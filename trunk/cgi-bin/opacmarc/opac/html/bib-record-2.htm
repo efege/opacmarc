@@ -19,7 +19,7 @@
 				
 				[pft]
 				/* Estilos ofrecidos (faltan: cita, xml, breve?). TO-DO: enviar esto a opacmarc.conf */
-				proc('a6017~Completo~a6017~Ficha~a6017~MARC~'),
+				proc('a6017~Etiquetado~a6017~Ficha~a6017~Modular~a6017~MARC~'),
 				
 				select v6001^f   /* tipo de controles */
 					case 'select' :
@@ -50,7 +50,7 @@
 						),
 					
 					case 'text' :
-						/* 'Estilo: '*/
+						'Estilo: '
 						'<ul class="navigation">',
 						(,
 							'<li>',
@@ -69,7 +69,7 @@
 									select v6017
 										case 'Ficha' : 'Ficha AACR2',
 										case 'MARC'  : 'Etiquetas MARC 21',
-										case '' : '',
+										case '' : '',  /* TO-DO: agregar descripciones */
 									endsel,
 									,'"',
 								'>',
@@ -78,6 +78,7 @@
 							else
 								'<span class="estilo estiloActivo">',v6017,'</span>',
 							fi,
+                            if iocc < nocc(v6017) then '&nbsp;&nbsp;&middot;' fi,
 							'</li>',
 						),
 						
@@ -147,13 +148,31 @@
 						'<a href="',v6001^u,
 							'?IsisScript=',v2000,
 							'&amp;db=',v2104,
-							'&amp;task=',if p(v2017) and a(v2099) then 'BROWSE-CATALOG' else if v6112^t[1] = 'COND' then 'TEST_CONDITION' else '', fi,fi,
+							'&amp;task=',
+                                if p(v2017) and a(v2099) then
+                                    'BROWSE-CATALOG'
+                                else if v6112^t[1] = 'COND' then
+                                    'TEST_CONDITION'
+                                else
+                                    v6112^t[1],
+                                fi,fi,
 							'&amp;query=',replace(v6112^q[1],'~','^'),
 							/*'&amp;condition=',v6112^q[1],*/
 							'&amp;',if 'TITLE~ANY' : v6112^t[1] and not v6112^q[1] : '~' then 'searchType' else 'index' fi,'=',v6112^t[1],
-							'&amp;sortBy=',v6112^s[1],
-							'&amp;from=',v2042,
-						'" title="Volver a la lista de resultados">
+							"&amp;sortBy="v6112^s[1],
+							"&amp;from="v2042,
+                            "&amp;filter1="v6112^f[1],
+                            "&amp;filterType1="v6112^g[1],
+                            "&amp;filterOp="v6112^h[1],
+                            "&amp;filter2="v6112^i[1],
+                            "&amp;filterType2="v6112^j[1],
+                            "&amp;exclude="v6112^k[1],
+                            "&amp;excludeType="v6112^l[1],
+                            "&amp;pub_date="v6112^w[1],
+                            "&amp;pub_date_type="v6112^x[1],
+                            "&amp;pub_date_from="v6112^y[1],
+                            "&amp;pub_date_to="v6112^z[1],
+						'" title="Volver a la lista de resultados">  <!-- FIXME - Add missing parameters -->
 						 Listado</a>',
 					[/pft]
 				</li>

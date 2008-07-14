@@ -1,9 +1,9 @@
 <!-- =========================================================
-	OPAC.XIS
+    OPAC.XIS
 
-	Script principal
+    Script principal
 
-	(c)2003-2006  Fernando J. Gómez - CONICET - INMABB
+    (c)2003-2006  Fernando J. Gómez - CONICET - INMABB
     ========================================================= -->
 
 <IsisScript>
@@ -11,20 +11,20 @@
 <!-- ======================================================= -->
 <function name="cleanQuery" action="replace" tag="3001">
 <!-- Método alternativo (y elegante) para hacer la limpieza de la
-	expresión ingresada por el usuario -->
+    expresión ingresada por el usuario -->
 <!-- Tablas AC y UC definidas globalmente para toda la aplicación -->
 <!-- ======================================================= -->
 <do>
-	<parm name="count">1</parm>
-	<parm name="fst">1 4 v3001</parm> <!-- aplica la técnica 4 al contenido de v3001 y almacena el resultado en v1 -->
-	<parm name="stw">BIBLIO.STW</parm>
-	<loop>
-		<field action="import" tag="list">3001</field>
-		<extract>this</extract>
-		<field action="export" tag="list">1</field>
-	</loop>
+    <parm name="count">1</parm>
+    <parm name="fst">1 4 v3001</parm> <!-- aplica la técnica 4 al contenido de v3001 y almacena el resultado en v1 -->
+    <parm name="stw">BIBLIO.STW</parm>
+    <loop>
+        <field action="import" tag="list">3001</field>
+        <extract>this</extract>
+        <field action="export" tag="list">1</field>
+    </loop>
 </do>
-<return action="replace" tag="3001"><pft>v1^*+| |</pft></return> <!-- devuelve las palabras generadas, separadas por un espacio -->
+<return action="replace" tag="3333"><pft>v1^*+| |</pft></return> <!-- devuelve las palabras generadas, separadas por un espacio -->
 </function>
 <!-- ============================================================= -->
 
@@ -43,13 +43,13 @@
 
 <!-- Restricción de acceso por IP -->
 <!--flow action="jump"><pft>
-	if not '200.49.224.3~127.0.0.1' : getenv('REMOTE_ADDR')
-		and 
-		not '24.232.~170.210.~' : s(getenv('REMOTE_ADDR')).7
-		and 
-		not '168.83.76.' : s(getenv('REMOTE_ADDR')).10
-	then 'EXIT'
-	fi
+    if not '200.49.224.3~127.0.0.1' : getenv('REMOTE_ADDR')
+        and 
+        not '24.232.~170.210.~' : s(getenv('REMOTE_ADDR')).7
+        and 
+        not '168.83.76.' : s(getenv('REMOTE_ADDR')).10
+    then 'EXIT'
+    fi
 </pft></flow-->
 
 
@@ -59,87 +59,99 @@ Parámetros CGI
 ==================================================
 -->
 <cgitable><pft>
-	'2000 IsisScript'/
-	'2001 query'/       /* puede tener más de una occ, si viene desde un índice */
-	'2002 searchType'/
-	'2003 index'/       /* SUBJ, NAME, TITLE, COL */
-	'2004 from'/
-	'2005 oper'/
-	'2006 trunc'/       /* en desuso. TO-DO: revisar dónde continúa presente v2006 */
-	'2007 browseTerm'/
-	'2008 style'/
-	'2009 browseMfn'/
-	'2010 keys'/
-	'2011 showForm'/
-	'2012 lang'/
-	'2013 pub'/
-	'2014 place'/
-	'2015 format'/
-	'2016 sortBy'/
-	'2017 curr'/        /* 2027: total */
-	'2018 biblioteca'/
-	'2019 litForm'/
-	'2020 biogr'/
-	'2021 trans'/
-	'2022 fecha1'/
-	'2023 fecha2'/
-	'2024 fest'/        /* Festchrift */
-	'2027 total'/       /* 2017: curr */
-	'2028 rpp'/         /* bib. records per page */
-	'2029 hpp'/         /* headings per page */
-	'2030 nearby'/
-	'2031 wa'/          /* works about */
-	/*'2032 go'/ */         /* 1 ó -1 */
-	
-	/* Navegación entre registros vecinos */
-	'2035 prev'/
-	'2036 next'/
-	
-	/* Browsing del catálogo completo */
-	/* '2040 browseCatFrom'/  */
-	'2041 mfn'/
-	
-	'2050 advanced'/   /* uso de form avanzado */
-	
-	/* Búsqueda combinando campos */
-	'2051 query1'/
-	'2052 query2'/
-	'2053 searchType1'/
-	'2054 searchType2'/
-	
-	/* Condición para identificar registros en la base */
-	'2070 condition'/
-	'2071 gr'/
-	'2072 maxMFN'/
-	
-	/* Testeo de registros bibliográficos */
-	'2080 extract'/
-	/* '2082 manualRecord'/
-	'2083 editMFN'/ */
-	
-	/* Parámetros de configuración */
-	'2090 COMPACT_RESULT_LIST'/
-	'2091 DISPLAY_LOCATION'/
-	'2092 SHOW_245c'/
-	
-	/* Identificador de una consulta previa */
-	'2099 cid'/
-	
-	'2100 trace'/
-	
-	'2101 task'/
-	
-	'2104 db'/        /* base de datos */
-	
-	'2105 mail_to'/
-	
-	'2106 cn'/        /* control number (para solicitar un registro específico) */
-	
-	'2107 agrep'/     /* agrep=1 indica que la búsqueda fue disparada automáticamente, en base a una única sugerencia del agrep */
-	
-	'2109 msclevel'/  /* nivel, al navegar por la MSC */
-	
-	'2110 status'/    /* status luego del envío de mensaje por mail */
+    '2000 IsisScript'/
+    '2001 query'/       /* puede tener más de una occ, si viene desde un índice */
+    '2002 searchType'/
+    '2003 index'/       /* SUBJ, NAME, TITLE, COL */
+    '2004 from'/
+    '2005 oper'/
+    '2006 trunc'/       /* en desuso. TO-DO: revisar dónde continúa presente v2006 */
+    '2007 browseTerm'/
+    '2008 style'/
+    '2009 browseMfn'/
+    '2010 keys'/
+    '2011 showForm'/
+    
+    '2012 lang'/
+    '2013 pub'/
+    '2014 place'/
+    '2015 format'/
+    
+    '2016 sortBy'/
+    '2017 curr'/        /* 2027: total */
+    
+    '2018 biblioteca'/
+    '2019 litForm'/
+    '2020 biogr'/
+    '2021 trans'/
+    
+    '2022 pub_date'/
+    '2023 pub_date_type'/
+    '2024 pub_date_from'/
+    '2025 pub_date_to'/
+    /* Falta: date_search_type (opciones: all, single, multi) */
+    
+    '2026 fest'/        /* Festchrift */
+    
+    '2027 total'/       /* 2017: curr */
+    '2028 rpp'/         /* bib. records per page */
+    '2029 hpp'/         /* headings per page */
+    '2030 nearby'/
+    '2031 wa'/          /* works about */
+    /*'2032 go'/ */         /* 1 ó -1 */
+    
+    /* Navegación entre registros vecinos */
+    '2035 prev'/
+    '2036 next'/
+    
+    /* Browsing del catálogo completo */
+    /* '2040 browseCatFrom'/  */
+    '2041 mfn'/
+    
+    '2050 advanced'/   /* uso de form avanzado */
+    
+    /* Búsqueda combinando campos */
+    '2051 filter1'/
+    '2052 filterType1'/
+    '2053 filterOp'/
+    '2054 filter2'/
+    '2055 filterType2'/
+    '2056 exclude'/
+    '2057 excludeType'/
+    
+    /* Condición para identificar registros en la base */
+    '2070 condition'/
+    '2071 gr'/
+    '2072 maxMFN'/
+    
+    /* Testeo de registros bibliográficos */
+    '2080 extract'/
+    /* '2082 manualRecord'/
+    '2083 editMFN'/ */
+    
+    /* Parámetros de configuración */
+    '2090 COMPACT_RESULT_LIST'/
+    '2091 DISPLAY_LOCATION'/
+    '2092 SHOW_245c'/
+    
+    /* Identificador de una consulta previa */
+    '2099 cid'/
+    
+    '2100 trace'/
+    
+    '2101 task'/
+    
+    '2104 db'/        /* base de datos */
+    
+    '2105 mail_to'/
+    
+    '2106 cn'/        /* control number (para solicitar un registro específico) */
+    
+    '2107 agrep'/     /* agrep=1 indica que la búsqueda fue disparada automáticamente, en base a una única sugerencia del agrep */
+    
+    '2109 msclevel'/  /* nivel, al navegar por la MSC */
+    
+    '2110 status'/    /* status luego del envío de mensaje por mail */
 </pft></cgitable>
 
 
@@ -157,7 +169,7 @@ Parámetros CGI
 <!-- (Sustituido por archivos TMPnnn.$$$) -->
 <!-- ATENCION: REMOTE_ADDR será siempre 127.0.0.1 si wxis es llamado por PHP vía HTTP -->
 <!--field action="replace" tag="2099"><pft>
-	,if a(v2099) then getenv('REMOTE_ADDR'),'_',replace(s(date).15,' ','_'),"_"v2002,"_"v2003,'_',f(size(v2001),1,0), fi,
+    ,if a(v2099) then getenv('REMOTE_ADDR'),'_',replace(s(date).15,' ','_'),"_"v2002,"_"v2003,'_',f(size(v2001),1,0), fi,
 </pft></field-->
 
 
@@ -190,11 +202,11 @@ Parámetros CGI
 
 <!-- =========== Content-type header =========== -->
 <display><pft>
-	if v2008 : 'XML' then
-		'Content-type: text/xml'/#,
-	else
-		'Content-Type: text/html; charset=iso-8859-1'/#,
-	fi,
+    if v2008 : 'XML' then
+        'Content-type: text/xml'/#,
+    else
+        'Content-Type: text/html; charset=iso-8859-1'/#,
+    fi,
 </pft></display>
 
 <!-- Omitimos DOCTYPE y <head>..</head> para MARCXML -->
@@ -205,15 +217,15 @@ Parámetros CGI
 
 <!-- Sort order (default) [para bib-*-search] -->
 <field action="replace" tag="2016"><pft>
-	if a(v2016) then
-		select v2003
-			case 'SUBJ'  : 'dateNew',
-			case 'NAME'  : 'author',
-			/*case 'COL'   : 'volNum',*/
-			case 'COL'   : 'dateOld',
-			elsecase       'author',
-		endsel,
-	fi
+    if a(v2016) then
+        select v2003
+            case 'SUBJ'  : 'dateNew',
+            case 'NAME'  : 'author',
+            /*case 'COL'   : 'volNum',*/
+            case 'COL'   : 'dateOld',
+            elsecase       'author',
+        endsel,
+    fi
 </pft></field>
 
 <!-- Default: hpp (headings por página) [para h-*] -->
@@ -235,63 +247,63 @@ Parámetros CGI
 <!-- ----------------------------------------------------------------- -->
 <!-- Tareas a realizar por el script -->
 <field action="replace" tag="2102"><pft>
-	'~BIB-CLASS-SEARCH'      /* búsqueda en la base bibliográfica usando códigos de clasificación */
-	'~BIB-H-SEARCH'          /* búsqueda en la base bibliográfica usando encabezamientos */
-	'~BIB-KW-SEARCH'         /* búsqueda por palabras en la base bibliográfica */
-	'~BIB-RECORD'            /* ver detalles de un registro bibliográfico */
-	'~BROWSE-CATALOG'        /* recorrer el catálogo completo */
-	'~CLASS-BROWSE'          /* navegación en el esquema de clasificación */
-	'~CLASS-KW-SEARCH'       /* búsqueda en el esquema de clasificación */
-	'~EXTRACT_KEYS'          /* extraer las claves que van al diccionario */
-	'~FEEDBACK_REPLY'        /* genera una página de respuesta al usuario que envió un mensaje */
-	'~H-BROWSE'              /* navegación en una base de encabezamientos */
-	'~H-KW-SEARCH'           /* búsqueda por palabras en las bases de encabezamientos */
-	'~SEND-MAIL'             /* enviar resultados por email */
-	'~SHOW_ABOUT'            /* mostrar información acerca del catálogo */
-	'~SHOW_FEEDBACK_FORM'    /* mostrar el formulario para reportar errores y comentarios */
-	'~SHOW_FORM'             /* presentar el formulario */
-	'~SHOW_NEW_MATERIAL'     /* muestra las novedades del catálogo */
-	'~TEST_CONDITION'        /* encontrar registros que cumplan una condición */
+    '~BIB-CLASS-SEARCH'      /* búsqueda en la base bibliográfica usando códigos de clasificación */
+    '~BIB-H-SEARCH'          /* búsqueda en la base bibliográfica usando encabezamientos */
+    '~BIB-KW-SEARCH'         /* búsqueda por palabras en la base bibliográfica */
+    '~BIB-RECORD'            /* ver detalles de un registro bibliográfico */
+    '~BROWSE-CATALOG'        /* recorrer el catálogo completo */
+    '~CLASS-BROWSE'          /* navegación en el esquema de clasificación */
+    '~CLASS-KW-SEARCH'       /* búsqueda en el esquema de clasificación */
+    '~EXTRACT_KEYS'          /* extraer las claves que van al diccionario */
+    '~FEEDBACK_REPLY'        /* genera una página de respuesta al usuario que envió un mensaje */
+    '~H-BROWSE'              /* navegación en una base de encabezamientos */
+    '~H-KW-SEARCH'           /* búsqueda por palabras en las bases de encabezamientos */
+    '~SEND-MAIL'             /* enviar resultados por email */
+    '~SHOW_ABOUT'            /* mostrar información acerca del catálogo */
+    '~SHOW_FEEDBACK_FORM'    /* mostrar el formulario para reportar errores y comentarios */
+    '~SHOW_FORM'             /* presentar el formulario */
+    '~SHOW_NEW_MATERIAL'     /* muestra las novedades del catálogo */
+    '~TEST_CONDITION'        /* encontrar registros que cumplan una condición */
 </pft></field>
 
 <!-- Ejecutamos la tarea, si es alguna de las de arriba -->
 <flow action="jump"><pft>
-	if v2102 : s('~',v2101) then v2101, fi
+    if v2102 : s('~',v2101) then v2101, fi
 </pft></flow>
 
 <!-- En caso contrario, tratamos de deducir qué tarea realizar -->
 <!-- TO-DO: eliminar esta parte obsoleta, mediante el uso sistemático
-	del parámetro 'task' en las llamadas al script -->
+    del parámetro 'task' en las llamadas al script -->
 <field action="replace" tag="2101"><pft>
-	if v2104 = 'bibima' and v2002 = 'SUBJ' then
-		'CLASS-KW-SEARCH',
-	else if v2104 = 'bibima' and v2003 = 'SUBJ' and a(v2031) then /* 2031 = wa */
-		'BIB-CLASS-SEARCH',
-	else if p(v2011) then             /* 2011 = showForm */
-		'SHOW_FORM',
-	else if p(v2002) then             /* 2002 = searchType */
-		if 'TITLE~SN~ANY' : v2002 then
-			'BIB-KW-SEARCH',
-		else
-			'H-KW-SEARCH',
-		fi,
-	else if p(v2003) then       /* 2003 = index */
-		if p(v2001) then         /* 2001 = query */
-			'BIB-H-SEARCH',
-		else
-			'H-BROWSE',
-		fi,
-	else if p(v2017) then        /* 2017 = curr */
-		'BIB-RECORD',
-	else if p(v2040) then
-		'BROWSE-CATALOG',
-	else if p(v2070) then
-		'TEST_CONDITION',
-	else if p(v2080) then
-		'EXTRACT_KEYS',
-	else                         /* default */
-		'FIN',
-	fi,fi,fi,fi,fi,fi,fi,fi,fi,
+    if v2104 = 'bibima' and v2002 = 'SUBJ' then
+        'CLASS-KW-SEARCH',
+    else if v2104 = 'bibima' and v2003 = 'SUBJ' and a(v2031) then /* 2031 = wa */
+        'BIB-CLASS-SEARCH',
+    else if p(v2011) then             /* 2011 = showForm */
+        'SHOW_FORM',
+    else if p(v2002) then             /* 2002 = searchType */
+        if 'TITLE~SN~ANY' : v2002 then
+            'BIB-KW-SEARCH',
+        else
+            'H-KW-SEARCH',
+        fi,
+    else if p(v2003) then       /* 2003 = index */
+        if p(v2001) then         /* 2001 = query */
+            'BIB-H-SEARCH',
+        else
+            'H-BROWSE',
+        fi,
+    else if p(v2017) then        /* 2017 = curr */
+        'BIB-RECORD',
+    else if p(v2040) then
+        'BROWSE-CATALOG',
+    else if p(v2070) then
+        'TEST_CONDITION',
+    else if p(v2080) then
+        'EXTRACT_KEYS',
+    else                         /* default */
+        'FIN',
+    fi,fi,fi,fi,fi,fi,fi,fi,fi,
 </pft></field>
 
 <!-- Ahora sí, saltamos a la tarea en cuestión -->
@@ -376,11 +388,11 @@ Parámetros CGI
 <label>TOO_MANY_HITS</label>
 <!-- ================================================== -->
 <display><htmlpft>
-	<p class="warning">
-		Se encontraron <b>[pft]v1002[/pft]</b> resultados, y el sistema procesa hasta un máximo de <b>[pft]v6001^d[/pft]</b>.
-		Por favor, intente restringir un poco más su búsqueda.
-	</p>
-	<!-- TO-DO: presentar aquí sugerencias para acotar la búsqueda -->
+    <p class="warning">
+        Se encontraron <b>[pft]v1002[/pft]</b> resultados, y el sistema procesa hasta un máximo de <b>[pft]v6001^d[/pft]</b>.
+        Por favor, intente restringir un poco más su búsqueda.
+    </p>
+    <!-- TO-DO: presentar aquí sugerencias para acotar la búsqueda -->
 </htmlpft></display>
 <!-- Deberiamos mostrar aquí el formulario avanzado, o al menos un link muy obvio? -->
 <flow action="jump">FIN</flow>
@@ -390,13 +402,13 @@ Parámetros CGI
 <label>SHOW_FORM</label>
 <!-- ================================================== -->
 <display><htmlpft><pft>
-	select v2011
-		case 'simple'   : ,cat('FORM-SIMPLE.HTM'),cat('HOME.HTM'),
-		case 'advanced' : ,cat('FORM_ADVANCED.HTM'),cat('HOME.HTM'),
-		/*case 'marc-edit': ,cat('MARC-EDIT-FORM.HTM'),*/
-		/*case 'control'  : ,cat('CONTROL-FORM.HTM'),*/
-		elsecase          ,cat('FORM-SIMPLE.HTM'),cat('HOME.HTM'),
-	endsel,
+    select v2011
+        case 'simple'   : ,cat('FORM-SIMPLE.HTM'),cat('HOME.HTM'),
+        case 'advanced' : ,cat('FORM_ADVANCED.HTM'),cat('HOME.HTM'),
+        /*case 'marc-edit': ,cat('MARC-EDIT-FORM.HTM'),*/
+        /*case 'control'  : ,cat('CONTROL-FORM.HTM'),*/
+        elsecase          ,cat('FORM-SIMPLE.HTM'),cat('HOME.HTM'),
+    endsel,
 </pft></htmlpft></display>
 <flow action="jump">FIN</flow>
 
@@ -405,7 +417,7 @@ Parámetros CGI
 <label>SHOW_ABOUT</label>
 <!-- ================================================== -->
 <display><htmlpft><pft>
-	,cat('ABOUT.HTM'),
+    ,cat('ABOUT.HTM'),
 </pft></htmlpft></display>
 <flow action="jump">FIN</flow>
 
@@ -414,7 +426,7 @@ Parámetros CGI
 <label>SHOW_FEEDBACK_FORM</label>
 <!-- ================================================== -->
 <display><htmlpft><pft>
-	,cat('FEEDBACK_FORM.HTM'),
+    ,cat('FEEDBACK_FORM.HTM'),
 </pft></htmlpft></display>
 <flow action="jump">FIN</flow>
 
@@ -423,7 +435,7 @@ Parámetros CGI
 <label>FEEDBACK_REPLY</label>
 <!-- ================================================== -->
 <display><htmlpft><pft>
-	,cat('FEEDBACK_REPLY.HTM'),
+    ,cat('FEEDBACK_REPLY.HTM'),
 </pft></htmlpft></display>
 <flow action="jump">FIN</flow>
 
@@ -441,11 +453,15 @@ Parámetros CGI
 <!-- Las páginas se cierran con los formularios de búsqueda (casi siempre) y con el footer (siempre) -->
 <!-- 2011 = showForm -->
 <display><htmlpft><pft>
-	if a(v2011) and not '~SHOW_FEEDBACK_FORM~SHOW_ABOUT' : v2101 then
-		,cat('FORM-SIMPLE.HTM'),
-		,cat('HOME.HTM'),  /* ATENCION: error en la visualización si el archivo home.htm no existe */
-	fi
-	,cat('OPAC-FOOTER.HTM'),
+    if a(v2011) and not '~SHOW_FEEDBACK_FORM~SHOW_ABOUT' : v2101 then
+        /*,cat('FORM-SIMPLE.HTM'),*/  /* Quitado a pedido de Raúl, 2007-12-17 */
+        /*,cat('FORM_ADVANCED.HTM'),*/
+        /*,cat('HOME.HTM'),*/  /* Quitado ídem */ /* ATENCION: error en la visualización si el archivo home.htm no existe */
+    fi
+    if p(v2011) then
+          /* A pedido de Raúl, esto sólo debe aparecer en las páginas de los formularios */
+        ,cat('OPAC-FOOTER.HTM'),
+    fi
 </pft></htmlpft></display>
 
 
@@ -454,31 +470,31 @@ Parámetros CGI
 <!-- ================================================== -->
 <file action="append" type="output">LOGFILE.TXT</file>
 <!--display><pft>
-	if not '200.49.229.48~' : s(getenv('HTTP_X_FORWARDED_FOR'),'~')
-	   and not '200.49.229.48~' : s(getenv('REMOTE_ADDR'),'~') then 
-	fi
+    if not '200.49.229.48~' : s(getenv('HTTP_X_FORWARDED_FOR'),'~')
+       and not '200.49.229.48~' : s(getenv('REMOTE_ADDR'),'~') then 
+    fi
 </pft></display-->
 <display><pft>
-	/* Eliminamos algunos campos auxiliares, y ordenamos por tag */
-	proc('d510','d2028','d2029','d9001'),
-	proc('d2000','d2102','d5000','d5001','d6112'),
-	proc('d6000','d6001','d6002','d6003','d6017'),
-	proc('s'),
+    /* Eliminamos algunos campos auxiliares, y ordenamos por tag */
+    proc('d510','d2028','d2029','d9001'),
+    proc('d2000','d2102','d5000','d5001','d6112'),
+    proc('d6000','d6001','d6002','d6003','d6017'),
+    proc('s'),
 </pft></display>
 <field action="replace" tag="1" split="flddir">ALL</field>
 <field action="replace" tag="1" split="occ"><pft>(v1/)</pft></field>
 <display><pft>
-	'!ID 0',/   /* 'ID 0', pues usando id2i con create/app no nos preocupamos por el MFN */
-	'!v5!',s(date).15/
-	'!v10!',getenv('REMOTE_ADDR')/
-	'!v11!',getenv('HTTP_X_FORWARDED_FOR')/
-	'!v12!',getenv('HTTP_USER_AGENT')/
-	(,
-		if v1*6 > '' then
-			'!v',v1*1.4,'!', v1*6/
-		fi,
-	),
-	/#
+    '!ID 0',/   /* 'ID 0', pues usando id2i con create/app no nos preocupamos por el MFN */
+    '!v5!',s(date).15/
+    '!v10!',getenv('REMOTE_ADDR')/
+    '!v11!',getenv('HTTP_X_FORWARDED_FOR')/
+    '!v12!',getenv('HTTP_USER_AGENT')/
+    (,
+        if v1*6 > '' then
+            '!v',v1*1.4,'!', v1*6/
+        fi,
+    ),
+    /#
 </pft></display>
 <file action="close" type="output">LOGFILE.TXT</file>
 
@@ -491,10 +507,10 @@ Parámetros CGI
 <!-- ================================================== -->
 <display><pft>'Content-Type: text/html'/#</pft></display>
 <display>
-	<body>
-		El demo del OPAC se encuentra fuera de servicio. Para consultas, 
-		diríjase a <a href="mailto:fgomez@criba.edu.ar">fgomez@criba.edu.ar</a>
-	</body>
+    <body>
+        El demo del OPAC se encuentra fuera de servicio. Para consultas, 
+        diríjase a <a href="mailto:fgomez@criba.edu.ar">fgomez@criba.edu.ar</a>
+    </body>
 </display>
 <flow action="exit">Now</flow>
 
@@ -508,33 +524,33 @@ Parámetros CGI
 <!-- ======================================================= -->
 <function name="cleanQuery_old" action="replace" tag="3001">
 <!-- Esta función no es llamada cuando v2001 proviene 
-	directamente de un heading completo, pero sí cuando 
-	proviene de un heading spliteado -->
+    directamente de un heading completo, pero sí cuando 
+    proviene de un heading spliteado -->
 <!-- ======================================================= -->
-	<!-- ¿Qué hacemos con los apóstrofes? -->
-	<!--display><pft>'<pre>'v2001'</pre>'</pft></display-->
-	<!--display><pft>
-		proc('d3001a3001¦',replace(v3001,',',' '),'¦'),
-		proc('d3001a3001¦',replace(v3001,'.',' '),'¦'),
-		proc('d3001a3001¦',replace(v3001,':',' '),'¦'),
-		proc('d3001a3001¦',replace(v3001,';',' '),'¦'),
-		proc('d3001a3001¦',replace(v3001,'-',' '),'¦'),
-		proc('d3001a3001¦',replace(v3001,'?',' '),'¦'),
-		proc('d3001a3001¦',replace(v3001,'!',' '),'¦'),
-		proc('d3001a3001¦',replace(v3001,s("'"d3001),' '),'¦'),
-		proc('d3001a3001¦',replace(v3001,'\',' '),'¦'),
-		proc('d3001a3001¦',replace(v3001,'(',' '),'¦'),
-		proc('d3001a3001¦',replace(v3001,')',' '),'¦'),
-		proc('d3001a3001¦',replace(v3001,'<',' '),'¦'),
-		proc('d3001a3001¦',replace(v3001,'>',' '),'¦'),
-		proc('d3001a3001¦',replace(v3001,' and ',' '),'¦'),
-		proc('d3001a3001¦',replace(v3001,' or ',' '),'¦'),
-		proc('d3001a3001¦',replace(v3001,'  ',' '),'¦'),
-		proc('d3001a3001¦',replace(v3001,'  ',' '),'¦'),
-		proc('d3001a3001¦',if left(v3001,1)=' ' then v3001*1 else v3001 fi,'¦'),
-		proc('d3001a3001¦',if right(v3001,1)=' ' then left(v3001,size(v3001)-1) else v3001 fi,'¦'),										
-	</pft></display-->
-	<!--display><pft>'<pre>'v3001'</pre>'</pft></display-->
-	<return action="replace" tag="3001"><pft>v3001</pft></return>
+    <!-- ¿Qué hacemos con los apóstrofes? -->
+    <!--display><pft>'<pre>'v2001'</pre>'</pft></display-->
+    <!--display><pft>
+        proc('d3001a3001¦',replace(v3001,',',' '),'¦'),
+        proc('d3001a3001¦',replace(v3001,'.',' '),'¦'),
+        proc('d3001a3001¦',replace(v3001,':',' '),'¦'),
+        proc('d3001a3001¦',replace(v3001,';',' '),'¦'),
+        proc('d3001a3001¦',replace(v3001,'-',' '),'¦'),
+        proc('d3001a3001¦',replace(v3001,'?',' '),'¦'),
+        proc('d3001a3001¦',replace(v3001,'!',' '),'¦'),
+        proc('d3001a3001¦',replace(v3001,s("'"d3001),' '),'¦'),
+        proc('d3001a3001¦',replace(v3001,'\',' '),'¦'),
+        proc('d3001a3001¦',replace(v3001,'(',' '),'¦'),
+        proc('d3001a3001¦',replace(v3001,')',' '),'¦'),
+        proc('d3001a3001¦',replace(v3001,'<',' '),'¦'),
+        proc('d3001a3001¦',replace(v3001,'>',' '),'¦'),
+        proc('d3001a3001¦',replace(v3001,' and ',' '),'¦'),
+        proc('d3001a3001¦',replace(v3001,' or ',' '),'¦'),
+        proc('d3001a3001¦',replace(v3001,'  ',' '),'¦'),
+        proc('d3001a3001¦',replace(v3001,'  ',' '),'¦'),
+        proc('d3001a3001¦',if left(v3001,1)=' ' then v3001*1 else v3001 fi,'¦'),
+        proc('d3001a3001¦',if right(v3001,1)=' ' then left(v3001,size(v3001)-1) else v3001 fi,'¦'),                                        
+    </pft></display-->
+    <!--display><pft>'<pre>'v3001'</pre>'</pft></display-->
+    <return action="replace" tag="3001"><pft>v3001</pft></return>
 </function>
 <!-- ============================================================= -->

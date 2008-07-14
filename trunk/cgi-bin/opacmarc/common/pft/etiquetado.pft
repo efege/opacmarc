@@ -10,23 +10,16 @@
 
 
 /* Esta tabla contiene todo el registro */
-'<table id="Etiquetado" align="center" border="0">'/
-
-/* Footer con campos 001 y 005 (¿opcional?) */
-'<tfoot id="etiqFoot">',
-	'<tr>',
-		'<td colspan="2">Registro ',v1,'&nbsp;&nbsp;&#183;&nbsp;&nbsp;Modificado: ',v5*6.2,'/',v5*4.2,'/',v5.4,'</td>'
-	'</tr>',
-'</tfoot>',
+'<table id="Etiquetado" align="center" border="0" cellspacing="0">'/
 
 '<tr>',
-'<td width="78%" style="border: 1px solid #CCC; background: #FFF; vertical-align: top;">',
+'<td width="78%" style="border: 0px solid #CCC; background: #FFF; vertical-align: top;">',
 
 /* Tabla izquierda */
-'<table width="100%" cellspacing="0" border="0">'/
+'<table width="100%" cellspacing="0" border="0" id="etiq">'/
 
 /* v6001^t = DISPLAY_DOC_TYPE  (ATENCION: quitar referencia a 'catalis') */
-if v6001^t = '1' or v2000 : 'catalis' then
+if v6001^t : v2104 or v2000 : 'catalis' then
 	'<thead>'
 		'<tr>'
 			'<th colspan="2" class="materialTypeHeader">',
@@ -49,7 +42,7 @@ proc(
 ),
 
 '<tr>'
-'<td class="label">Título / responsables</td>',
+'<td class="label">Título/responsables</td>',
 '<td class="data">',
 	'<span class="title">',
 		(,
@@ -81,7 +74,7 @@ proc(
  */
 
 if s(v100,v110,v111,v130) > '' then
-	'<tr style="display: none;"><td class="label">',
+	'<!--tr style="display: none;"><td class="label">',
 	"Autor"d100, "Entidad"d110, "Reunión"d111,
 	'</td>'/
 	'<td class="data">',
@@ -109,7 +102,7 @@ if s(v100,v110,v111,v130) > '' then
 	fi,
 	*/
 
-	'</td></tr>'/
+	'</td></tr-->'/
 fi,
 
 
@@ -304,38 +297,6 @@ if s(v440,v490) > '' then
 					'<br>',
 				),
 			fi,
-		'</td>'
-	'</tr>'/
-fi,
-
-
-/* ---------------------------------------------
- *           Area 8: Standard numbers
- * ---------------------------------------------
- *  ATENCION: ver los ISBN invalidos (^z)
- */
-
-if p(v020^a) then
-	'<tr>'
-		'<td class="label">ISBN</td>'/
-		'<td class="data">',
-			(,
-				v020^a,
-				v020^z,
-				if iocc < nocc(v020) then '; ' fi
-			),
-		'</td>'
-	'</tr>'/
-fi,
-
-if p(v022) then  /* REVISAR */
-	'<tr>'
-		'<td class="label">ISSN</td>'
-		'<td class="data">',
-			(,
-				replace(s(v022^a,v022^z),' :',''),
-				if iocc < nocc(v022) then '; ' fi
-			),
 		'</td>'
 	'</tr>'/
 fi,
@@ -565,6 +526,131 @@ fi,
 '-->'/
 
 /* ---------------------------------------------
+ *           Area 8: Standard numbers
+ * ---------------------------------------------
+ *  ATENCION: ver los ISBN invalidos (^z)
+ */
+
+if p(v020^a) then
+	'<tr>'
+		'<td class="label">ISBN</td>'/
+		'<td class="data">',
+			(,
+				v020^a,
+				v020^z,
+				if iocc < nocc(v020) then '; ' fi
+			),
+		'</td>'
+	'</tr>'/
+fi,
+
+if p(v022) then  /* REVISAR */
+	'<tr>'
+		'<td class="label">ISSN</td>'
+		'<td class="data">',
+			(,
+				replace(s(v022^a,v022^z),' :',''),
+				if iocc < nocc(v022) then '; ' fi
+			),
+		'</td>'
+	'</tr>'/
+fi,
+
+
+/* ---------------------------------------------
+ *             Subject added entries            
+ * ---------------------------------------------
+ */
+
+/* ATENCION: aplicar urlencode, como se hizo con v100,v700 */
+
+if s(v600,v610,v630,v650,v651,v653) > '' then
+	proc('d5555',
+		if p(v600) then ('a5555¦',v600,'¦'), fi,
+		
+		if p(v610) then ('a5555¦',v610,'¦'), fi,
+		
+		if p(v630) then ('a5555¦',v630,'¦'), fi,
+		
+		if p(v650) then ('a5555¦',v650,'¦'), fi,
+		
+		if p(v651) then ('a5555¦',v651,'¦'), fi,
+		
+		if p(v653) then ('a5555¦',v653,'¦'), fi,
+	),
+
+	if p(v5555) then
+		'<tr>'
+			'<td class="label">Temas</td>',
+			'<td class="data">'/
+				'<ul class="noteList">'  /* El uso de <ol> genera una linea vacia al final de la lista en IE 5.5; en IE 6 el problema se da con <ul> y <ol>, pero se soluciona con <ol></ul> !!! */
+	fi,
+	
+	/* loop sobre v5555 */
+	(,
+		if iocc > nocc(v5555) then
+			break,
+		else
+			
+			/* Codificamos el query en v7600 */
+			proc('d7000a7000¦',v5555*2,'¦'),
+			,@URLENCODE.PFT,
+			proc('d7600a7600¦',v7000[1],'¦'),
+
+            /* Total de postings para este heading (2008-03-27) */
+            proc('d7601a7601¦', ref(['SUBJ']l(['SUBJ']'_HEAD_'v5555^9),v11), '¦')
+            
+			/* Construimos el link (deshabilitado hasta resolver los problemas <= ¿Qué problemas? [2008-03-27]) */
+			'<li>'
+                if v7601[1] > '1' then
+    				'<a style="font-weight: normal;" href="',v6001^u[1],
+    					'?IsisScript=',v2000[1],
+    					'&amp;db=',v2104[1],
+    					'&amp;task=BIB-H-SEARCH',
+    					'&amp;index=SUBJ',
+    					'&amp;query=',replace(replace(v7600[1],   /* cuando usamos URLENCODE */
+    						s('^2',v7600[1]^2),''),
+    						s('^9',v7600[1]^9),''),
+    					/*if not '.?!-':right(v5555,1) then '.' fi*/,
+    				'">',
+                else
+                    '<span>'
+                fi,
+				replace(replace(replace(replace(replace(replace(replace(
+				replace(replace(replace(replace(replace(replace(replace(replace(v5555*4,
+					'^x','&mdash;'),
+					'^y','&mdash;'),
+					'^z','&mdash;'),
+					'^v','&mdash;'),
+					'^a','&mdash;'),  /* para el 653 */
+					'--','&mdash;'),
+					'^b',' '),
+					'^c',' '),
+					'^d',' '),
+					'^l',' '),
+					'^p',' '),
+					'^q',' '),
+					'^t',' '),
+					s('^2',v5555^2),''),
+					s('^9',v5555^9),''),
+                if v7601[1] > '1' then
+                    '</a>'
+                else
+                    '</span>'
+                fi,
+			'</li>'/
+		fi,
+	),
+
+	if p(v5555) then 
+				'</ul>'
+			'</td>'
+		'</tr>'/
+	fi,
+fi,
+
+
+/* ---------------------------------------------
  *             Added entry headings             
  * ---------------------------------------------
  */
@@ -594,17 +680,24 @@ if s(v100,v700) > '' then
 				,@URLENCODE.PFT,
 				proc('d7100a7100¦',v7000[1],'¦'),
 				
-				/* Construimos el link */
-				'<a style="font-weight: normal;" href="',v6001^u[1],
-					'?IsisScript=',v2000[1],
-					'&amp;db=',v2104[1],
-					'&amp;task=BIB-H-SEARCH',
-					'&amp;index=NAME',
-					'&amp;query=',replace(replace(replace(v7100[1],   /* cuando usamos URLENCODE */
-						s('^e',v7100[1]^e),''),
-						s('^4',v7100[1]^4),''),
-						s('^9',v7100[1]^9),''),
-				'">',
+                /* Total de postings para este heading (2008-03-27) */
+                proc('d7101a7101¦', ref(['NAME']l(['NAME']'_HEAD_'v8100^9),v11), '¦')
+                
+                if v7101[1] > '1' then
+    				/* Construimos el link */
+    				'<a style="font-weight: normal;" href="',v6001^u[1],
+    					'?IsisScript=',v2000[1],
+    					'&amp;db=',v2104[1],
+    					'&amp;task=BIB-H-SEARCH',
+    					'&amp;index=NAME',
+    					'&amp;query=',replace(replace(replace(v7100[1],   /* cuando usamos URLENCODE */
+    						s('^e',v7100[1]^e),''),
+    						s('^4',v7100[1]^4),''),
+    						s('^9',v7100[1]^9),''),
+    				'">',
+                else
+                    '<span>',
+                fi
 					/*'&amp;query=',v8100^9,'">',*/  /* para SUBCAMPO9 */
 					
 					replace(replace(replace(replace(replace(
@@ -620,7 +713,11 @@ if s(v100,v700) > '' then
 						s(',^e',v8100^e),''),
 						s('^4',v8100^4),''),
 						s('^9',v8100^9),''),
-				'</a>'/,
+                if v7101[1] > '1' then
+                    '</a>'/,
+                else
+                    '</span>',
+                fi,
 				if iocc < nocc(v8100) then ' <br> ' fi,
 			),
 		'</td>'
@@ -731,89 +828,6 @@ if s(v111,v711) > '' then
 			),
 		'</td>'
 	'</tr>'/
-fi,
-
-
-
-/* ---------------------------------------------
- *             Subject added entries            
- * ---------------------------------------------
- */
-
-/* ATENCION: aplicar urlencode, como se hizo con v100,v700 */
-
-if s(v600,v610,v630,v650,v651,v653) > '' then
-	proc('d5555',
-		if p(v600) then ('a5555¦',v600,'¦'), fi,
-		
-		if p(v610) then ('a5555¦',v610,'¦'), fi,
-		
-		if p(v630) then ('a5555¦',v630,'¦'), fi,
-		
-		if p(v650) then ('a5555¦',v650,'¦'), fi,
-		
-		if p(v651) then ('a5555¦',v651,'¦'), fi,
-		
-		if p(v653) then ('a5555¦',v653,'¦'), fi,
-	),
-
-	if p(v5555) then
-		'<tr>'
-			'<td class="label">Temas</td>',
-			'<td class="data">'/
-				'<ul class="noteList">'  /* El uso de <ol> genera una linea vacia al final de la lista en IE 5.5; en IE 6 el problema se da con <ul> y <ol>, pero se soluciona con <ol></ul> !!! */
-	fi,
-	
-	/* loop sobre v5555 */
-	(,
-		if iocc > nocc(v5555) then
-			break,
-		else
-			
-			/* Codificamos el query en v7600 */
-			proc('d7000a7000¦',v5555*2,'¦'),
-			,@URLENCODE.PFT,
-			proc('d7600a7600¦',v7000[1],'¦'),
-			
-			/* Construimos el link (deshabilitado hasta resolver los problemas) */
-			'<li>'
-				'<a style="font-weight: normal;" href="',v6001^u[1],
-					'?IsisScript=',v2000[1],
-					'&amp;db=',v2104[1],
-					'&amp;task=BIB-H-SEARCH',
-					'&amp;index=SUBJ',
-					'&amp;query=',replace(replace(v7600[1],   /* cuando usamos URLENCODE */
-						s('^2',v7600[1]^2),''),
-						s('^9',v7600[1]^9),''),
-					/*if not '.?!-':right(v5555,1) then '.' fi*/,
-				'">',
-				replace(replace(replace(replace(replace(replace(replace(
-				replace(replace(replace(replace(replace(replace(replace(replace(v5555*4,
-					'^x','&mdash;'),
-					'^y','&mdash;'),
-					'^z','&mdash;'),
-					'^v','&mdash;'),
-					'^a','&mdash;'),  /* para el 653 */
-					'--','&mdash;'),
-					'^b',' '),
-					'^c',' '),
-					'^d',' '),
-					'^l',' '),
-					'^p',' '),
-					'^q',' '),
-					'^t',' '),
-					s('^2',v5555^2),''),
-					s('^9',v5555^9),''),
-				'</a>'
-			'</li>'/
-		fi,
-	),
-
-	if p(v5555) then 
-				'</ul>'
-			'</td>'
-		'</tr>'/
-	fi,
 fi,
 
 
@@ -1010,6 +1024,9 @@ if p(v773) then
 	fi,
 fi,
 
+    /* Fila de relleno. Prueba (2008-03-14) */
+    '<tr><td class="label">&nbsp;</td><td class="data">&nbsp;</td></tr>'
+
 '</table>'/
 
 '</td>'
@@ -1162,6 +1179,13 @@ fi,
 '</td>',
 
 '</tr>',
+
+/* Footer con campos 001 y 005 (¿opcional?) */
+'<tfoot id="etiqFoot">',
+	'<tr>',
+		'<td colspan="2">Registro ',v1,'&nbsp;&nbsp;&#183;&nbsp;&nbsp;Modificado: ',v5*6.2,'/',v5*4.2,'/',v5.4,'</td>'
+	'</tr>',
+'</tfoot>',
 
 '</table>'
 
