@@ -1,0 +1,182 @@
+<!--
+   Los archivos de configuración se leen en este orden (local, global) debido a que
+   si v6000 = '^a1^a0' entonces v6000^a = '1', es decir, la primera ocurrencia de un
+   subcampo les gana a todas las posteriores.
+-->
+
+<!-- Leemos el archivo de configuración local local.conf -->
+<field action="replace" tag="6000" split="occ"><pft>
+	cat(getenv('PATH_WXIS'),'opac/config/local.conf')
+</pft></field>
+
+<!-- Leemos el archivo de configuración opacmarc.conf -->
+<field action="add" tag="6000" split="occ"><pft>
+	cat(getenv('PATH_WXIS'),'opac/config/opacmarc.conf')
+</pft></field>
+
+
+<!-- Almacenamos los valores de los parámetros en varios campos 600x -->
+
+<!-- v6001: opciones varias -->
+<field action="replace" tag="6001"><pft>
+	(,
+		,if v6000.1 = '#' then /* ignoramos líneas de comentarios */
+		,else if v6000 : 'FORM_STYLE='            then '^a',mid(v6000,instr(v6000,'=')+1,size(v6000))
+		,else if v6000 : 'AGREP_MAX_SUG='         then '^b',mid(v6000,instr(v6000,'=')+1,size(v6000))
+		,else if v6000 : 'COMPACT_RESULT_LIST='   then '^c',mid(v6000,instr(v6000,'=')+1,size(v6000))
+		,else if v6000 : 'MAX_HITS_BIB='          then '^d',mid(v6000,instr(v6000,'=')+1,size(v6000))
+		,else if v6000 : 'DEFAULT_RECORD_STYLE='  then '^e',mid(v6000,instr(v6000,'=')+1,size(v6000))
+		,else if v6000 : 'RECORD_STYLE_CONTROL='  then '^f',mid(v6000,instr(v6000,'=')+1,size(v6000))
+		,else if v6000 : 'SHOW_245h='             then '^g',mid(v6000,instr(v6000,'=')+1,size(v6000))
+		,else if v6000 : 'HEADINGS_PER_PAGE='     then '^h',mid(v6000,instr(v6000,'=')+1,size(v6000))
+		,else if v6000 : 'SHOW_INV='              then '^i',mid(v6000,instr(v6000,'=')+1,size(v6000))
+		,else if v6000 : 'TEXT_INDENT='           then '^j',mid(v6000,instr(v6000,'=')+1,size(v6000))
+		,else if v6000 : 'USE_MSC='               then '^k',mid(v6000,instr(v6000,'=')+1,size(v6000))
+		,else if v6000 : 'SHOW_EXTERNAL_LINKS='   then '^l',mid(v6000,instr(v6000,'=')+1,size(v6000))
+		,else if v6000 : 'SHOW_245c='             then '^m',mid(v6000,instr(v6000,'=')+1,size(v6000))
+		,else if v6000 : 'EMAIL_RECORDS='         then '^n',mid(v6000,instr(v6000,'=')+1,size(v6000))
+		,else if v6000 : 'BIB_RECORDS_PER_PAGE='  then '^r',mid(v6000,instr(v6000,'=')+1,size(v6000))
+		,else if v6000 : 'DISPLAY_LOCATION='      then '^s',mid(v6000,instr(v6000,'=')+1,size(v6000))
+		,else if v6000 : 'DISPLAY_DOC_TYPE='      then '^t',mid(v6000,instr(v6000,'=')+1,size(v6000))
+		,else if v6000 : 'SCRIPT_URL='            then '^u',mid(v6000,instr(v6000,'=')+1,size(v6000))
+		,else if v6000 : 'SHOW_RECORD_ID='        then '^v',mid(v6000,instr(v6000,'=')+1,size(v6000))
+		,else if v6000 : 'CALL_NUMBER_BROWSE='    then '^w',mid(v6000,instr(v6000,'=')+1,size(v6000))
+		,else if v6000 : 'AGREP_AUTO_SEARCH='     then '^x',mid(v6000,instr(v6000,'=')+1,size(v6000))
+		,else if v6000 : 'SHOW_SUGGESTIONS='      then '^y',mid(v6000,instr(v6000,'=')+1,size(v6000))
+		,else if v6000 : 'MAIN_ENTRY_TOP='        then '^1',mid(v6000,instr(v6000,'=')+1,size(v6000))
+		,else if v6000 : 'ETIQ_773_MODE='         then '^7',mid(v6000,instr(v6000,'=')+1,size(v6000))
+		,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,
+	),
+</pft></field>
+
+<!-- v6002: Texto de mensajes, botones, etc. -->
+<field action="replace" tag="6002"><pft>
+	(,
+		,if v6000.1 = '#' then ,, /* ignoramos líneas de comentarios */
+		,else if v6000 : 'AVAILABLE_IN='   then '^a',mid(v6000,instr(v6000,'=')+1,size(v6000))
+		,else if v6000 : 'INDEX_BROWSE='   then '^i',mid(v6000,instr(v6000,'=')+1,size(v6000))
+		,else if v6000 : 'NEW_SEARCH='     then '^s',mid(v6000,instr(v6000,'=')+1,size(v6000))
+		,else if v6000 : 'KEYWORD_SEARCH=' then '^w',mid(v6000,instr(v6000,'=')+1,size(v6000))
+		,fi,fi,fi,fi,fi,
+	),
+</pft></field>
+
+
+<!-- v6003: Paths -->
+<field action="replace" tag="6003"><pft>
+	(,
+		,if v6000.1 = '#' then /* ignoramos líneas de comentarios */
+		,else if v6000 : 'PATH_DB='        then '^b',mid(v6000,instr(v6000,'=')+1,size(v6000))
+		,else if v6000 : 'PATH_CGI-BIN='   then '^c',mid(v6000,instr(v6000,'=')+1,size(v6000))
+		,else if v6000 : 'PATH_HTDOCS='    then '^h',mid(v6000,instr(v6000,'=')+1,size(v6000))
+		,else if v6000 : 'PATH_LOGS='      then '^l',mid(v6000,instr(v6000,'=')+1,size(v6000))
+		,else if v6000 : 'PATH_AGREP='     then '^p',mid(v6000,instr(v6000,'=')+1,size(v6000))
+		,else if v6000 : 'PATH_TEMP='      then '^t',mid(v6000,instr(v6000,'=')+1,size(v6000))
+		,fi,fi,fi,fi,fi,fi,fi,
+	),
+</pft></field>
+
+
+<!-- Ciertos parámetros pueden sobreescribirse con valores recibidos vía CGI -->
+<field action="replace" tag="6001"><pft>
+	if p(v2090) then replace(v6001,s('^c'v6001^c),s('^c'v2090)) fi,
+</pft></field>
+
+<field action="replace" tag="6001"><pft>
+	if p(v2091) then replace(v6001,s('^s'v6001^s),s('^s'v2091)) fi,
+</pft></field>
+
+<field action="replace" tag="6001"><pft>
+	if p(v2092) then replace(v6001,s('^s'v6001^s),s('^s'v2092)) fi,
+</pft></field>
+
+
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<!--                       CIPAR                        -->
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<parm name="cipar"><pft>
+	/* ----- BASES (common) ----- */
+	'BIBLIO.FST=',      v6003^b,'/common/biblio.fst'/
+	'BIBLIO.STW=',      v6003^b,'/common/biblio.stw'/
+	'COUNTRY.*=',       v6003^b,'/common/country.*'/
+	'DICTGIZ.*=',       v6003^b,'/common/dictgiz.*'/
+	'HEADSORT.PFT=',    v6003^b,'/common/headsort.pft'/
+	'LANG.*=',          v6003^b,'/common/lang.*'/
+	'SELSUBJ.PFT=',     v6003^b,'/common/selsubj.pft'/
+	'SELNAME.PFT=',     v6003^b,'/common/selname.pft'/
+	'SELTITLE.PFT=',    v6003^b,'/common/seltitle.pft'/
+	
+	'ACTAB=',           v6003^b,'/common/ac-ansi.tab'/
+	'UCTAB=',           v6003^b,'/common/uc-ansi.tab'/
+
+	/* ----- BASES (specific) ----- */
+	'BASES.PAR=',       v6003^b,'/opac/',v2104,'/bases.txt'/
+	'BIB_CODES.TXT=',   v6003^b,'/opac/',v2104,'/bibcode.txt'/
+	'BIBLIO.*=',        v6003^b,'/opac/',v2104,'/biblio.*'/
+	'DATES.TXT=',       v6003^b,'/opac/',v2104,'/dates.txt'/
+	'LANG_CODES.TXT=',  v6003^b,'/opac/',v2104,'/langcode.txt'/
+	'LIT_CODES.TXT=',   v6003^b,'/opac/',v2104,'/litcode.txt'/
+	'MSC.*=',           v6003^b,'/opac/msc2000/msc.*'/
+	'NAME.*=',          v6003^b,'/opac/',v2104,'/name.*'/
+	'NOVEDADES.TXT=',   v6003^b,'/opac/',v2104,'/novedades.txt'/
+	'SUBJ.*=',          v6003^b,'/opac/',v2104,'/subj.*'/
+	'TITLE.*=',         v6003^b,'/opac/',v2104,'/title.*'/
+	'UPDATED.TXT=',     v6003^b,'/opac/',v2104,'/updated.txt'/
+
+	/* ----- Archivos HTML ----- */
+	'ABOUT.HTM=',         v6003^c,'/opac/about/',v2104,'.htm'/
+	'BIB-LIST-HEAD.HTM=', v6003^c,'/common/html/bib-list-head.htm'/
+	'BIB-NAV.HTM=', v6003^c,'/opac/html/bib-nav.htm'/
+	'BIB-RECORD-1.HTM=',  v6003^c,'/opac/html/bib-record-1.htm'/
+	'BIB-RECORD-2.HTM=',  v6003^c,'/opac/html/bib-record-2.htm'/
+	'BIB-RECORD-3.HTM=',  v6003^c,'/opac/html/bib-record-3.htm'/
+	'BROWSE-CATALOG-NAV.HTM=',v6003^c,'/opac/html/browse-catalog-nav.htm'/
+	'COMPLETO.HTM=',      v6003^c,'/opac/html/complete.htm'/
+	'CONTROL-FORM.HTM=',  v6003^c,'/opac/control-form.htm'/
+	'FEEDBACK_REPLY.HTM=',v6003^c,'/opac/html/feedback-reply.htm'/
+	'FEEDBACK_FORM.HTM=', v6003^c,'/opac/html/feedback-form.htm'/
+	'FORM-SIMPLE.HTM=',   v6003^c,'/opac/html/form-simple.htm'/
+	'FORM_ADVANCED.HTM=', v6003^c,'/opac/html/form-advanced.htm'/
+	'HEADING-BROWSE-MIDDLE.HTM=',v6003^c,'/opac/html/heading-browse-middle.htm'/
+	'HEADING-BROWSE-NAV.HTM=',v6003^c,'/opac/html/heading-browse-nav.htm'/
+	'HEADING-BROWSE-TOP.HTM=',v6003^c,'/opac/html/heading-browse-top.htm'/
+	'HOME.HTM=',          v6003^c,'/opac/home/',v2104,'.htm'/
+	'H-SEARCH-BOTTOM.HTM=',v6003^c,'/opac/html/h-search-bottom.htm'/
+	'H-SEARCH-TOP-1.HTM=',v6003^c,'/opac/html/h-search-top-1.htm'/
+	'H-SEARCH-TOP-2.HTM=',v6003^c,'/opac/html/h-search-top-2.htm'/
+	'MAIL-RESULTS.HTM=',  v6003^c,'/opac/html/mail.htm'/
+	'NOVEDAD.HTM=',       v6003^c,'/opac/html/novedad.htm'/
+	'OPAC-FOOTER.HTM=',   v6003^c,'/opac/html/opac-footer.htm'/
+	'OPAC-HEAD.HTM=',     v6003^c,'/opac/html/opac-head.htm'/
+	'SAMPLE-RECORD.TXT=', v6003^c,'/opac/sample-record.txt'/
+	'SORTED-BY.HTM=',     v6003^c,'/opac/html/sorted-by.htm'/
+	
+	'OPAC-BANNER.HTM=',   v6003^c,'/opac/banner/',v2104,'.htm'/
+	'PRESENTATION.HTM=',  v6003^c,'/opac/present/',v2104,'.htm'/
+	'ABOUT-MSC.HTM=',     v6003^c,'/opac/html/about-msc.htm'/
+	
+	/* ----- Archivos PFT ----- */
+	'AACR2.PFT=',         v6003^c,'/opac/pft/aacr2.pft'/
+	'CITA.PFT=',          v6003^c,'/opac/pft/cita.pft'/
+	'CLEAN-HEADING.PFT=', v6003^c,'/opac/pft/clean-heading.pft'/
+	'COMPACT-DATES.PFT=', v6003^c,'/opac/pft/compact-dates.pft'/
+	'DICTGIZ.PFT=',       v6003^c,'/opac/pft/dictgiz.pft'/
+	'HEADINGS.PFT=',      v6003^c,'/opac/pft/headings.pft'/
+	'MAIL.PFT=',          v6003^c,'/opac/pft/mail.pft'/
+	'MSC.PFT=',           v6003^c,'/opac/pft/msc.pft'/
+	
+	/* ----- Archivos PFT (compartidos con Catalis) ----- */
+	'BIB_SORT_KEY.PFT=',  v6003^c,'/common/pft/bib-sort-key.pft'/
+	'DOCUMENT-TYPE.PFT=', v6003^c,'/common/pft/doc-type.pft'/
+	'ETIQUETADO.PFT=',    v6003^c,'/common/pft/etiquetado.pft'/
+	'URLENCODE.PFT=',     v6003^c,'/common/pft/urlencode.pft'/
+	'WORK_HEADING.PFT=',  v6003^c,'/common/pft/wh.pft'/
+	
+	/* ----- Directorio para archivos temporales ----- */
+	'CI_TEMPDIR=',v6003^t,/
+	
+	/* ----- Archivo de logs (uno por fecha) ----- */
+	'LOGFILE.TXT=',v6003^l,'/log-',s(date).8,'.txt'/
+</pft></parm>
+

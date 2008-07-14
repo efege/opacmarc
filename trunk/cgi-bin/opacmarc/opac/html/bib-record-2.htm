@@ -1,0 +1,197 @@
+[pft]if v2008 <> 'XML' then[/pft]
+
+	<div id="resultWrapper" class="bib-record-2">
+
+	<!-- container para los grupos de controles -->
+	<div id="resultSubheader" style="text-align: center;">
+	
+		<!-- Controles para cambiar el estilo de visualización -->
+		<div style="float: right;">
+			<form action="[pft]v6001^u[/pft]" method="get">
+				<input type="hidden" name="IsisScript" value="[pft]v2000[/pft]">
+				<input type="hidden" name="task" value="BIB-RECORD">
+				<input type="hidden" name="db" value="[pft]v2104[/pft]">
+				<!--input type="hidden" name="query" value="v2001"-->
+				<input type="hidden" name="cid" value="[pft]v2099[/pft]">
+				<!--input type="hidden" name="keys" value="v2010"--> <!-- pasan via tmp -->
+				<input type="hidden" name="curr" value="[pft]v2017,"1"n2017[/pft]">
+				<input type="hidden" name="total" value="[pft]v2027[/pft]">
+				
+				[pft]
+				/* Estilos ofrecidos (faltan: cita, xml, breve?). TO-DO: enviar esto a opacmarc.conf */
+				proc('a6017~Completo~a6017~Ficha~a6017~MARC~'),
+				
+				select v6001^f   /* tipo de controles */
+					case 'select' :
+						'Estilo: '/
+						'<select name="style" onchange="this.form.submit()">'/
+						(,
+							'<option value="',v6017,'"',
+							if v2008[1] = v6017 then
+								' selected',
+							fi,
+							'>',v6017,'</option>'/
+						),
+						'</select>'/
+						'<noscript>
+							<input type="submit" value="Cambiar" class="button">
+						</noscript>'/
+					
+					case 'button' :
+						'Estilo: '/
+						(,
+							'<input type="submit"',
+							if v2008[1] = v6017 then
+								'class="estilo estiloActivo" onclick="return false;"',
+							else
+								' class="estilo" ',
+							fi,
+							' name="style" value="',v6017,'">'/
+						),
+					
+					case 'text' :
+						/* 'Estilo: '*/
+						'<ul class="navigation">',
+						(,
+							'<li>',
+							if v2008[1] <> v6017 then
+								'<a href="',v6001^u[1],
+									'?IsisScript=',v2000[1],
+									'&amp;task=BIB-RECORD',
+									'&amp;db=',v2104[1],
+									'&amp;cid=',v2099[1],
+									'&amp;curr=',if v2017[1] = '' and v2106[1] = '' then '1' else v2017[1], fi,
+									'&amp;total=',v2027[1],
+									'&amp;cn=',v2106[1],
+									'&amp;style=',v6017,'"',
+									' class="estilo" ',
+									' title="',
+									select v6017
+										case 'Ficha' : 'Ficha AACR2',
+										case 'MARC'  : 'Etiquetas MARC 21',
+										case '' : '',
+									endsel,
+									,'"',
+								'>',
+									v6017,
+								'</a>',
+							else
+								'<span class="estilo estiloActivo">',v6017,'</span>',
+							fi,
+							'</li>',
+						),
+						
+						/* Link al BibTeX de MathSciNet (sugerido por Sebastián Ferraro) */
+						/* TO-DO: usar el .conf; abrir ventana pequeña con JS */
+						proc('d510a510|',ref(['BIBLIO']val(v2041),v510[1]),'|'), /* tomamos el primer 510 del registro */
+						if v510^a.2 = 'MR' and a(v510^3) then   /* excluimos los casos en que hay un 510$3 */
+							'<li>',
+							'<a href="http://www.ams.org/msnmain/',
+								replace(v510^c,' #',':'),
+								'?fn=105&amp;r=1&amp;form=docdownload&amp;dr=all&amp;l=20&amp;pg3=MR&amp;s3=',
+								replace(v510^c,' #',':'),
+								'&amp;fmt=bibtex" class="estilo" title="Registro BibTeX (abre una nueva ventana; requiere acceso a MathSciNet)" target="_blank">BibTeX</a>',
+							'</li>',
+						fi,
+						
+						'</ul>',
+				endsel,
+				[/pft]
+			</form>
+		</div>
+		
+		[pft]if val(v2027) > 1 then /* si hay más de un "resultado" */ [/pft]
+			
+			<div style="float: left;">
+				<span style="white-space: nowrap;">
+					Resultado [pft]v2017[/pft] de [pft]v2027[/pft]
+				</span>
+			</div>
+				
+			<!-- Controles para navegar por la lista de registros -->
+			<ul class="navigation" style="margin-left: auto; margin-right: auto;">
+				
+				<!-- Enlace al registro anterior -->
+				<li>
+					[pft]
+						if val(v2017) > 1 then
+							'<a href="',v6001^u,
+								'?IsisScript=',v2000,
+								'&amp;task=BIB-RECORD',
+								'&amp;db=',v2104,
+								'&amp;cid=',v2099,
+								'&amp;curr=',f(val(v2017)-1,1,0),
+								'&amp;style=',v2008,
+							'" id="linkPrevResult" title="Ver el resultado anterior">',
+								'Anterior</a>',
+						else
+							'<span id="linkPrevResultDisabled">Anterior</span>', /* sólo texto, sin link */
+						fi,
+					[/pft]
+				</li>
+				
+			   <li>&nbsp;|&nbsp;</li>
+				
+				<!-- Enlace a la lista de resultados -->
+				<!-- Los parámetros dependen de la tarea original (BIB-*-SEARCH, BROWSE-CATALOG, TEST_CONDITION) -->
+				<li>
+					[pft]
+						/* Obtenemos el 'from' de la forma Dn+1 tal que Dn+1 <= v2017 < D(n+1)+1 */
+						/* donde D = 6001^r = DEFAULT_RECORDS_PAGE */
+						proc('d2042a2042~',f((val(v2017)-1)/val(v6001^r),1,1),'~'),
+						proc('d2042a2042~',left(v2042,instr(v2042,'.')-1),'~'),
+						proc('d2042a2042~',f(val(v6001^r)*val(v2042)+1,1,0),'~'),
+					[/pft]
+					
+					[pft]
+						'<a href="',v6001^u,
+							'?IsisScript=',v2000,
+							'&amp;db=',v2104,
+							'&amp;task=',if p(v2017) and a(v2099) then 'BROWSE-CATALOG' else if v6112^t[1] = 'COND' then 'TEST_CONDITION' else '', fi,fi,
+							'&amp;query=',replace(v6112^q[1],'~','^'),
+							/*'&amp;condition=',v6112^q[1],*/
+							'&amp;',if 'TITLE~ANY' : v6112^t[1] and not v6112^q[1] : '~' then 'searchType' else 'index' fi,'=',v6112^t[1],
+							'&amp;sortBy=',v6112^s[1],
+							'&amp;from=',v2042,
+						'" title="Volver a la lista de resultados">
+						 Listado</a>',
+					[/pft]
+				</li>
+				
+			   <li>&nbsp;|&nbsp;</li>
+			   
+				<!-- Enlace al registro siguiente -->
+				<li>
+					[pft]
+						if val(v2017) < val(v2027) then
+							'<a href="',v6001^u,
+								'?IsisScript=',v2000,
+								'&amp;task=BIB-RECORD',
+								'&amp;db=',v2104,
+								'&amp;cid=',v2099,
+								'&amp;curr=',f(val(v2017)+1,1,0),
+								'&amp;style=',v2008,
+							'" id="linkNextResult" title="Ver el resultado siguiente">',
+								'Siguiente</a>',
+						else
+							'<span id="linkNextResultDisabled">Siguiente</span>', /* sólo texto, sin link */
+						fi,
+					[/pft]
+				</li>
+				
+			</ul>
+			
+		[pft]else if a(v2106) then[/pft]  <!-- único resultado -->
+			<div style="text-align: left;">
+				Se encontró este único registro
+			</div>
+		
+		[pft]else[/pft]  <!-- para mantener el espacio adecuado cuando se solicita un registro por su nro. de control -->
+			<div>&nbsp;</div>
+		[pft]fi,fi[/pft]
+			
+	</div> <!-- resultSubheader -->
+	
+	<div style="clear: both; font-size: 1px; line-height: 1px;">&nbsp;</div> <!-- clear -->
+	
+[pft]fi[/pft]

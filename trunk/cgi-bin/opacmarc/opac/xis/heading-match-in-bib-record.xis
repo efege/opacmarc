@@ -1,0 +1,556 @@
+<!-- =========================================================
+	HEADING-MATCH-IN-BIB-RECORD
+	Encuentra los registros bibliográficos asociados a un heading.
+	
+	Estructura:
+		FASE 1: Construcción de la expresion de búsqueda
+		FASE 2: La búsqueda propiamente dicha
+		FASE 3: Generación de enlaces que ofrecen sugerencias asociadas a esta búsqueda
+		FASE 4: Display de los resultados
+		FASE 5: Ranking de subject headings
+		FASE 6: Elementos finales de la página (botones, mail)
+		
+	ATENCION: revisar todos esos mid(xx,1,size(xx)-1)
+	
+	MODIFICADO para usar subcampo 9 (heading number), 2003/10/28
+	
+	Se llega aquí también desde una búsqueda por palabras en un índice de
+	headings, que haya generado un único resultado.
+	
+	(c) 2003-2006 Fernando J. Gómez - INMABB - CONICET
+	========================================================= -->
+
+<!-- Variables:
+		1000  auxiliar para subfield split
+		1002  Isis_Total (search & list)
+		1003  Isis_Total (search)
+		1005  Isis_Keys
+
+		1201  mfn (v1^m)
+		1231  flag para no re-activar el gizmo
+		1901  auxiliar para heading split (SUBJ)
+
+		2000  IsisScript
+		2001  expresión recibida por el script
+		2003  index (NAME,SUBJ,TITLE,COL)
+		2004  from (para paginación)
+		2016  sortBy
+		2028  rpp (count)
+		2031  wa (works about)
+		2099  cid (identificador de una consulta previa)
+
+		3001  search expression, en construcción
+		3002  search expression, construida
+		3004  heading limpio (mostrable HTML)
+		3010  string de campos donde se busca el match exacto
+		3011  flag para indicar que hubo match
+
+		5775  descriptores presentes en los registros recuperados
+		5776  los descriptores ganadores del ranking por frecuencias
+
+		6001  parámetros de OPAC.INI
+		6002  mensajes, texto de botones
+
+		7000  auxiliar para uso de URLENCODE.PFT
+		7001  auxiliar para uso de URLENCODE.PFT
+
+		9001  main heading (para compactación de la lista de resultados)
+		9005  flag (NEW_MAIN_HEADING) 
+ -->
+
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	*** FASE 1: Construcción de search expression
+	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<!-- ATENCION: v2001 puede tener más de una occ. -->
+
+<!--display><pft>'v2001:'v2001+|<br>|</pft></display-->
+
+
+<!-- Supresión de '^' y '\' -->
+<!-- SUBCAMPO9: Anular esto -->
+<field action="replace" tag="3001" split="occ"><pft>
+	proc('d1000a1000¦',
+		,replace(mid(v2001*1,1,size(v2001*1)),'^','¦a1000¦'),
+	'¦'),
+	(|~|v1000*1),
+</pft></field>
+
+<!-- Esta tabla de conversión debe estar sincronizada entre 
+     postings.xis, bib-h-search.xis y dictgiz.seq -->
+<!-- SUBCAMPO9: Anular esto -->
+<field action="replace" tag="3001" split="occ"><pft>@DICTGIZ.PFT</pft></field>
+
+
+<!-- SUBCAMPO9: Agregar esto -->
+<!-- Averiguamos el heading a partir de su código -->
+<!-- ATENCION: necesitamos arreglar: gizmo, dashes, ~a -->
+<!--field action="replace" tag="3004"><pft>ref([v2003]l([v2003]'_HEAD_'v2001),v1)</pft></field--> 
+
+
+<!-- Mostramos el encabezamiento usado para la búsqueda -->
+<display><htmlpft>
+	[pft]if v9060 <> 'UNIQUE_KEYWORD_MATCH' then[/pft]
+		<div id="resultHeader" class="[pft]v2003[/pft]">
+			Búsqueda por
+			[pft]
+				select v2003 
+					case 'NAME' : 'autor',
+					case 'SUBJ' : 'tema',
+					case 'TITLE': 'título',
+					case 'COL'  : 'serie',
+				endsel,
+			[/pft]:
+			<b>
+				[pft]if v2003 = 'TITLE' then
+					v3004.80,
+				else
+					v3004,
+				fi[/pft]
+			</b>
+		</div>
+	[pft]else ,@CLEAN-HEADING.PFT,[/pft]
+		<div id="singleMatchNotice">
+			Hay una única coincidencia: <b>[pft]v3004[/pft]</b>
+		</div>
+	[pft]fi[/pft]
+</htmlpft></display>
+
+<!--display><pft>ALL</pft></display-->
+
+<!-- A qué campos (tags) se restringe la búsqueda -->
+<!-- ATENCION: necesitamos, en el caso de "Vea también obras acerca de",
+	ampliar la búsqueda a todos los headings tienen al susodicho autor
+	en el 600$a, independientemente de las subdivisiones presentes.
+	Es decir, necesitamos una especie de truncamiento, tanto
+	al armar la expresión de búsqueda como al chequear los matchings
+	en los registros recuperados.
+	Ver si ese mismo comportamiento debería darse en general cuando
+	se sigue un link desde un nombre en un campo 600.
+-->
+<field action="replace" tag="3002" split="occ"><pft>
+	(,
+		select v2003[1]
+			case 'NAME' : ,v3001,'/(9100)'/
+			case 'SUBJ' :
+				if a(v2031) then 
+					v3001,'/(9600)'/   /* v3001.30 ?? */
+				else 
+					mid(v3001.29,1,size(v3001)-1),'$/(9600)'/
+				fi,
+			case 'TITLE': ,v3001,'/(9200)', ' OR ', v3001,'/(9400)',/
+			case 'COL'  : ,v3001,'/(9400)'/
+			/*
+			case 'NAME' : '"',v3001.29,'$"/(9100)'/
+			case 'SUBJ' : '"',v3001.29,'$"/(9600)'/
+			*/
+			/*
+			case 'SUBJ' :
+				if a(v2031) then 
+					'"'v3001.30'"/(9600)'/
+				else 
+					'"'mid(v3001.29,1,size(v3001)-1)'$"/(9600)'/
+				fi,
+			*/
+		endsel,
+		/* Usamos comillas dobles para permitir la presencia de palabras reservadas */
+		/* El uso de comillas dobles hace necesario truncar en 30 caracteres 
+			(el "$" cuenta como uno de esos 30) */
+	),
+</pft></field>
+
+<!-- Intercalamos el operador OR, en caso de haber más de una ocurrencia de v2001 -->
+<!-- (i.e., si hay más de un heading seleccionado) -->
+<!--field action="replace" tag="3002"><pft>
+	if nocc(v3002) > 1 then
+		'(', v3002+|) OR (|, ')',
+	fi 
+</pft></field-->
+
+<!--Show search expression for debugging -->
+<!--display><pft>
+	'<pre style="color: #BBB;">',v3002,'</pre>'
+</pft></display-->
+
+
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    *** FASE 2: la búsqueda propiamente dicha
+	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<do task="search">
+	<parm name="db">BIBLIO</parm>
+	<parm name="expression"><pft>v3002</pft></parm>
+	<define>1002 Isis_Total</define>
+	<define>1005 Isis_Keys</define>  <!-- Para identificar el tag -->
+
+	<!-- Descomentar estas líneas para ver cuántos registros se recuperan en el diccionario -->
+	<!--parm name="count">1</parm>
+	<loop></loop>
+	<display><pft>'<span style="color: #ccc;">Recuperados vía diccionario: ',v1002,'</span>'</pft></display-->
+
+	<!-- Test para detectar demasiados resultados -->
+	<!-- ATENCION: si conocemos el nro. de heading, basta con hacer un npost() al
+		 comienzo del script -->
+	<parm name="count">1</parm>
+	<loop><!-- set v1002 --></loop>
+	<flow action="skip"><pft>if val(v1002) > val(v6001^d) or val(v1002) = 0 then 'Quit' fi</pft></flow>
+
+	<!-- Cuando hay un único resultado, salimos del <do> (no parece necesario hacerlo desde aquí) -->
+	<!--flow action="skip"><pft>if val(v1002)=1 then 'Quit' fi</pft></flow-->
+
+	<parm name="count"><pft>v6001^d</pft></parm>  <!-- no superamos el límite -->
+	<loop>
+		<field action="import" tag="list">2001,2003,2016,2031</field>
+		<!--display><pft>'<p>'v650'<br>'replace(v2001,'~','^')</pft></display-->
+		
+		<!-- Acá es cuando necesitamos que se hayan preservado los 
+			delimitadores de subcampo, para poder chequear fácilmente un match -->
+		<!-- Revisar que no haya posibilidad de error (mismatch) -->
+		
+		<!-- 1. En qué campos hay que buscar un match -->
+		<!-- ATENCION: estos tags deberian almacenarse en alguna variable de la aplicacion -->
+		<field action="replace" tag="3010"><pft>
+			select v2003
+				case 'SUBJ' : s(v600|_|,v610|_|,v611|_|,v630|_|,v650|_|,v651|_|,v653|_|,v655|_|),
+				case 'NAME' : s(v100|_|,v110|_|,v111|_|,v700|_|,v710|_|,v711|_|),
+				case 'TITLE': s(v130|_|,v240|_|,v245|_|,v246|_|,v505|_|,v700|_|,v730|_|,v773|_|,v440|._|,v830|_|), /* nótese el punto al final del 440 */
+				case 'COL'  : s(v440|_|,v490|_|,v830|_|),
+			endsel,
+		</pft></field>
+				
+		
+		<!-- 2. Averiguamos si hay match -->
+		<!-- ATENCION: en búsquedas desde un link "works about", el punto final molesta 
+		     (porque queremos incluir cualquier subdivision) -->
+		<!-- ATENCION: parece que molesta *siempre*! -->
+		<!-- ATENCION: v2001*2 en lugar de v2001: agregado 2006-04-17 para las búsquedas por serie ("^aCarus mathematical" vs. "^aThe Carus mathematical") -->
+		<!-- Comparación usando mpu: 2006-04-18, para búsquedas por serie con artículo inicial, normalizada ("Libros del mirasol") -->
+		<field action="delete" tag="3011">ALL</field>
+		<field action="replace" tag="3011"><pft>
+			if p(v2031) then  /* buscando "works about" Fulano (ignoramos lo que sigue al ^a) */
+				if s(mpu,v3010[1]) : replace(mid(s(mpu,v2001*2),1,size(v2001^a)-1),'\','') then 'MATCH' fi,
+			else
+				(,
+					if s(mpu,v3010[1]) : replace(mid(s(mpu,v2001*2),1,size(v2001)-1),'\','') then 'MATCH' fi,
+					/* (el '\' aparece cuando hay comillas simples en v2001) */
+					/* ATENCION: revisar las vueltas que da ese '\' */
+				),
+			fi,
+		</pft></field>
+
+		<!-- 3. Si hay match, mandamos los datos a la lista -->
+		<!-- ATENCION: el subcampo ^k no debe incluir ningún '^' -->
+		<list action="load" type="list"><pft>
+			if p(v3011) then
+				'^k',@BIB_SORT_KEY.PFT,
+				'^m',mfn,
+				'^t',(v1005+|#|),  /* para poder incluirlas en los links desde wh.pft */
+				'^s',              /* SH para el ranking */
+				( replace(v600*2,'^','~'),'#', ),
+				( replace(v650*2,'^','~'),'#', ),
+				( replace(v651*2,'^','~'),'#', ),
+				( replace(v653*2,'^','~'),'#', ),
+			fi,
+		</pft></list>
+		
+		<!--display><pft>'<br>'mfn,x1,v1005.3</pft></display-->
+	</loop>
+</do>   <!-- fin del do task="search" -->
+
+<!-- Si hubo demasiados resultados... -->
+<flow action="jump"><pft>
+	if val(v1002) > val(v6001^d) then  /* v6001^d: MAX_HITS_BIB */
+		'TOO_MANY_HITS',
+	fi
+</pft></flow>
+
+
+<!-- Display sort(ed) keys, for debugging -->
+<!--do task="list">
+	<parm name="sort"><pft>v1^k</pft></parm>
+	<define>1 Isis_Item</define>
+	<loop>
+		<display><pft>'<pre>mfn: ',v1^m,x2,'key: 'v1^k,'</pre>'</pft></display>
+	</loop>
+</do-->
+
+
+<!-- Contamos los matchings auténticos = total de items en la lista -->
+<do task="list">
+	<define>1 Isis_Item</define>
+	<define>1002 Isis_Total</define>
+	<parm name="count">1</parm>
+	<loop>
+		<!-- set v1002 and v2041 (usado para cuando hay un único resultado) -->
+		<field action="replace" tag="2041"><pft>v1^m</pft></field>
+		<field action="export" tag="list">2041</field>
+		<!--display><pft>'<p>'v1^k/</pft></display-->
+	</loop>
+</do>
+
+<!-- Almacenamos los MFNs ordenados -->
+<call name="saveMfnList"><pft>
+	"^t"v2003,
+	'^q',replace(v2001,'^','~'),
+	"^r"v3004,
+	"^n"v1002,
+	"^s"v2016,  /* sortBy */
+</pft></call>
+
+
+<!-- v6001^y: SHOW_SUGGESTIONS-->
+<flow action="jump"><pft>
+	if val(v6001^y) = 0 then 'DISPLAY_RESULTS' fi
+</pft></flow>
+
+
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	*** FASE 3: Generación de enlaces que ofrecen sugerencias
+	asociadas a esta búsqueda
+	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<!-- Para búsquedas por tema, siempre se generan enlaces. 
+	Para búsquedas por autor, sólo se generan si se comprueba que 
+	hay registros con ese autor como tema (tag 600). 
+-->
+<!-- ATENCION: Hay casos en que no tiene sentido ofrecer el link. P.ej.:
+"Vea todos los temas que incluyan el término Berger, Elmer, 1908-"
+(cuando hay un solo tema con ese término, entonces no hay nada nuevo
+para mostrar).
+-->
+
+
+<flow action="jump"><pft>if v2003 <> 'NAME' then 'SHOW_SUGGESTIONS' fi</pft></flow>
+
+<!--display><pft>v3002'<br>'replace(replace(v3002,'"',''),'/(9100)','$/(9600)')</pft></display-->
+
+<!-- ¿Tenemos "works about" para este autor? -->
+<!-- ATENCION: al recuperar por /(9600), debemos mirar solo el 600$a
+     y truncar, pues nos vienen bien todas las subdivisiones -->
+<!-- ATENCION: Esta info podría cargarse de antemano en la base de autores -->
+<do task="search">
+	<parm name="db">BIBLIO</parm>
+	<!--parm name="expression"><pft>'"'mid(v3001.29,1,size(v3001)-1)'$"/(9600)'/</pft></parm-->
+	<parm name="expression"><pft>mid(v3001,1,size(v3001)-1),'$/(9600)'/</pft></parm>
+	<define>1003 Isis_Total</define>
+	<parm name="count">1</parm>
+	<loop><!-- set v1003 --></loop>
+</do>
+
+<!-- ====================================== -->
+<label>SHOW_SUGGESTIONS</label>
+<!-- ====================================== -->
+<include>opac/xis/show-suggestions.xis</include>
+
+
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	*** FASE 4: Display de los resultados
+	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<label>DISPLAY_RESULTS</label>
+
+<!-- Si la lista tiene un único elemento, pasamos a mostrar el registro completo -->
+<field action="replace" tag="9060"><pft>if val(v1002) = 1 then 'UNIQUE_KEYWORD_MATCH', fi</pft></field>
+<flow action="jump"><pft>
+	if val(v1002) = 1 then 'BIB-RECORD' fi,
+</pft></flow>
+
+
+<!-- En otro caso, viene el display de lista ordenada de títulos (work headings) -->
+<!-- ATENCION: Mostrar cada main heading una única vez (Ej. Anton, Howard) -->
+<!-- Agrupar resultados según Obras de, obras acerca de... -->
+
+
+<!-- Control para cambiar el orden -->
+<display><htmlpft><pft>cat('SORTED-BY.HTM')</pft></htmlpft></display>
+
+
+<!-- ======== Display de los resultados ======== -->
+
+<!-- Abrimos la tabla de resultados -->
+<display><htmlpft><pft>cat('BIB-LIST-HEAD.HTM')</pft></htmlpft></display>
+
+<do task="list">
+	<define>1 Isis_Item</define>
+	<define>1001 Isis_Current</define>
+	<define>1002 Isis_Total</define>
+	<parm name="sort"><pft>v1^k</pft></parm> <!-- acá irá v1^t,v1^k -->
+	<parm name="from"><pft>v2004</pft></parm>	
+	<parm name="count"><pft>v2028</pft></parm>
+	<!--display><pft>'&nbsp;&#8212;&nbsp;Seleccionados: ',v1002/</pft></display-->
+	<!--display><pft>'<ol>'/</pft></display-->
+	<loop>
+		<field action="import" tag="list">2000,2003,2004,2016,2099,2101,2104,6001,6003,9001</field>
+		<do task="mfnrange">
+			<parm name="db">BIBLIO</parm>
+			<parm name="from"><pft>v1^m</pft></parm>
+			<parm name="count">1</parm>
+			<loop>
+				<field action="import" tag="list">1001,1002,2000,2003,2004,2016,2099,2101,2104,6001,6003,9001</field>
+				
+				<!-- Queremos poder conservar las claves en los links que salgan desde wh.pft -->
+				<field action="import" tag="1005">1</field>
+				<field action="replace" tag="1005" split="occ"><pft>replace(v1005^t,'#',s(#))</pft></field>
+				<!--display><pft>ALL</pft></display-->
+				
+				<!-- 9005: Flag para indicar que el main heading es distinto del anterior -->
+				<!-- Solo interesa si está activada la compactación de resultados -->
+				<!-- ATENCION: ver cómo detectar el comienzo del bloque de registros que carecen de 1xx -->
+				<!-- TO-DO: estamos incluyendo dentro del heading subcampos irrelevantes como $4 -->
+				<field action="replace" tag="9004"><pft>
+					'MAIN_HEADING='
+					v100*2,
+					v110*2,
+					v111*2,
+				</pft></field>
+				<!--display><pft>'<hr>9001: 'v9001,' . 9004: 'v9004</pft></display-->
+				<field action="replace" tag="9005"><pft>
+					if v9004 <> v9001 then
+						'NEW_MAIN_HEADING',
+					fi
+				</pft></field>
+				
+				<!-- Generamos una fila de la tabla -->
+				<display><pft>,@WORK_HEADING.PFT,</pft></display>
+				
+				<field action="replace" tag="9001"><pft>v9004</pft></field>
+				<field action="export" tag="list">9001</field>
+			</loop>
+		</do>
+		<field action="export" tag="list">9001</field>
+	</loop>
+</do>
+
+<!-- Cerramos la tabla de resultados -->
+<display>
+	</table>
+	
+	<!-- Experimento: barra lateral que acompañe la lista de resultados -->
+	<!--div style="float: right; width: 22%; margin-top: 0.7em; border: 1px solid red;">
+		Suggested navigation links
+	</div>
+	<div class="clear">&nbsp;</div-->
+</display>
+
+<flow action="jump"><pft>
+	/* v6001^y = SHOW_SUGGESTIONS */
+	if val(v6001^y) = 0 or v2003 <> 'SUBJ' or val(v1002) < 6 then 'ABAJO' fi
+</pft></flow>
+
+
+<!-- -----------------------------------------------------------------------
+     *** FASE 5: Ranking de subject headings
+	   ----------------------------------------------------------------------- -->
+<!-- Solo para búsquedas temáticas -->
+<!-- (y que tengan un mínimo de resultados) -->
+<!-- ATENCION: la presencia del ~9 estorba -->
+
+<!-- Cargamos en v5775 todos los descriptores presentes en los registros recuperados -->
+<do task="list">
+	<define>1 Isis_Item</define>
+	<loop>
+		<field action="import" tag="list">5775</field>
+		<field action="add" tag="5775" split="occ"><pft>replace(v1^s,'#',s(#))</pft></field>
+		<field action="export" tag="list">5775</field>
+	</loop>
+</do>
+
+<!--display><pft>v5775+|<br>|</pft></display-->
+<!--display><pft>ALL</pft></display-->
+
+<!-- Limpiamos la lista (porque sólo hay una lista disponible!) -->
+<list action="delete">now</list>
+
+<!-- Cargamos los descriptores en la lista, contando frecuencia -->
+<!-- (Excluimos el descriptor usado en *esta* búsqueda) -->
+<list action="load" type="freq"><pft>
+	(,
+		if not v5775 : replace(v2001[1],'^','~') then v5775/ fi
+	),
+</pft></list>
+<!-- ATENCION: la más pequeña diferencia (puntuación, mayúsculas) estropea el conteo -->
+
+<!-- Ordenamos por frecuencia, y cargamos en v5776 los "ganadores" -->
+<do task="list">
+	<define>1 Isis_Item</define>
+	<define>2 Isis_Value</define>
+	<define>3 Isis_Total</define>
+	<parm name="sort"><pft>f(val(v2),5,0)</pft></parm>
+	<parm name="reverse">On</parm>
+	<parm name="from">1</parm>
+	<parm name="count">3</parm> <!-- Ponemos un tope -->
+	<loop>
+		<field action="import" tag="list">1002,5776</field>
+		<!--display><pft>v2,'--',f(val(v2)/val(v1002),1,3) ,v1'<br>'</pft></display-->
+		<field action="add" tag="5776"><pft>
+			if val(v2)/val(v1002) >= 0.2 then v1, fi
+		</pft></field>
+		<field action="export" tag="list">5776</field>
+		<!-- El coeficiente debe ajustarse de acuerdo a v1002 -->
+	</loop>
+</do>
+
+<display><htmlpft>
+	[pft]if p(v5776) then /*v5776+|<br>|*/[/pft]
+		
+		<!--script type="text/javascript">
+			if ( document.getElementById ) {
+				document.getElementById("concom1").innerHTML = "<img src=/opac/img/right.gif alt=&gt;>";
+				document.getElementById("concom2").innerHTML += "Vea también: ";
+				[pft]
+				(,
+					'document.getElementById("concom2").innerHTML += "<a href=',
+						v6001^u[1],
+						'?IsisScript=',v2000[1],
+						'&amp;db=',v2104[1],
+						'&amp;index=SUBJ',
+						'&amp;query=',
+							replace(replace(replace(replace(v5776,
+								'~','^'),
+								'&','%26'),
+								' ','%20'),
+								mid(v5776,instr(v5776,'~9'),1000),'')
+						'>',
+						'<strong>',
+						replace(replace(replace(replace(v5776*2,
+							'~d',' '),
+							'~x','&#8212;'),
+							'~y','&#8212;'),
+							'~z','&#8212;'),
+						'</strong>',
+						'</a>"',
+					if iocc < nocc(v5776) then ' + " <b>&#183;</b> "', fi,
+					';'/
+				),
+				[/pft]
+			}
+		</script-->
+	[pft]fi[/pft]
+</htmlpft></display>
+
+
+
+<!-- -----------------------------------------------------------------------
+	*** FASE 6: Elementos finales de la página (botones, mail)
+	----------------------------------------------------------------------- -->
+
+<!-- ===================================== -->
+<label>ABAJO</label>
+<!-- ===================================== -->
+
+<!-- Botones -->
+<display><htmlpft><pft>
+	,cat('BIB-NAV.HTM'),
+</pft></htmlpft></display>
+
+<!-- Email -->
+<display><htmlpft><pft>
+	if v6001^n = '1' then ,cat('MAIL-RESULTS.HTM'), fi
+</pft></htmlpft></display>
+
+<display>
+	</div>  <!-- resultWrapper -->
+</display>

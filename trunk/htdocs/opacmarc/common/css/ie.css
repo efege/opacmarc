@@ -1,0 +1,37 @@
+/* Correcciones en CSS para IE <= 6 */
+
+/* Consultar por ejemplo "Essentials of CSS Hacking For Internet Explorer",
+	http://www.maratz.com/blog/archives/2005/06/16/essentials-of-css-hacking-for-internet-explorer/
+*/
+
+
+/* Links: LVHA */
+a:link, a:visited {
+	border: none !important;
+	text-decoration: underline;
+}
+a:hover, a:active {
+	border: none !important;
+	text-decoration: none;
+}
+
+div#resultWrapper {
+	height: 1%;  /*  esto aparentemente soluciona el problema del padding inferior fluctuante en IE  :-) */
+}
+
+ul#webSearches li {
+	border-left: none;
+}
+
+div#sugerencias li {
+	background-position: 4px 0em;  /* ajusta la posición de la imagen (bullet) */
+}
+
+input#kwQuery, input#browseTerm {
+	width: auto; /* con porcentajes no lucen bien */
+}
+
+div#otros-recursos, div#de-nuevo { /* el uso de porcentajes hace saltar los links */
+	padding-left: 7px;
+	padding-right: 7px;
+}

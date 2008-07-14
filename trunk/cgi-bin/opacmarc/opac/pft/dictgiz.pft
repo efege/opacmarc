@@ -1,0 +1,22 @@
+/* =================================================================
+ *  Gizmo aplicado a los headings antes de enviarlos al diccionario
+ *  ATENCION: Mantener sincronizado con dictgiz.seq 
+ * =================================================================
+ */
+
+replace(replace(replace(replace(replace(replace(
+replace(replace(replace(replace(replace(replace(replace(v3001,
+    ' :',''),
+    ' ;',''),
+    ' /',''),
+    '"',''),
+    ',',''),
+    '.',''),
+    ' ','_'),
+    '(','['),
+    ')',']'),
+    '+','_PLUS_'),
+    '*','_TIMES_'),
+    '\',''),
+    s("'"n9999),'_'),
+				 

@@ -1,0 +1,133 @@
+<!-- =======================================================================
+	BIB-CLASS-SEARCH
+	
+	Búsqueda en la base bibliográfica usando códigos de clasificación
+	(e.g. MSC 2000)
+	
+	(c) 2004 Fernando J. Gómez - INMABB - CONICET
+	======================================================================== -->
+
+
+<!-- Mostramos el código MSC usado para la búsqueda -->
+<display><htmlpft>
+	<div id="resultHeader">
+		Búsqueda por código <!--temático--> de
+		<!--a href="[pft]v6001^u[/pft]?IsisScript=[pft]v2000[/pft]&amp;task=CLASS-BROWSE&amp;msclevel=1&amp;db=bibima&amp;searchType=SUBJ"-->MSC 2000<!--/a-->:
+		<br>&nbsp;&nbsp;&nbsp;
+		<b>
+		[pft]
+			v2001,' - ',
+			ref(['MSC']l(['MSC']if size(v2001) = 5 then v2001 else v2001,'xx' fi),v2), /* mostrar aquí el nodo buscado, y sus ancestros */
+		[/pft]
+		</b>
+	</div>
+</htmlpft></display>
+
+
+<do task="search">
+	<parm name="db">BIBLIO</parm>
+	<parm name="expression"><pft>
+		'-MSC=',v2001,
+		if size(v2001) = 3 then 'xx', fi,  /* 70K => 70Kxx */
+		/*'$'*/
+	</pft></parm>
+	<define>1002 Isis_Total</define>
+	<!--define>1005 Isis_Keys</define-->  <!-- Para identificar el tag -->
+
+	<parm name="count"></parm>	
+	<loop>
+		<field action="import" tag="list">2001,2003,2016,2031</field>
+		
+		<!-- ATENCION: el subcampo ^k no debe incluir ningún '^' -->
+		<list action="load" type="list"><pft>
+			'^k',@BIB_SORT_KEY.PFT,
+			'^m',mfn,
+		</pft></list>
+		
+		<!-- seteamos v2041, usado para el caso de resultado único -->
+		<field action="replace" tag="2041"><pft>mfn</pft></field>
+		<field action="export" tag="list">2041</field>
+	</loop>
+</do>
+
+
+<!-- Almacenamos los MFNs ordenados -->
+<call name="saveMfnList"><pft>
+	"^t"v2003,
+	'^q',replace(v2001,'^','~'),
+	'^r'v2001,' - ',ref(['MSC']l(['MSC']if size(v2001) = 5 then v2001 else v2001'xx' fi),v2), /* mostrar aquí el nodo buscado, y sus ancestros */
+	"^n"v1002,
+	"^s"v2016,  /* sortBy */
+</pft></call>
+
+
+<!-- Si la lista tiene un único elemento, pasamos a mostrar el registro completo -->
+<flow action="jump"><pft>
+	if val(v1002) = 1 then 'BIB-RECORD' fi
+</pft></flow>
+
+
+<!-- Control para reordenar el listado -->
+<display><htmlpft><pft>cat('SORTED-BY.HTM')</pft></htmlpft></display>
+
+
+<!-- ======== Display de los resultados ======== -->
+
+<display><htmlpft><pft>cat('BIB-LIST-HEAD.HTM')</pft></htmlpft></display>
+
+<do task="list">
+	<define>1 Isis_Item</define>
+	<define>1001 Isis_Current</define>
+	<define>1002 Isis_Total</define>
+	<parm name="sort"><pft>v1^k</pft></parm> <!-- acá irá v1^t,v1^k -->
+	<parm name="from"><pft>v2004</pft></parm>	
+	<parm name="count"><pft>v2028</pft></parm>
+	<!--display><pft>'&nbsp;&#8212;&nbsp;Seleccionados: ',v1002/</pft></display-->
+	<!--display><pft>'<ol>'/</pft></display-->
+	<loop>
+		<field action="import" tag="list">2000,2003,2004,2016,2099,2104,6001,9001</field>
+		<do task="mfnrange">
+			<parm name="db">BIBLIO</parm>
+			<parm name="from"><pft>v1^m</pft></parm>
+			<parm name="count">1</parm>
+			<loop>
+				<field action="import" tag="list">1001,1002,2000,2003,2004,2016,2099,2104,6001,9001</field>
+				
+				<!-- Queremos poder conservar las claves en los links que salgan desde wh.pft -->
+				<field action="import" tag="1005">1</field>
+				<field action="replace" tag="1005" split="occ"><pft>replace(v1005^t,'#',s(#))</pft></field>
+				<!--display><pft>ALL</pft></display-->
+				
+				<!-- Flag para indicar que el main heading es distinto del anterior -->
+				<!-- Solo interesa si está activada la compactación de resultados -->
+				<!-- ATENCION: ver cómo detectar el comienzo del bloque de registros que carecen de 1xx -->
+				<field action="replace" tag="9005"><pft>
+					if s(v100*2,v110*2,v111*2, if s(v100,v110,v111)='' then v245^a fi) <> v9001 then 
+						'NEW_MAIN_HEADING',
+					fi
+				</pft></field>
+				
+				<display><pft>,@WORK_HEADING.PFT,</pft></display>
+				
+				<field action="replace" tag="9001"><pft>s(v100*2,v110*2,v111*2, if s(v100,v110,v111)='' then v245^a fi)</pft></field>
+				<field action="export" tag="list">9001</field>
+			</loop>
+		</do>
+		<field action="export" tag="list">9001</field>
+	</loop>
+</do>
+
+<display>
+	</table>  <!-- Fin de la tabla de resultados -->
+</display>
+
+
+<!-- Botones -->
+<display><htmlpft><pft>cat('BIB-NAV.HTM')</pft></htmlpft></display>
+
+<!-- Email -->
+<!--display><htmlpft><pft>cat('MAIL-RESULTS.HTM')</pft></htmlpft></display-->
+
+<display>
+	</div> <!-- resultWrapper -->
+</display>

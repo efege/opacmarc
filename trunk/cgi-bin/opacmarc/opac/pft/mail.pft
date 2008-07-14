@@ -1,0 +1,53 @@
+/* ----------------------------------------------------------
+ * Formato para la visualización de registros
+ * bibliográficos en emails.
+ *
+ * NECESITA REVISIÓN
+ * ----------------------------------------------------------
+ */
+
+
+/* El desfasaje es debido al uso de la 1ra. línea para almacenar 
+   datos de la búsqueda */
+'[',
+	f(val(v1001)-1,1,0), '/', f(val(v1002)-1,1,0),
+']'/
+
+lw(72),
+
+"           AUTOR: "d100,
+"         ENTIDAD: "d110,
+"         REUNION: "d111,
+proc('d1001a1001¦',
+	replace(s(v100*3,v110*3,v111*3),'^','¦a1001¦'),
+'¦'),
+(,
+	if v1001.1 <> '9' then v1001*1(18,18)+| | fi,
+),/
+/* v1001*1(18,18)+| |,/ */
+
+"          TÍTULO: "d245,
+proc('d1001a1001¦',
+	replace(v245*3,'^','¦a1001¦'),
+'¦'),
+v1001*1(18,18)+| |,/
+
+"         EDICIÓN: "d250,
+proc('d1001a1001¦',
+	replace(v250*3,'^','¦a1001¦'),
+'¦'),
+v1001*1(18,18)+| |,/
+
+"     PUBLICACIÓN: "d260,
+proc('d1001a1001¦',
+	replace(v260*3,'^','¦a1001¦'),
+'¦'),
+v1001*1(18,18)+| |,/
+
+"DETALLES FÍSICOS: "d300,
+proc('d1001a1001¦',
+	replace(v300*3,'^','¦a1001¦'),
+'¦'),
+v1001*1(18,18)+| |,/
+
+/#/#,

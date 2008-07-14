@@ -1,0 +1,35 @@
+##########################################
+#  ATENCION - NO MODIFIQUE ESTE ARCHIVO  #
+##########################################
+
+
+# -----------------------------------------------------------------
+# Archivos utilizados en la generación del OPAC y en Catalis
+# -----------------------------------------------------------------
+AC-ANSI.TAB=__OPACMARC_DIR__/common/ac-ansi.tab
+BIBLIO.FST=__OPACMARC_DIR__/common/biblio.fst
+BIBLIO.STW=__OPACMARC_DIR__/common/biblio.stw
+COUNTRY.*=__OPACMARC_DIR__/common/country.*
+DICTGIZ.*=__OPACMARC_DIR__/common/dictgiz.*
+HEADSORT.PFT=__OPACMARC_DIR__/common/headsort.pft
+UC-ANSI.TAB=__OPACMARC_DIR__/common/uc-ansi.tab
+
+
+# -----------------------------------------------------------------
+# Archivos utilizados solamente en la generación del OPAC
+# -----------------------------------------------------------------
+ELIMDUP2.PFT=__OPACMARC_DIR__/opac/elimdup2.pft
+HEAD.PFT=__OPACMARC_DIR__/opac/head.pft
+HEADINGS.FST=__OPACMARC_DIR__/opac/headings.fst
+LANG.*=__OPACMARC_DIR__/opac/lang.*
+LANG.FST=__OPACMARC_DIR__/opac/lang.fst
+LANG.TXT=__OPACMARC_DIR__/opac/lang.txt
+LOCATION_SORT.PFT=__OPACMARC_DIR__/opac/location_sort.pft
+MSC.*=/home/fer/www/bases/catalis_pack_devel/opac/msc2000/msc.*
+NAME.PFT=__OPACMARC_DIR__/opac/name.pft
+OEM2ANSI.*=__OPACMARC_DIR__/opac/oem2ansi.*
+RECODE.PFT=__OPACMARC_DIR__/opac/recode.pft
+REGPUNT.PFT=__OPACMARC_DIR__/opac/regpunt.pft
+SECS2MARC.PROC=__OPACMARC_DIR__/opac/secs2marc.proc
+SUBJ.PFT=__OPACMARC_DIR__/opac/subj.pft
+TITLE.PFT=__OPACMARC_DIR__/opac/title.pft

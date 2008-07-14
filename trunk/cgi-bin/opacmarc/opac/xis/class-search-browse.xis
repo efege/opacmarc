@@ -1,0 +1,300 @@
+<!-- =========================================================
+	CLASS-SEARCH-BROWSE.XIS
+	
+	Búsquedas y navegación (search and browse) en la base de
+	códigos de clasificación (e.g. MSC 2000)
+	
+	Parámetros:
+		2109: msclevel
+	
+	(c) 2002-2004 Fernando J. Gómez - INMABB - CONICET
+	========================================================= -->
+
+<!-- Operador booleano por defecto -->
+<field action="replace" tag="2005"><pft>if a(v2005) then 'AND' fi</pft></field>
+
+<!-- TO-DO: considerar el * para truncamiento -->
+
+<!-- Limpiamos la expresión recibida; el resultado queda en v3001 -->
+<call name="cleanQuery"><pft>
+	if a(v2109) then replace(v2001,'*','XXXTRUNCATEXXX'), fi
+</pft></call>
+
+<!-- Construcción de la search expression -->
+<!--display><pft>'2001='v2001,'<br>3001='v3001,'<br>2109='v2109</pft></display-->
+<field action="replace" tag="3002"><pft>
+	if p(v2109) then  /* browsing */
+		'-MSC:NI:',v2109,
+		if p(v2001) then
+			' AND -MSC:', v2001,'$',   /* OJO con el prefijo */
+		fi,
+		
+	else if val(v2001.2) > 0 or v2001.2 = '00' then
+		/* Cosas como 82C21 (82C22 68T15) se deben convierten en 82C21+82C22+68T15 */
+		replace(replace(replace(v2001,
+			'(',''),
+			')',''),
+			' ','$+'),
+		'',
+		
+	else         /* ordinary keyword search */
+		replace(replace(replace(s(mpu,v3001),  /* mpu porque cleanQuery no cambia el case */
+			'XXXTRUNCATEXXX','$'),
+			' AND ',' '),
+			' ',' AND ')
+	fi,fi
+</pft></field>
+
+<!--display><pft>'<br>expr='v3002</pft></display-->
+
+
+<!-- 
+    En el search, se cargan en un campo auxiliar los códigos y sus MFNs respectivos,
+    incluyendo --si corresponde-- los progenitores de cada nodo recuperado.
+-->
+<do task="search">
+	<parm name="db">MSC</parm>
+	<parm name="expression"><pft>v3002</pft></parm>
+	<define>1002 Isis_Total</define>
+	<parm name="count">1</parm>
+	<loop><!-- set v1002 --></loop>
+
+	<!-- Si hay cero o demasiados resultados, salimos ya del <do> -->
+	<flow action="skip"><pft>
+		if val(v1002) = 0 or ( val(v1002) > val(v6001^d) and v2101 : 'KW' ) then
+			'Quit',
+		fi
+	</pft></flow>
+	
+	<parm name="count"></parm>
+	<define>1005 Isis_Keys</define>
+
+	<loop>
+		<field action="import" tag="list">5000</field>
+		
+		<!-- nivel 1 -->
+		<field action="add" tag="5000"><pft>
+			if v1 : 'XX' then
+				'~'v1^*,'^m',mfn,
+			fi
+		</pft></field>
+		<field action="add" tag="5000"><pft>
+			if not v5000 : s('~'v1.2'-XX') then
+				'~'v1.2'-XX','^m',f(l(['MSC']s('-MSC:'v1.2'-XX')),1,0),
+			fi
+		</pft></field>
+		
+		<!-- nn-01, nn-02, etc. -->
+		<!--field action="add" tag="5000"><pft>if v1*2.1 = '-' and not v1:'XX' then '~'v1^*,'^m',mfn, fi</pft></field-->
+		<!--field action="add" tag="5000"><pft>if not v5000:s('~'v1.3'xx') and l(['MSC']s('-MSC:'v1.3'xx')) > 0 AND NOT v1:'XX' then '~'v1.3'xx','^m',f(l(['MSC']s('-MSC:'v1.3'xx')),1,0), fi,</pft></field-->
+		
+		<!-- nivel 2 -->
+		<field action="add" tag="5000"><pft>
+			if v1 : 'xx' then
+				'~'v1^*,'^m',mfn,
+			fi
+		</pft></field> 
+		<field action="add" tag="5000"><pft>
+			if not v5000 : s('~'v1.3'xx') and l(['MSC']s('-MSC:'v1.3'xx')) > 0 and not v1 : '-' then
+				'~'v1.3'xx','^m',f(l(['MSC']s('-MSC:'v1.3'xx')),1,0),
+			fi,
+		</pft></field>
+		
+		<!-- nivel 3 -->
+		<field action="add" tag="5000"><pft>
+			if not v5000 : s('~'v1^*) then
+				'~'v1^*,'^m',mfn
+			fi
+		</pft></field>
+		
+		<field action="export" tag="list">5000,1005</field>
+	</loop>
+
+</do>
+
+
+<display><htmlpft>
+	<div id="resultHeader">
+		[pft]if a(v2109) then[/pft]
+			Búsqueda en la clasificación temática
+			<!--a href="[pft]v6001^u[/pft]?IsisScript=[pft]v2000[/pft]&amp;task=CLASS-BROWSE&amp;msclevel=1&amp;db=bibima&amp;searchType=SUBJ" title=""-->MSC 2000:<!--/a-->
+		[pft]else if v2109 <> '1' then[/pft]
+			Navegando por la clasificación temática
+			<!--a href="[pft]v6001^u[/pft]?IsisScript=[pft]v2000[/pft]&amp;task=CLASS-BROWSE&amp;msclevel=1&amp;db=bibima&amp;searchType=SUBJ" title=""-->MSC 2000:<!--/a-->
+		[pft]else[/pft]
+			Clasificación temática MSC 2000
+		[pft]fi,fi[/pft]
+	
+		[pft]
+			if v2109 = '1' then
+				/*'Clasificación temática MSC 2000',*/
+			else if p(v2109) then
+				'<b>',
+				v2001,
+				' &#183; ',
+				if v2109 = '2' then
+					ref(['MSC']l(['MSC']v2001.2'-XX'),v2),
+				else if l(['MSC']v2001.3'xx') > 0 then
+					ref(['MSC']l(['MSC']v2001.3'xx'),v2),  /* hojas de una subsección */
+				else
+					ref(['MSC']l(['MSC']v2001.2'-XX'),v2), /* hojas de una sección */
+				fi,fi,
+				'</b>',
+			else
+				'<b>'v2001'</b>',  /* search terms(s) */
+			fi,fi,
+		[/pft]
+	</div>
+	
+</htmlpft></display>
+
+
+<!-- Si no hubo resultados -->
+<flow action="jump"><pft>if val(v1002) = 0 then 'ZERO_HITS' fi</pft></flow>
+
+<!-- Si hubo demasiados resultados (en una keyword search) -->
+<flow action="jump"><pft>
+	if val(v1002) > val(v6001^d) and v2101 : 'KW' then  /* v6001^d: MAX_HITS_BIB */
+		'TOO_MANY_HITS',
+	fi
+</pft></flow>
+
+
+<!-- El campo auxiliar es cargado en la lista -->
+<list action="load" type="list"><pft>(v5000/)</pft></list>
+
+
+<display><htmlpft>
+	<div id="resultWrapper">
+		[pft]
+			if a(v2109) /*and not s(mpu,v2003,mpl) : 'TEMA'*/ then
+				'<div id="resultSubheader">'
+					if val(v1002) > 0 then 
+						if val(v1002) > 1 then
+							'Mostrando <strong>',v1002,'</strong> resultados encontrados.',
+						else
+							'Mostrando el único resultado encontrado.',
+						fi,
+					else
+						'No se encontraron resultados ',
+					fi,
+					/*
+					' para <strong>'v3001'</strong> en la <a href="',v6001^u,'?IsisScript=',v2000,'&amp;msclevel=1&amp;db=bibima&amp;searchType=SUBJ" title="Las 63 secciones de la MSC"><strong>clasificación temática (MSC 2000)</strong></A>'
+					*/
+				'</div>'
+			fi,
+		[/pft]
+	
+	[pft]if v2109 <> '1' then[/pft]
+	<!--form id="FormTemas" action="[pft]v6001^u[/pft]" method="GET" style="margin: 0;" -onsubmit="check(this);return false">
+	<input type="hidden" name="IsisScript" value="[pft]v2000[/pft]">
+	<input type="hidden" name="db" value="[pft]v2104[/pft]">
+	<input type="hidden" name="task" value="BIB-CLASS-SEARCH">
+	<input type="hidden" name="index" value="SUBJ"-->
+	
+	<!--table width="100%" style="font-size:smaller;"><tr><td>
+	<input type="button" value="Buscar temas seleccionados" onClick="check(this.form)"-->
+	<!--input type="button" value="Seleccionar todos" onClick="selectAll()"-->
+	<!--/td>
+	<td align="right"><A href="[pft]v6001^u[/pft]?IsisScript=[pft]v2000[/pft]&amp;expr=NI:1" title="Las 63 secciones de la MSC"><strong>Listado temático principal</strong></a>
+	</td></tr>
+	</table-->
+	[pft]fi[/pft]
+
+	<!--
+	<form action="/cgi-bin/wxis.exe" method="get">
+	<input type="hidden" name="IsisScript" value="[pft]v2000[/pft]">
+	<input type="submit" value="Buscar los temas marcados">
+	-->
+
+	<table id="msctable" cellspacing="0" border="1" style="width: [pft]if v2109 = '1' then '55%' else '100%' fi[/pft];">
+	
+	<!-- colgroup: para acomodar las columnas de la tabla, usando table-layout: fixed -->
+	<colgroup>
+		<col style="width: 2em;">    <!-- código nivel 1 -->
+		<col style="width: 4em;">    <!-- código nivel 2 -->
+		<col style="width: 4em;">    <!-- código nivel 3 -->
+		[pft]if v2109 = '1' then[/pft]
+			<col>                     <!-- -->
+			<!--col style="width: 1em;"--> <!-- -->
+			<!--col-->                     <!-- -->
+		[pft]else[/pft]
+			<col width="80%">         <!-- descripción -->
+		[pft]fi[/pft]
+	</colgroup>
+	
+	
+	<tbody style="vertical-align: top;">
+	<!--tr-->
+		<!-- Esto sigue estando feo! -->
+		<!--td style="font-size: 1px; line-height: 1px;"></td>
+		<td style="font-size: 1px; line-height: 1px;"></td>
+		<td style="font-size: 1px; line-height: 1px;"></td>
+		[pft]if v2109 = '1' then[/pft]
+			<td style="font-size: 0px; line-height: 0px;"></td>
+			<td style="font-size: 1px; line-height: 1px; width: 6px;"></td>
+			<td rowspan="64" id="aboutMSCCell">
+				[pft]cat('ABOUT-MSC.HTM')[/pft]
+			</td>
+		[pft]else[/pft]
+			<td width="80%" style="font-size: 1px; line-height: 1px;"></td>
+		[pft]fi[/pft]
+	</tr-->
+</htmlpft></display>
+
+
+<do task="list">
+	<define>1 Isis_Item</define>
+	<loop>
+		<field action="import" tag="list">1005,2000,2001,2101,2104,2109,6001</field>
+		
+		<do task="mfnrange">
+			<parm name="db">MSC</parm>
+			<parm name="from"><pft>v1^m</pft></parm>
+			<parm name="count">1</parm>
+			<loop>
+				<field action="import" tag="list">1005,2000,2001,2101,2104,2109,6001</field>
+				<hl>
+					<parm name="keys"><pft>(v1005/)</pft></parm>
+					<parm name="prefix"><span class="hl"></parm>
+					<parm name="suffix"></span></parm>
+					<!-- Sólo nos interesa resaltar cuando se hace una búsqueda, no en un browsing -->
+					<field action="replace" tag="902"><pft>v2</pft></field>
+					<field action="hl" tag="902"><pft>if a(v2109) then v2 fi</pft></field>
+					<!--display><pft>ALL</pft></display-->
+					<display><pft>@MSC.PFT</pft></display>
+				</hl>
+			</loop>
+		</do>
+	</loop>
+</do>
+
+<display><htmlpft>
+	</tbody>
+	</table>
+	
+	[pft]if v2109 = '1' then[/pft]
+		[pft]cat('ABOUT-MSC.HTM')[/pft]
+	[pft]fi[/pft]
+	
+	<div class="clear">&nbsp;</div>
+	
+	
+	[pft]if v2109 <> '1' then /*[/pft]
+		<p>
+			<table width="100%">
+				<tr>
+					<td>
+						<input type="submit" value="Buscar temas marcados" class="submit" style="font-size:100%;">
+						<!--input type="button" value="Seleccionar todos" onClick="selectAll()"-->
+					<!--/td-->
+					<!--td align="right"><a href="',v6001^u,'?IsisScript=',v2000,'&amp;expr=NI:1" title="Las 63 secciones de la MSC"><strong>Clasificación temática</strong></a>
+					</td-->
+				<!--/tr>
+			</table-->
+	[pft]*/ fi[/pft]
+	<!--/form-->
+	
+	</div> <!-- resultWrapper -->
+
+</htmlpft></display>

@@ -1,0 +1,44 @@
+/* ======================================================================
+ *  Regularizacion de la puntuacion final en los campos de
+ *  encabezamientos.
+ *
+ *  El campo 2 contiene el valor del campo cuya puntuacion
+ *  se desea regularizar.
+ *
+ *  Este formato es llamado:
+ *    1. al generar la base bibliografica,
+ *    2. luego de haber generado las bases de encabezamientos.
+ *
+ *  ATENCION: contempla los casos en que el subcampo final es numerico?
+ *  En particular, ver el caso del subcampo 9.
+ *
+ *  (c) 2003-2004 Fernando J. Gomez - CONICET - INMABB
+ * ======================================================================
+ */
+
+
+/* Quitamos el subcampo ^2 */
+proc('d3a3¦',replace(v2,s('^2',v2^2),''),'¦')
+
+
+/* Normalizamos puntuación */
+if '-!?)' : right(v3[1],1) then
+	v3[1],
+	
+else if '-.~!.~?.~).~' : s(right(v3[1],2),'~') then
+	mid(v3[1],1,size(v3[1])-1),
+	
+else if right(v3[1],1) = ',' then
+	mid(v3[1],1,size(v3[1])-1),
+	if not '.,~-,~!,~?,~),~' : s(right(v3[1],2),'~') then '.' fi,
+	
+else if right(v3[1],1) <> '.' and not right(v3[1],5) : '^4' then
+	v3[1],'.',
+	
+else
+	v3[1],
+fi,fi,fi,fi,
+
+
+/* Reponemos el subcampo ^2 */
+if v2 : '^2' then '^2',v2^2 fi,

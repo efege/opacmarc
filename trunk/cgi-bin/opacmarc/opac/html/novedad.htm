@@ -1,0 +1,129 @@
+<!-- visualización de una "novedad" del catálogo -->
+
+<!-- mostramos fecha de adquisición? -->
+
+<div class="novedad">
+
+		[pft]if p(v985) then[/pft]
+			<div class="imageCell">
+				<p style="background: #DDD;">
+					<img src="[pft]v6003^h[/pft]opac/img/bibima/[pft]v001,'.',v985^a[/pft]" alt="Imagen de la tapa">
+				</p>
+			</div>
+		[pft]fi[/pft]
+		
+		<h3 class="title">
+			[pft]
+			proc(
+				'd1000a1000`',
+					replace(replace(v245*3,
+						' /^c','^c'),
+						'^','`a1000`'),
+				'`',
+			),
+			
+
+			'<a ',
+				'href="',v6001^u,
+					'?IsisScript=',v2000,
+					'&amp;task=BIB-RECORD',
+					'&amp;db=',v2104,
+					'&amp;cn=',v001,
+			'" title="Ver detalles">',
+			(,
+				if not 'c68' : v1000.1 then
+					if v1000.1 = 'h' then
+						/* 245$h: lo omitimos, pero preservamos la puntuación final, si la hay */
+						mid(v1000*1,instr(v1000*1,']')+1,2)
+					else
+						v1000*1,
+					fi,
+					x1,
+				fi,  
+			),
+			'</a>'
+			[/pft]
+		</h3>
+		
+		<h4 class="responsabilidad">
+			[pft]v245^c[/pft]
+		</h4>
+		
+		[pft]if p(v250) then[/pft]
+		<p class="edicion">
+			[pft]
+				proc('d1000a1000`',replace(v250*3,'^','`a1000`'),'`'),
+				(,
+					if not '68' : v1000.1 then v1000*1+| | fi,
+				),
+			[/pft]
+		</p>
+		[pft]fi[/pft]
+		
+		<p class="publication">
+			[pft]
+			proc(
+				'd1000a1000`',
+					replace(v260*3,'^','`a1000`'),
+				'`',
+			),
+			(,
+				if not '368' : v1000.1 then
+					replace(replace(v1000*1,
+						'c19','&copy;19'),
+						'c20','&copy;20'),
+					x1,
+				fi,
+			),
+			[/pft]
+		</p>
+
+		[pft]if p(v859) or p(v092) then[/pft]
+			<div class="ubicacion" style="margin-bottom: 0;">
+				<h3 class="label" style="font-size: 100%;">Ubicación:</h3>
+				<ul style="margin-left: 2em;">
+					[pft]if p(v092) then[/pft]
+					
+						<div class="STresto">
+							[pft]v092^c,x1,v092^l[/pft]
+						</div>
+						
+					[pft]else[/pft]
+					
+						[pft](, /* loop sobre ocurrencias del 859 */[/pft]
+							<li>
+								[pft]
+									/* La base del INMABB tiene un tratamiento especial */
+									if v2104[1] = 'bibima' then
+										'<div>',
+											if v859^3 <> '' then
+												v859^3,
+												if v859^t <> '' then ', ', else ': ', fi,
+											fi,
+											if v859^t <> '' then v859^t, ': ', fi,  /* nro. de ejemplar */
+											'<span style="font-weight: bold;">',replace(v859^p,'.',''),'</span>', /* inventario */
+										'</div>',
+									else
+										|<div class="STparte">|v859^3|</div>| /* parte de una obra en varias partes, e.g. "Vol. 1", "Tomo 3", etc. */
+										'<div class="STresto">',
+											v859^k|<!--br-->&nbsp;|        /* separamos con saltos de línea o con espacios? */
+											v859^h,
+											'<!--br-->&nbsp;',replace(v859^i,' ','<!--br-->&nbsp;'),
+											|<!--br-->&nbsp;|v859^v,
+										'</div>'/
+										
+										/* Nro. de inventario */
+										if v6001^i[1] : v2104[1] then
+											|<div>Inv.&nbsp;|v859^p|</div>|
+										fi
+									fi,
+								[/pft]
+							</li>
+						[pft]),[/pft]
+						
+					[pft]fi[/pft]
+				</ul>
+			</div>
+		[pft]fi[/pft]
+
+</div>

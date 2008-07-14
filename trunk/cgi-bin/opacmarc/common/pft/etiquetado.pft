@@ -1,0 +1,1183 @@
+/* =============================================
+ *  Estilo de visualización "etiquetado"
+ * =============================================
+ */
+
+/* ATENCION: Los enlaces desde el campo 740 no tienen sentido (títulos no controlados) */
+/* ATENCION: Mostrar idioma (v008*35.3), cuando parezca necesario */
+/* Mostrar 546, 530 */
+/* Presentar enlaces desde 830 */
+
+
+/* Esta tabla contiene todo el registro */
+'<table id="Etiquetado" align="center" border="0">'/
+
+/* Footer con campos 001 y 005 (¿opcional?) */
+'<tfoot id="etiqFoot">',
+	'<tr>',
+		'<td colspan="2">Registro ',v1,'&nbsp;&nbsp;&#183;&nbsp;&nbsp;Modificado: ',v5*6.2,'/',v5*4.2,'/',v5.4,'</td>'
+	'</tr>',
+'</tfoot>',
+
+'<tr>',
+'<td width="78%" style="border: 1px solid #CCC; background: #FFF; vertical-align: top;">',
+
+/* Tabla izquierda */
+'<table width="100%" cellspacing="0" border="0">'/
+
+/* v6001^t = DISPLAY_DOC_TYPE  (ATENCION: quitar referencia a 'catalis') */
+if v6001^t = '1' or v2000 : 'catalis' then
+	'<thead>'
+		'<tr>'
+			'<th colspan="2" class="materialTypeHeader">',
+				,@DOCUMENT-TYPE.PFT,
+			'</th>'
+		'</tr>'
+	'</thead>'/
+fi,
+
+/* -------------------------------------------------
+ *  Título
+ * -------------------------------------------------
+ */
+proc(
+	'd1000a1000¦',
+		replace(replace(v245*3,
+			' /^c','^c'),
+			'^','¦a1000¦'),
+	'¦',
+),
+
+'<tr>'
+'<td class="label">Título / responsables</td>',
+'<td class="data">',
+	'<span class="title">',
+		(,
+			if not 'c68' : v1000.1 then
+				if v1000.1 = 'h' then
+					/* 245$h: lo omitimos, pero preservamos la puntuación final, si la hay */
+					mid(v1000*1,instr(v1000*1,']')+1,2)
+					/* Opcionalmente, podemos mostrar el 245$h: */
+					'<!--span style="font-weight: normal;">',
+						v1000*1,  /* no usamos bold para DGM */
+					'</span-->',
+				else
+					v1000*1,
+				fi,
+				x1,
+			fi,  
+		),
+	'</span>',
+	" / "v245^c,  /* ATENCION: registros pre-ISBD no usan '/' */
+'</td>',
+'</tr>'/
+
+
+/* ---------------------------------------------
+ *               Main entry heading
+ * ---------------------------------------------
+ * Si ya hay un v245^c, yo mandaría esto más abajo.
+ * ¿Corchetes para v130?
+ */
+
+if s(v100,v110,v111,v130) > '' then
+	'<tr style="display: none;"><td class="label">',
+	"Autor"d100, "Entidad"d110, "Reunión"d111,
+	'</td>'/
+	'<td class="data">',
+	'<a href="',v6001^u,
+		'?IsisScript=',v2000,
+		'&amp;db=',v2104,
+		'&amp;index=NAME',
+		'&amp;query=',v100*2,v110*2,v111*2,v130*2,
+	'">'/
+	proc('d1000a1000¦',
+		replace(s(v100*3,v110*3,v111*3,v130*3),'^','¦a1000¦'),
+	'¦'),
+	( v1000*1+| | ),
+	'</a>'/
+
+	/* --- Título uniforme (v240 y v130 se excluyen mutuamente) --- */
+	/* En general, ocultamos v240 (ver cuándo sería necesario) */
+	/*
+	if p(v240) and v240.1 = '1' then
+		'<br>'/,
+		proc('d1000a1000¦',
+			replace(v240*3,'^','¦a1000¦'),
+		'¦'),
+		'[', v1000*1+| |, ']',
+	fi,
+	*/
+
+	'</td></tr>'/
+fi,
+
+
+if s(v700,v710,v711,v730) > '' then
+/* --- ATENCION: agregar los que faltan: 830, etc --- */
+	proc('d5555',
+		if p(v700) then
+			(,
+				if not v700 : '^t' then 'a5555¦',v700*2,'¦' fi,
+			),
+		fi,
+		if p(v710) then
+			(,
+				if not v710 : '^t' then 'a5555¦',v710*2,'¦' fi,
+			),
+		fi,
+		if p(v711) then
+			(,
+				if not v711 : '^t' then 'a5555¦',v711*2,'¦' fi,
+			),
+		fi,
+		/*if p(v730) then ('a5555¦',v730*2,'¦'), fi,*/
+		/*if p(v740) then ('a5555¦',v740*2,'¦'), fi,*/
+		/*if p(v830) then ('a5555¦',v830*2,'¦'), fi,*/
+	),
+
+	/* --- ATENCION: no todas llevan index=NAME --- */
+	'<!--tr><td class="label">Autores,&nbsp;etc.</td><td class="data">'/
+	(,
+		if iocc > nocc(v5555) then 
+			break,
+		else
+			'<a href="',v6001^u[1],
+				'?IsisScript=',v2000[1],
+				'&amp;db=',v2104[1],
+				'&amp;index=NAME',
+				'&amp;query=',replace(v5555,s(',^e',v5555^e),''),
+			'">',
+			replace(replace(replace(replace(replace(
+			replace(replace(replace(replace(replace(v5555*2,
+				'^b',' '),
+				'^c',' '),
+				'^d',' '),
+				'^l',' '),
+				'^p',' '),
+				'^q',' '),
+				'^t',' '),
+				'^v',' '),
+				s(',^e',v5555^e),''),
+				s('^4',v5555^4),''),
+			/*  revisar si esto aun sirve:
+			if right(v5555,2) = '.,' then mid(v5555,1,size(v5555)-1),
+			else if right(v5555,1) = ',' then mid(v5555,1,size(v5555)-1),'.',
+			else v5555,
+			fi,fi,
+			*/
+			'</a><br>'/
+		fi,
+	),
+
+	'</td></tr-->'/
+fi,
+
+
+/* ---------------------------------------------
+ *               Area 2: Edición
+ * ---------------------------------------------
+ */
+if p(v250) then
+	'<tr>'
+	'<td class="label">Edición</td>'/
+	'<td class="data">',
+		proc('d1000a1000¦',replace(v250*3,'^','¦a1000¦'),'¦'),
+		(,
+			if not '68' : v1000.1 then v1000*1+| | fi,
+		),
+	'</td>'
+	'</tr>'/
+fi,
+
+
+/* ---------------------------------------------
+ *    Area 4: Publicación, distribución, etc.
+ * ---------------------------------------------
+ */
+if p(v260) then
+	'<tr>'
+		'<td class="label">Publicación</td>'/
+		'<td class="data">',
+			proc(
+				'd1000a1000¦',
+					replace(v260*3,'^','¦a1000¦'),
+				'¦',
+			),
+			(,
+				if not '368' : v1000.1 then
+					replace(replace(v1000*1,
+						'c19','&copy;19'),
+						'c20','&copy;20'),
+					x1,
+				fi,
+			),
+		'</td>'
+	'</tr>'/
+fi,
+
+
+/* ---------------------------------------------
+ *       Area 5: Descripción física
+ * ---------------------------------------------
+ */
+if p(v300) then
+	'<tr>'
+		'<td class="label">Detalles&nbsp;físicos</td>'/
+		'<td class="data">',
+			proc(
+				'd1000a1000¦',
+					replace(replace(replace(replace(replace(v300*3,
+						' p.',' págs.'),
+						'a1 v.','a1 vol.'),
+						' v.',' vols.'),
+						'bil.','bilustraciones'),
+						'^','¦a1000¦'),
+				'¦',
+			),
+			(,
+				if v1000.1 = 'a' and 'v.~p.~' : v1000*1.2 and val(v1000*1) = 0 then
+					'&nbsp;&nbsp;&nbsp;&nbsp;'
+				fi,
+				if not '68' : v1000.1 then
+					v1000*1+| |,
+				fi,
+			),
+		'</td>'
+	'</tr>'/
+fi,
+
+
+/* ---------------------------------------------
+ *              Area 6: Serie
+ * ---------------------------------------------
+ */
+
+if s(v440,v490) > '' then
+	'<tr>'
+		'<td class="label">Colección</td>'
+		'<td class="data">',
+			if p(v440) then
+			(,
+				/* Codificamos el query en v7400 */
+				proc('d7000a7000¦',v440*2,'¦'),
+				,@URLENCODE.PFT,
+				proc('d7400a7400¦',v7000[1],'¦'),
+				
+				/* Construimos el link */
+				'<a href="',v6001^u[1],
+					'?IsisScript=',v2000[1],
+					'&amp;db=',v2104[1],
+					'&amp;index=COL',
+					'&amp;query=^a',replace(v7400[1]^a,'+;',''),
+				'">',
+				,replace(v440^a,' ;',''),
+				/* ATENCION: n,p son repetibles */
+				if p(v440^n) then ' ',replace(v440^n,' ;','') fi,
+				if p(v440^p) then ' ',replace(v440^p,' ;','') fi,
+				if p(v440^x) then ' ISSN ',replace(v440^x,' ;','') fi,
+				'</a>',
+				if p(v440^v) then ' ; ',replace(v440^v,' ','&nbsp;') fi,
+				'<br>',
+			),
+			fi,
+			if p(v490) then
+				(,
+					/* Codificamos el query en v7400 */
+					proc('d7000a7000¦',v490*2,'¦'),
+					,@URLENCODE.PFT,
+					proc('d7400a7400¦',v7000[1],'¦'),
+					
+					/* Construimos el link */
+					'<!--a href="',v6001^u[1],
+						'?IsisScript=',v2000[1],
+						'&amp;db=',v2104[1],
+						'&amp;index=COL',
+						'&amp;query=^a',replace(v7400[1]^a,'+;',''),
+					'"-->',
+					replace(v490^a,' ;',''),
+					/* ATENCION: aqui el $v no está aparte (a veces?) */
+					if p(v490^p) then ' 'v490^p fi,
+					if p(v490^x) then ' ISSN ',replace(v490^x,' ;','') fi,
+					'<!--/a-->',
+					if p(v490^v) then ' ; ',replace(v490^v,' ','&nbsp;') fi,
+					'<br>',
+				),
+			fi,
+		'</td>'
+	'</tr>'/
+fi,
+
+
+/* ---------------------------------------------
+ *           Area 8: Standard numbers
+ * ---------------------------------------------
+ *  ATENCION: ver los ISBN invalidos (^z)
+ */
+
+if p(v020^a) then
+	'<tr>'
+		'<td class="label">ISBN</td>'/
+		'<td class="data">',
+			(,
+				v020^a,
+				v020^z,
+				if iocc < nocc(v020) then '; ' fi
+			),
+		'</td>'
+	'</tr>'/
+fi,
+
+if p(v022) then  /* REVISAR */
+	'<tr>'
+		'<td class="label">ISSN</td>'
+		'<td class="data">',
+			(,
+				replace(s(v022^a,v022^z),' :',''),
+				if iocc < nocc(v022) then '; ' fi
+			),
+		'</td>'
+	'</tr>'/
+fi,
+
+
+/* ---------------------------------------------
+ *                 Area 7: Notas
+ * ---------------------------------------------
+ */
+
+/* ATENCION: si solo hay una nota, habria que no usar <li> ? */
+
+/* ATENCION: notas de traducción desde un 765 - TESTEAR */
+/* OCLC no las imprime */
+/* Ver: repetibilidad del 765; tratamiento especial de subcampos? */
+if p(v765) and v765.1 = '0' then
+	'<tr>'
+		'<td class="label">',if a(v765^i) then 'Traducción de' else v765^i fi,'</td>'/
+		'<td class="data">'/
+			proc('d1000a1000¦',replace(v765*3,'^','¦a1000¦'),'¦'),
+			(,
+				if not 'w678' : v1000.1 then
+					v1000*1+| |,
+				fi,
+			),
+		'</td>'
+	'</tr>'/
+fi,
+
+
+/* Campos de notas que se agrupan bajo la etiqueta genérica "Notas" */
+if s(v500,v501,v502,v504,v530,v534,v580) > '' then
+	'<tr>'
+		'<td class="label">Notas</td>'/
+		'<td class="data">'/
+			'<ul class="noteList">',
+fi,
+
+
+/* --------- Linking Entry Complexity Note  ---------- */
+/* ATENCION: la visualización de los 580 está atada
+ * a ciertos indicadores de los campos 76x-78x.
+ * Pero no está claro cómo se vinculan, en caso de que haya
+ * más de un 580.
+ */
+if p(v580) and not v773[1].1 = '1' then
+	(,
+		'<li>',replace(v580^a,'--','&mdash;'),'</li>'/
+	),
+fi,
+
+/* --------- Nota de tesis ---------- */
+if p(v502) then
+	(,
+		'<li>',replace(v502^a,'--','&mdash;'),'</li>'/
+	),
+fi,
+
+
+/* --------- Nota de forma física adicional ---------- */
+if p(v530) then
+	(,
+		'<li>',
+			v530^a, if v530^u <> '' then ' <a href="',v530^u,'">',v530^u,'</a>' fi,
+		'</li>'/
+	),
+fi,
+
+
+/* --- Original version note (repetibilidad?) --- */
+if p(v534) then
+	proc(
+		'd1000a1000¦',
+			replace(v534*3,'^','¦a1000¦'),
+		'¦',
+	),
+	'<li>',(v1000*1+| |),'<br>'/
+fi,
+
+/* --------- Nota general ---------- */
+if p(v500) then
+	(,
+		'<li>',
+			replace(v500^a,'--','&mdash;'),
+		'</li>',
+	),
+fi,
+
+/* --------- Nota de bibliografía ---------- */
+if p(v504) then
+	(,
+		'<li>',v504^a,'</li>'/
+	),
+fi,
+
+
+/* Campos de notas que se agrupan bajo la etiqueta genérica "Notas" */
+if s(v500,v501,v502,v504,v530,v534,v580) > '' then
+			'</ul>'
+		'</td>'
+	'</tr>'/
+fi,
+
+
+/* --------- Nota de resumen ---------- */
+if p(v520) then
+	(,
+		'<tr>'
+			'<td class="label">',
+				'Resumen',
+			'</td>'/
+			'<td class="data">'/
+				replace(v520^a,'--','&mdash;'),'<br>'/
+			'</td>'
+		'</tr>'/
+	),
+fi,
+
+
+/* --- Nota de contenido --- */
+if p(v505) then
+	(,
+		'<tr>'
+			'<td class="label">',
+				if v505*4.10 = 'Capítulos:' then
+					'Capítulos',
+				else
+					select v505.1
+						case '0' : 'Contenido',
+						case '1' : 'Contenido incompleto',
+						case '2' : 'Contenido parcial',
+						case '8' : 'Contenido',
+					endsel,
+				fi,
+			'</td>'/
+			'<td class="data">'/
+				'<ul class="noteList">'
+					'<li>',
+					replace(replace(replace(replace(replace(replace(replace(v505*2,
+						'Capítulos:',''),  /* ya lo usamos como etiqueta, ahora no lo necesitamos */
+						'--','<li>'),
+						' ;','<li>'),
+						'^t',' <span class="analyticTitle">'),
+						' /^r','</span> / '),
+						'^g',' '),
+						'^a',''),
+				'</ul>'/
+			'</td>'
+		'</tr>'/
+	),
+fi,
+
+
+/* --------- Nota de citas, referencias ---------- */
+/* [Para agregar] Ejemplo de link a Zbl: http://www.emis.de/cgi-bin/zmes/ZMATH/es/quick.html?first=1&maxdocs=20&type=html&an=0896.16001&format=complete */
+if p(v510) then
+	'<tr>'
+		'<td class="label">',
+			'Reseña',
+		'</td>'/
+		'<td class="data">'/
+			(,
+				if iocc > 1 then '<br>' fi,
+				v510^a,x1,
+				if v510^a : 'MR' then,  /* link para MR */
+					'<a href="http://www.ams.org/mathscinet-getitem?mr=', replace(v510^c,' #',':'), '" title="Acceso al texto de la reseña en MathSciNet">'
+						v510^c,
+					'</a>',
+				else,
+					v510^c,
+				fi,
+				x1,v510^3,
+			),
+		'</td>'
+	'</tr>'/
+fi,
+
+
+/* --------- Nota de "con" ---------- */
+if p(v501) then
+	(,
+		'<li>',replace(v501^a,'--','&mdash;'),'</li>'/
+	),
+fi,
+
+
+
+'<!--',
+
+'<tr>',
+	'<td class="data">'/
+	
+	'<div style="border: solid 1px #AAA; background: #FFC; padding: 0 0.3em; margin-bottom: 0.3em;">',
+		v001/
+		"<br>lccn: "v010^a/
+	'</div>'/,
+	
+	if s(v50,v82) > '' then
+		'<div style="border: solid 1px #AAA; background: #FFC; padding: 0 0.3em; margin-bottom: 0.3em;">',
+	
+		/* ATENCION: tanto v50 como v50^a son repetibles */
+		if p(v050) then
+			'lcc: ',
+			'<a href="',v6001^u[1],
+				'?IsisScript=',v2000[1],
+				'&amp;query=-LCCLASS=',v050^a.2,
+				'&amp;db=CLASS" title="Buscar obras dentro de esta misma clase">',
+			v050^a.2,
+			'</a>',
+			v050^a*2,
+			'<br>'/
+		fi/
+	
+		/* ATENCION: tanto v82 como v82^a son repetibles */
+		"ddc: "v082^a/
+	
+		'</div>'/,
+	fi,
+	
+	'<div style="border: solid 1px #AAA; background: #FFC; padding: 0 0.3em;">'
+		( v995+|<br>| ),/
+	'</div>'/,
+	
+	'</td>',
+'</tr>'/
+
+'-->'/
+
+/* ---------------------------------------------
+ *             Added entry headings             
+ * ---------------------------------------------
+ */
+
+/* --- Agrupamos personas (100,700) --- */
+/* El parámetro query usa los valores devueltos por urlencode */
+if s(v100,v700) > '' then
+	proc('d8100',
+		if p(v100) then
+			'a8100¦',v100,'¦',
+		fi,
+		if p(v700) then
+			(, 
+				if v700^t = '' then  /* excluimos entradas de nombre/título */
+					'a8100¦',v700,'¦',
+				fi,
+			),
+		fi,
+	),
+
+	'<tr>'
+		'<td class="label">Nombres</td>'/
+		'<td class="data">'/
+			(,
+				/* Codificamos el query en v7100 */
+				proc('d7000a7000¦',v8100*2,'¦'),
+				,@URLENCODE.PFT,
+				proc('d7100a7100¦',v7000[1],'¦'),
+				
+				/* Construimos el link */
+				'<a style="font-weight: normal;" href="',v6001^u[1],
+					'?IsisScript=',v2000[1],
+					'&amp;db=',v2104[1],
+					'&amp;task=BIB-H-SEARCH',
+					'&amp;index=NAME',
+					'&amp;query=',replace(replace(replace(v7100[1],   /* cuando usamos URLENCODE */
+						s('^e',v7100[1]^e),''),
+						s('^4',v7100[1]^4),''),
+						s('^9',v7100[1]^9),''),
+				'">',
+					/*'&amp;query=',v8100^9,'">',*/  /* para SUBCAMPO9 */
+					
+					replace(replace(replace(replace(replace(
+					replace(replace(replace(replace(replace(replace(v8100*4,
+						'^b',' '),
+						'^c',' '),
+						'^d',' '),
+						'^l',' '),
+						'^p',' '),
+						'^q',' '),
+						'^t',' '),
+						'^v',' '),
+						s(',^e',v8100^e),''),
+						s('^4',v8100^4),''),
+						s('^9',v8100^9),''),
+				'</a>'/,
+				if iocc < nocc(v8100) then ' <br> ' fi,
+			),
+		'</td>'
+	'</tr>'/
+fi,
+
+/* --- Agrupamos entidades (110,710) --- */
+if s(v110,v710) > '' then
+	proc('d8110',
+		if p(v110) then
+			'a8110¦',v110,'¦',
+		fi,
+		if p(v710) then
+			(,
+				'a8110¦', v710, '¦',   /* excluimos los ^t ?? */
+			),
+		fi,
+	),
+	'<tr>'
+		'<td class="label">Entidades</td>'/
+		'<td class="data">'/
+			(,
+				/* Codificamos el query en v7110 */
+				proc('d7000a7000¦',v8110*2,'¦'),
+				,@URLENCODE.PFT,
+				proc('d7110a7110¦',v7000[1],'¦'),
+				
+				/* Construimos el link */
+				'<a style="font-weight: normal;" href="',v6001^u[1],
+					'?IsisScript=',v2000[1],
+					'&amp;db=',v2104[1],
+					'&amp;task=BIB-H-SEARCH',
+					'&amp;index=NAME',
+					'&amp;query=',replace(replace(replace(v7110[1],   /* cuando usamos URLENCODE */
+						s('^e',v7110[1]^e),''),
+						s('^4',v7110[1]^4),''),
+						s('^9',v7110[1]^9),''),
+				'">',
+					replace(replace(replace(replace(replace(replace(
+					replace(replace(replace(replace(replace(replace(replace(v8110*4,
+						'^b',' '),
+						'^c',' '),
+						'^d',' '),
+						'^g',' '),
+						'^k',' '),
+						'^l',' '),
+						'^p',' '),
+						'^q',' '),
+						'^t',' '),
+						'^v',' '),
+						s(',^e',v8110^e),''),
+						s('^4',v8110^4),''),
+						s('^9',v8110^9),''),
+				'</a>',
+				if iocc < nocc(v8110) then ' <br> ' fi,
+			),
+		'</td>'
+	'</tr>'/
+fi,
+
+/* --- Agrupamos reuniones (111,711) --- */
+if s(v111,v711) > '' then
+	proc('d8111',
+		if p(v111) then 'a8111¦',v111,'¦' fi,
+		if p(v711) then
+			(,
+				if not v711 : '^t' then
+					'a8111¦',v711,'¦',
+				fi,
+			),
+		fi,
+	),
+	'<tr>'
+		'<td class="label">Reunión</td>'/
+		'<td class="data">'/
+			(,
+				/* Codificamos el query en v7111 */
+				proc('d7000a7000¦',v8111*2,'¦'),
+				,@URLENCODE.PFT,
+				proc('d7111a7111¦',v7000[1],'¦'),
+				
+				/* Construimos el link */
+				'<a style="font-weight: normal;" href="',v6001^u[1],
+					'?IsisScript=',v2000[1],
+					'&amp;db=',v2104[1],
+					'&amp;task=BIB-H-SEARCH',
+					'&amp;index=NAME',
+					'&amp;query=',replace(replace(replace(v7111[1],   /* cuando usamos URLENCODE */
+						s('^e',v7111[1]^e),''),
+						s('^4',v7111[1]^4),''),
+						s('^9',v7111[1]^9),''),
+				'">',
+				replace(replace(replace(replace(replace(
+				replace(replace(replace(replace(replace(replace(v8111*4,
+					'^b',' '),
+					'^c',' '),
+					'^d',' '),
+					'^l',' '),
+					'^n',' '),
+					'^p',' '),
+					'^q',' '),
+					'^t',' '),
+					'^v',' '),
+					s('^4',v8111^4),''),
+					s('^9',v8111^9),''),
+				'</a>',
+				if iocc < nocc(v8111) then ' <br> ' fi,
+			),
+		'</td>'
+	'</tr>'/
+fi,
+
+
+
+/* ---------------------------------------------
+ *             Subject added entries            
+ * ---------------------------------------------
+ */
+
+/* ATENCION: aplicar urlencode, como se hizo con v100,v700 */
+
+if s(v600,v610,v630,v650,v651,v653) > '' then
+	proc('d5555',
+		if p(v600) then ('a5555¦',v600,'¦'), fi,
+		
+		if p(v610) then ('a5555¦',v610,'¦'), fi,
+		
+		if p(v630) then ('a5555¦',v630,'¦'), fi,
+		
+		if p(v650) then ('a5555¦',v650,'¦'), fi,
+		
+		if p(v651) then ('a5555¦',v651,'¦'), fi,
+		
+		if p(v653) then ('a5555¦',v653,'¦'), fi,
+	),
+
+	if p(v5555) then
+		'<tr>'
+			'<td class="label">Temas</td>',
+			'<td class="data">'/
+				'<ul class="noteList">'  /* El uso de <ol> genera una linea vacia al final de la lista en IE 5.5; en IE 6 el problema se da con <ul> y <ol>, pero se soluciona con <ol></ul> !!! */
+	fi,
+	
+	/* loop sobre v5555 */
+	(,
+		if iocc > nocc(v5555) then
+			break,
+		else
+			
+			/* Codificamos el query en v7600 */
+			proc('d7000a7000¦',v5555*2,'¦'),
+			,@URLENCODE.PFT,
+			proc('d7600a7600¦',v7000[1],'¦'),
+			
+			/* Construimos el link (deshabilitado hasta resolver los problemas) */
+			'<li>'
+				'<a style="font-weight: normal;" href="',v6001^u[1],
+					'?IsisScript=',v2000[1],
+					'&amp;db=',v2104[1],
+					'&amp;task=BIB-H-SEARCH',
+					'&amp;index=SUBJ',
+					'&amp;query=',replace(replace(v7600[1],   /* cuando usamos URLENCODE */
+						s('^2',v7600[1]^2),''),
+						s('^9',v7600[1]^9),''),
+					/*if not '.?!-':right(v5555,1) then '.' fi*/,
+				'">',
+				replace(replace(replace(replace(replace(replace(replace(
+				replace(replace(replace(replace(replace(replace(replace(replace(v5555*4,
+					'^x','&mdash;'),
+					'^y','&mdash;'),
+					'^z','&mdash;'),
+					'^v','&mdash;'),
+					'^a','&mdash;'),  /* para el 653 */
+					'--','&mdash;'),
+					'^b',' '),
+					'^c',' '),
+					'^d',' '),
+					'^l',' '),
+					'^p',' '),
+					'^q',' '),
+					'^t',' '),
+					s('^2',v5555^2),''),
+					s('^9',v5555^9),''),
+				'</a>'
+			'</li>'/
+		fi,
+	),
+
+	if p(v5555) then 
+				'</ul>'
+			'</td>'
+		'</tr>'/
+	fi,
+fi,
+
+
+/* ---------------------------------------------
+ * Códigos MSC [suspendido, 24/sep/05; puse '9084' en lugar de '084']
+ * ---------------------------------------------
+ */
+if p(v9084) and s(mpu,v084^2,mpl) : 'MSC' then
+	'<tr>',
+		'<td class="label">Códigos MSC</td>',
+		'<td class="data">',
+			'<!--a href="',v6001^u,
+				'?IsisScript=',v2000,
+				'&amp;db=',v2104,
+				'&amp;task=CLASS-KW-SEARCH',
+				'&amp;query=',v084^a+| |,
+				'&amp;searchType=SUBJ"',
+				' title="Consultar estos códigos en la MSC 2000"',
+			'>',
+				/*v084^a+| &#183; |,*/
+			'</a-->',
+			'<ul class="noteList" style="padding-left: 3.5em; text-indent: -3.5em;">'
+			(,
+				'<li>'
+				'<a href="',v6001^u[1],
+					'?IsisScript=',v2000[1],
+					'&amp;db=',v2104[1],
+					'&amp;task=CLASS-KW-SEARCH',
+					'&amp;query=',v084^a,
+					'&amp;searchType=SUBJ"',
+					' title="Consultar el código en la MSC 2000"',
+				'>',
+					v084^a,
+				'</a>',
+				x1,
+				/* ref(['MSC']l(['MSC']v084^a),v2),'<br>', [suspendido por error "cntread/read/cnt2", 24/sep/05] */
+			),
+			'</ul>'
+		'</td>',
+	'</tr>',
+fi,
+
+
+/* ---------------------------------------------
+ *           Non-subject added entries          
+ * ---------------------------------------------
+ * ¿Que hacemos con los titulos en ^t ??
+ * Campo 830 dice "Serie"?
+ * Labels para el campo 246?
+ */
+
+if p(v246) then
+	proc('d5555',
+		(,
+			if '01' : v246.1 then 'a5555¦',v246*4,'¦' fi,  /* va como nota */
+		),
+	),
+	if p(v5555) then
+		'<tr>'
+			'<td class="label">Títulos&nbsp;alt.</td>'
+			'<td class="data">',
+				( v5555+|<br>| ),
+			'</td>'
+		'</tr>'/
+	fi,
+fi,
+
+/* --- Disponible en... --- */
+if p(v995) then
+	'<tr>'
+		'<td class="label" -style="border-top: 4px solid #AAA;">',v6002^a,'</td>'/
+		'<td class="data" -style="border-top: 4px solid #AAA;">',
+			( v995+| &#183; | ),
+		'</td>'
+	'</tr>'/
+fi,
+
+/* --- Acceso electrónico (repetible) --- */
+/*
+if p(v856) then
+	(,
+		'<tr>'
+			'<td class="label">',if p(v856^3) then v856^3 else 'Acceso en línea' fi,'</td>'/
+			'<td class="data">',
+				'<a href="',v856^u,'">',if p(v856^y) then v856^y else v856^u fi,'</a>'/
+				"<br>"v856^z,
+			'</td>'
+		'</tr>'/
+	),
+fi,
+*/
+
+
+/*---------------------------------------------------*\
+   Analíticas de "En"
+\*---------------------------------------------------*/
+
+/* ATENCION: repetibilidad del campo 773? */
+ 
+if p(v773) then
+	if v773[1].1 = '0' then  /* 1er indicador = 0 => Display note */
+		
+		proc('d5555a5555~',
+			if v773[1]*1.1 = '#' then  /* 2do indicador = # => Display constant = In */
+				'Publicado en',
+			else
+				v773^i[1], /*  2do indicador = 8 => No display constant generated => show $i (Display text) */
+			fi,
+		'~'),
+		
+		if v6001^7 = 'header' then
+			'<tr>',
+				'<td colspan="2" class="materialTypeHeader">',
+					mpu,v5555,mpl,':',
+				'</td>',
+			'</tr>',
+		fi,
+		
+		'<tr>',
+			'<td align="left" class="label">',
+				if v6001^7 = 'label' then v5555, else '&nbsp;' fi,
+			'</td>'/
+			
+			proc(
+				'd1000a1000¦',
+					replace(v773[1]*3,'^','¦a1000¦'),
+				'¦',
+			),
+			/* Averiguamos posición del subcampo t */
+			(,
+				if v1000.1 = 't' then
+					proc('d1002a1002~',f(iocc,1,0),'~'),
+					break,
+				fi
+			),
+			
+			'<td class="data', if v6001^7 = 'label' then ' v773' fi, '">'/
+			(,
+				if not 'imruwyz7' : v1000.1 then
+					/*
+					select v1000.1*/
+						/* ATENCION: completar etiquetas */
+						/*
+						case 'a' : '<tr><td class="label">Autor</td>'/
+						case 'b' : '<tr><td class="label">Edición</td>'/
+						case 'd' : '<tr><td class="label">Publicación</td>'/
+						case 'g' : '<tr><td class="label">&nbsp;</td>'/
+						case 'h' : '<tr><td class="label">Descripción física</td>'/
+						case 'k' : '<tr><td class="label">Colección</td>'/
+						case 'n' : '<tr><td class="label">Nota</td>'/
+						case 't' : '<tr><td class="label">Título</td>'/
+						*/
+						/* ATENCION: Título o Revista, en base a Leader/07 */
+						/*
+						case 'x' : '<tr><td class="label">ISSN</td>'/
+						case 'z' : '<tr><td class="label">ISBN</td>'/
+						elsecase '<tr><td class="label">&nbsp;</td>'/
+					endsel,
+					'<tr>'
+					'<td class="data', if v1000.1 = 't' then ' title' fi,'">',
+					*/
+					
+					/* ATENCION: si 773^t incluye la mención de responsabilidad, ésta
+						también sale negrita */
+						
+					/* TO-DO: ¿ubicar el ISSN a continuación del título? */
+					if v1000.1 = 't' then
+						'<span class="title773">',v1000*1,'</span>', /* $t: título */
+					else if v1000.1 = 'k' then
+						'(',v1000*1,')',      /* $k: serie */
+					else if v1000.1 = 'x' then
+						' ISSN ', v1000*1,    /* $x: ISSN */
+					else
+						'<br>',replace(v1000*1,' : ',': '),
+					fi,fi,fi,
+					
+					/*'</td>',
+					'</tr>'/ */
+				fi,
+			),
+			'</td>'
+		'</tr>'/
+		
+	else  /* 1er indicador = 1 => Do not display note (A textual note is contained in field 580) */
+		'<tr>'
+			'<td class="label">&nbsp;</td>'/
+			'<td class="data">'/
+				replace(replace(replace(v580^a,
+					'In: ',''),
+					'IN: ',''),
+					'--','&mdash;'),
+			'</td>'
+		'</tr>'/
+	fi,
+fi,
+
+'</table>'/
+
+'</td>'
+
+
+/* ---------------------------------------------
+ *   Columna para location & access
+ * ---------------------------------------------
+ */
+'<td valign="top" align="left" id="locationCell">'/
+
+	'<table width="100%" cellspacing="0" border="0">'/
+		
+		/* ---------------------------------------------------------
+		 * Signatura topográfica (call number)
+		 * ---------------------------------------------------------
+		 */
+		 
+		if p(v859^h) then
+			/* if v773[1].1 = '0' then '<hr>' fi, */
+			'<thead>',
+				'<tr>',
+					'<th class="locationHeader" valign="top">UBICACION</th>',
+				'</tr>'
+			'</thead>',
+			
+			'<tbody>'/
+			
+			/* loop sobre ocurrencias del campo 859 */
+			(,
+				'<tr>',
+					'<td style="vertical-align: top; padding: 0.4em 0.5em 0.2em 0.5em; /*border-bottom: 1px solid #e0e0e0;*/ font-weight: bold; /*padding: 4px;*/">',
+						|<div class="STparte">|v859^3|</div>|
+						'<div class="STresto">',
+							v859^k|<!--br-->&nbsp;|        /* separamos con saltos de línea o con espacios? */
+							if not v859^h : 'A-' then v859^h, fi,  /* bibima: no mostramos v859^h cuando tiene el inventario */
+							'<!--br-->&nbsp;',replace(v859^i,' ','<!--br-->&nbsp;'),
+							|<!--br-->&nbsp;|v859^v,
+							if v2104[1] = 'bibima' then '<div style="font-style: italic; color: #666;">',v859^p,'</div>', fi,
+						'</div>',
+					'</td>'
+				'</tr>',
+			),
+			
+		else if p(v050) then  /* LC call number */
+			'<thead>',
+				'<tr>',
+					'<th class="locationHeader">UBICACION</th>',
+				'</tr>',
+			'</thead>',
+			
+			'<tbody>'/
+			(,
+				'<tr>',
+					'<td style="padding: 0.3em 0.5em; /*border-bottom: 1px solid #E0E0E0;*/ font-weight: bold; /*padding: 4px;*/">',
+						v050^a,
+						'<br>',replace(v050^b,' ','<br>'),
+					'</td>'
+				'</tr>',
+			),
+		fi,fi,
+		
+		if s(v859^h,v050) > '' and p(v856) then
+				'<tr>'
+					'<td style="line-height: 8px;">&nbsp;</td>'
+				'</tr>'/
+			'</tbody>'/
+		fi,
+		
+		/* ---------------------------------------------------------
+		 * Acceso remoto (URL)
+		 * ---------------------------------------------------------
+		 */
+		if p(v856) then
+			'<thead>'
+				'<tr>'
+					'<th class="locationHeader">ENLACES</th>'
+				'</tr>'
+			'</thead>',
+			
+			'<tbody>'/
+			(,
+				'<tr>'
+					'<td style="padding: 0.3em 0.4em 0.2em 0.5em; /*border-bottom: 1px solid #E0E0E0;*/ /*font-weight: bold;*/">',
+						'<a title="',v856^u,'" href="',v856^u,'">',
+							/* Orden de prioridad para el texto del link: 856$y, 856$3, 856$u */
+							if v856 : '^y' then
+								v856^y,
+							else if v856 : '^3' then
+								v856^3,
+							else
+								v856^u,
+							fi,fi,
+						'</a>',
+					'</td>'
+				'</tr>',
+			),
+		fi,
+		
+		/* ==== Links a librerías ==== */
+		/* ATENCION: ver el caso de más de un ISBN (ejemplo: MFN 020314)
+		 * ATENCION: ver otros amazon: amazon.co.uk, amazon.ca
+		 * ATENCION: si se llega a *resaltar* el campo 20, habrá que revisar esto
+		 */
+		if p(v020^a) and v6001^l = '1' and ( '0123' : v020^a[1].1 or 'x84' = v020^a[1].2 ) then
+			'<tr>'
+				'<td style="line-height: 8px;">&nbsp;</td>'
+			'</tr>'/
+			'</tbody>'/
+			'<thead>'
+				'<tr>'
+					'<th class="locationHeader">LIBRERÍAS</th>'
+				'</tr>'
+			'</thead>',
+			
+			'<tbody>'/
+				'<tr>'
+				'<td style="padding: 0.3em 0.4em 0.2em 0.5em;">'
+					if '84' = v020^a[1].2 then
+						'<a href="http://www.mcu.es/cgi-bin/BRSCGI3701?CMD=VERLST&BASE=ISBN&CONF=AEISPA.cnf&OPDEF=AND&DOCS=1-10&SEPARADOR=&WGEN-C=&WISB-C=',s(v020^a[1]).10,'&WAUT-C=&WTIT-C=&WMAT-C=&WEDI-C=&WFEP-C=&@T353-GE=&@T353-LE=&WSER-C=&WLUG-C=&WDIS-C=%28DISPONIBLE+or+AGOTADO%29&WLEN-C=&WCLA-C=&WSOP-C=">Agencia Española del ISBN</a>'/
+					else
+						select v020^a[1].1
+							case '2' : '<a href="http://www.amazon.fr/exec/obidos/ASIN/',s(v020^a[1]).10,'">Amazon.fr</a>'/
+							case '3' : '<a href="http://www.amazon.de/exec/obidos/ASIN/',s(v020^a[1]).10,'">Amazon.de</a>'/
+							elsecase
+								if v8*17.1 = 'k' then  /* United Kingdom */
+									'<a href="http://www.amazon.co.uk/exec/obidos/ASIN/',s(v020^a[1]).10,'">Amazon.co.uk</a>'/
+									'<br>'/
+								fi,
+								if v8*17.1 = 'c' then  /* Canada */
+									'<a href="http://www.amazon.ca/exec/obidos/ASIN/',s(v020^a[1]).10,'">Amazon.ca</a>'/
+									'<br>'/
+								fi,
+								'<a href="http://www.amazon.com/exec/obidos/ASIN/',s(v020^a[1]).10,'">Amazon.com</a>'/
+								'<br>'/
+								'<a href="http://search.barnesandnoble.com/booksearch/isbninquiry.asp?ISBN=',s(v020^a[1]).10,'">Barnes & Noble</a>'/
+						endsel,
+					fi,
+				'</td>'
+				'</tr>'/
+		fi,
+
+		'</tbody>'/
+	'</table>',
+	
+	'<!--div style="position: relative; bottom: -10px; padding: 3em;">',
+		'<span valign="bottom" align="right" style="font-size: 85%; color: #999; font-style: italic;">',v001,'&nbsp;</span>'
+	'</div-->'/
+	
+'</td>',
+
+'</tr>',
+
+'</table>'
+
+
+if p(v020^a) and v6001^l = '1' and ( '0123' : v020^a[1].1 or '84' = v020^a[1].2 ) then
+	'<!--div align="center">'/
+	'<table width="90%">'
+		'<tr>'
+			'<td class="smaller" style="line-height: 1.2em;">',
+				'* Enlaces (no verificados) a sitios externos. ',
+				/*'Esta biblioteca no está afiliada con ninguna de las empresas u organismos aquí mencionados.',*/
+				/*' Bueno, a menos que entremos en algo como
+				<a href="http://www.amazon.com/exec/obidos/subst/associates/join/associates.html">Amazon.com Associates</a>...'/
+				*/
+			'</td>'
+		'</tr>'
+	'</table>'/
+	'</div-->'/
+fi,
