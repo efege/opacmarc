@@ -1,0 +1,64 @@
+<div id="resultWrapper" class="sorted-by">
+
+	<div id="resultSubheader">
+	
+		<form action="[pft]v6001^u[/pft]" method="GET">
+			<input type="hidden" name="IsisScript" value="[pft]v2000[/pft]">
+			<input type="hidden" name="db" value="[pft]v2104[/pft]">
+			<input type="hidden" name="task" value="[pft]v2101[/pft]">
+			<input type="hidden" name="query" value="[pft]v2001[/pft]">
+			<input type="hidden" name="index" value="[pft]v2003[/pft]">
+			<input type="hidden" name="oper" value="[pft]v2005[/pft]">
+			<input type="hidden" name="trunc" value="[pft]v2006[/pft]">
+			<input type="hidden" name="wa" value="[pft]v2031[/pft]">
+			
+			[pft]if v2101 = 'BIB-KW-SEARCH' then[/pft]
+				<input type="hidden" name="searchType" value="[pft]v2002[/pft]">
+				<input type="hidden" name="lang" value="[pft]v2012[/pft]">
+				<input type="hidden" name="pub" value="[pft]v2013[/pft]">
+				<input type="hidden" name="place" value="[pft]v2014[/pft]">
+				<input type="hidden" name="format" value="[pft]v2015[/pft]">
+				<input type="hidden" name="biblioteca" value="[pft]v2018[/pft]">
+				<input type="hidden" name="litForm" value="[pft]v2019[/pft]">
+				<input type="hidden" name="biogr" value="[pft]v2020[/pft]">
+				<input type="hidden" name="trans" value="[pft]v2021[/pft]">
+				<input type="hidden" name="fecha1" value="[pft]v2022[/pft]">
+				<input type="hidden" name="fecha2" value="[pft]v2023[/pft]">
+				<input type="hidden" name="query1" value="[pft]v2051[/pft]">
+				<input type="hidden" name="query2" value="[pft]v2052[/pft]">
+				<input type="hidden" name="db1" value="[pft]v2053[/pft]">
+				<input type="hidden" name="db2" value="[pft]v2054[/pft]">
+			[pft]fi[/pft]
+			
+			Mostrando 
+			[pft]
+				if val(v1002) = val(v2004) then 
+					'el último '
+				else v2004,'-',
+					if val(v2004) + val(v2028) - 1 > val(v1002) then
+						v1002,
+					else
+						f(val(v2004) + val(v2028) - 1,1,0),
+					fi,
+				fi,
+			[/pft]
+			
+			de [pft]v1002[/pft] resultados, ordenados por
+			
+			<select name="sortBy" onchange="this.form.submit()" style="font-family: verdana, sans-serif;">
+				<option value="author" [pft]if v2016 = 'author' then 'selected' fi[/pft]>autor/título</option>
+				<option value="title" [pft]if v2016 = 'title' then 'selected' fi[/pft]>título</option>
+				<option value="dateNew" [pft]if v2016 = 'dateNew' then 'selected' fi[/pft]>fecha (decreciente)</option>
+				<option value="dateOld" [pft]if v2016 = 'dateOld' then 'selected' fi[/pft]>fecha (creciente)</option>
+				[pft]if v2104 <> 'bibima' then[/pft]
+					<option value="callNumber" [pft]if v2016 = 'callNumber' then 'selected' fi[/pft]>ubicación</option>
+				[pft]fi[/pft]
+			</select>
+			
+			<noscript>
+				<input type="submit" value="Reordenar" class="button">
+			</noscript>
+			
+		</form>
+		
+	</div>  <!-- resultSubheader -->

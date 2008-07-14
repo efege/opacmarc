@@ -1,0 +1,19 @@
+/* Correcciones en CSS para versiones de IE anteriores a la 6 */
+
+/* Consultar por ejemplo "Essentials of CSS Hacking For Internet Explorer",
+	http://www.maratz.com/blog/archives/2005/06/16/essentials-of-css-hacking-for-internet-explorer/
+*/
+
+body {
+	font-size: x-small;
+}
+
+td {
+	font-size: 1em;
+}
+
+table#headingRecordList,
+table#bibRecordList,
+div#columnsWrapper {
+	width: 92%;
+}

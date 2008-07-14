@@ -1,0 +1,228 @@
+<!-- =========================================================
+	marc.xis
+	
+	Generación del display MARC-tagged.
+	
+	TO-DO:
+		Llevar estilos, cellpadding y align a un archivo .css
+		
+		La separación de subcampos (uno por línea) debiera ser una opción.
+		
+		Presentar campos 003, 006, 007
+		
+		Links a campos no estándar (e.g. 092)?
+		
+		Aclarar cuando un registro no es MARC puro, sino resultado de una
+		migración desde otro formato. ¿Cómo lo sabemos?
+	
+	(c) 2003-2006 Fernando J. Gómez - CONICET - INMABB
+	========================================================= -->
+
+
+<field action="replace" tag="1008" split="flddir"><pft>ALL</pft></field>
+<field action="replace" tag="1010" split="occ"><pft>v1008</pft></field>
+
+<!-- Excluimos campos de control (00x), campos locales (859, 9xx), y campos con tag > 999 -->
+<field action="replace" tag="1010" split="occ"><pft>
+	(,
+		if v1010.2 = '00' and not '~001~003~005~006~007~008~859~' : v1010*2.3 and not v1010*2.1 = '9' then
+			v1010/
+		fi,
+	),
+</pft></field>
+<!--field action="export" tag="list">1010</field-->
+
+
+<display>
+	<div style="text-align: center; margin-top: 0.5em; border-top: 0px solid #CCC;">
+		<div style="background: /*#FFE*/; text-align: left; margin-left: auto; margin-right: auto; padding: 0.1em 0.4em;">
+</display>
+
+<display><htmlpft>
+	<!-- Leader -->
+	<table width="100%" class="tablaMARC" cellspacing="0" cellpadding="2" border="0" style="border-top: none;">
+		<tr>
+			<td class="marctag" [pft]if v1022*8.1 = '^' then ' valign="top"' fi[/pft]>
+				<a href="http://www.loc.gov/marc/bibliographic/ecbdldrd.html#mrcblea" title="Información sobre la cabecera (leader)"><b>LDR</b></a>
+			</td>
+			<td style="letter-spacing: 2px;">
+				[pft]
+				'·····',  /* Record length */
+				v905,
+				v906,
+				v907,
+				v908,
+				v909,
+				'22',
+				'·····',  /* Base address of data */
+				v917,
+				v918,
+				v919,
+				'4500',
+				[/pft]
+			</td>
+		</tr>
+	</table>
+	
+	<!-- Campo 001 -->
+	<table width="100%" class="tablaMARC" cellspacing="0" cellpadding="2" border="0">
+		<tr>
+			<td class="marctag">
+				<a href="http://www.loc.gov/marc/bibliographic/ecbdcntr.html#mrcb001" title="Información sobre el campo 001"><b>001</b></a>
+			</td>
+			<td style="letter-spacing: 2px;">
+				[pft]v001[/pft]
+			</td>
+		</tr>
+	</table>
+	
+	<!-- Campo 005 -->
+	<table width="100%" class="tablaMARC" cellspacing="0" cellpadding="2" border="0">
+		<tr>
+			<td class="marctag">
+				<a href="http://www.loc.gov/marc/bibliographic/ecbdcntr.html#mrcb005" title="Información sobre el campo 005"><b>005</b></a>
+			</td>
+			<td style="letter-spacing: 2px;">
+				[pft]v005[/pft]
+			</td>
+		</tr>
+	</table>
+	
+	<!-- Campo 008 -->
+	<table width="100%" class="tablaMARC" cellspacing="0" cellpadding="2" border="0">
+		<tr>
+			<td class="marctag">
+				<a href="http://www.loc.gov/marc/bibliographic/ecbd008s.html" title="Información sobre el campo 008"><b>008</b></a>
+			</td>
+			<td style="letter-spacing: 2px;">
+				[pft]v008[/pft]
+			</td>
+		</tr>
+	</table>
+</htmlpft></display>
+
+
+<do>
+	<!-- Una iteración por cada campo presente en el registro -->
+	<parm name="count"><pft>f(nocc(v1010),1,0)</pft></parm>
+	<define>1001 Isis_Current</define>
+	<loop>
+		<field action="import" tag="list">1010</field>
+		
+		<!-- extraemos la ocurrencia de v1010 (i.e. el campo) que nos interesa -->
+		<field action="replace" tag="1022"><pft>
+			(,
+				if iocc = val(v1001[1]) then v1010 fi,
+			),
+		</pft></field>
+		
+		<!-- Presentamos el campo -->
+		<display><pft>
+			'<table width="100%" class="tablaMARC" cellspacing="0" cellpadding="2" border="0">'/
+				'<tr>',
+				'<td class="marctag"', if v1022*8.1 = '^' then ' valign="top"' fi,'>',
+				   /* 
+				   	 ecbdldrd.html#mrcblea (LDR)
+				   	 ecbdcntr.html (001-006)
+				   	 ecbd007s.html (007)
+				   	 ecbd008s.html (008)
+				   	 ecbdnumb.html (010-048)
+				   	 ecbdclas.html (050-088)
+				       ecbdmain.html (110-130)
+				       ecbdtils.html (210-247)
+				       ecbdimpr.html (250-270)
+				       ecbdphys.html (300-366)
+				       ecbdsers.html (440-490)
+				       ecbdnot1.html (500-535)
+				       ecbdnot2.html (536-59X)
+				       ecbdsubj.html (600-658)
+				       ecbdadde.html (700-754)
+				       ecbdlink.html (760-787)
+				       ecbdsrae.html (800-830)
+				       ecbdhold.html (841-887)
+				   */
+				   proc('d1025a1025|',
+				   	if '01~02~03~04' : v1022*2.2            then 'ecbdnumb.html',
+				   	else if '05~06~07~08' : v1022*2.2       then 'ecbdclas.html',
+				   	else if '1' = v1022*2.1                 then 'ecbdmain.html',
+				   	else if '21~22~24' : v1022*2.2          then 'ecbdtils.html',
+				   	else if '25~26~27' : v1022*2.2          then 'ecbdimpr.html',
+				   	else if '3' = v1022*2.1                 then 'ecbdphys.html',
+				   	else if '4' = v1022*2.1                 then 'ecbdsers.html',
+				   	else if '50~51~52' : v1022*2.2          then 'ecbdnot1.html',  /* ojo, faltan 53x */
+				   	else if '54~55~56~57~58' : v1022*2.2    then 'ecbdnot2.html',  /* ojo, faltan 53x */
+				   	else if '6' = v1022*2.1                 then 'ecbdsubj.html',
+				   	else if '70~71~72~73~74~75' : v1022*2.2 then 'ecbdadde.html',
+				   	else if '76~77~78' : v1022*2.2          then 'ecbdlink.html',
+				   	else if '80~81~83' : v1022*2.2          then 'ecbdsrae.html',
+				   	else if '84~85~86~87~88' : v1022*2.2    then 'ecbdhold.html',
+				   	else '??',
+				   	fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,
+				   '|'),
+					'<a href="http://www.loc.gov/marc/bibliographic/',v1025,'#mrcb',v1022*2.3,'" title="Información sobre el campo ',v1022*2.3,'"><b>',v1022*2.3,'</b></a>',  /* field tag */
+				'</td>'/,
+				
+				if v1022*8.1 <> '^' then
+					/* Campo de control, 00x */
+					'<td style="letter-spacing: 2px;">',
+						replace(v1022*6,' ','#'),        /* field content */
+					'</td>',
+					'</tr>',
+					
+				else /* Campo de datos */
+					'<td class="marcindicators" valign="top" align="center">',
+						replace(v1022*6.2,' ','#'),      /* indicators */
+					'</td>',
+					
+					/* Cargamos los subcampos en un campo repetible auxiliar */
+					/* ATENCION: el nro. de ocurrencias de este campo aux. pone
+					   un límite sobre la cantidad de subcampos que podrán verse :-( */
+					proc('a9900~ ~a9900~ ~a9900~ ~a9900~ ~a9900~ ~a9900~ ~a9900~ ~a9900~ ~a9900~ ~a9900~ ~'),
+					proc('a9900~ ~a9900~ ~a9900~ ~a9900~ ~a9900~ ~a9900~ ~a9900~ ~a9900~ ~a9900~ ~a9900~ ~'),
+					proc('a9900~ ~a9900~ ~a9900~ ~a9900~ ~a9900~ ~a9900~ ~a9900~ ~a9900~ ~a9900~ ~a9900~ ~'),
+					proc('a9900~ ~a9900~ ~a9900~ ~a9900~ ~a9900~ ~a9900~ ~a9900~ ~a9900~ ~a9900~ ~a9900~ ~'),
+					proc('d1022a1022¦',v1022*8,'¦'),
+					(,
+						""d9900,
+						if instr(v1022[1]*1,'^') = 0 then
+							proc('a7800¦',v1022[1],'¦'),
+							break,
+						else
+							proc('a7800¦',
+								mid(v1022[1],1,instr(v1022[1]*1,'^')),
+							'¦'),
+							proc('d1022a1022¦',
+								mid(v1022[1]*1,instr(v1022[1]*1,'^'),size(v1022[1])),
+							'¦'),
+						fi,
+					),
+					
+					/* Recorremos el campo auxiliar 9900 para formatear los subcampos */
+					
+					'<td>'/
+					(,
+						if v7800*1.8 = 'uhttp://' then
+							'<b> $u</b>', /* subfield code */
+							' <a href="',v7800*2,'">',v7800*2,'</a>'        /* mostramos URLs como links */
+						else if iocc = 1 then 
+							'<b>',replace(v7800.2,'^','$'),'</b>',   /* subfield code */
+							x1,
+							v7800*2,              /* subfield content */
+						else if v7800.2 <> '^9' then  /* no mostramos subcampos $9 */
+							x1,
+							'<b>',replace(v7800.2,'^','$'),'</b>', /* subfield code */
+							x1,
+							v7800*2,          /* subfield content */
+						fi,fi,fi,
+					),
+					'</td>'/
+				fi,
+			'</table>'/
+		</pft></display>
+	</loop>
+</do>
+
+<display>
+	</div>
+	</div>
+</display>

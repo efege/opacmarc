@@ -1,0 +1,152 @@
+<!-- ==========================================================
+	BIB-TEST-COND
+	
+	Detecta registros que satisfacen una condición booleana
+	ATENCION: limitar la cantidad de resultados por página
+	
+	(c)2003-2004  Fernando J. Gómez - CONICET - INMABB
+	=========================================================== -->
+
+
+<!-- v2070: la condición booleana -->
+<field action="replace" tag="2070"><pft>replace(v2070,'\','')</pft></field>
+
+<!-- Hasta qué MFN procesar -->
+<field action="replace" tag="2072"><pft>v2072,"1000"n2072</pft></field>
+
+<display><htmlpft>
+	<table width="100%" cellspacing="0" border="0">
+		<tr>
+			<td>
+				Búsqueda por condición booleana:
+			</td>
+			<td align="right">
+				<a class="newSearch" href="[pft]v6001^u[/pft]?IsisScript=[pft]v2000[/pft]&amp;db=[pft]v2104[/pft]&amp;showForm=simple">
+					[pft]v6002^s[/pft]
+				</a>
+			</td>
+		</tr>
+	</table>
+
+	<div class="resultHeader">
+		[pft]v2070, " (grupo repetible)"d2071[/pft]
+	</div>
+</htmlpft></display>
+
+
+<!-- Verificamos la sintaxis del formato -->
+<field action="replace" tag="1011">
+<pft type="check">
+   <pft>'if ',v2070,' then , fi'</pft>
+</pft>
+</field>
+
+<flow action="jump"><pft>if val(v1011) = 0 then 'PFT_OK' fi</pft></flow>
+
+<!-- En caso de error, nos vamos -->
+<display>
+	<table cellspacing="0" style="margin-top: 0.5em;">
+		<tr>
+			<td class="notFound">Hay un error de formato. Revise la condición usada.</td>
+		</tr>
+	</table>
+</display>
+<flow action=jump>FIN</flow>
+
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<label>PFT_OK</label>
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<do task="mfnrange">
+	<parm name="db">BIBLIO</parm>
+	<parm name="count"><pft>v2072</pft></parm>
+	<define>1001 Isis_Current</define>
+	<loop>
+		<field action="import" tag="list">v2070,2071</field>
+		<proc>a1010~'HIT'~</proc>
+		<flow action="jump"><pft> <!-- Se cumple la condición: salto a HIT -->
+			<pft>
+				"("d2071,
+					'if ',v2070,' then ',v1010,', break, fi',
+				")"d2071
+			</pft>
+		</pft></flow>
+		<flow action="skip">Next</flow> <!-- No se cumple: pasamos al siguiente registro -->
+		
+		<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+		<label>HIT</label>
+		<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+		<list action="load" type="list"><pft>'^m',mfn</pft></list>
+	</loop>
+</do>
+
+<!-- Contamos los hits -->
+<do task="list">
+	<define>1 Isis_Item</define>
+	<define>1002 Isis_Total</define>
+	<parm name="count">1</parm>
+	<loop><!-- set v1002 --></loop>
+</do>
+
+<!-- Si no hubo resultados... -->
+<display><pft>
+	if val(v1002) = 0 then
+		'No hay registros que cumplan con la condición.'
+	fi
+</pft></display>
+<flow action="jump"><pft>if val(v1002) = 0 then 'FIN' fi</pft></flow>
+
+<!-- Si hubo demasiados resultados... -->
+<flow action="jump"><pft>
+	if val(v1002) > val(v6001^d) then  /* v6001^d: MAX_HITS_BIB */
+		'TOO_MANY_HITS',
+	fi
+</pft></flow>
+
+
+<!-- Almacenamos los MFNs ordenados -->
+<!-- ATENCION: v2070 puede contener '^' -->
+<call name="saveMfnList"><pft>
+	'^tCOND', '^q',replace(v2070,'^','\^'), '^r',replace(v2070,'^','\^'), "^n"v1002
+</pft></call>
+
+
+<!-- Si hubo un solo resultado, pasamos a mostrar el registro completo -->
+<flow action="jump"><pft>
+	if val(v1002) = 1 then 'BIB-RECORD' fi
+</pft></flow>
+
+<!-- Control para cambiar el orden -->
+<display><htmlpft><pft>cat('SORTED-BY.HTM')</pft></htmlpft></display>
+
+
+<!-- Tabla con los resultados -->
+
+<display><htmlpft><pft>cat('BIB-LIST-HEAD.HTM')</pft></htmlpft></display>
+
+<do task="list">
+	<define>1 Isis_Item</define>
+	<define>1001 Isis_Current</define>
+	<define>1002 Isis_Total</define>
+	<loop>
+		<field action="import" tag="list">2000,2099,2104,6001</field>
+		<do task="mfnrange">
+			<parm name="db">BIBLIO</parm>
+			<parm name="from"><pft>v1^m</pft></parm>
+			<parm name="count">1</parm>
+			<loop>
+				<field action="import" tag="list">1001,1002,2000,2104,2099,6001</field>
+				<display><pft>,@WORK_HEADING.PFT,</pft></display>
+			</loop>
+		</do>
+	</loop>
+</do>
+
+<display>
+	</table>
+</display>
+
+<!-- Botones -->
+<display><htmlpft><pft>cat('BIB-NAV.HTM')</pft></htmlpft></display>
+

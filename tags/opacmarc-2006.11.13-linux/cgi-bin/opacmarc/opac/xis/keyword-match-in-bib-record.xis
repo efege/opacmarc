@@ -1,0 +1,492 @@
+<!-- ========================================================
+	BIB-KW-SEARCH
+	
+	Búsqueda por keywords en la base bibliográfica.
+	Incluye búsquedas por títulos, números normalizados,
+	fechas, y otras restricciones.
+	
+	(c)2003-2006  Fernando J. Gómez - CONICET - INMABB
+	========================================================= -->
+
+<!-- Operador booleano por defecto -->
+<field action="replace" tag="2005"><pft>if a(v2005) then 'AND' fi</pft></field>
+
+<!-- Limpiamos la expresión recibida; el resultado queda en v3001 -->
+<call name="cleanQuery"><pft>
+	if 'TITLE~ANY' : v2002 then
+		replace(v2001,'*','XXXTRUNCATEXXX'), /* XXXTRUNCATEXXX es un string (alfabético) improbable, para evitar que el símbolo de truncación se pierda durante la limpieza */
+	fi
+</pft></call>
+<!-- ATENCION: clean query1 & query2 ??? -->
+
+<!--proc>s</proc>
+<display><pft>ALL</pft></display-->
+
+
+<!-- Mostramos los términos buscados -->
+<display><htmlpft>
+	[pft]
+		if v2107 <> '1' then  /* 2107: agrep */
+			'<div id="resultHeader">',
+				'Búsqueda ',
+				if p(v2001) then
+					select v2002
+						case 'TITLE' : 'por palabras del título:',
+						case 'SN'    : 'por ISBN/ISSN/etc:',
+						case 'ANY'   : 'en cualquier campo:',
+					endsel,
+				else
+					'avanzada:',
+				fi,
+			
+		else   /* agrep=1: corrección automática */
+			'<div id="correctedQuery">',
+				'No se encontraron resultados. Corregido a: '
+		fi,
+		
+		x1,
+		
+		'<b>',
+			replace(v2001,'<','&lt;'), /* ATENCION: ver esta "limpieza" */
+			if p(v2051) then v2053,': ',v2051, fi,
+			if p(v2051) and p(v2052) then x1,v2005,x1 fi, 
+			if p(v2052) then v2054,': ',v2052, fi,
+		'</b>',
+		
+		/* ==== Restricciones ==== */
+		if s(v2012,v2013,v2014,v2018,v2019,v2022,v2023)>'' then
+			'&nbsp;&nbsp;<span style="font-weight: bold;">', 
+			if p(v2012) then '&nbsp;&nbsp;&nbsp;<b>&#183;</b> Idioma: <b>',v2012^n,'</b>', fi,
+			if p(v2014) then '&nbsp;&nbsp;&nbsp;<b>&#183;</b> Lugar de publicación: <b>',v2014,'</b>', fi,
+			if p(v2013) then '&nbsp;&nbsp;&nbsp;<b>&#183;</b> Editorial: <b>',v2013,'</b>', fi,
+			if p(v2022) then '&nbsp;&nbsp;&nbsp;<b>&#183;</b> Desde: <b>',v2022,'</b>', fi,
+			if p(v2023) then '&nbsp;&nbsp;&nbsp;<b>&#183;</b> Hasta: <b>',v2023,'</b>', fi,
+			if p(v2018) then '&nbsp;&nbsp;&nbsp;<b>&#183;</b> Biblioteca: <b>',v2018,'</b>', fi,
+			if p(v2019) then '&nbsp;&nbsp;&nbsp;<b>&#183;</b> Forma literaria: <b>',if v2019='YES' then 'ficción' else 'no ficción' fi,'</b>', fi,
+			'</span>',
+		fi,
+		
+		'</div>',
+	[/pft]
+		
+		<!-- TO-DO: testear este menú (ver NCSU) -->
+		<!--select>
+			<option>La misma búsqueda en:</option>
+			<option>Google Scholar</option>
+			<option>Scopus</option>
+			<option>MathSciNet</option>
+		</select-->
+		
+</htmlpft></display>
+
+
+<!-- Armamos la search expression -->
+<field action="replace" tag="3001"><pft>
+	replace(replace(s(mpu,v3001),  /* v3001 es la expresión luego de la limpieza; usamos mpu porque cleanQuery no cambia el case */
+		'XXXTRUNCATEXXX','$'),
+		' AND ',' ')
+</pft></field>
+
+<field action="replace" tag="3001"><pft>
+	if p(v2001) then
+		/* Búsqueda simple */
+		select v2002
+			case 'TITLE' : replace(v3001,' ',s('/(9204)',x1,v2005,x1)), '/(9204)',
+			               ' OR ',
+			               replace(v3001,' ',s('/(9404)',x1,v2005,x1)), '/(9404)', /* incluimos las series. TO-DO: revisar cada lugar donde diga "9204" */
+			case 'SN'    : /* originalmente sólo ISBN e ISSN; lo extendemos a otros identificadores numéricos */
+								'-SN=',v2001,
+								' OR -SN=',replace(v2001,'-',''), /* aceptamos un ISBN que traiga guiones */
+								' OR -INV=',v2001, /* nros. de inventario */
+								' OR -NC=',v2001,  /* nros. de control */
+			case 'ANY'   : replace(v3001,' ',s(x1,v2005,x1)),
+		endsel,
+	else
+		/* Búsqueda avanzada */
+		/* TO-DO: truncamiento */
+		'(',
+			if p(v2051) then
+				replace(v2051,' ',s(v2006,'/',v2053,x1,v2005,x1)), v2006,
+				select v2053
+					case 'TITLE': '/(9204)',
+					case 'NAME' : '/(9104)',
+					case 'SUBJ' : '/(9604)',
+				endsel,
+			fi,
+			if p(v2051) and p(v2052) then x1,v2005,x1, fi,
+			if p(v2052) then
+				replace(v2052,' ',s(v2006,'/',v2054,x1,v2005,x1)), v2006,
+				select v2054
+					case 'TITLE': '/(9204)',
+					case 'NAME' : '/(9104)',
+					case 'SUBJ' : '/(9604)',
+				endsel,
+			fi,
+		')',
+	fi,
+	
+	if p(v2013) then ' AND ',replace(v2013,' ','$/(9261) AND '),'$/(9261)', fi,
+	if p(v2014) then ' AND ',replace(v2014,' ','$/(9260) AND '),'$/(9260)', fi,
+	" AND -LANG="v2012^*,
+	" AND -BIB="v2018,
+	" AND -FICTION="v2019,
+	" AND -BIOGR=YES"d2020,
+	" AND -TRANS="v2021,
+	" AND -FEST"d2024,
+</pft></field>
+
+<!-- Si no se usaron fechas, la expresión de búsqueda está (casi) lista -->
+<flow action="jump"><pft>
+	if s(v2022,v2023) = '' then 'SEARCH_EXPR_READY' fi
+</pft></flow>
+
+<!-- Pero si hay fechas, tenemos que manipularlas para incorporarlas a la expresión -->
+
+<!-- No queremos fechas en blanco -->
+<field action="replace" tag="2022"><pft>"1600"n2022</pft></field>
+<field action="replace" tag="2023"><pft>"2000"n2023</pft></field>
+
+<!-- v3020: distancia entre fechas -->
+<field action="replace" tag="3020"><pft>f(val(v2023) - val(v2022),1,0)</pft></field>
+
+<!-- ATENCION: este error debería producir un mensaje bien específico,
+     o quizás debería el sistema invertir el orden de las fechas?? -->
+<flow action="jump"><pft>if val(v3020) < 0 then 'ZERO_HITS' fi</pft></flow> 
+
+<field action="replace" tag="3022"><pft>v2022</pft></field>
+<flow action="jump"><pft>if val(v3020) = 0 then 'COMPACTAR_FECHAS' fi</pft></flow>
+
+<!-- v3022: la secuencia de años -->
+<do>
+	<parm name="count"><pft>v3020</pft></parm>
+	<define>1001 Isis_Current</define>
+	<loop>
+		<field action="import" tag="list">3022</field>
+		<field action="add" tag="3022"><pft>f(val(v3022[1]) + val(v1001),1,0)</pft></field>
+		<field action="export" tag="list">3022</field>
+	</loop>
+</do>
+
+
+<!-- ================================================== -->
+<label>COMPACTAR_FECHAS</label>
+<!-- ================================================== -->
+<!--display><pft>ALL</pft></display-->
+<display><pft>@COMPACT-DATES.PFT</pft></display>
+<proc>d3022d3023d3024d3025d3026</proc>
+
+<!-- Añadimos las fechas a la expresión de búsqueda -->
+<field action="replace" tag="3001"><pft>
+	v3001,' AND (', |-F=|v3027+| OR |, ')',
+</pft></field>
+
+
+<!-- ================================================== -->
+<label>SEARCH_EXPR_READY</label>
+<!-- ================================================== -->
+<!-- Finalmente, quitamos un posible '$/(9204)' de la expresión de búsqueda -->
+<field action="replace" tag="3001"><pft>
+	replace(replace(replace(v3001,
+		'($/(9204)) AND ',''),
+		'(/(9204)) AND ',''),
+		'() AND ',''),
+</pft></field>
+
+<!--display><pft>ALL</pft></display-->
+
+<!-- Descomentar para ver la expresión de búsqueda final -->
+<!--display><pft>
+	'<pre style="color: red;">',v3001,'</pre>'
+</pft></display-->
+
+<!-- Si olemos algo raro, nos vamos... -->
+<!--display><pft>if v3001 : '$/(9204)' and size(v3001) < 9 then '¡Epa! ¿Qué esperaba Ud. encontrar?' fi</pft></display>
+<flow action="jump"><pft>if v3001 : '$' and size(v3001) < 3 then /*'SHOW_FORM'*/ 'FIN' fi</pft></flow-->
+
+<do task="search">
+	<parm name="db">BIBLIO</parm>
+	<parm name="expression"><pft>v3001</pft></parm>
+	<define>1002 Isis_Total</define>
+	<parm name="count">1</parm>
+	<loop><!-- set v1002 --></loop>
+
+	<!-- Si hay cero resultados, salimos ya del <do> -->
+	<flow action="skip"><pft>
+		if val(v1002) = 0 /*or val(v1002) > val(v6001^d)*/ then
+			'Quit',
+		fi
+	</pft></flow>
+	
+	<!-- flag para indicar que se superó el tope de resultados -->
+	<field action="replace" tag="9040"><pft>
+		if val(v1002) > val(v6001^d) then 'TOO_MANY_HITS' fi
+	</pft></field>
+	
+	<parm name="count"><pft>v6001^d</pft></parm> <!-- cant. máx. -->
+	<define>1005 Isis_Keys</define>
+	
+	<loop>
+		<field action="import" tag="list">2016</field>
+		<list action="load" type="list"><pft>
+			'^k',@BIB_SORT_KEY.PFT, 
+			'^m',mfn,
+			'^h',v1005+|~|,   /* v1005 = tag-espacio-key */
+		</pft></list>
+		<field action="replace" tag="2041"><pft>mfn</pft></field>
+		<field action="export" tag="list">1005,2041</field> 
+		<!-- ATENCION: solo para el caso de hits=1; no es nada eficiente esto -->
+	</loop>
+</do>
+
+<!-- Si no hubo resultados... -->
+<!-- ATENCION: A veces no hay resultados solo a causa de las *restricciones* -->
+<flow action="jump"><pft>if val(v1002) = 0 then 'ZERO_HITS' fi</pft></flow>
+
+<!-- Si hubo demasiados resultados... -->
+<!--flow action="jump"><pft>
+	if val(v1002) > val(v6001^d) then  /* v6001^d: MAX_HITS_BIB */
+		'TOO_MANY_HITS',
+	fi
+</pft></flow-->
+
+<!--display><pft>ALL</pft></display-->
+
+
+<!-- Almacenamos los MFNs ordenados -->
+<call name="saveMfnList"><pft>
+	"^t"v2002, "^tADV"n2002,
+	"^q"v2001,
+	"^r"v2001,
+	"^n"v1002,
+	"^s"v2016,  /* sortBy */
+	"^u"v2006,  /* trunc */
+</pft></call>
+
+
+<!-- Si hubo un solo resultado, pasamos a mostrar el registro completo -->
+<field action="replace" tag="9060"><pft>
+	if val(v1002) = 1 then 'UNIQUE_KEYWORD_MATCH', fi
+</pft></field>
+<flow action="jump"><pft>
+	if val(v1002) = 1 then 'BIB-RECORD' fi
+</pft></flow>
+<!-- Las keys para el resaltado quedaron en v1005 -->
+
+<!--display><pft>ALL</pft></display-->
+
+<!-- Control para reordenar el listado -->
+<display><htmlpft><pft>
+	if not v9040 = 'TOO_MANY_HITS' then
+		,cat('SORTED-BY.HTM'),
+	else
+		'<div id="resultWrapper" class="too-many-hits">'
+		'<p class="warning">
+			Se encontraron <b>'v1002'</b> resultados, y el sistema procesa hasta
+			un máximo de <b>'v6001^d'</b>.
+			Por favor, intente restringir su búsqueda.
+		</p>'
+	fi,
+</pft></htmlpft></display>
+
+<!--display><htmlpft>
+	[pft]if val(v1002) > val(v6001^d) then[/pft]
+		[Para reducir la cantidad de resultados, puede usar el
+		<a href="[pft]v6001^u[/pft]?IsisScript=[pft]v2000[/pft]&amp;db=[pft]v2104[/pft]&amp;showForm=advanced&amp;query=[pft]v2001[/pft]&amp;searchType=[pft]v2002[/pft]&amp;oper=[pft]v2005[/pft]&amp;trunc=[pft]v2006[/pft]">
+			formulario de búsqueda avanzada
+		</a>]
+	[pft]fi[/pft]
+</htmlpft></display-->
+
+<!-- Abrimos la tabla de resultados -->
+<display><htmlpft><pft>cat('BIB-LIST-HEAD.HTM')</pft></htmlpft></display>
+
+<!-- Presentamos los resultados ordenados -->
+<do task="list">
+	<define>1111 Isis_Item</define>
+	<define>1001 Isis_Current</define>
+	<define>1002 Isis_Total</define>
+	<parm name="sort"><pft>v1111^k</pft></parm>
+	<parm name="from"><pft>v2004</pft></parm>
+	<parm name="count"><pft>v2028</pft></parm>
+	<loop>
+		<!--display><pft>'<br>KEY: 'v1111</pft></display-->
+		<field action="import" tag="list">2000,2001,2004,2013,2014,2016,2099,2104,6001,6003,9001</field>
+		<do task="mfnrange">
+			<parm name="db">BIBLIO</parm>
+			<parm name="from"><pft>v1111^m</pft></parm>
+			<parm name="count">1</parm>
+			<loop>
+				<field action="import" tag="list">1001,1002,1111,2000,2001,2004,2013,2014,2016,2099,2104,6001,6003,9001</field>
+				
+				<!-- ======== Resaltado ======== -->
+				<hl>
+					<parm name="prefix"><span class="hl"></parm>
+					<parm name="suffix"></span></parm>
+					
+					<!--display><pft>v1111|<p>|</pft></display-->
+					<field action="replace" tag="1005" split="occ"><pft>replace(v1111^h,'~',s(#))</pft></field>
+					
+					<!-- ====== TITULOS ====== -->
+					<!-- ATENCION: el resaltado del AND no funciona aún (en bib-record.xis?) -->
+					<parm name="keys"><pft>
+						(,
+							if v1005.4 = '9204' then v1005*5/ fi,
+						),
+						if s(mpu,v2001,mpl) : ' AND ' then 'AND'/ fi,
+					</pft></parm>
+					<!--display><pft>v1005+|<br>|</pft></display-->
+					
+					<!-- ATENCION: esta operacion solo debe hacerse cuando los 
+					     campos ya existen! Hay peligro realmente??? -->
+					
+					<!-- Approach del 15/03 (ver gráfico explicativo) -->
+					<!-- Esto soluciona el problema del resaltado accidental de los 
+						delimitadores de subcampo -->
+					
+					<!-- Título uniforme: 130 -->
+					<field action="replace" tag="9130"><pft>
+						proc('d7001a7001¦',
+							replace(v130*3,'^','¦a7001¦'),
+						'¦'),
+						v7001*1+|_|,
+					</pft></field>
+					<field action="hl" tag="9130"><pft>v9130</pft></field>
+					<field action="replace" tag="130"><pft>
+						proc('d7002a7002¦',
+							replace(v9130,'_','¦a7002¦'),
+						'¦'),
+						v130.2,(|^|v7001.1,v7002),
+					</pft></field>
+					
+					<!-- Título uniforme: 240 -->
+					<field action="replace" tag="9240"><pft>
+						proc('d7001a7001¦',
+							replace(v240*3,'^','¦a7001¦'),
+						'¦'),
+						v7001*1+|_|,
+					</pft></field>
+					<field action="hl" tag="9240"><pft>v9240</pft></field>
+					<field action="replace" tag="240"><pft>
+						proc('d7002a7002¦',
+							replace(v9240,'_','¦a7002¦'),
+						'¦'),
+						v240.2,(|^|v7001.1,v7002),
+					</pft></field>
+					
+					
+					<!-- Título propiamente dicho: 245 -->
+					<!-- No queremos resaltar el 245^c, pero eso sólo parece 
+						fácil si sabemos que siempre será el último subcampo,
+						en caso de estar presente. Según OCLC:
+						"Once subfield ‡c has been recorded, no further subfield 
+						coding of field 245 is possible." -->
+					<field action="replace" tag="9245"><pft>
+						proc('d7001a7001¦',
+							replace(v245*3,'^','¦a7001¦'),
+						'¦'),
+						(if v7001.1<>'c' then '_'v7001*1, fi),
+					</pft></field>
+					<field action="hl" tag="9245"><pft>v9245*1</pft></field>
+					<field action="replace" tag="245"><pft>
+						proc('d7002a7002¦',
+							replace(v9245,'_','¦a7002¦'),
+						'¦'),
+						proc("a7002¦"v245^c"¦"),
+						v245.2,(|^|v7001.1,v7002),
+					</pft></field>
+					
+					<!-- El 246 complica las cosas, porque puede repetirse... -->
+					<field action="hl" tag="246" split="occ"><pft>(v246*4/)</pft></field>
+					<field action="replace" tag="246" split="occ"><pft>|^a|v246</pft></field>
+					
+					<!-- El 500, aunque repetible, parece menos complicado por 
+					     no tener más que un subcampo -->
+					<field action="hl" tag="500" split="occ"><pft>(v500/)</pft></field>
+					
+					<!-- v600^t -->
+					<field action="hl" tag="600" split="occ"><pft>
+						(,
+							replace(v600,'^t','^t ')/
+						),
+					</pft></field>
+					
+					
+					<!-- ==== Resaltado: LUGAR & EDITORIAL (ATENCION: no discrimina al resaltar) ====== -->
+					
+					<!-- Intercalamos espacios en v260 -->
+					<!--field action="replace" tag="9260" split="occ"><pft>replace(v260*3,'^',s(#))</pft></field>
+					<field action="replace" tag="260"><pft>v245.2,('^',v9260.1,x1,v9260*1)</pft></field-->
+					
+					<parm name="keys"><pft>(if v1005.3 = '926' then v1005*5/ fi)</pft></parm>
+					<field action="replace" tag="260"><pft>
+						if p(v260) then 
+							proc('a9260¦',
+								replace(v260*3,'^','¦a9260¦'),
+							'¦'),
+							v260.2,('^',v9260.1,x1,v9260*1),
+						fi
+					</pft></field>
+					<field action="hl" tag="260"><pft>v260</pft></field>
+					
+					<!-- ===== Resaltado: Biblioteca ===== -->
+					<parm name="keys"><pft>(if v1005.4 = '-BIB' then v1005*5/ fi)</pft></parm>
+					<field action="hl" tag="995" split="occ"><pft>(v995/)</pft></field>
+					
+					
+					<!-- 9005: Flag para indicar que el main heading es distinto del anterior -->
+					<!-- Solo interesa si está activada la compactación de resultados -->
+					<!-- ATENCION: ver cómo detectar el comienzo del bloque de registros que carecen de 1xx -->
+					<!-- TO-DO: estamos incluyendo dentro del heading subcampos irrelevantes como $4 -->
+					<field action="replace" tag="9004"><pft>
+						'MAIN_HEADING='
+						v100*2,
+						v110*2,
+						v111*2,
+					</pft></field>
+					<!--display><pft>'<hr>9001: 'v9001,' . 9004: 'v9004</pft></display-->
+					<field action="replace" tag="9005"><pft>
+						if v9004 <> v9001 then
+							'NEW_MAIN_HEADING',
+						fi
+					</pft></field>
+				
+					<!-- Generamos una fila de la tabla -->
+					<display><pft>,@WORK_HEADING.PFT,</pft></display>
+					
+					<field action="replace" tag="9001"><pft>v9004</pft></field>
+					<field action="export" tag="list">9001</field>
+					
+				</hl>
+				<field action="export" tag="list">9001</field> <!-- necesitamos añadir un export aquí (3 en total) -->
+			</loop>
+		</do>
+		<field action="export" tag="list">9001</field>
+	</loop>
+</do>
+
+<!--display><pft>ALL</pft></display-->
+
+<display>
+	</table>  <!-- Fin de la tabla de resultados -->
+	
+	<!-- Experimento: barra lateral que acompañe la lista de resultados -->
+	<!--div style="float: right; width: 22%; margin-top: 0.7em; border: 1px solid red;">
+		Suggested navigation links
+	</div>
+	<div class="clear">&nbsp;</div-->
+</display>
+
+<!-- Botones -->
+<display><htmlpft><pft>
+	,cat('BIB-NAV.HTM'),
+</pft></htmlpft></display>
+
+<!-- Email -->
+<display><htmlpft><pft>
+	if v6001^n = '1' then ,cat('MAIL-RESULTS.HTM'), fi
+</pft></htmlpft></display>
+
+<display>
+	</div>  <!-- resultWrapper -->
+</display>
+

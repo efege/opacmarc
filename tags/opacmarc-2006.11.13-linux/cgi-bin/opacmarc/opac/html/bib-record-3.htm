@@ -1,0 +1,73 @@
+				<noscript>
+					[pft],@AACR2.PFT,[/pft]
+				</noscript>
+				
+				<!--div align="center">
+					<div id="aacrDisplayDiv" class="opacAacrDiv" style="display:block; border:1px solid black">
+						xx
+					</div>
+				</div-->
+				
+				<script type="text/javascript">
+					document.write("<div style=\"text-align: center\"><div id=\"aacrDisplayDiv\" class=\"opacAacrDiv\" style=\"display: none; margin-left: auto; margin-right: auto; text-align: left;\"><\/div><\/div>");
+				</script>
+				
+				
+				<!-- ======== Código tomado de Catalis: display-record.htm ======= -->
+				<script type="text/javascript">
+					var receivedRecord = new Object();
+					receivedRecord = {
+						mfn        : "[pft]mfn(1)[/pft]",
+						leader     : "[pft]v905,v906,v907,v908,v909,v917,v918,v919[/pft]",
+						f001       : "[pft]v001[/pft]",
+						f003       : "[pft]v003[/pft]",
+						f005       : "[pft]v005[/pft]",
+						f006       : "[pft]v006+|~|[/pft]",
+						f007       : "[pft]v007+|~|[/pft]",
+						f008       : "[pft]v008[/pft]",
+						createdBy  : "[pft]s(mpu,v991,mpl)[/pft]",
+						datafields : "[pft]v3083+|\n|[/pft]"  // cada datafield fue almacenado como una occ de v3083, en catalis.xis
+					}
+					
+					var ejemplares = new Array();
+					
+					[pft]
+					if p(v859) then
+						(,
+					[/pft]
+							var ejemplar = new Object();
+							var subfields = "[pft]replace(v859,'"','\"')[/pft]".split(/\^/);
+							var sfCode;
+							for (var i=1; i < subfields.length; i++) {
+								sfCode = subfields[i].substr(0,1);
+								ejemplar[sfCode] = subfields[i].substr(1);
+							}
+							ejemplares.push(ejemplar);
+					[pft]
+						),
+					fi,
+					[/pft]
+					
+					receivedRecord.ejemplares = ejemplares;
+					// v980 puede incluir comillas dobles, por eso necesitamos usar \"
+					receivedRecord.postItNote = "[pft]replace(v980,'"','\"'),[/pft]";
+					receivedRecord.OK = "[pft]v981[/pft]";
+					
+					//top.showRecordDetails(receivedRecord);
+					var leader06 = receivedRecord.leader.substr(1,1);
+					var leader07 = receivedRecord.leader.substr(2,1);
+					var materialType = getMaterialType(leader06,leader07);
+					var f001 = receivedRecord.f001;
+					var f005 = receivedRecord.f005;
+					var f008 = receivedRecord.f008;
+					var marcDatafields = receivedRecord.datafields.split(/\n/);
+					var ejemplares = receivedRecord.ejemplares;
+					var g_databases = new Object();
+					g_databases._activeDB_ = "[pft]v2104[/pft]";
+					var AACR_FIELD_HL = false;  // no resalta campos en la ficha
+					var recordDisplay = marc2aacr(materialType,f001,f005,f008,marcDatafields,ejemplares);
+					
+					// TO-DO: adaptar para browsers sin getElementById
+					document.getElementById("aacrDisplayDiv").innerHTML = recordDisplay;
+					document.getElementById("aacrDisplayDiv").style.display = "block";
+				</script>

@@ -1,0 +1,96 @@
+/* ==============================================================
+ *  URL encoding
+ *  Input: un string (v7000[1])
+ *  Output: el mismo string, codificado (v7000[1])
+ *
+ *  Para que este formato pueda ser llamado desde el interior de
+ *  un grupo repetible, evitamos aquí el uso de grupos 
+ *  repetibles, y nos referimos explícitamente a v7000[1].
+ *
+ *  Check: http://i-technica.com/whitestuff/urlencodechart.html
+ *  Also: http://www.blooberry.com/indexdot/html/topics/urlencoding.htm
+ *
+ *  TO-DO: completar la tabla.
+ * ==============================================================
+ */
+
+proc('d7000a7000|'
+		replace(replace(replace(replace(v7000[1],
+			'"','%22'),
+			'&','%26'),
+			'+','%2B'),
+			' ','+'),
+'|'),
+
+proc('d7000a7000|'
+		replace(replace(replace(replace(v7000[1],
+			'ç','%E7'),
+			'Ç','%C7'),
+			'ñ','%F1'),
+			'Ñ','%D1'),
+'|'),
+
+proc('d7000a7000|'
+		replace(replace(replace(
+		replace(replace(replace(
+		replace(replace(replace(v7000[1],
+			'Á','%C1'),
+			'Ä','%C4'),
+			'Å','%C5'),
+			'à','%E0'),
+			'á','%E1'),
+			'â','%E2'),
+			'ã','%E3'),
+			'ä','%E4'),
+			'å','%E5'),
+'|'),
+
+proc('d7000a7000|'
+		replace(replace(replace(replace(replace(replace(v7000[1],
+			'è','%E8'),
+			'é','%E9'),
+			'ê','%EA'),
+			'ë','%EB'),
+			'É','%C9'),
+			'È','%C8'),
+'|'),
+
+proc('d7000a7000|'
+		replace(replace(replace(replace(v7000[1],
+			'ì','%EC'),
+			'í','%ED'),
+			'î','%EE'),
+			'ï','%EF'),
+'|'),
+
+proc('d7000a7000|'
+		replace(replace(replace(replace(replace(replace(replace(v7000[1],
+			'ò','%F2'),
+			'ó','%F3'),
+			'ô','%F4'),
+			'õ','%F5'),
+			'ö','%F6'),
+			'Ø','%D8'),
+			'ø','%F8')
+'|'),
+
+proc('d7000a7000|'
+		replace(replace(replace(
+		replace(replace(replace(v7000[1],
+			'Ú','%DA'),
+			'Ü','%DC'),
+			'ù','%F9'),
+			'ú','%FA'),
+			'û','%FB'),
+			'ü','%FC'),
+'|'),
+
+proc('d7000a7000|'
+		replace(replace(replace(v7000[1],
+			'´','%B4'),
+			'ª','%AA'),
+			'º','%BA'),
+'|'),
+
+
+/* ======================================================= */

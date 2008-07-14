@@ -1,0 +1,29 @@
+/* ------------------------------------------------------------------------
+ * Formato para generar una versión limpia del heading solicitado.
+ *
+ * Ejemplos:
+ *           "^aGambaro, Griselda,^d1928-" => "Gambaro, Griselda, 1928-"
+ *           "^aOjos^xEnfermedades"        => "Ojos--Enfermedades"
+ *
+ * ATENCION: este formato va de la mano con la porcion de aacr2.pft 
+ *	que genera la lista de headings
+ * ------------------------------------------------------------------------
+ */
+
+	proc('d3003a3003{',
+		if p(v2003) and p(v2001) then
+			proc('d2001a2001{',replace(v2001,'\',''),'{'),
+			proc('d1000a1000{',replace(v2001*1,'^','{a1000{'),'{'),
+			(,
+				if 'xyzv' : v1000.1 then
+					'--'
+				else if iocc > 1 then
+					x1,
+				fi, fi,
+				v1000*1,
+			),
+		fi
+	'{'),
+	
+	/* Versión HTML */
+	proc('d3004a3004{',replace(v3003,'--','&#8212;'),'{'),

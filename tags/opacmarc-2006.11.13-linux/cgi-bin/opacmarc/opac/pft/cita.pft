@@ -1,0 +1,71 @@
+/* 
+  =============================================================== 
+	Formato para generar una cita bibliográfica.
+	Ver esto para arrancar: 
+		Excerpts from International Standard ISO 690:1987
+		Information and documentation -- Bibliographic references - 
+		Content, form and structure
+		http://www.nlc-bnc.ca/iso/tc46sc9/standard/690-1e.htm
+  ===============================================================
+*/
+
+'<div id="cita" align="center">'/
+'<table cellspacing="0" cellpadding="12">'/
+'<tr><td class="citaCell">'/
+
+/* ====== name ====== */
+/* Quitamos fechas y la coma que las precede; fuller form of name) */
+/* ATENCION: el subcampo q se excluye también en v111 ?? */
+if s(v100,v110,v111)>'' then
+	proc('d1901a1901|',replace(replace(s(v100*3,v110*3,v111*3),',^d','.^d'),'^','|a1901|'),'|'),
+	( if not 'dq9':v1901.1 then v1901*1,x1, fi ),
+fi,
+
+/* ====== title proper ====== */
+proc('d245a245|',mpl,v245^a," "v245^b,'|'),
+'<span', if a(v773) then ' style="font-style: italic;"' fi,'>',
+	if ' /':right(v245,2) then 
+		mid(v245,1,size(v245)-2), 
+	else if ',;':right(v245,1) then
+		mid(v245,1,size(v245)-1),
+	else
+		v245,
+	fi,fi,
+	if not '.?!' : right(v245,1) then '.' fi,
+'</span>',
+
+
+/* ====== Edición ====== */
+" "v250^a,  /* &nbsp; para no dejar el numerito huerfano? */
+/* quitar puntuacion final, como en MFN 37557 */
+
+
+/* ====== Publicación ====== */
+x1,
+/* Normalizamos el espacio en v260^c */
+proc('d260a260~',replace(v260,'^c ','^c'),'~'),
+proc('d1901a1901|',replace(v260*3,'^','|a1901|'),'|'),
+v1901*1+| |,
+
+if p(v773) and v773.1='0' then
+	x1,'<span style="font-weight: bold;">En:</span>',x1,
+	proc('d1001a1001|',replace(v773*3,'^','|a1001|'),'|'),
+
+	/* Averiguamos posición del subcampo t */
+	( if v1001.1='t' then proc('d1002a1002~',f(iocc,1,0),'~'), break, fi ) 
+
+	(
+		if not 'hmnruwxyz7' : v1001.1 then
+			,if v1002[1]>'' and iocc > val(v1002[1]) then ' &#8212; ', fi,
+			,if v1001.1 = 't' then '<span style="font-style: italic;">',v1001*1,'</span>',
+			else if v1001.1 = 'k' then '(',v1001*1,')', 
+			else v1001*1, 
+			fi,fi,
+			x1,
+		fi,
+	),
+fi,
+
+
+'</td></tr></table>'/
+'</div>'/

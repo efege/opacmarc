@@ -1,0 +1,159 @@
+
+/* ---------------------------------
+ * Estilo breve (WH) 
+ * 
+ * Compartido por Catalis y el OPAC
+ * ---------------------------------
+ */
+
+table#bibRecordList td {
+	padding-top: 0.3em;
+	padding-bottom: 0.4em;
+}
+
+table#bibRecordList td.newHeading {
+	background: #FFF; /*#FFE;*/
+	border-width: 0px 0;
+	border-color: #999;
+	border-style: solid;
+	border-bottom: 0px dotted #998;
+	border-top: 0px solid #998;
+	color: #333;
+	font-weight: bold;
+	padding: 0.15em 0.7em;
+	/*padding-left: 1.2em;
+	text-indent: -1.2em;*/
+}
+
+span.titleMainEntry {
+	color: #888;
+	font-style: italic;
+}
+
+/* Color de fondo para las filas (zebra table) */
+table#bibRecordList tr.whOdd {
+	background: #FFF; /*#FFE; /*#ECFBEC; /*#E0EEE0; /* #EFEFEF; /*#ECFBEC; /*#EFEFEF; /*#E6E6E6;*/
+}
+
+table#bibRecordList tr.whEven {
+	background: #FFF; /*#FFE; /* #ECFBEC; /*#E0EEE0; /*#EFEFEF; /* #ECFBEC; /*#EFEFEF;*/
+}
+
+table#bibRecordList td {
+	vertical-align: top;
+}
+
+table#bibRecordList td.whCounter {
+	border-bottom: dotted 1px #999; /* rgb(205,082,082)  #CCC */
+	color: #666;
+	padding-left: 0.2em;
+	padding-right: 0.2em;
+	text-align: right;
+	width: 3em; /*1.7em;*/
+}
+
+table#bibRecordList td.whData {
+	border-bottom: dotted 1px #999; /* rgb(205,082,082)  #CCC */
+	border-left: solid 1px #d6d6d6; /*#c9c9c9;*/
+}
+
+table#bibRecordList td.whPubDate {
+	width: 3em;
+	padding-left: 0.5em;
+	padding-right: 0.5em;
+	text-align: center;
+}
+
+table#bibRecordList td.whIndent {  /* uso 'table' para tener mayor especificidad */
+	padding-left: 1.6em;
+	text-indent: -1em;
+	line-height: 1.4;
+}
+
+table#bibRecordList td.docType {
+	font-size: 90%;
+	/*font-family: arial, sans-serif;*/
+	line-height: 1.5;
+	padding-left: 0.3em;
+	padding-right: 0.3em;
+	text-align: center;
+	text-transform: uppercase;
+}
+
+table#bibRecordList td.whLocation {
+	/* ATENCION: esta regla compite con una para "table#bibRecordList td" definida en opac.css */
+	border-bottom: dotted 1px #999; /* rgb(205,082,082)  #CCC */
+	border-left: solid 1px #d6d6d6;
+	color: #000;
+	min-width: 6.5em;  /* no funciona en IE */
+	padding-left: 0.4em;
+	padding-right: 0.4em;
+	white-space: nowrap; /* no funciona en IE6 si se combina con width; además, no siempre es deseable el nowrap, debido a que pueden aparecer textos largos */
+	/*width: 7em;*/ /* este width afecta la alineación a derecha del texto en IE */
+}
+
+table#bibRecordList td.whLocation ul {
+	list-style: none;
+}
+
+table#bibRecordList td.whFirstRow {  /* TO-DO: ajustar según la presencia/ausencia de heading */
+	border-top: 1px dotted #999; /* rgb(205,082,082)  #CCC */
+}
+
+table#bibRecordList td.sortedByThis {
+	background: #F3F3F3; /*#FFC;*/
+}
+
+table#bibRecordList span.whEdition {
+	font-style: italic;
+}
+
+table#bibRecordList td.spanish {
+	background-image: url('../../opac/img/orange-8x16.png');
+	background-repeat: no-repeat;
+	background-position: 8px 0;
+}
+
+a.whTitleLinkCatalis {
+	font-weight: bold;
+	text-decoration: none;
+}
+
+a.whTitleLinkCatalis:hover {
+	text-decoration: underline;
+}
+
+a.whTitleLinkOPAC {
+	font-weight: bold;
+	text-decoration: none;
+	border-bottom: 1px dotted #009;
+}
+
+* html a.whTitleLinkOPAC {  /* para IE que no entiende "dotted" */
+	border-bottom: none;
+}
+
+a.whTitleLinkOPAC:hover {
+	text-decoration: none;
+	border-bottom: 1px solid #009;
+}
+
+.miniEditButton {
+	font-family: verdana, sans-serif;
+	font-size: 11px;
+	/*font-weight: bold;*/
+	border: 1px solid black;
+	line-height: 12px;
+	height: 17px;
+}
+
+span.GMD {
+	font-weight: normal;
+}
+
+
+tr.emptyRow td {
+	font-size: 0.5em;
+	line-height: 1em;
+	padding: 0;
+}

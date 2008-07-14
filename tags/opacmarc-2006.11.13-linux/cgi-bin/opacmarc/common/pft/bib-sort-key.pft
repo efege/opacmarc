@@ -1,0 +1,87 @@
+/* =======================================================
+ * Clave de ordenación para los registros bibliográficos.
+ *
+ * ATENCION: falta ajustar las claves secundarias.
+ *
+ * (c) 2003-2006  Fernando J. Gómez - CONICET - INMABB
+ * =======================================================
+ */
+
+select v2016
+
+	/* ----------------------------------------------
+	 * Orden por "autor" (i.e. 100, 110, 111)
+	 * ----------------------------------------------
+	 */
+	case 'author' :
+		
+		/* Empezamos por juntar al principio los registros cuyo main
+		   heading es el buscado (IDEA ABANDONADA) */
+		/* if s(v100|.|,v110|.|,v111|.|) : replace(v2001,'\','') then '!!' fi, */
+		
+		/* Enviamos al final los registros que carezcan de 1xx ("autores varios") */
+		if s(v100,v110,v111,v130) = '' then 'ZZZ' fi,
+		
+		mpu,
+		/* 199 pasa a contener el campo 1xx que esté presente */
+		proc('d199a199¦',v100,v110,v111,'¦'),
+		
+		/* Número de reunión: queremos que '1st' aparezca *antes* que '10th' */
+		if p(v111) then proc('d199a199¦',replace(v199,v199^n,f(val(v199^n),3,0)),'¦'), fi,
+		
+		/* Eliminamos subcampo ^9 */
+		replace(replace(v199*4,s('^9',v199^9),''),'^','~'),
+		
+		/* Título uniforme */
+		if p(v130) then '~'mid(s(mpu,v130^a),val(v130.1) + 1,60) fi,
+		if p(v240) then '~'mid(s(mpu,v240^a),val(v240*1.1) + 1,60) fi,
+		
+		/* Título */
+		'~'mid(s(mpu,v245^a),val(v245*1.1) + 1,60),  /* TO-DO: quitar ' :' y ' /' finales */
+		
+		/* Fecha */
+		'~'replace(v008*7.4,'u','0'),
+		mpl,
+	
+	
+	/* ----------------------------------------------
+	 * Orden por título
+	 * ----------------------------------------------
+	 */
+	case 'title' :
+		mpu,
+		/*mid(s(mpu,v240^a),val(v240*1.1)+1,size(v240^a)),*/
+		
+		mid(s(mpu,v245^a),val(v245*1.1) + 1,size(v245^a)),
+		replace(v250^a,'[',''),  /* TO-DO: fecha en lugar de edición */
+		
+		/*
+		replace(s(v100*4,v110*4,v111*4),'^','~'),
+		mid(s(mpu,v130^a),val(v130.1) + 1,size(v130^a)),
+		*/
+		mpl,
+
+
+	/* ----------------------------------------------
+	 * Orden por fecha, decreciente (newest first)
+	 * ----------------------------------------------
+	 */
+	case 'dateNew' :
+		f(9999 - val(replace(v008*7.4,'u','0')),1,0),  /* 198u se toma como 1980 */
+	
+	
+	/* ----------------------------------------------
+	 * Orden por fecha creciente (oldest first)
+	 * ----------------------------------------------
+	 */
+	case 'dateOld' :
+		f(val(replace(v008*7.4,'u','0')),1,0),  /* 198u se toma como 1980 */
+
+	case 'callNumber' :
+		'',  /* nada, pues la base ya está ordenada por signatura topográfica */
+		
+	/*case 'volNum':
+		f(val(v440^v),1,0),x1,f(val(v490^v),1,0),
+	*/
+	
+endsel,

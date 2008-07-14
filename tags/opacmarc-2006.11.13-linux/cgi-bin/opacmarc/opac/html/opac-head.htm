@@ -1,0 +1,69 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+<link rel="stylesheet" type="text/css" href="[pft]v6003^h[/pft]common/css/opac.css" title="basic">
+<link rel="stylesheet" type="text/css" href="[pft]v6003^h[/pft]opac/css/banner/[pft]v2104[/pft].css" title="basic">
+<link rel="stylesheet" type="text/css" href="[pft]v6003^h[/pft]common/css/aacr.css">
+<link rel="stylesheet" type="text/css" href="[pft]v6003^h[/pft]common/css/wh.css">
+<!--link rel="stylesheet" type="text/css" href="[pft]v6003^h[/pft]common/css/etiquetado.css"-->
+<link rel="stylesheet" type="text/css" href="[pft]v6003^h[/pft]common/css/complete.css">
+<link rel="stylesheet" type="text/css" href="[pft]v6003^h[/pft]common/css/novedades.css">
+<link rel="stylesheet" type="text/css" href="[pft]v6003^h[/pft]common/css/msc.css">
+<link rel="stylesheet" type="text/css" href="[pft]v6003^h[/pft]opac/css/print.css" title="print">
+
+<!-- Comentarios condicionales, para cargar hojas de estilo que sólo verá IE -->
+<!--[if IE]>
+	<link rel="stylesheet" type="text/css" href="[pft]v6003^h[/pft]common/css/ie.css">
+<![endif]-->
+<!--[if lt IE 6]>
+	<link rel="stylesheet" type="text/css" href="[pft]v6003^h[/pft]common/css/ie5x.css">
+<![endif]-->
+
+<script type="text/javascript" src="[pft]v6003^h[/pft]opac/js/opac.js"></script>
+
+<!-- Funciones JS para generar el display AACR2 (ficha) -->
+<script type="text/javascript" src="[pft]v6003^h[/pft]common/js/marc2aacr.js"></script>
+<script type="text/javascript" src="[pft]v6003^h[/pft]common/js/isbn-hyphen.js"></script>
+<script type="text/javascript" src="[pft]v6003^h[/pft]common/js/getMaterialType.js"></script>
+
+
+[pft]
+	/* Limpiamos el heading buscado (tan pronto? sí, pues lo necesitamos para el <title>) */
+	,@CLEAN-HEADING.PFT,
+[/pft]
+
+
+<!-- TO-DO: Ajustar el <title> para las diferentes situaciones -->
+<title>
+[pft]
+	'Catálogo',
+	if v2101 = 'BIB-CLASS-SEARCH' then
+		' - MSC 2000: ',v2001,
+	else if v2101 = 'CLASS-BROWSE' then
+		' - MSC 2000',      /* TO-DO: mostrar sección visitada */
+	else if p(v3004) then
+		' - ',v3004,        /* 3004: heading */
+	else if p(v2002) then  /* 2002: searchType */
+		' - ', v2001,       /* 2001: keyword query */
+	else if p(v2003) then  /* 2003: index */
+		' - Índice de ',
+		select v2003
+			case 'TITLE' : 'títulos',
+			case 'NAME'  : 'autores',
+			case 'SUBJ'  : 'temas',
+		endsel,
+	else if v2101 = 'BIB-RECORD' then
+		/* TO-DO: display v245 */
+	fi,fi,fi,fi,fi,fi,
+[/pft]
+</title>
+
+</head>
+
+<body>
+
+<!--p class="hide"><a href="#recordWrapper">Ir directo al contenido</a></p-->

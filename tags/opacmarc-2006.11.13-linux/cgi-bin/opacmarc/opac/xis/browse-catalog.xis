@@ -1,0 +1,157 @@
+<!-- ========================================================
+	BROWSE-CATALOG
+	
+	Browsing del catálogo completo, en base a MFNRANGE.
+	
+	La base de datos se supone ordenada de alguna manera
+	útil, e.g. por signatura topográfica.
+	
+	El parámetro browseMfn (v2009) indica el MFN inicial.
+	
+	Usando el parámetro browseTerm (v2007) mostramos a partir
+	de una signatura topográfica específica.
+	
+	(c) 2003-2006  Fernando J. Gómez - CONICET - INMABB
+	========================================================= -->
+
+
+<!-- v2027: Número total de registros en el catálogo -->
+<!-- Necesario para saber cuándo deshabilitar el botón "Siguientes" -->
+<field action="replace" tag="2027"><pft>
+	ref(['BIBLIO']1,f(maxmfn-1,1,0)),
+</pft></field>
+
+<flow action="jump"><pft>
+	/* v2009: browseMfn. Si ya conocemos el MFN inicial, pasamos al display de registros */
+	if p(v2009) then 'DISPLAY_HEADER_2' fi,
+</pft></flow>
+
+<!-- Tomamos del diccionario la clave necesaria -->
+<do task="keyrange">
+	<parm name="db">BIBLIO</parm>
+	<field action="replace" tag="3008"><pft>
+		'-ST=',replace(v2007,' ','_'),
+	</pft></field>
+	<parm name="from"><pft>v3008</pft></parm>
+	<parm name="to">-ST=~</parm>
+	<parm name="count">1</parm>
+	<define>1 Isis_Key</define>
+	<loop>
+		<display><pft>'v1: 'v1</pft></display>
+		<!-- v3009: el MFN del primer posting de la primera clave encontrada -->
+		<field action="replace" tag="2009"><pft>f(l(['BIBLIO']v1),1,0)</pft></field>
+		<field action="export" tag="list">1,2009</field>
+	</loop>
+</do>
+
+<!--display><pft>'<br>Primer posting: ',v2009</pft></display-->
+
+<!-- retrocedemos una posición -->
+<field action="replace" tag="2009"><pft>
+	/* retrocedemos una posición, para que quede claro que no se esconde nada (aunque al usuario le parezca un error) */
+	/* TO-DO: esto debiera ser una opcion en el .conf */
+	f(val(v2009) - 0,1,0),
+</pft></field>
+
+<!-- Pero al retroceder, no podemos ir más allá del MFN 1 -->
+<field action="replace" tag="2009"><pft>
+	f(rmax('1'/v2009),1,0)
+</pft></field>
+
+
+<!-- =============================== -->
+<label>DISPLAY_HEADER_2</label>
+<!-- =============================== -->
+<!-- Encabezamiento de la lista de registros -->
+<display><htmlpft>
+	
+	<div id="resultHeader">
+		Recorriendo el catálogo completo, por orden de ubicación del material[pft]if p(v2007) then ', a partir de: <b>',v2007,'</b>' fi[/pft]
+	</div>
+	<!-- TO-DO: colocar aquí el mínimo entre val(v2004) + val(v2028) y val(v2027) -->
+	
+	<div id="resultWrapper" class="browse-catalog">
+	
+	<!--div id="resultSubheader">
+		<Registros [pft]v2004,'-',f(val(v2004) + val(v2028) - 1,1,0)[/pft]
+		de
+		[pft]
+		proc(
+			'd5001a5001¦',
+				replace(s(cat('BASES.PAR')),s(#),'¦a5001¦'),
+			'¦',
+		),
+		(,
+			if v5001 : 'BIBLIOGRAPHIC_TOTAL=' then
+				mid(v5001,instr(v5001,'=') + 1,size(v5001)-20),
+				break,
+			fi,
+		),
+		[/pft], por orden de ubicación del material
+		<br> -->
+		<!--span style="font-style: italic;">
+		Por favor informe errores en el ordenamiento (luego de verificar que no se trata de errores en la carga
+		de datos)</span>
+	</div-->
+</htmlpft></display>
+
+
+<!-- Navegación -->
+<display><htmlpft><pft>
+	proc('d1000a1000@bottom@'),
+	,cat('BROWSE-CATALOG-NAV.HTM'),
+</pft></htmlpft></display>
+
+
+<!-- ======== Display de los registros ======== -->
+
+<display><htmlpft><pft>
+	cat('BIB-LIST-HEAD.HTM')
+</pft></htmlpft></display>
+
+<do task="mfnrange">
+	<parm name="db">BIBLIO</parm>
+	<parm name="from"><pft>v2009</pft></parm>
+	<parm name="count"><pft>v2028</pft></parm>
+	<define>1001 Isis_Current</define>
+	<loop>
+		<field action="import" tag="list">2000,2101,2004,2104,6001,6003,9001</field>
+		<!--display><pft>ALL</pft></display-->
+		
+		<!-- 9005: Flag para indicar que el main heading es distinto del anterior -->
+		<!-- Solo interesa si está activada la compactación de resultados -->
+		<!-- ATENCION: ver cómo detectar el comienzo del bloque de registros que carecen de 1xx -->
+		<!-- ATENCION: este bloque se repite en otro .xis -->
+		<field action="replace" tag="9004"><pft>
+			'MAIN_HEADING='
+			v100*2,
+			v110*2,
+			v111*2,
+		</pft></field>
+		<!--display><pft>'<hr>9001: 'v9001,' . 9004: 'v9004</pft></display-->
+		<field action="replace" tag="9005"><pft>
+			if v9004 <> v9001 then
+				'NEW_MAIN_HEADING',
+			fi
+		</pft></field>
+		
+		<display><pft>,@WORK_HEADING.PFT,</pft></display>
+		
+		<field action="replace" tag="9001"><pft>v9004</pft></field>
+		<field action="export" tag="list">9001</field>
+	</loop>
+</do>
+
+<display>
+	</table>  <!-- Fin de la tabla de registros -->
+</display>
+
+
+<!-- Navegación -->
+<display><htmlpft><pft>
+	,cat('BROWSE-CATALOG-NAV.HTM'),
+</pft></htmlpft></display>
+
+<display>
+	</div>  <!-- resultWrapper -->
+</display>

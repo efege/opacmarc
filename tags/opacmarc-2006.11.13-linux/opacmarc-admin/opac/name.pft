@@ -1,0 +1,66 @@
+/* =======================================================================
+ * Extraccion de encabezamientos de nombres de la base bibliografica.
+ *
+ * Ver selname.pft
+ *
+ * ATENCION: filtramos el subcampo 9?
+ *
+ * (c) Fernando J. Gomez, INMABB, 2003
+ * =======================================================================
+ */
+
+/* --------------------------------------------------------------------
+ *  v1 tiene la forma:
+ *
+ *    !v7xx!##^aName^qfuller name^ddates.^4relator_code^9heading_number
+ *
+ *  Este es el aspecto del campo 1000 luego del proc() del paso 1:
+ *
+ *    1000 "aName"
+ *    1000 "qfuller name"
+ *    1000 "ddates."
+ *    1000 "4relator_code"
+ *    1000 "9heading_number"
+ *    1000 "##"
+ *
+ *  Y este es el aspecto de la salida que este pft genera:
+ *
+ *    !ID 0
+ *    !v001!~aName~qfuller name~ddates.
+ *    !v002!7xx
+ *    !v009!heading_number
+ * --------------------------------------------------------------------
+ */
+
+
+/#'!ID 0'/,
+'!v001!',
+
+/*  PASO 1: Dividimos el encabezamiento en subcampos */
+proc
+(
+	'd1000',
+	(,
+		'a1000|',replace(v1*9,'^','|a1000|'),'|a1000|##|',
+	),
+)
+
+
+/* PASO 2: Filtramos subcampos (loop sobre v1000) */
+(,
+	if v1000 = '##' then
+		/'!v002!',v1[1]*2.3,
+	else if v1000.1 = '9' then
+		/'!v009!',v1000*1,
+	else
+		select v1[1]*2.3
+			case '100' : if 'abcdq'  : v1000.1 then '~'v1000, fi,
+			case '700' : if 'abcdq'  : v1000.1 then '~'v1000, fi,
+			case '110' : if 'abcdnt' : v1000.1 then '~'v1000, fi,
+			case '710' : if 'abcdnt' : v1000.1 then '~'v1000, fi,
+			case '111' : if 'acdenq' : v1000.1 then '~'v1000, fi,
+			case '711' : if 'acdenq' : v1000.1 then '~'v1000, fi,
+		endsel,
+	fi,fi,
+),
+

@@ -1,0 +1,53 @@
+/*  ===================================================================
+ *  Eliminacion de duplicados en una lista ordenada de encabezamientos.
+ *
+ *  Comparamos headings sucesivos (ignorando el tipo de subdivision??)
+ *  El uso de '--' es arbitrario (a los efectos de comparar)
+ *  En el campo 2 tenemos el tag (tipo de heading).
+ *  En el campo 3 tenemos el indicador de ordenacion (para titulos)
+ *
+ *  (las lineas previas son heredadas de la version 1)
+ *
+ *  (c) 2003-2004  Fernando J. Gomez - CONICET - INMABB
+ *  ===================================================================
+ */
+
+
+/* ---------------------------------------------------------------------
+ *  Ejemplo de entrada-salida para este PFT: (COMPLETAR)
+ *
+ *	- si v1 coincide con el v1 del registro previo: no genera nada
+ *	- en otro caso:
+ *		!ID 0
+ *		!v001!
+ *		!v002!
+ *		!v013!
+ *		!v014!
+ *		!v009!
+ * ---------------------------------------------------------------------
+ */
+
+
+if s(v1) <> ref(mfn-1,v1) then
+	mpl,
+	'!ID 0'/,
+	'!v001!',v1/,
+	"!v002!"v2/,        /* tag del campo */
+	
+	/* --- Campos 13 y 14: sólo para títulos (???): Filing character --- */
+	if mstname : 'title' then
+		if p(v13) then
+			'!v013!',v13,/
+		fi,
+		if val(v13) = 0 then
+			'!v014!',
+			s(mpu,v1*2.1,mpl),/
+		else
+			'!v014!',
+			mid(s(mpu,v1*2,mpl),val(v13) + 1,1),/
+		fi,
+	fi,
+	
+	"!v009!"v9/,    /* Nro. de identificacion  */
+fi,
+

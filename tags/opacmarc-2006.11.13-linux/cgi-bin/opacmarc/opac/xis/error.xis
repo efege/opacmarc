@@ -1,0 +1,11 @@
+<!-- ================================================== -->
+<label>ERROR-DB</label>
+<!-- ================================================== -->
+
+<display><pft>
+	'Content-Type: text/html; charset=iso-8859-1'/#,
+</pft></display>
+
+<display>Error: parámetro <b>db</b> ausente.</display>
+
+<flow action="jump">FIN</flow>

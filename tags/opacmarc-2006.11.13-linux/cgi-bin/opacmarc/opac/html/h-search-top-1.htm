@@ -1,0 +1,16 @@
+[pft]
+	if v2107 <> '1' then  /* 2107: agrep */
+		'<div id="resultHeader">'
+			'Búsqueda en el índice de ',
+			select v2002
+				case 'NAME' : 'autores:',
+				case 'SUBJ' : 'temas:',
+			endsel,
+			' <b>',v2001,'</b>',
+		'</div>',
+	else,   /* agrep=1: corrección automática */
+		'<div id="correctedQuery">',
+			'No se encontraron resultados. Corregido a: <b>',v2001,'</b>',
+		'</div>',
+	fi,
+[/pft]

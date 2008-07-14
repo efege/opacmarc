@@ -1,0 +1,46 @@
+[pft]if v2101 = 'BIB-RECORD' then[/pft]
+	
+	<div id="resultHeader" class="[pft]v6112^t[1][/pft]">
+		[pft]
+			if p(v6112^t) then
+				'Búsqueda ',
+				select v6112^t[1]
+					case 'NAME'  : 'por autor',
+					case 'SUBJ'  : if v2104 = '_bibima' then
+											'por código temático de <a href="',v6001^u,'?IsisScript=',v2000,'&amp;task=CLASS-BROWSE&amp;msclevel=1&amp;db=bibima&amp;searchType=SUBJ"><b>MSC 2000</b></a>',
+										else
+											'por tema',
+										fi,
+					case 'COND'  : 'por condición booleana',
+					case 'TITLE' : if v2101 = 'BIB-H-SEARCH' then 'por título' else 'por palabras del título' fi,
+					/* ATENCION: si proviene del índice de títulos, dirá "por título"; si proviene de una búsqueda
+					   por palabras, dirá "por palabras del título".
+					   TO-DO: al cambiar de estilo, pasa de "título" a "palabras del título" */
+					case 'SN'    : 'por ISBN/ISSN/etc',
+					case 'COL'   : 'por serie',
+					case 'ADV'   : 'avanzada',
+					case 'ANY'   : 'en todos los campos',
+					elsecase       '',
+				endsel,
+				':',
+			else if p(v2106) then
+				'Búsqueda por número de registro: <b>',v2106,'</b>',
+			else
+				'',
+			fi,fi,
+		[/pft]
+		
+		[pft]
+		if v6112^t[1] = 'TITLE' then
+			'<b>',v6112^r[1].80,'</b>',
+		else
+			'<b>',v6112^r[1],'</b>',
+		fi,
+		
+		if p(v2017) and a(v2099) then
+			'Recorriendo el catálogo completo',
+		fi,
+		[/pft]
+	</div>  <!-- resultHeader -->
+
+[pft]fi[/pft]

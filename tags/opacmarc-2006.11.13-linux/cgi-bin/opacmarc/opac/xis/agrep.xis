@@ -1,0 +1,119 @@
+<!--
+	====================================================================
+	AGREP: approximate matchings.
+	
+	(c) 2003-2004 Fernando J. Gómez - CONICET - INMABB
+
+	Implementado para expresiones formadas por una única palabra.
+	
+	Algunos links relevantes sobre agrep:
+	
+		http://www.tgries.de/agrep/ -- Port de agrep para Windows/DOS
+		http://www.tgries.de/agrep/agrephlp.html -- The Help Page for AGREP 3.35 / 3.37
+		ftp://ftp.cs.arizona.edu/agrep/ -- agrep sources
+	
+	De acuerdo con http://www.tgries.de/agrep/#COPYRIGHT , "All materials
+	developed as a consequence of the use of this software shall duly
+	acknowledge such use, in accordance with the usual standards of
+	acknowledging credit in academic research."
+	
+	Opciones relevantes:
+		-#  find matches with at most # errors
+		-i  case-insensitive search; ISO <> ASCII
+		-w  pattern has to match as a word: "win" will not match "wind"
+		-x  pattern must match a whole line
+		-Dk deletion cost is k
+		-Ik insertion cost is k
+		-Sk substitution cost is k
+		-V[012345V] version / verbose more
+		@listfile  use the filenames in listfile
+	
+	ATENCION:  dist("thoery","theory") = 2, pues una trasposición se compone
+	de dos sustituciones. Sin embargo, por ser una palabra "corta", sólo
+	estamos buscando {x : dist(x,"thoery") = 1}, y perdemos el match.
+	Si por otra parte hacemos que el costo de insertar y de eliminar sea mayor
+	que el de sustituir, y aumentamos la tolerancia... tendremos esto:
+	carta => {BERTA, CARLO, CARTAN, CARTAS, CAUSA, FALTA, HASTA, PARTE, PARTS, SANTA}
+	
+	Para el index ANY, podemos usar @listfile
+	
+	====================================================================
+-->
+
+<function name="agrep" action="replace" tag="4101">
+
+	<field action="import" tag="list">2002,2104,6003</field>
+	
+	<!-- ATENCION: La opción -B no admite un tope para el número de errores, 
+		y eso en ciertas ocasiones puede dar resultados muy pobres -->
+	
+	<!-- Archivo temporal para almacenar la lista de coincidencias aproximadas -->
+	<file action="create" type="tempfile">2098</file>
+	
+	<!-- Construimos el comando a utilizar, parte por parte -->
+	<!-- 4101: término original, 2002: searchType-->
+	<proc><pft>
+		/* agrep (exe) */ ,'a5550¦', v6003^p,                                        '¦',
+		/* parámetros */  ,'a5551¦', '-V0 -i -1 -D1 -I1 -S1 -w',                     '¦',
+		/* expresión */   ,'a5552¦', '"',v4101,'"',                                  '¦',  /* '"^',v4101,'$"' */
+		/* diccionario */ ,'a5553¦', v6003^b,'/opac/',v2104,'/dict',v2002,'.txt','¦',
+		/* salida */      ,'a5554¦', '>',v2098,                                      '¦',
+	</pft></proc>
+	
+	
+	<!-- El parámetro -V0 es necesario en Windows, pero no se usa (y causa error) en Unix -->
+	<!-- TO-DO: buscar una solución más elegante (?), tal vez descartando las líneas que
+		arroja agrep en Windows cuando no se usa -V0 -->
+	<proc><pft>
+		if not getenv('SERVER_SOFTWARE') : 'Win' and not getenv('OS') : 'Win' then
+			'd5551a5551¦',replace(v5551,'-V0 ',''),'¦'
+		fi
+	</pft></proc>
+	
+	
+	<!-- Descomentar para ver el comando construido -->
+	<!--display><pft>
+		'<span style="font-size: 13px; line-height: 18px; color: black;">
+			[',v5550,x1,v5551,x1,v5552,x1,v5553,x1,v5554,']
+		</span>'
+	</pft></display-->
+	
+	<!-- Ejecutamos el comando -->
+	<display><pft>
+		,system(v5550,x1,v5551,x1,v5552,x1,v5553,x1,v5554),
+	</pft></display>
+	
+	
+	<!-- Leemos los resultados -->
+	<proc>d5555</proc>
+	<field action="replace" tag="5555" split="occ"><pft>,cat(v2098),</pft></field>
+	<!--display><pft>'<br>agrep.xis | agrep output, pass 1: ',v5555+| ~ |</pft></display-->
+	
+	<!-- Si hubo matching o la palabra es "corta", no seguimos probando -->
+	<flow action="jump"><pft>
+		if p(v5555) or size(v4101) <= 6 then 'AGREP_END' fi,
+	</pft></flow>
+	
+	<!-- No hubo matching y la palabra es "larga": 2do intento, tolerando dos errores (cambiamos -1 por -2) -->
+	<field action="replace" tag="5551"><pft>replace(v5551,'-1','-2')</pft></field>
+	<display><pft>system(v5550,x1,v5551,x1,v5552,x1,v5553,x1,v5554)</pft></display>
+	<field action="add" tag="5555" split="occ"><pft>cat(v2098)</pft></field>
+	<!--display><pft>'<br>agrep.xis | agrep output, pass 2: ',v5555+| ~ |</pft></display-->
+	
+	<!-- Si hubo matching o la palabra no es "más larga", no seguimos probando -->
+	<flow action="jump"><pft>
+		if p(v5555) or size(v4101) <= 10 then 'AGREP_END' fi,
+	</pft></flow>
+	
+	<!-- No hubo matching, y la palabra es "más larga": 3er intento, tolerando tres errores (cambiamos -2 por -3) -->
+	<field action="replace" tag="5551"><pft>,replace(v5551,'-2','-3'),</pft></field>
+	<display><pft>,system(v5550,x1,v5551,x1,v5552,x1,v5553,x1,v5554),</pft></display>
+	<field action="add" tag="5555" split="occ"><pft>,cat(v2098),</pft></field>
+	<!--display><pft>'<br>agrep.xis | agrep output, pass 3: ',v5555+| ~ |</pft></display-->
+	
+	<label>AGREP_END</label>
+	
+	<!--display><pft>'<br>agrep.xis | Returned value: ',v5555+| ~ |</pft></display-->
+	<return action="replace" tag="5555" split="occ"><pft>(v5555/)</pft></return>
+
+</function>

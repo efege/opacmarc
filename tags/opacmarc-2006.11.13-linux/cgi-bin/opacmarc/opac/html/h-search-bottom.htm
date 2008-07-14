@@ -1,0 +1,63 @@
+[pft]/*
+	Parte inferior de keyword-match-in-heading:
+		* botón Anteriores
+		* botón Siguientes
+*/[/pft]
+
+[pft]if val(v1002) > val(v2029) then[/pft]
+	<div align="center">
+		<div style="margin-top: 0.7em; /*background: #EAEAEA;*/ padding: 0.3em; border-top: 1px dotted #999;">
+			<table>
+				<tr>
+					<td>		
+						<!-- Botón "buscar marcados" -->
+						<!--
+						<input type="hidden" name="IsisScript" value="',v2000,'">'/
+						<input type="hidden" name="db" value="',v2104,'">'/
+						<input type="hidden" name="index" value="',v2002,'">'/
+						<input type="submit" value="Buscar marcados">'/
+						</form-->
+					</td>
+					<td>
+						<!-- Botón "anteriores" -->
+						<!--form action="[pft]v6001^u[/pft]" method="GET">
+							<input type="hidden" name="IsisScript" value="[pft]v2000[/pft]">
+							<input type="hidden" name="db" value="[pft]v2104[/pft]">
+							<input type="hidden" name="from" value="[pft]f(val(v2004) - val(v2029),1,0)[/pft]">
+							<input type="hidden" name="searchType" value="[pft]v2002[/pft]">
+							<input type="hidden" name="query" value="[pft]v2001[/pft]">
+							<input type="hidden" name="oper" value="[pft]v2005[/pft]">
+							<input type="hidden" name="trunc" value="[pft]v2006[/pft]">
+							<input type="hidden" name="hpp" value="[pft]v2029[/pft]">
+							<input type="submit" class="button" value="&lt; [pft]select v2002 case 'NAME' : 'Nombres', case 'SUBJ' : 'Temas', endsel[/pft] anteriores" [pft]if val(v2004) = 1 then 'disabled="disabled"' fi[/pft]>
+						</form-->
+						[pft]if val(v2004) = 1 then[/pft]
+							<span style="color: #AAA;">&lt; Anteriores</span>
+						[pft]else[/pft]
+							<a href="[pft]v6001^u[/pft]?IsisScript=[pft]v2000[/pft]&amp;db=[pft]v2104[/pft]&amp;from=[pft]f(val(v2004) - val(v2029),1,0)[/pft]&amp;searchType=[pft]v2002[/pft]&amp;query=[pft]v2001[/pft]">&lt; Anteriores</a>
+						[pft]fi[/pft]
+					</td>
+					<td style="padding-left: 3em;">
+						<!-- Botón "siguientes" -->
+						<!--form action="[pft]v6001^u[/pft]" method="get">
+							<input type="hidden" name="IsisScript" value="[pft]v2000[/pft]">
+							<input type="hidden" name="db" value="[pft]v2104[/pft]">
+							<input type="hidden" name="from" value="[pft]f(val(v2004)+val(v2029),1,0)[/pft]">
+							<input type="hidden" name="searchType" value="[pft]v2002[/pft]">
+							<input type="hidden" name="query" value="[pft]v2001[/pft]">
+							<input type="hidden" name="oper" value="[pft]v2005[/pft]">
+							<input type="hidden" name="trunc" value="[pft]v2006[/pft]">
+							<input type="hidden" name="hpp" value="[pft]v2029[/pft]">
+							<input type="submit" class="button" value="[pft]select v2002 case 'NAME' : 'Nombres', case 'SUBJ' : 'Temas', endsel[/pft] siguientes &gt;" [pft]if val(v1001) >= val(v1002) then 'disabled="disabled"' fi[/pft]>
+						</form-->
+						[pft]if val(v1001) >= val(v1002) then[/pft]
+							<span style="color: #AAA;">Siguientes &gt;</span>
+						[pft]else[/pft]
+							<a href="[pft]v6001^u[/pft]?IsisScript=[pft]v2000[/pft]&amp;db=[pft]v2104[/pft]&amp;from=[pft]f(val(v2004)+val(v2029),1,0)[/pft]&amp;searchType=[pft]v2002[/pft]&amp;query=[pft]v2001[/pft]">Siguientes &gt;</a>
+						[pft]fi,[/pft]
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+[pft]fi[/pft]

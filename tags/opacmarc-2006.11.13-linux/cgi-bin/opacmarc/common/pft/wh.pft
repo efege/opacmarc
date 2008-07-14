@@ -1,0 +1,558 @@
+/* --------------------------------------------------------------------
+ * wh.pft
+ *
+ * Estilo de visualización breve para presentar una lista registros
+ * bibliográficos.
+ *
+ * (c) 2003-2004 Fernando J. Gómez - CONICET - INMABB
+ * --------------------------------------------------------------------
+ *
+ * Inicialmente basado en las Guidelines for OPAC displays, de M. Yee.
+ *
+ * TO-DO: considerar otros campos de título: 630, 730, 246.
+ *
+ * ¿Los headings deberian ser clickeables, o solo los títulos?
+ *
+ * Display compactado: inicialmente, sólo para busquedas por autor
+ * desde un heading, y ordenadas alfabéticamente (si, además, está
+ * activada la opción).
+ *
+ * v9005 es un flag para indicar que debe mostrarse el main heading
+ * (para listados compactados).
+ *
+ * --------------------------------------------------------------------
+ */
+
+ 
+/* --------------------------------------------------
+ * Cargamos en v9010 el main heading (1xx)
+ * ATENCION: ¿incluimos tambien el campo 130?
+ * --------------------------------------------------
+ */
+
+if s(v100,v110,v111) > '' then
+	proc(
+		'd1901a1901¦',
+			replace( s(v100*3,v110*3,v111*3), '^', '¦a1901¦' ),
+		'¦',
+	),
+	
+	proc(
+		'a9010¦',
+			(, 
+				if v100[1] > '' and 'qd' : v1901.1 then 
+					'<span class="lighter">',v1901*1,'</span>', /* $q, $d: más claros */ 
+				else if not '49' : v1901.1 then
+					v1901*1,
+				fi,fi,
+				x1,
+			),
+		'¦',
+	),
+fi,
+
+
+
+/* ----------------------------------------------------------
+ * Una fila especial, si hay un nuevo main heading
+ * v6001^c: COMPACT_RESULT_LIST
+ * TO-DO: mostrar los headings como enlaces:
+ * wxis?IsisScript=opac/xis/opac.xis&db=bibima&task=BIB-H-SEARCH&index=NAME&query=^aCourant,+Richard,^d1888-1972.
+ * ----------------------------------------------------------
+ */
+proc('d1011a1011@',
+		if v6001^c = '1' and v9005 = 'NEW_MAIN_HEADING' and 'author' : v2016 /*v2003 = 'NAME'*/ then
+			'TRUE'
+		else
+			'FALSE',
+		fi,
+	'@'),
+
+if v1011 = 'TRUE' then
+	'<tr class="emptyRow">',
+		'<td colspan="5">&nbsp;</td>',
+	'</tr>',
+	'<tr>',
+		'<td colspan="5" class="newHeading">',
+			'<!--a href="',v6001^u,
+				'?IsisScript=',v2000,
+				'&amp;db=',v2104,
+				'&amp;task=BIB-H-SEARCH',
+				'&amp;index=NAME',
+				'&amp;query=^a',v9010,'"-->',
+				v9010,
+			'<!--/a-->',
+			"<span class='titleMainEntry'>Autores varios</span>"n9010,
+		'</td>',
+	'</tr>',
+fi,
+
+
+/* Comienza la fila para este registro. Color de fondo alternado en base a v1001 (Isis_Current) */
+'<tr id="resultRow',v001,'" class="',if right(f(val(v1001)/2,1,1),1) = '0' then 'whEven' else 'whOdd' fi,'">'/
+
+
+/* ------------------------------------------------
+ *  Begin columna para contador/recordID
+ * ------------------------------------------------
+ */
+ 
+/* '<td width="10">&nbsp;</td>'/ */
+
+'<td class="whCounter',
+	if val(v1001) = val(v2004) or v1011 = 'TRUE' then
+		' whFirstRow',
+	fi,
+	/*if v008*35.3 = 'spa' then
+		' spanish',
+	fi,*/
+'">'/
+
+	if v2000 : 'catalis.xis' then
+		/* ATENCION: no debemos usar aquí el nombre del IsisScript; hace falta algún otro parámetro */
+		/*'<br>',*/
+		'<button id="btn',v001,'" type="button" class="miniEditButton" style="width: 55px; background: ', if p(v980) then '#FFA;' else '#E2DFD0;', fi,'"',
+				' title="Editar este registro">',v001,'</button>',
+		/* ATENCION: si usamos mfn en lugar de mfn(1), no funciona bien */
+		"<br>"v991,
+	else
+		v1001,'.',
+	fi,
+'</td>'/
+/* ------------------------------------------------
+ *  End columna para contador/recordID
+ * ------------------------------------------------
+ */
+
+
+/* ---------------------------------------------------
+ *  Begin columna de datos bibliográficos
+ * ---------------------------------------------------
+ */
+'<td', 
+	if v6001^j = '1' then       /* v6001^j: TEXT_INDENT */
+		' class="whData whIndent'
+	else
+		' class="whData',
+	fi, 
+	if val(v1001) = val(v2004) or v1011 = 'TRUE' then
+		' whFirstRow',
+	fi,
+'">'/
+
+	/* --- MAIN HEADING --- */
+	/* ATENCION: el v2003 importa? */
+	/*if (v6001^c <> '1' or v2003 <> 'NAME') and v2016 = 'author' and p(v9010) then
+		v9010"<br>",
+	fi,*/
+
+	/* --- 130: Título uniforme --- */
+	if p(v130) then
+		'<span style="font-style: italic;">[',
+		v130^a, if right(v130^a,1) <> '.' then '.' fi,
+		if p(v130^l) then
+			x1, if right(v130^l,1) = '.' then mid(v130^l,1,size(v130^l)-1) else v130^l, fi,
+		fi,
+		']</span><br>',
+	fi,
+	
+	/* --- 240: Título uniforme --- */
+	if p(v240) and v240.1 = '1' then
+		/*proc('d240a240¦',replace(v240,'.^l',',^len '),'¦'),*/  /* Cuándo usar esto? */
+		'<span style="font-style: italic;">[',
+				proc(
+					'd1000a1000¦',
+						replace(v240*3,'^','¦a1000¦'),
+					'¦',
+				),
+				v1000*1+| |,
+		']</span><br>',
+	fi,
+
+	/* --- Enlace desde el título (v245) al registro individual --- */
+	'<a ',
+		if v2000 : 'catalis.xis' then
+			' class="whTitleLinkCatalis" '
+		else
+			' class="whTitleLinkOPAC" ',
+		fi,
+		'href="',v6001^u,
+			'?IsisScript=',v2000,
+			'&amp;task=BIB-RECORD',
+			|&amp;db=|v2104,
+			/*'&amp;query=',mfn,*/
+			/*"&amp;keys="v1005+|~|,*/
+			|&amp;curr=|v1001,
+			|&amp;total=|v1002,
+			'&amp;cid=',v2099,
+			/*'&amp;mfn=',mfn,*/
+			/*|&amp;prev=|v6112,*/
+			/*|&amp;next=|v6113,*/
+	'" title="Ver detalles">',
+
+	/* --- Título propiamente dicho --- */
+	/* Subcampos $a, $b, $n, $p */
+	/* ¿Subcampo h? */
+
+	/* proc('d9245a9245¦',
+		mpl,v245^a," "v245^b,
+	'¦'), */
+	/*
+	if ' /' : right(v9245,2) then
+		mid(v9245,1,size(v9245)-2),
+	else if ',;' : right(v9245,1) then
+		mid(v9245,1,size(v9245)-1),
+	else
+		v9245,
+	fi,fi,
+	*/
+	
+	proc(
+		'd1901a1901¦',
+			replace(replace(v245*3,
+				' /^c','^c'),
+				'^','¦a1901¦'),
+		'¦',
+	),
+	
+	/* ATENCION: hay registros viejos que no usan '/' */
+	
+	/* Loop sobre subcampos del 245 */
+	(, 
+		if 'abnp' : v1901.1 then
+			x1,v1901*1,
+		fi,
+		if 'h' = v1901.1 and v6001^g[1] = '1' then
+			x1,'<span class="GMD">',mid(v1901*1,1,size(v1901*1)-1),'</span>',
+			replace(right(v1901,1),']','<span class="GMD">]</span>'),
+		fi, 
+	),
+	
+	if v6001^m <> '1' and not '.?!' : right(v9245,1) then '.' fi,
+	/* ATENCION: corregir esto! */
+
+	'</a>',
+
+	/* ----------------------------------------------------
+	 * Mención de responsabilidad
+	 * ----------------------------------------------------
+	 * ATENCION: el 245$c puede también contener títulos, pero no están marcados :-(
+	 * ----------------------------------------------------
+	 */
+
+	if not v6001^m = '0' then  /* v6001^m: SHOW_245c */
+		/* Normalizamos el espacio en v245^c */
+		proc(
+			'd245a245¦',
+				replace(v245,'^c ','^c'),
+			'¦',
+		),
+		/* if not v6001^j = '1' then '<br>' fi, */ 
+		/* mpu, " / "v245^c.1, mpl, v245^c*1, */
+		" / "v245^c,   /* OPCION: '<br>' | ' / ' | ' ' */
+	fi,
+	
+	/* ----------------------------------
+	 *  Edición
+	 * ----------------------------------
+	 */
+	if p(v250) then
+		'<span class="whEdition">'
+			" &mdash; "d250,    /* OPCION: x1 | '<br>' | " &mdash; "d250 */
+			replace(v250^a,' /',''),
+			/* ¿agregamos '&nbsp;' para no dejar el numerito huerfano? */
+			/* quitar puntuacion final, como en MFN 37557 (???) */
+		'</span>',
+	fi,
+	
+	
+	/* --- Fecha (y otros datos de publicación) --- */
+	/* ***SUSPENDIDO*** */
+	x1,
+	'<!--span class="publication">'
+	
+	/* Normalizamos el espacio en v260^c */
+	proc('d260a260¦',replace(v260,'^c ','^c'),'¦'),
+	
+	/* Ponemos el símbolo de copyright (se puede abreviar?) */
+	proc('d260a260¦',replace(replace(replace(replace(v260,'^cc1','^c&copy;1'),'^cc2','^c&copy;2'),', c',', &copy;'),'[c','[&copy;'),'¦'),
+	
+	if /*v6001^m = '1' or*/ s(v2013,v2014) > '' and 1=0 then
+		/* Campo 260 completo, si la búsqueda fue por lugar o editorial */ 
+		proc('d1901a1901¦',replace(v260*3,'^','¦a1901¦'),'¦'),
+		"<br>"d245^c,
+		v1901*1+| |,
+	else
+		/* Sólo fecha, para el resto de las búsquedas */
+		/* ¿Mostramos v260^c? */
+		/* if right(v260^c,1) = ']' and not v260^c : '[' then '[' fi,
+		v260^c,/ */
+		/* ¿O hacemos como LC, que parece poner el date1 del campo 8? */
+		v008*07.4'.',
+	fi,
+	'</span-->'/
+	
+
+	/* -------------------------------------------------------------
+	 * Los campos siguientes se muestran solamente si 
+	 * el title proper no fue resaltado?
+	 * ------------------------------------------------------------- 
+	 */
+	
+	/* Contamos el número de palabras resaltadas en el campo 245 */
+	proc('a1902¦',replace(v245,'"hl"','¦a1902¦'),'¦'),
+	proc('a1903¦',f(nocc(v1902)-1,1,0),'¦'),
+	/* y el número de palabras presentes en v2001 */
+	proc('a1904¦',replace(v2001,' ','¦a1904¦'),'¦'),
+	proc('a1905¦',f(nocc(v1904),1,0),'¦'),
+	
+	/* ---------------------------------------------------------------
+	 *  ATENCION: este criterio solo funciona *bien* cuando no hay 
+	 *  palabras resaltadas repetidas.
+	 * ---------------------------------------------------------------
+	 */
+
+	if val(v1903) < val(v1905) then
+	
+	/* --- 240: Título uniforme --- */
+	/* (misma pregunta que para 130) */
+	/* Posible respuesta: mostrarlo cuando es el responsable de la recuperacion */
+	/* ATENCION: MFN 044054, nada que ver con título original! */
+	if /*v240.1 = '1' and*/ v240 : '"hl"' then 
+		proc('d1901a1901¦',replace(v240*3,'^','¦a1901¦'),'¦'),
+		/*' (Original: ',v1901*1+| |,')',*/
+		/*'<br><em>Tít. original: ',v240^a,'</em>',*/
+		/*'<br>',*/ 
+	fi,
+
+	if v500 : '"hl"' and not v240 : '"hl"' then
+		(,
+			if v500 : '"hl"' and ( v500^a : 'Trad' or v500^a : 'Transl' ) then
+				'<br><em>',v500^a,'</em>', break,
+			fi,
+		),
+	fi,
+	
+	if v600 : '"hl"' and not v240 : '"hl"' then
+		(,
+			if v600^t : '"hl"' then
+				'<br>Acerca de: <em>',v600^a,x1,v600^d,x1,v600^t,'</em>',
+			fi,
+		),
+	fi,
+	
+	fi,
+	
+'</td>'/
+/* ------------------------------------------------
+ *  End columna de datos bibliográficos
+ * ------------------------------------------------
+ */
+
+
+/* ------------------------------------------------
+ *  Begin columna de fecha de publicación
+ * ------------------------------------------------
+ */
+ 
+'<td class="whData whPubDate',
+	if val(v1001) = val(v2004) or v1011 = 'TRUE' then
+		' whFirstRow',
+	fi,
+	if v2016.4 = 'date' then
+		' sortedByThis',       /* para resaltar la columna */
+	fi,
+'">'/
+	replace(v008*7.4,'u','-'),  /* ¿En qué casos conviene usar v260^c, o v008*11.4? */
+	if v008*6.1 = 'm' and v008*11.4 <> '9999' then
+		'-', replace(v008*11.4,'u','-'),
+	fi,
+'</td>'/
+/* ------------------------------------------------
+ *  End columna de fecha de publicación
+ * ------------------------------------------------
+ */
+
+
+/* ------------------------------------------------
+ *  Columna para tipo de material/documento
+ * ------------------------------------------------
+ */
+
+if v6001^t : v2104 then  /* v6001^t = DISPLAY_DOC_TYPE */
+	'<td class="whData docType',
+	if val(v1001) = val(v2004) or v1011 = 'TRUE' then
+		' whFirstRow',
+	fi,
+	'">',
+		@DOCUMENT-TYPE.PFT,
+	'</td>'/
+fi,
+
+
+
+/* -------------------------------------------------------------------------------
+ *  Columna para signatura/ubicación/acceso al recurso
+ *  ATENCION: hay que mantener consistencia con los otros estilos (etiquetado.pft, marc2aacr.js)
+ *  El manejo de los espacios en blanco dentro de una signatura topográfica (que
+ *  inciden en el ancho de la celda y en la altura de toda la fila) debería poder
+ *  configurarse.
+ * -------------------------------------------------------------------------------
+ */
+ 
+/* TO-DO: no hay que contar ocurrencias del campo 859, sino "partes" diferentes.
+   Es decir, si hay 3 ejemplares del vol. 1 y 1 ejemplar del vol. 2, sólo hay que
+   mostrar *dos* signaturas. Por supuesto, si el número de volúmenes es "grande",
+   habrá que generar un display más compacto.
+*/
+
+
+if not v6001^s = '0' then     /* v6001^s: DISPLAY_LOCATION */
+
+
+'<td class="whLocation',
+	if val(v1001) = val(v2004) or v1011 = 'TRUE' then
+		' whFirstRow',
+	fi,
+	if v2101 = 'BROWSE-CATALOG' or v2016 = 'callNumber' then
+		' sortedByThis',       /* para resaltar la columna */
+	fi,
+'">'/
+
+	/* v9011: cuántas signaturas top. diferentes mostramos (es una cuestión de espacio) */
+	/*proc('a9011¦',if not v6001^m = '0' then '3' else '2' fi,'¦'),*/
+	proc('a9011¦1¦'), /* sólo una */
+	
+	if not v6001^s = '0' then     /* v6001^s: DISPLAY_LOCATION */
+	
+		/* para registros analíticos, creamos un 859 virtual usando el del registro padre */
+		/* TO-DO: agregar *todas* las ocurrencias del 859? */
+		if p(v773) then proc('a859|',ref(['BIBLIO']l(['BIBLIO']'-NC='v773^w),v859[1]),'|'), fi,
+		
+		if p(v859) then
+			
+			if v2104 = 'bibima' and v859^p : 'A-' then  /* La base del INMABB tiene un tratamiento especial */
+				'<ul>'
+					(, /* loop sobre ocurrencias del 859 */
+						'<li>'
+							'<div>',
+								if v859^3 <> '' then
+									replace(v859^3,'Vol.','v.'),
+									if v859^t <> '' then ', ', else ': ', fi,
+								fi,
+								if v859^t <> '' then replace(v859^t,'Ej','ej'), ': ', fi,  /* nro. de ejemplar */
+								'<span style="font-weight: bold;">',replace(v859^p,'.',''),'</span>', /* inventario */
+							'</div>',
+						'</li>'
+					),
+				'</ul>',
+			else
+				/*|<div class="STparte">|v859^3[1]|</div>|*/ /* parte de una obra en varias partes, e.g. "Vol. 1", "Tomo 3", etc. */
+				'<div class="STresto">',
+					v859^k[1]|<!--br-->&nbsp;|        /* separamos con saltos de línea o con espacios? */
+					v859^h[1],
+					'<br><!--&nbsp;-->',replace(v859^i[1],' ','<!--br-->&nbsp;'),
+					/*|<!--br-->&nbsp;|v859^v[1],*/
+				
+					if nocc(v859) > 1 then   /* tenemos más de un ejemplar */
+						/* Y agregamos un link que indica la presencia de más signaturas top. */
+						/* (es una réplica del link asociado al v245) */
+						'&nbsp;&nbsp;<a href="',v6001^u,
+							'?IsisScript=',v2000,
+							'&amp;db=',v2104,
+							'&amp;task=BIB-RECORD',
+							/*'&amp;query=',mfn,*/
+							/*"&amp;keys="v1005+|~|,*/
+							'&amp;cid=',v2099,
+							'&amp;curr=',v1001,
+							'&amp;total=',v1002,
+							'" title="Hay más de un ejemplar; verifique sus ubicaciones.">',
+						'<img src="',v6003^h,'opac/img/sym_s_tree_plus.gif" style="border: none; /*vertical-align: top;*/"></a>'/ 
+					fi
+				'</div>'/
+			fi,
+			
+			/* el bloque que sigue ha quedado deshabilitado */
+				
+			'<!--div>'
+			
+				if nocc(v859) <= val(v9011) then     /* Mostramos todas las signaturas top. */
+				
+					if v2104[1] = 'bibima' then
+						if v859^3 <> '' then
+							v859^3,
+							if v859^t <> '' then ', ', else ': ', fi,
+						fi,
+						if v859^t <> '' then v859^t, ': ', fi,  /* nro. de ejemplar */
+						'<span style="font-weight: bold;">',replace(v859^p,'.',''),'</span>', /* inventario */
+					else
+						v859^h[1],
+						if v859^i[1] <> '' then
+							'&nbsp;',    /* OPCION: separamos con saltos de línea <br> o con espacios &nbsp; ? */
+							replace(v859^i[1],' ','&nbsp;'),
+						fi,
+					fi,
+					
+				else    /* Tenemos más signaturas top. de las que queremos mostrar */
+					/* loop sobre el campo 859 */
+					(,
+						if iocc <= val(v9011) then
+							v859^h,
+							if v859^i <> '' then
+								'&nbsp;',  /* OPCION: separamos con saltos de línea <br> o con espacios &nbsp; ? */
+								replace(v859^i,' ','&nbsp;'),
+							fi,
+						fi,
+					),
+					
+					/* Y agregamos un link que indica la presencia de más signaturas top. */
+					/* (es una réplica del link asociado al v245) */
+					'<span style="font-weight: normal;"> [',
+					'<a href="',v6001^u,
+						'?IsisScript=',v2000,
+						'&amp;db=',v2104,
+						'&amp;task=BIB-RECORD',
+						/*'&amp;query=',mfn,*/
+						/*"&amp;keys="v1005+|~|,*/
+						'&amp;cid=',v2099,
+						'&amp;curr=',v1001,
+						'&amp;total=',v1002,
+						'" title="Otras ubicaciones para esta obra">',
+					'+</a>]</span>'/ 
+				fi,
+			'</div-->'
+
+		else if p(v092) then   /* locally assigned Dewey call number (OCLC) */
+			'<b>',v092^c[1],x1,v092^l[1],'</b>',   /* subcampos $c y $l usados en la U N de Cuyo */
+			/* TO-DO: considerar más de un campo 092? */
+			if val(v866^a) > 1 then '<br><i>(',v866^a,')</i>', fi,
+			
+		else if p(v050) then   /* signatura topográfica de LC */
+			v050^a[1],x1,v050^b[1],            /* menos líneas */
+			/*'<br>',replace(v050^b[1],' ','<br>'),*/  /* más líneas */
+			/* TO-DO: considerar más de un campo 050; e.g. LCCN 2002658459 */
+			
+		else if p(v856) then  /* acceso mediante URI */
+			'<a target="_blank" title="[Abre una nueva ventana] ',v856^u,'" href="',v856^u,'">',
+				v856^3[1],  /* Materials specified */
+				v856^y[1],  /* Link text */
+			'</a>',
+			/* TO-DO: considerar más de un campo 856 */
+			
+		else
+			'&nbsp;',  /* default: un espacio en blanco */
+		fi,fi,fi,fi,
+	else
+		'&nbsp;',    /* default: un espacio en blanco */
+	fi
+'</td>'/
+fi
+/* ------------------------------------------------
+ *  End columna para signatura/ubicación/acceso
+ * ------------------------------------------------
+ */
+
+
+'</tr>'/
+
+

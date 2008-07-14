@@ -1,0 +1,140 @@
+/* --------------------------------
+ * Estilo etiquetado
+ * --------------------------------
+ */
+
+/*table#Etiquetado {
+	table-layout: fixed;   suspendido porque en IE5 vuelve invisible la tabla!!
+}*/
+
+table#Etiquetado, table#Etiquetado table {
+	/*font-size: 95%;*/
+}
+
+table#Etiquetado .title {
+	font-weight: bold;
+}
+
+table#Etiquetado .materialTypeHeader {
+	background: #008;
+	color: white;
+	line-height: 110%;
+	font-weight: bold;
+	text-align: center;
+}
+
+table#Etiquetado td, table#Etiquetado th {
+	padding: 3px;  /* reemplaza al cellpadding de la tabla */
+}
+
+table#Etiquetado td.label {
+	background: #838383;
+	color: #FFF;
+	width: 8.4em;
+	vertical-align: top;
+	line-height: 1.4em;
+	text-align: right;
+	font-style: italic;
+	font-weight: normal;
+	border-top: 1px solid #E6E6E6;
+	border-right: 1px solid #EEE; /* motivado por v773 */
+	padding-right: 0.4em;
+}
+
+table#Etiquetado td.data {
+	vertical-align: top;
+	line-height: 1.4em;
+	/*border-bottom: 1px solid #CCC;*/
+	border-top: 1px solid #E6E6E6;
+	background: #FFF; /*#F6F6F6*/ /*#FEFEF0*/ /*#EDEDCF*/ /*#EBFFED*/ /*#FCFCFC*/
+	padding-left: 0.4em;
+	padding-right: 0.5em;
+}
+
+table#Etiquetado td.v773 {
+	background: #D6D6D6; /*#E0E0E0*/
+	color: #000;
+	font-weight: normal;
+	/*border-top: 3px solid #FCFCFC*/
+}
+
+table#Etiquetado .title773 {
+	font-weight: bold;
+}
+
+#etiqFoot {
+	background: rgb(92%,92%,92%);
+	color: #777;
+}
+
+#etiqFoot td {
+	border-top: 1px solid #CCC;
+	border-bottom: 1px solid #CCC;
+	font-size: 80%;
+	line-height: 140%;
+	font-style: italic;
+	text-align: center;
+	padding: 0 1em;
+}
+
+
+/* -----------------------------
+ * Listas de notas
+ * -----------------------------
+ */
+
+/* basado en: Taming lists -- A list apart */
+table#Etiquetado .noteList {
+	list-style: none;
+	margin-left: 0;
+	margin-bottom: -0.4em; /* evitamos espacio vacío debajo del último item de la lista, y además compensamos el padding-bottom de los <li> */
+	margin-top: 0;
+	padding-left: 1.2em;
+	text-indent: -1.2em;
+}
+
+table#Etiquetado .noteList li {
+	padding-bottom: 0.4em;
+}
+
+/* títulos marcados con $t en un campo 505 */
+table#Etiquetado span.analyticTitle {
+	font-weight: bold;
+}
+
+/*
+.noteList li:before { from: Taming lists -- A list apart
+	content: "\00BB \0020";
+}
+*/
+
+
+/* ------------------------------------
+ * Signaturas topográficas, ubicación
+ * ------------------------------------
+ */
+
+table#Etiquetado th.locationHeader {
+	background: #838383;
+	color: white;
+	line-height: 110%;
+	font-weight: bold;
+	text-align: left;
+	padding: 3px 0.4em;
+}
+
+table#Etiquetado #locationCell {
+	background: #FFF;
+	border: 1px solid #CCC;
+}
+
+table#Etiquetado div.STparte {
+	padding: 0.1em;
+	border-bottom: 1px solid #CCC;
+	font-style: italic;
+	font-weight: normal;
+}
+
+table#Etiquetado div.STresto {
+	padding-left: 0.5em;
+}

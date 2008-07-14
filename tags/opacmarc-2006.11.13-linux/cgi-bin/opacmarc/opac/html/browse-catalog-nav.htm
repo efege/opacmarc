@@ -1,0 +1,59 @@
+<div style="border-[pft]v1000[/pft]: 1px dotted #999; padding: 0.3em 0;">
+	<table cellspacing="0" style="margin: 0 auto;">
+		<tr>
+			<!-- container para el bloque izquierdo -->
+			<td class="[pft]v2003[/pft]" style="/*background: #EAEAEA;*/ /*border: 1px solid #D0D0D0;*/ padding: 0.3em 0.5em;">
+				<table cellspacing="0">
+					<tr>
+						
+						<!-- Link "anteriores" -->
+						<td>
+							[pft]if val(v2009) = 1 then[/pft]
+								<span style="color: #AAA;">&lt; Anteriores</span>
+							[pft]else[/pft]
+								<a href="[pft]v6001^u[/pft]?IsisScript=[pft]v2000[/pft]&amp;db=[pft]v2104[/pft]&amp;task=BROWSE-CATALOG&amp;browseMfn=[pft]
+										f(
+											rmax(
+												f(val(v2009) - val(v2028),1,0),
+													x1,
+													'1'
+											),1,0
+										),
+									[/pft]">&lt; Anteriores</a>
+							[pft]fi[/pft]
+						</td>
+						
+						<!-- Link "siguientes" -->
+						<td style="padding-left: 2em;">
+							[pft]if val(v1001) >= val(v2027) then[/pft]
+								<span style="color: #AAA;">Siguientes &gt;</span>
+							[pft]else[/pft]
+								<a href="[pft]v6001^u[/pft]?IsisScript=[pft]v2000[/pft]&amp;db=[pft]v2104[/pft]&amp;task=BROWSE-CATALOG&amp;browseMfn=[pft]f(val(v2009) + val(v2028),1,0)[/pft]">Siguientes &gt;</a>
+							[pft]fi[/pft]	
+						</td>
+					</tr>
+				</table>
+			</td>
+			
+			<!-- container para el bloque derecho -->
+			<td style="/*background: #EAEAEA;*/ /*border: 1px solid #D0D0D0;*/ padding-left: 2em;">
+				<form action="[pft]v6001^u[/pft]" method="get">
+					<table cellspacing="0">
+						<tr>
+							<!-- Botón "saltar a" -->
+							<td>
+								<input type="hidden" name="IsisScript" value="[pft]v2000[/pft]">
+								<input type="hidden" name="db" value="[pft]v2104[/pft]">
+								<input type="hidden" name="task" value="[pft]v2101[/pft]">
+								<input type="submit" class="button" value="Saltar a:">
+								<input type="text" size="10" name="browseTerm" class="jumpTo">
+								(signatura topográfica)
+							</td>
+						</tr>
+						
+					</table>
+				</form>
+			</td>
+		</tr>
+	</table>
+</div>

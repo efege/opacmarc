@@ -1,0 +1,164 @@
+/* ================================================================== 
+ * HEADINGS.PFT
+ * Visualización de términos de un índice (autores, temas)
+ * ==================================================================
+ */
+
+/* Campo 1502: valor del parámetro query. Veamos de cuál campo (v1, v4, v5) lo tomamos:  */
+proc('d1502a1502¦',
+	if p(v4) then
+		v4,             /* "see" reference */
+	else if p(v5) then
+		v5,             /* "see also" reference */
+	else
+		v1,             /* default: authorized form */
+	fi,fi,
+'¦'),
+
+
+/*  ---------------------------------------------------------------
+ *  Codificamos (urlencode) el parámetro query
+ *  ---------------------------------------------------------------
+ */
+proc('d7000a7000¦',replace(v1502,'~','^'),'¦'),
+,@URLENCODE.PFT,
+proc('d1502a1502¦',v7000,'¦'),
+
+
+/*  ---------------------------------------------------------------
+ *  Mostramos encabezamientos, incluyendo referencias
+ *  ---------------------------------------------------------------
+ */
+'<tr class="headingRow', if right(f(val(v1001)/2,1,1),1) = '0' then ' headingEven' else ' headingOdd' fi, '"',
+	/* Resaltamos el "centro del entorno" */
+	if p(v2030) and mfn = val(v3009) then
+		' style="background: #D0D0D0;"',
+	fi,
+'>'/
+
+/*  ---------------------------------------------------------------
+ *  contador (no se usa para browsing, sí para resultados)
+ *  ---------------------------------------------------------------
+ */
+if p(v1001) and not v2101 : 'BROWS' then
+	'<td align="right" width="40" valign="top" class="counter ',v2003,if v1001 = v2009 or val(v1001) = 1 then ' headingFirstRow' fi'" style="width: 2em;">',v1001".",x1,'</td>'/
+fi,
+
+/*  ---------------------------------------------------------------
+ *  checkbox (para selección múltiple)
+ *  ---------------------------------------------------------------
+ */
+/*
+'<td valign="top" width="20">'/
+	'<input type="checkbox" name="query" value="',replace(v1502,'~','^'),'" size="100" -onclick="changeColor(this)">'/
+'</td>'/
+*/
+
+/*  ---------------------------------------------------------------
+ *  número de postings/hits
+ *  ---------------------------------------------------------------
+ */
+/* ATENCION: no tienen sentido para las "see references" */
+if p(v11) then
+	'<td class="lighter ',v2003,if v1001 = v2009 or val(v1001) = 1 then ' headingFirstRow' fi'" style="width: 3em; text-align: right; padding-right: 0;" valign="top">',
+		if p(v11) then '[',v11,']', fi,
+	'</td>'/
+fi,
+
+/*  ---------------------------------------------------------------
+ *  término del índice
+ *  ---------------------------------------------------------------
+ */
+'<td class="',v2003, if v1001 = v2009 or val(v1001) = 1 then ' headingFirstRow' fi,' headingCellIndent">',
+
+/*  ---------------------------------------------------------------
+ *  Caso 1: "see" reference
+ *  ---------------------------------------------------------------
+ */
+if p(v4) then
+	v1501,
+	'<br>&nbsp;&nbsp;<img src="/opac/img/m_a2y.gif" alt=""> Vea: ',
+	'<a href="',v6001^u,
+		'?IsisScript=',v2000,
+		'&amp;db=',v2104,
+		'&amp;index=',v2003,
+		'&amp;query=',replace(replace(v1502,'~','^'),'&','%26'),
+	'">',
+	proc('d1880a1880¦a',replace(v4,'~','¦a1880¦'),'¦'),
+	(,
+		if 'xyzv' : v1880.1 then
+			'&#8212;',v1880*1,
+		else
+			x1,v1880*1,
+		fi,
+	),
+	'</a>',
+	
+/*  ---------------------------------------------------------------
+ *  Caso 2: "see also" reference (REVISAR)
+ *  ---------------------------------------------------------------
+ */
+else if p(v5) then
+	v1501,
+	'<br>&nbsp;&nbsp;<img src="/opac/img/m_a2y.gif" alt=""> Vea también: ',
+	'<a href="',v6001^u,
+		'?IsisScript=',v2000,
+		'&amp;db=',v2104,
+		'&amp;index=',v2003,
+		'&amp;query=',replace(replace(v1502,'~','^'),'&','%26'),'">',
+		v1,
+	'</a>',
+	
+/*  ---------------------------------------------------------------
+ *  Default: heading sin referencias
+ *  ---------------------------------------------------------------
+ */
+else
+	'<a ', if val(v11) = 0 then 'href="' else 'href="' fi,
+		v6001^u,
+		'?IsisScript=',v2000,
+		'&amp;db=',v2104,
+		'&amp;task=BIB-H-SEARCH',
+		'&amp;index=',v2003,
+		'&amp;query=',v1502,
+	'" style="font-weight: bold;', if p(v2) and '830~440' : v2 /* series */ then 'font-style: italic;' fi, '">',
+	if v2003 = 'TITLE' then 
+		'<span style="font-weight: normal;">',mid(v1501,1,val(v13)+1),'</span>',  /* non-filing chars */
+		
+		if v1501 : ' / ' then 
+			replace(mid(v1501,val(v13)+2,size(v1501)),' / ','</a> / '),
+		else
+			mid(v1501,val(v13)+2,size(v1501)),
+			'</a>',
+		fi,
+		
+		if right(v1501,1) <> '.' then '.' fi,
+		
+		if '830~440' : v2 then ' (Serie)', fi, /* aclaramos qué títulos corresponden a series */
+		
+		/* omitimos este tramo, por eso el 1=0 */
+		if 1 = 0 then
+			proc('d111a111¦',replace(v1501,' ','¦a111¦'),'¦'),
+			if nocc(v111) > 25 then  /* cantidad de palabras */
+				(,
+					if iocc <= 25 then
+						v111,x1,
+					else
+						break,
+					fi,
+				),
+				'.&nbsp;.&nbsp;.',
+			else
+				v1501,
+				if right(v1501,1) <> '.' then '.' fi,
+			fi,
+		fi,
+		
+	else          /* v2003 != 'TITLE' */
+		v1501,
+		'</a>',
+	fi,
+fi,fi,
+
+'</td>'/
+'</tr>'/

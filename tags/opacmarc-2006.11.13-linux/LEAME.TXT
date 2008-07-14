@@ -1,0 +1,20 @@
+Opacmarc - Versión 2006.11.13
+
+
+Para conocer los términos bajo los cuales se ofrece este software, lea LICENCIA.TXT.
+
+Para instalar el sistema, siga las instrucciones de http://catalis.uns.edu.ar/dokuwiki/doku.php?id=instalacion_de_opacmarc
+
+Para encontrar información general sobre Catalis/Opacmarc, visite http://inmabb.criba.edu.ar/catalis/ .
+
+Para plantear consultas, participar en discusiones, y estar al tanto de lo que
+suceda con Catalis/Opacmarc, visite http://groups.google.com.ar/group/catalis/ .
+
+Tenga presente que Catalis/Opacmarc sigue siendo un software en desarrollo. Manténgase
+informado sobre las nuevas versiones que vayan apareciendo (una buena manera
+es mediante una suscripción al grupo mencionado arriba), y asegúrese de estar
+usando la versión más reciente.
+
+
+--
+Fernando J. Gómez

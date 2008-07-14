@@ -1,0 +1,173 @@
+<!-- =========================================================
+	KEYWORD-MATCH-IN-HEADING
+	
+	Búsqueda por palabras en las bases de encabezamientos (índices)
+	
+	ATENCION: ver cómo salen ordenados los Bielsa
+	
+	(c) 2003-2004  Fernando J. Gómez - CONICET - INMABB
+	========================================================= -->
+
+
+<!-- Operador booleano (default) (aun necesario?) -->
+<field action="replace" tag="2005"><pft>if a(v2005) then 'AND' fi</pft></field>
+
+<call name="cleanQuery"><pft>
+	replace(v2001,'*','XXXTRUNCATEXXX'), /* XXXTRUNCATEXXX es un string improbable, para evitar que el símbolo de truncación se pierda durante la limpieza */
+</pft></call>
+<!-- ATENCION: Cuando la búsqueda proviene de un link 
+	("Vea otros temas que incluyan los términos..."), no hay que 
+	perder ninguna palabra, ya que éstas después no salen resaltadas. 
+	Ejemplo: Rio de Janeiro -->
+	
+<!--display><pft>ALL</pft></display-->
+
+<!-- Search expression -->
+<field action="replace" tag="3001"><pft>
+	replace(v3001,'XXXTRUNCATEXXX','$'),
+</pft></field>
+<field action="replace" tag="3002"><pft>
+	replace(v3001,' ',s(v2006,x1,v2005,x1)),v2006,
+</pft></field>
+
+<!-- Show search expression -->
+<!--display><pft>
+	'<pre style="color: #BBB;">',v3002,'</pre>'
+</pft></display-->
+
+<!-- Los registros están ordenados alfabéticamente de acuerdo al campo 1,
+	que es el nombre autorizado; dependiendo de la expresión de 
+	búsqueda, es posible que haya que mostrar otros campos (referencias).
+	
+	Una posibilidad es: recorrer los registros recuperados, generar una
+	lista con todos los nombres involucrados (campos 1,4,5), ordenar esa
+	lista alfabéticamente, recorrer la lista ordenada, y sólo mostrar
+	aquellos nombres que hayan hecho matching con el query, y teniendo
+	en cuenta si son o no referencias. (Alternativamente, pueden mandarse
+	a la lista sólo los nombres que hayan hecho matching). Pero eso no
+	funciona cuando hay que mostrar simplemente una porción continua
+	del índice, donde no hay ningún matching y los datos ya deben estar
+	previamente ordenados.
+	
+	Otra posibilidad es generar, a partir de la base de autoridades, una
+	base de nombres que tenga un registro por cada nombre autorizado
+	(campo 100) y por cada variante (campo 400). Cuando el registro
+	provenga de un campo 400 de la base de autoridades, incluirá un
+	subcampo ^s con el encabezamiento autorizado correspondiente.
+-->
+
+<!--flow action="jump"><pft></pft></flow-->
+
+
+<do task="search">  <!-- Basta con un search (sin un list), pues los registros están ordenados en la base -->
+	<parm name="db"><pft>v2002</pft></parm>
+	<parm name="expression"><pft>v3002</pft></parm>
+	<parm name="from"><pft>v2004</pft></parm>
+	<parm name="count">1</parm>
+	<define>1001 Isis_Current</define>
+	<define>1002 Isis_Total</define>
+	<define>1005 Isis_Keys</define>
+	<loop>
+		<!-- set v1002 -->
+		<field action="replace" tag="9060"><pft>if val(v1002) = 1 then replace(v1,'~','^'), fi</pft></field>
+		<field action="export" tag="list">9060</field>
+	</loop>
+	
+	<!-- Qué mostramos en esta página: -->
+	<display><htmlpft><pft>cat('H-SEARCH-TOP-1.HTM')</pft></htmlpft></display>
+
+	<!-- Si no hay resultados, nos vamos del <do>; si sólo hay un resultado, pasamos
+	     directamente al listado de reg. bibliográficos. Epa... pero antes necesitamos conocer
+	     a ese único resultado! -->
+	<flow action="skip"><pft>if val(v1002) <= 1 then 'Quit' fi</pft></flow>
+	
+	<display><htmlpft><pft>cat('H-SEARCH-TOP-2.HTM')</pft></htmlpft></display>
+
+	<parm name="count"><pft>v2029</pft></parm>
+	<loop>
+		<field action="import" tag="list">2000,2001,2104</field>
+		<field action="import" tag="2003">2002</field>  <!-- 'searchType' pasa a ser 'index' en los links que se generen -->
+		<hl>
+			<parm name="prefix"><span class="hl"></parm>
+			<parm name="suffix"></span></parm>
+			<parm name="keys"><pft>(v1005/), if v2001 : ' and ' then 'AND' fi</pft></parm>
+			
+			<!-- v1: ^aGeopolitics^zBolivia. ==> para el link 
+			     v2: Geopolitics-Bolivia.    ==> para mostrar 
+			-->
+			
+			<!--display><pft>ALL</pft></display-->
+			
+			<!-- Siempre se resalta el v1 -->
+			<field action="hl" tag="1501"><pft> 
+					proc('d1880a1880¦a',replace(v1,'~','¦a1880¦'),'¦'),
+					/*v1880[1],*/
+					(,
+						if 'xyzv' : v1880.1 then
+							'&mdash;', v1880*1,
+						else if 'cdnq' : v1880.1 then
+							x1,'<span class="headingQualifier">',v1880*1,'</span>',
+						else
+							x1,v1880*1,
+						fi,fi,
+					),
+			</pft></field>
+			
+			<display><pft>,@HEADINGS.PFT,</pft></display>
+			
+		</hl>
+	</loop>
+	
+	<display><htmlpft>
+		</table>
+	</htmlpft></display>
+	
+</do>
+
+<display><pft>
+	/*	
+		Creamos los parámetros necesarios para llamar a heading-match-in-bib-records.xis.
+		ejemplo de input actual:   (2002) searchType=NAME , (2001) query=godel
+		ejemplo de input esperado: (2101) task=BIB-H-SEARCH , (2003) index=NAME , (2001) query=^aGödel, Kurt,^d1906-1978.
+	*/
+	if val(v1002) = 1 then
+		proc('d2101a2101#BIB-H-SEARCH#'),
+		proc('d2003a2003#',v2002,'#'),
+		proc('d2001a2001#',v9060,'#'),
+		proc('d2002'),
+	fi,
+	/* Además, necesitamos un flag para saber que venimos de una búsqueda por palabras */
+	proc('d9060a9060#UNIQUE_KEYWORD_MATCH#'),
+</pft></display>
+
+
+<!-- Si no hay resultados o sólo hay uno... -->
+<flow action="jump"><pft>
+	if val(v1002) = 0 then
+		'ZERO_HITS',
+	else if val(v1002) = 1 then
+		'BIB-H-SEARCH',
+	fi,fi,
+</pft></flow>
+
+
+<!-- Otra posible salida cuando no hay hits: ofrecer un browse -->
+<!--field action="replace" tag="2007"><pft>
+	if val(v1002)=0 then v2001 fi
+</pft></field>
+<flow action="jump"><pft>
+	if val(v1002)=0 then 'H-BROWSE' fi
+</pft></flow-->
+
+<!--display><pft>ALL</pft></display-->
+
+
+<!-- ========= Botones (sólo si se justifica) ========= -->
+<!-- ATENCION: controlar que no falten parámetros -->
+<display><htmlpft><pft>
+	,cat('H-SEARCH-BOTTOM.HTM'),
+</pft></htmlpft></display>
+
+<display>
+	</div>   <!-- resultWrapper -->
+</display>

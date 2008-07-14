@@ -1,0 +1,153 @@
+<hr>
+
+<div id="searchFormWrapper">
+
+		<!-- BUSQUEDA SIMPLE POR PALABRAS -->
+		
+		<div id="search" class="searchFormCell">
+		
+			<h4 class="searchFormHead">
+				[pft]v6002^w[/pft]
+			</h4>
+			
+			<form id="simpleSearchForm" name="simpleSearchForm" action="[pft]v6001^u[/pft]" method="GET" onsubmit="checkQuery(this); return false;">
+			
+				<input type="hidden" name="IsisScript" value="[pft]v2000[/pft]">
+				<input type="hidden" name="db" value="[pft]v2104[/pft]">
+				
+				<div id="keywordFormControls">
+					<table cellspacing="0" cellpadding="4">
+						<tr>
+							<td rowspan="3" style="width: 1em; vertical-align: top;">
+								<!--En<br-->
+								<!-- TO-DO: separar los options (mozilla) -->
+								<select name="searchType" id="searchType" size="5">
+									<option value="NAME"  [pft]if v2002 = 'NAME' then 'selected' fi[/pft]>Autor</option>
+									<option value="TITLE" [pft]if v2002 = 'TITLE' or a(v2002) then 'selected' fi[/pft]>Título</option>
+									<option value="SUBJ"  [pft]if v2002 = 'SUBJ' then 'selected' fi[/pft]>Tema[pft]if v6001^k : v2104 then ' (MSC)' fi[/pft]</option>
+									<option value="SN"    [pft]if v2002 = 'SN' then 'selected' fi[/pft]>ISBN/ISSN/etc</option>
+									<option value="ANY"   [pft]if v2002 = 'ANY' then 'selected' fi[/pft]>Cualquier campo</option>
+								</select>
+							</td>
+							<!--td style="white-space: nowrap; width: 1em; vertical-align: top;">
+								contiene
+							</td-->
+							<td style="vertical-align: top;">
+								<label for="kwQuery">contiene las <u>p</u>alabras:</label>
+								<br>
+								<!-- TO-DO: mejorar el criterio usado para poner un atributo id aquí (ver opac.js) -->
+								<input type="text" id="kwQuery" name="query" value="[pft]if v2101 : '-KW-' and a(v2109) then v2001 fi[/pft]" accesskey="P">
+								<input type="submit" class="button" value="Buscar">
+							</td>
+						</tr>
+					</table>
+				</div>
+						
+				<div style="border-top: 1px dotted #999; padding: 0.3em;">
+					<!--Ejemplos:-->
+					<div id="keywordExamples" class="minihelp">
+						Escriba una o más palabras; el sistema las combina automáticamente con un AND. Use * para
+						buscar usando una raíz
+						(p.ej. <i>fractal*</i> encuentra <i>fractal</i>, <i>fractales</i>, <i>fractals</i>).
+					</div>
+				</div>
+						
+			</form>
+		</div>  <!-- search -->
+		
+		
+		<div id="browseIndexes" class="searchFormCell">
+			
+			<h4 class="searchFormHead">
+				[pft]v6002^i[/pft]
+			</h4>
+			
+			<!-- Formulario acceso a índices -->
+			<form id="BrowseIndexForm" name="BrowseIndexForm" action="[pft]v6001^u[/pft]" method="GET">
+			
+				<input type="hidden" name="IsisScript" value="[pft]v2000[/pft]">
+				<input type="hidden" name="db" value="[pft]v2104[/pft]">
+				<input type="hidden" name="task" value="H-BROWSE">
+					
+				
+				<div id="browseFormControls">
+					<table cellspacing="0" cellpadding="4">
+						<tr>
+							<td style="width: 1em; vertical-align: top;">
+								<select name="index" id="browseType" size="[pft]if v2104 <> 'bibima' then '3' else '2' fi[/pft]">
+									<option value="NAME" [pft]if v2003 = 'NAME' or (v2003 = 'SUBJ' and v6001^k : v2104) or v2003 = 'COL' or a(v2003) then 'selected' fi[/pft]>Autor</option>
+									<option value="TITLE" [pft]if v2003 = 'TITLE' then 'selected' fi[/pft]>Título</option>
+									[pft]if v2104 <> 'bibima' then[/pft]
+										<option value="SUBJ" [pft]if v2003 = 'SUBJ' then 'selected' fi[/pft]>Tema[pft]if v6001^k : v2104 then ' (MSC)' fi[/pft]</option>
+									[pft]fi[/pft]
+									<!--option value="SN" [pft]if v2003 = 'SN' then 'selected' fi[/pft]>ISBN/ISSN</option-->
+								</select>
+							</td>
+							<!--td style="vertical-align: top; white-space: nowrap; width: 1em; padding-right: 0;">
+								comienza&nbsp;por
+							</td-->
+							<td style="vertical-align: top;">
+								<label for="browseTerm">com<u>i</u>enza&nbsp;por:</label>
+								<br>
+								<input type="text" size="18" id="browseTerm" name="browseTerm" accesskey="I">
+								<input type="submit" class="button" value="Explorar">
+							</td>
+						</tr>
+					</table>
+				</div>
+				
+				<div id="browseExamples" class="minihelp">
+					Ingrese las primeras letras del autor o título que busca. Omita artículos iniciales en títulos.
+				</div>	
+				
+					<!--tr>
+						<td align="left">
+							<div style="line-height: 1em;">
+							<span class="smaller">Mostrar</span>&nbsp;<select name="hpp">
+							<option value="8"  [pft]if v2029='8' OR s(v2029,v6001^h)='8' then 'selected' fi[/pft]>8</option>
+							<option value="16" [pft]if v2029='16' OR s(v2029,v6001^h)='16' then 'selected' fi[/pft]>16</option>
+							<option value="32" [pft]if v2029='32' OR s(v2029,v6001^h)='32' then 'selected' fi[/pft]>32</option>
+							</select>
+							
+							<span class="smaller">términos por página</span>
+							</div>
+						</td>
+					</tr-->
+				<!--/table-->
+			</form>
+			
+		</div>  <!-- browseIndexes -->
+
+			[pft]if v6001^k : v2104 then[/pft]
+				<div class="searchFormCell" style="width: 48.4%; float: right; padding: 0.2em 3px;">
+					<h4 class="searchFormHead" style="border: none;">
+					Búsquedas por tema:
+					<a class="newSearch" href="[pft]v6001^u[/pft]?IsisScript=[pft]v2000[/pft]&amp;task=CLASS-BROWSE&amp;msclevel=1&amp;db=[pft]v2104[/pft]&amp;searchType=SUBJ" title="Navegue por la MSC 2000, desde donde podrá hacer búsquedas por tema">
+						explore la MSC&nbsp;2000
+					</a>
+					</h4>
+				</div>
+			[pft]fi[/pft]
+			
+		<!-- Enlaces laterales -->
+		<div style="clear: both;">
+			<!--a class="newSearch" href="[pft]v6001^u[/pft]?IsisScript=[pft]v2000[/pft]&amp;db=[pft]v2104[/pft]&amp;showForm=advanced">
+				Más opciones de búsqueda</a>
+			<br>
+			<span>
+			(Por autor/título, fecha, idioma, editorial, etc.)
+			</span-->
+			
+			[pft]if v6001^w = '1' and v2104 <> 'bibima' then[/pft]
+				<div class="searchFormCell" style="padding: 0.5em 1em;">
+					<a class="newSearch" href="[pft]v6001^u[/pft]?IsisScript=[pft]v2000[/pft]&amp;db=[pft]v2104[/pft]&amp;task=BROWSE-CATALOG&amp;browseMfn=1">
+						Recorrer el catálogo completo</a>
+					(por orden de ubicación del material)
+					<!--span style="font-size: 90%; font-style: italic;">Experimental. Es posible que el orden no sea el correcto.</span-->
+				</div>
+			[pft]fi[/pft]
+			
+			<!--a href="">Ayuda</a> <span class="smaller">(no disponible aún)</span-->
+		</div> 
+		
+</div>  <!-- searchFormWrapper -->

@@ -1,0 +1,35 @@
+<field action="replace" tag="1"><pft>cat('NOVEDADES.TXT')</pft></field>
+
+<list action="load" type="list"><pft>(v1/)</pft></list>
+
+<display>
+	<div style="background: #FFF; float: left; padding: 1em 2%; width: 96%">
+	<h2 style="margin: 0 0 1em;">Últimas adquisiciones</h2>
+	<p>Este es el material bibliográfico (excepto revistas) que la biblioteca ha incorporado recientemente.</p>
+	<p style="border-bottom: 1px solid #CCC; padding-bottom: 1em;">También puede consultar el <a href="http://inmabb.criba.edu.ar/biblioteca/rev2006.html">listado de
+	   revistas suscriptas para 2006</a>.</p>
+</display>
+
+<do task="list">
+	<define>1 Isis_Item</define>
+	<parm name="reverse">On</parm>
+	<parm name="count">50</parm>   <!-- TO-DO: llevar este número a opacmarc.conf -->
+	<loop>
+		<field action="import" tag="list">2000,2104,6001,6003</field>
+		<!--display><pft>'<br>001: ',v1,' ; mfn: ',f(l(['BIBLIO']'-NC='v1),1,0)</pft></display-->
+		<do task="mfnrange">
+			<parm name="db">BIBLIO</parm>
+			<parm name="from"><pft>f(l(['BIBLIO']'-NC='v1),1,0)</pft></parm>
+			<parm name="count">1</parm>
+			<loop>
+				<field action="import" tag="list">2000,2104,6001,6003</field>
+				<display><htmlpft><pft>cat('NOVEDAD.HTM')</pft></htmlpft></display>	
+			</loop>
+		</do>
+	</loop>
+</do>
+
+<display>
+	</div>
+	<div class="clear"></div>
+</display>

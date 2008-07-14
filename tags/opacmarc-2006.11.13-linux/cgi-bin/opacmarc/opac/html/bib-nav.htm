@@ -1,0 +1,82 @@
+
+<!-- Botones para saltar a los registros anteriores o siguientes -->
+<!-- TO-DO: usar links en lugar de botones -->
+
+[pft]if val(v1002) > val(v2028) then[/pft]
+	<div style="margin: 1.2em auto 0.5em; text-align: center;">
+	
+		<!-- Botón "anteriores" -->
+		<form action="[pft]v6001^u[/pft]" method="GET" style="display: inline;">
+			<input type="hidden" name="IsisScript" value="[pft]v2000[/pft]">
+			<input type="hidden" name="db" value="[pft]v2104[/pft]">
+			<input type="hidden" name="task" value="[pft]v2101[/pft]">
+			<input type="hidden" name="from" value="[pft]f(val(v2004)-val(v2028),1,0)[/pft]">
+			<input type="hidden" name="query" value="[pft]v2001[/pft]">
+			<input type="hidden" name="searchType" value="[pft]v2002[/pft]">
+			<input type="hidden" name="oper" value="[pft]v2005[/pft]">
+			<input type="hidden" name="trunc" value="[pft]v2006[/pft]">
+			<input type="hidden" name="rpp" value="[pft]v2028[/pft]">
+			<input type="hidden" name="index" value="[pft]v2003[/pft]">
+			<input type="hidden" name="wa" value="[pft]v2031[/pft]">
+			<input type="hidden" name="sortBy" value="[pft]v2016[/pft]">
+			
+			[pft]if v2101 = 'BIB-KW-SEARCH' then[/pft]
+				<input type="hidden" name="lang" value="[pft]v2012[/pft]">
+				<input type="hidden" name="pub" value="[pft]v2013[/pft]">
+				<input type="hidden" name="place" value="[pft]v2014[/pft]">
+				<input type="hidden" name="format" value="[pft]v2015[/pft]">
+				<input type="hidden" name="biblioteca" value="[pft]v2018[/pft]">
+				<input type="hidden" name="litForm" value="[pft]v2019[/pft]">
+				<input type="hidden" name="biogr" value="[pft]v2020[/pft]">
+				<input type="hidden" name="trans" value="[pft]v2021[/pft]">
+				<input type="hidden" name="fest" value="[pft]v2024[/pft]">
+				<input type="hidden" name="fecha1" value="[pft]v2022[/pft]">
+				<input type="hidden" name="fecha2" value="[pft]v2023[/pft]">
+				<input type="hidden" name="query1" value="[pft]v2051[/pft]">
+				<input type="hidden" name="query2" value="[pft]v2052[/pft]">
+				<input type="hidden" name="db1" value="[pft]v2053[/pft]">
+				<input type="hidden" name="db2" value="[pft]v2054[/pft]">
+			[pft]fi[/pft]
+			
+			<input type="submit" class="button" value="&lt; Anteriores" [pft]if val(v2004) = 1 then 'disabled' fi[/pft]>
+		</form>
+		
+		
+		<!-- Botón "siguientes" -->
+		<form action="[pft]v6001^u[/pft]" method="GET" style="display: inline; margin-left: 0.5em;">
+			<input type="hidden" name="IsisScript" value="[pft]v2000[/pft]">
+			<input type="hidden" name="db" value="[pft]v2104[/pft]">
+			<input type="hidden" name="task" value="[pft]v2101[/pft]">
+			<input type="hidden" name="from" value="[pft]f(val(v2004)+val(v2028),1,0)[/pft]">
+			<input type="hidden" name="query" value="[pft]v2001[/pft]">
+			<input type="hidden" name="searchType" value="[pft]v2002[/pft]">
+			<input type="hidden" name="oper" value="[pft]v2005[/pft]">
+			<input type="hidden" name="trunc" value="[pft]v2006[/pft]">
+			<input type="hidden" name="rpp" value="[pft]v2028[/pft]">
+			<input type="hidden" name="index" value="[pft]v2003[/pft]">
+			<input type="hidden" name="wa" value="[pft]v2031[/pft]">
+			<input type="hidden" name="sortBy" value="[pft]v2016[/pft]">
+			
+			[pft]if v2101 = 'BIB-KW-SEARCH' then[/pft]
+				<input type="hidden" name="lang" value="[pft]v2012[/pft]">
+				<input type="hidden" name="pub" value="[pft]v2013[/pft]">
+				<input type="hidden" name="place" value="[pft]v2014[/pft]">
+				<input type="hidden" name="format" value="[pft]v2015[/pft]">
+				<input type="hidden" name="biblioteca" value="[pft]v2018[/pft]">
+				<input type="hidden" name="litForm" value="[pft]v2019[/pft]">
+				<input type="hidden" name="biogr" value="[pft]v2020[/pft]">
+				<input type="hidden" name="trans" value="[pft]v2021[/pft]">
+				<input type="hidden" name="fest" value="[pft]v2024[/pft]">
+				<input type="hidden" name="fecha1" value="[pft]v2022[/pft]">
+				<input type="hidden" name="fecha2" value="[pft]v2023[/pft]">
+				<input type="hidden" name="query1" value="[pft]v2051[/pft]">
+				<input type="hidden" name="query2" value="[pft]v2052[/pft]">
+				<input type="hidden" name="db1" value="[pft]v2053[/pft]">
+				<input type="hidden" name="db2" value="[pft]v2054[/pft]">
+			[pft]fi[/pft]
+			
+			<input type="submit" class="button" value="Siguientes &gt;" [pft]if val(v1001) >= val(v1002) then 'disabled' fi[/pft]>
+		</form>
+	</div>
+[pft]fi[/pft]
+

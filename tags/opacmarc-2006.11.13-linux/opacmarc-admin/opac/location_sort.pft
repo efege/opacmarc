@@ -1,0 +1,58 @@
+/* -----------------------------------------------------------------------------
+ * Criterio para ordenar el archivo maestro de la base bibliográfica
+ * de acuerdo a signatura topográfica o ubicación (location).
+ *
+ * Este ordenamiento permite ofrecer en el OPAC un browse del catálogo
+ * completo que, a la vez, tenga sentido en cuanto a la organización del
+ * material.
+ *
+ * TO-DO: ver otros campos en los que puede aparecer la "ubicación".
+ * TO-DO: restringir la aplicación del criterio para Dewey 860-868.
+ *
+ * (c) 2006  Fernando J. Gómez - CONICET - INMABB
+ * -----------------------------------------------------------------------------
+ */
+
+mpu,
+if p(v859^h) then
+	if v859^h.2 : 'A-' then
+		/* nros. de inventario, base del INMABB */
+		'A-',
+		v859^k[1],
+		right(s('0000',replace(v859^h[1],'A-','')),4),
+		v859^i[1],
+	else
+		v859^k[1],  /* prefijo */
+		c15,
+		if val(v859^h[1].1) = 0 and val(v859^h[1]) >= 860 and val(v859^h[1]) <= 868 then
+			/* Cuando se usa el sistema Dewey para clasificar literatura hispanoamericana (860-868),
+			   se produce una curiosa situación: se utiliza un prefijo de una o dos letras para indicar
+			   el país, y el orden correcto es
+					860, 861,..., 868, A86x, B86x, Ch86x, Co86x,..., V86x, 869
+			   Para lograr ese orden, aplicamos este criterio: si el primer carácter del nro. de clase no es
+			   un dígito (val = 0) y la parte numérica está entre 860 y 868, anteponemos
+			   un prefijo '868' al nro. de clase.
+			   TO-DO: restringir la aplicación de este criterio a las bases de datos donde sea correcto usarlo.  
+			*/
+			'868',v859^h[1],
+		else
+			v859^h[1],  /* clase */
+		fi,
+		c35,
+		v859^i[1],  /* librística */
+	fi,
+		
+else if p(v092^c) then
+	v092^c[1], c15, v092^l[1],  /* clase + librística (U N de Cuyo) */
+
+else if p(v856^u) then
+	v856^u[1],              /* URI */
+	
+else if p(v050) then
+	v050^a[1],              /* LC call number */
+	
+else
+	'ZZZZZZ',
+
+fi,fi,fi,fi
+
