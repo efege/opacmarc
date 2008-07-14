@@ -1,0 +1,50 @@
+/* ===================================================================
+ *  1. Regulariza puntuacion de los campos con encabezamientos.
+ *  2. Agrega un subcampo ^9 a los campos con encabezamientos.
+ *  3. Elimina subject headings en base al 2do indicador.
+ *
+ *  NOTA: regpunt.pft recibe su parametro en el campo 2000.
+ *
+ *  ATENCION: ajustar para el caso en que ^9 ya este presente.
+ *  ATENCION: podrían "infiltrarse" campos no deseados, e.g. tag > 999?
+ * ===================================================================
+ */
+
+/* --------------------------------------------------------------------
+ * EXPLICACION:
+ *
+ * v1 tiene la forma:
+ *
+ *    !v<tag>!field_content
+ *
+ * luego v1*1.4 = 'v<tag>', y v1*7.1 = 2do indicador.
+ *
+ * mfn corresponde a la base que se crea con
+ *
+ * 	  mx seq=biblio1.id
+ *
+ * donde cada campo de cada registro la base bibliografica original
+ * pasa a ser un *registro*.
+ * --------------------------------------------------------------------
+ */
+
+
+if v1.7 = '!v1106!' then  /* excluimos campos 1106 (bloqueo) */
+	,,
+else if getenv('NAME_TAGS') : v1*1.4 then
+	proc('d2a2¦',v1,'¦'),
+	,@REGPUNT.PFT,
+	'^9',mfn, /
+	
+else if getenv('SUBJ_TAGS') : v1*1.4 then
+	if getenv('IGNORE_SUBJ_HEADINGS') : v1*7.1 and v1*1.4 <> 'v653' then
+		,,
+	else
+		proc('d2a2¦',v1,'¦'),
+		,@REGPUNT.PFT,
+		'^9',mfn, /
+	fi,
+	
+else
+	v1,/
+fi,fi,fi,

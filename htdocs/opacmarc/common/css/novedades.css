@@ -1,0 +1,45 @@
+/* listado de novedades */
+
+div.novedad {
+	/*background: #DDD;*/
+	border-bottom: 2px solid #CCC;
+	float: left;
+	margin-left: 50px;
+	margin-bottom: 0.7em;
+	padding: 0.5em 1em;
+	width: 40em;
+}
+
+h3.title {
+	font-size: 115%;
+	font-weight: bold;
+	line-height: 1.3;
+	margin-bottom: 0.3em;
+}
+h4.responsabilidad {
+	font-size: 100%;
+	font-weight: bold;
+	margin-bottom: 0.4em;
+}
+p.edicion {
+	margin-bottom: 0.3em;
+}
+p.publication {
+	margin-bottom: 0.3em;
+}
+
+div.imageCell {
+	float: right;
+	margin-bottom: 0;
+	margin-left: 1em;
+}
+
+div.imageCell p {
+	background: #FFF;
+	padding: 6px;
+	text-align: center;
+}
+div.imageCell img {
+	border: 1px solid #908470;
+	/*margin: 0 0 0.7em;*/
+}

@@ -1,0 +1,64 @@
+<div id="about">
+
+<div style="width: 45em; max-width: 95%;">
+
+<!--p class="warning">
+	ATENCIÓN: este formulario aún no está funcionando correctamente. Si usted la ha usado para enviar
+	algún mensaje, le avisamos que el mensaje no ha llegado. Estamos trabajando para solucionar el
+	problema.
+</p-->
+
+<h2 style="margin-bottom: 1.5em;">Mensajes acerca del catálogo</h2>
+
+<p>
+	Puede utilizar este formulario para hacernos llegar sus comentarios y sugerencias sobre el catálogo, y también
+	para informarnos acerca de errores detectados.
+</p>
+
+<script type="text/javascript">
+	function validate(form) {
+		if (form.mensaje.value == "") {
+			alert("No ha ingresado ningún mensaje.");
+			return false;
+		}
+	}
+</script>
+
+<form action="[pft]v6003^h[/pft]opac/php/feedback.php" method="POST" style="width: 80%; border: 1px solid #999; padding: 1.5em; margin: auto; background: #DDD;" onsubmit="return validate(this);">
+
+	<!--p style="margin-top: 0;">
+	Esto es un:
+	<br>
+	<input type="radio" id="tipoComentario" name="tipoMensaje" value="comentario" checked="checked">
+	<label for="tipoComentario">
+		comentario/sugerencia
+	</label>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<input type="radio" id="tipoError" name="tipoMensaje" value="error">
+	<label for="tipoError">
+		informe de error
+	</label>
+	</p-->
+	
+	<p style="margin-top: 0;">Su nombre:
+	<br>
+	<input type="text" name="nombre" style="width: 20em;">
+	</p>
+	
+	<p>Su dirección electrónica (si desea una respuesta):
+	<br>
+	<input type="text" name="email" style="width: 20em;">
+	</p>
+	
+	<p>Su mensaje:
+	<br>
+	<textarea name="mensaje" rows="10" cols="40"></textarea>
+	</p>
+	
+	<input type="submit" value="Enviar" style="width: 8em; height: 2.2em;">
+
+</form>
+
+</div>
+
+</div>

@@ -1,0 +1,51 @@
+/* -------------------------------------------------------------------
+ * Tipo de documento.
+ *
+ * Utilizado en las visualizaciones breve y completa de registros.
+ *
+ * Los términos son deducidos a partir de la presencia de ciertos datos
+ * en el registro. Alternativamente, puede usarse el texto almacenado en
+ * un campo ad-hoc (e.g. el campo 907 de la U.N. de Cuyo, aquí mapeado
+ * a 920). En cualquier caso, es recomendable usar términos cortos,
+ * que resulten claros para los usuarios.
+ *
+ * ATENCION: el orden en que se efectúan los tests es importante.
+ *
+ * TO-DO: añadir más tipos.
+ * -------------------------------------------------------------------
+ */
+
+if p(v920^a) then
+	v920^a+|, |,   /* repetible? */
+
+else if v907 = 'a' and v773^7*2.2 = 'as' then  /* monographic component of a serial language material */
+	'Artículo de revista',  /* ¿y recorte de diario? */
+	
+else if v907 = 'a' and v773^7*2.2 = 'am' then  /* monographic component of a monographic language material */
+	'Parte de un libro',
+	
+else if p(v502) or v008*24.4 : 'm' then
+	'Tesis',
+	
+else if v906 = 'a' and v907 = 'm' then
+	'Libro',   /* TO-DO: un artículo/ensayo publicado en un sitio web personal, cómo queda? */
+	
+else if v907 = 'i' and v008*21.1 = 'w' then  /* integrating resource, updating Web site */
+	'Sitio web',
+	
+else if v907 = 's' and v008*21.1 = 'p' then  /* serial, periodical */
+	/*'Publicación periódica',*/
+	'Revista',
+	
+else if v907 = 's' and v008*21.1 = 'n' then  /* serial, newspaper */
+	'Diario',
+	
+else if v907 = 's' and v008*21.1 = 'm' then  /* serial, monographic series */
+	'Serie monográfica',
+
+else if v906 = 'j' then
+	'Grabación de audio',
+	
+else
+	'&nbsp;'
+fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,

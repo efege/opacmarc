@@ -1,0 +1,35 @@
+##########################################
+#  ATENCION - NO MODIFIQUE ESTE ARCHIVO  #
+##########################################
+
+
+# -----------------------------------------------------------------
+# Archivos utilizados en la generación del OPAC y en Catalis
+# -----------------------------------------------------------------
+AC-ANSI.TAB=/home/fer/opacmarc-admin/common/ac-ansi.tab
+BIBLIO.FST=/home/fer/opacmarc-admin/common/biblio.fst
+BIBLIO.STW=/home/fer/opacmarc-admin/common/biblio.stw
+COUNTRY.*=/home/fer/opacmarc-admin/common/country.*
+DICTGIZ.*=/home/fer/opacmarc-admin/common/dictgiz.*
+HEADSORT.PFT=/home/fer/opacmarc-admin/common/headsort.pft
+UC-ANSI.TAB=/home/fer/opacmarc-admin/common/uc-ansi.tab
+
+
+# -----------------------------------------------------------------
+# Archivos utilizados solamente en la generación del OPAC
+# -----------------------------------------------------------------
+ELIMDUP2.PFT=/home/fer/opacmarc-admin/opac/elimdup2.pft
+HEAD.PFT=/home/fer/opacmarc-admin/opac/head.pft
+HEADINGS.FST=/home/fer/opacmarc-admin/opac/headings.fst
+LANG.*=/home/fer/opacmarc-admin/opac/lang.*
+LANG.FST=/home/fer/opacmarc-admin/opac/lang.fst
+LANG.TXT=/home/fer/opacmarc-admin/opac/lang.txt
+LOCATION_SORT.PFT=/home/fer/opacmarc-admin/opac/location_sort.pft
+MSC.*=/home/fer/www/bases/catalis_pack_devel/opac/msc2000/msc.*
+NAME.PFT=/home/fer/opacmarc-admin/opac/name.pft
+OEM2ANSI.*=/home/fer/opacmarc-admin/opac/oem2ansi.*
+RECODE.PFT=/home/fer/opacmarc-admin/opac/recode.pft
+REGPUNT.PFT=/home/fer/opacmarc-admin/opac/regpunt.pft
+SECS2MARC.PROC=/home/fer/opacmarc-admin/opac/secs2marc.proc
+SUBJ.PFT=/home/fer/opacmarc-admin/opac/subj.pft
+TITLE.PFT=/home/fer/opacmarc-admin/opac/title.pft

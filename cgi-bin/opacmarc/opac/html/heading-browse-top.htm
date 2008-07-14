@@ -1,0 +1,67 @@
+<div id="resultHeader" class="[pft]v2003[/pft]">
+	Indice de 
+	[pft]
+	select v2003 
+		case 'NAME' : 'autores',
+		case 'SUBJ' : 'temas',
+		case 'TITLE': 'títulos',
+	endsel,
+
+	/*
+	proc('d5001a5001¦',replace(s(cat('BASES.PAR')),s(#),'¦a5001¦'),'¦'),
+	(,
+		if v5001 : s(v2003[1],'_TOTAL=') then 
+			' <span style="color: #DDD; font-weight: normal; font-size: 95%;">(',mid(v5001,instr(v5001,'=')+1,10),' términos en total)</span>',
+			break,
+		fi,
+	),
+	*/
+
+	if s(v1235,v2030) = '' and p(v2007) then 
+		', <span style="font-weight: normal;">a partir de <b>',v2007,'</b></span>',
+	fi
+	if v2009 = '1' and a(v2007) then 
+		', <span style="font-weight: normal;">desde su comienzo</span>',
+	fi,
+	/* ATENCION: también puede ser "cercanos a" ??? */
+	[/pft]
+</div>
+
+
+<!--display><pft>
+/* ¿Existe la palabra en alguna parte del índice? */
+/* ATENCION: ¿qué sentido tenía esto? */
+/* ATENCION: y si hay más de una palabra en v2007? */
+if v2003='SUBJ' AND size(v2007) > 3 AND npost([v2003]v2007) > 0 then
+	'<div style="margin: 0.5em 0 0.5em 3em;">'/
+		'<table width="90%" cellpadding="2" border="0" style="background: #f0f0f0; line-height: 1.2em;" -class="smaller">'/
+			'<tr><td width="9" style="padding-left: 4px;"><img src="/opac/img/right.gif" alt="" border="0"></td>'/
+			'<td -colspan="2">'/
+			'Ver todos los temas que incluyan el término ', 
+			'<a href="',v6001^u[1],'?IsisScript=',v2000[1],'&amp;db=SUBJ&amp;query=',v2007,'"><strong>',v2007,'</strong></a>',
+			'<br>'/
+			'</td></tr>'/
+		'</table>'/
+	'</div>'/
+fi,
+</pft></display-->
+
+[pft]if p(v1235) then  /* p(v1235) = NO_LEFT_MATCHING */[/pft]
+	<div class="warning">
+		No hay términos que empiecen con <b><i>[pft]v2007[/pft]</i></b> en este índice.
+		Estos son algunos términos cercanos.
+	</div>
+[pft]else if p(v2030) then[/pft]
+	Mostrando términos cercanos a 
+	[pft]proc('d1000a1000¦',replace(s('a',v2007),'~','¦a1000¦'),'¦'),
+	/* ATENCION: revisar si el 'a' puede evitarse (es tedioso de revisar :-( ) */ [/pft]
+	<b>
+	[pft](,
+		,if 'xyzv' : v1000.1 then '&#8212;' else x1, fi, 
+		,v1000*1, 
+	),[/pft]
+	</b>
+[pft]else
+	/*'Términos a partir de <b>',v2007,'</b>:'/ */
+fi,fi,[/pft]
+

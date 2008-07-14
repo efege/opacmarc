@@ -1,0 +1,82 @@
+AKK|Akkadian|Acadio
+ALB|Albanian|Albanés
+ARA|Arabic|Arabe
+ARC|Aramaic|Arameo
+ARM|Armenian|Armenio
+ARN|Mapuche|Mapuche
+BAQ|Basque|Vasco
+BUL|Bulgarian|Búlgaro
+CAI|Central American Indian (Other)|Indios de Centroamérica (Otros)
+CAS|cas?|cas?
+CAT|Catalan|Catalán
+CHI|Chinese|Chino
+CZE|Czech|Checo
+DAN|Danish|Danés
+DEU|deu?|deu?
+DUT|Dutch|Holandés
+DYU|Dyula|Dyula?
+ENG|English|Inglés
+EPO|Esperanto|Esperanto
+EST|Estonian|Estonio
+FIN|Finnish|Finés
+FRE|French|Francés
+FRM|French, Middle (ca. 1400-1600)|Francés medio (ca. 1400-1600)
+FRO|French, Old (ca. 842-1400)|Francés antiguo (ca. 842-1400)
+GER|German|Alemán
+GLG|Galician|Gallego
+GRC|Greek, Ancient (to 1453)|Griego antiguo (hasta 1453)
+GRE|Greek, Modern (1453- )|Griego moderno (1453- )
+GRN|Guarani|Guaraní
+GUJ|Gujarati|Gujarati
+HEB|Hebrew|Hebreo
+HIN|Hindi|Hindi?
+HUN|Hungarian|Húngaro
+IND|Indonesian|Indonesio
+ILE|Interlingue|Interlingüe
+ITA|Italian|Italiano
+JAP|jap?|jap?
+JPN|Japanese|Japonés
+KAN|Kannada|Kannada?
+KOR|Korean|Coreano
+KUR|Kurdish|Kurdo?
+LAD|Ladino|Ladino
+LAT|Latin|Latín
+LAV|Latvian|Latvian?
+LIT|Lithuanian|Lituano
+MAP|Austronesian (Other)|Austronesian (Other)?
+MUL|Multiple languages|Múltiples idiomas
+NAI|North American Indian (Other)|Indios de Norteamérica (Otros)
+NAV|Navajo|Navajo
+NIC|Niger-Kordofanian (Other)|Niger-Kordofanian (Other)
+NOR|Norwegian|Noruego
+OCI|Occitan (post-1500)|Occitano? (post-1500)
+ORM|Oromo|Oromo?
+PAN|Panjabi|Panjabi
+PER|Persian|Persa
+PLI|Pali|Pali?
+POL|Polish|Polaco
+POR|Portuguese|Portugués
+QUE|Quechua|Quechua
+ROA|Romance (Other)|Romance (Otros)
+RUM|Romanian|Rumano
+RUS|Russian|Ruso
+SAI|South American Indian (Other)|Indios de Sudamérica (Otros)
+SAN|Sanskrit|Sánscrito
+SCC|Serbian|Serbio
+SCO|Scots|Scots?
+SCR|Croatian|Croata
+SLO|Slovak|Eslovaco
+SLV|Slovenian|Esloveno
+SOT|Sotho|Sotho?
+SPA|Spanish|Español
+SWA|Swahili|Swahili
+SWE|Swedish|Sueco
+SYR|Syriac|Sirio?
+TGL|Tagalog|Tagalog?
+THA|Thai|Thai
+TUR|Turkish|Turco
+UKR|Ukrainian|Ucraniano
+UND|Undetermined|Sin determinar
+VIE|Vietnamese|Vietnamita
+WEL|Welsh|Galés
+YID|Yiddish|Yiddish

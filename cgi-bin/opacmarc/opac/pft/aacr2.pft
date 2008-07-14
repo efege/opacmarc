@@ -1,0 +1,549 @@
+/* =============================================
+ *             Display ISBD (AACR2)             
+ * =============================================
+ */
+
+
+'<div align="center">'/
+'<div id="AACR2">'/
+'<table class="AACR2Table AACR2Font" cellpadding="12" border="0">'/
+'<tr>'/
+
+/* ======= Begin side-column ======= */
+'<td valign="top" rowspan="3" width="15%" style="padding-left: 0.2em;">'/
+
+if s(v50,v82)>'' then
+	'<div>',
+
+	/* ATENCION: tanto v50 como v50^a son repetibles */
+	if p(v050) then
+		v050^a[1], "<br>"v050^b[1], '<br>'/
+	fi/
+
+	/* ATENCION: tanto v82 como v82^a son repetibles */
+	"<br>"v082^a[1]/
+
+	'</div>'/,
+fi,
+
+'<!--div style="border-bottom: solid 1px #bbb; /*background: #f0f0f0;*/ padding: 0 0.3em;">'
+	v995+|<br>|,/
+'</div-->'/,
+'</td>'/
+/* ===== End side-column ====== */
+
+'<td>'/
+
+/* =============================================
+ *               Main entry heading
+ * =============================================
+ * Corchetes para v130 ?
+ */
+
+if s(v100,v110,v111,v130) > '' then
+	/* Codificamos el query en v7100 */
+	proc('d7000a7000¦',v100*2,v110*2,v111*2,v130*2,'¦'),
+	,@URLENCODE.PFT,
+	proc('d7100a7100¦',v7000[1],'¦'),
+
+	/* Construimos el link */
+	'<a style="font-weight: bold;" href="',v6001^u,
+	'?IsisScript=',v2000,
+	'&amp;db=',v2104,
+	'&amp;index=NAME',
+	'&amp;query=',replace(v7100,s('^e',v7100^e),''), /* ATENCION: v111^e? */
+	'">'/
+	proc('d1000a1000¦',replace(s(v100*3,v110*3,v111*3,v130*3),'^','¦a1000¦'),'¦'),
+	,(,
+		if 'dqe':v1000.1 or v111[1]>'' and 'cdn':v1000.1 then
+			/* Datos que no van en negrita */
+			'<span style="font-weight: normal;">',v1000*1,'</span>',x1,
+		else if not '4689':v1000.1 then v1000*1,x1, fi,
+		fi,
+	,),
+	'</a>'/
+
+/* ====== Uniform title (v240 y v130 se excluyen) ====== */
+	if p(v240) and v240.1='1' then
+		'<p class="uniformTitle">'/
+		proc('d1000a1000¦',replace(v240*3,'^','¦a1000¦'),'¦'),
+		'[',(v1000*1+| |),']',
+	fi,
+fi,
+
+
+/* ======= Begin description ======== */
+
+/* =============================================
+ *                  Area 1: Title               
+ * =============================================
+ */
+'<p class="title">'/
+	,proc('d1000a1000¦',replace(v245*3,'^','¦a1000¦'),'¦'),
+'<span class="title">',(if not '68':v1000.1 then v1000*1+| | fi),'</span>'/
+
+
+/* =============================================
+ *                Area 2: Edition               
+ * =============================================
+ */
+if p(v250) then ' &#8212; ',
+	proc('d1000a1000¦',replace(v250*3,'^','¦a1000¦'),'¦'),
+	(if not '68':v1000.1 then v1000*1+| | fi),
+fi,
+
+
+/* =============================================
+ *    Area 4: Publicacion, distribucion, etc.   
+ * =============================================
+ * En el campo 260 se da habitualmente la situaci¢n de subcampos
+ * repetidos (lugar o editorial). La soluci¢n m s simple para lograr
+ * el display correcto, es preservar los subcampos en el orden en que
+ * est n ingresados, insertando los espacios intermedios. Pero atenci¢n:
+ * si los subcampos no se ingresan en el orden adecuado, el resultado
+ * ser  incorrecto.
+ */
+
+if p(v260) then ' &#8212; ',
+	proc('d1000a1000¦',replace(v260*3,'^','¦a1000¦'),'¦'),
+	(if not '368':v1000.1 then v1000*1+| |, fi),
+fi,
+
+
+/* =============================================
+ *         Area 5: Physical description         
+ * =============================================
+ */
+if p(v300) then
+	if a(v773) then '</p><p class="physical">' else ' &#8212; ' fi,
+	proc('d1000a1000¦',replace(v300*3,'^','¦a1000¦'),'¦'),
+	(
+		if v1000.1='a' and 'v.~p.~':v1000*1.2 and val(v1000*1)=0 then
+			'&nbsp;&nbsp;&nbsp;&nbsp;'
+		fi,
+		if not '68':v1000.1 then v1000*1+| |, fi,
+	),
+fi,
+
+
+/* =============================================
+ *                Area 6: Series
+ * ATENCION: revisar links en series con ^p
+ * Se podrían cargar todas las ocurrencias de ambos
+ * campos en un campo auxiliar, y solo procesar este?
+ * =============================================
+ */
+if s(v440,v490)>'' then ' &#8212;',
+	if p(v440) then
+		,(,
+			/* Codificamos el query en v7400 */
+			proc('d7000a7000¦',v440*2,'¦'),
+			,@URLENCODE.PFT,
+			proc('d7400a7400¦',v7000[1],'¦'),
+			
+			/* Construimos el link */
+			' (', '<a href="',v6001^u[1],
+					'?IsisScript=',v2000[1],
+					'&amp;db=',v2104[1],
+					'&amp;index=COL',
+					'&amp;query=^a',replace(v7400[1]^a,'+;',''),
+						'" title="Búsqueda por colección">',
+						,replace(v440^a,' ;',''),
+						/* ATENCION: n,p son repetibles */
+						,if p(v440^n) then ' ',replace(v440^n,' ;','') fi,
+				,if p(v440^p) then ' ',replace(v440^p,' ;','') fi,
+				,if p(v440^x) then ' ISSN ',replace(v440^x,' ;','') fi,
+				,'</a>',
+				,if p(v440^v) then ' ; ',replace(v440^v,' ','&nbsp;') fi,
+			')',
+		,),
+	fi,
+
+	if p(v490) then
+	,(,
+		' (',
+			replace(v490^a,' ;',''),
+			if p(v490^x) then ' ISSN ',replace(v490^x,' ;',''), fi,
+			if p(v490^v) then ' ; ',replace(v490^v,' ','&nbsp;'), fi,
+		')',
+	,),
+	fi,
+fi,
+
+'</p>'/,
+
+/* =============================================
+ *                 Area 7: Notes                
+ * =============================================
+ */
+
+/* ==== Analíticas de "En" (773: va como primera nota) ==== */
+if p(v773) then
+	'<p class="note">'/
+	'<span style="font-style: italic; font-weight: bold;">',
+	,if v773[1].2='0 ' then 'En' else if v773[1].1='0' then v773^i[1] fi,fi,
+	,x1,'</span>',
+	if v773[1].1='0' then
+		proc('d1000a1000¦',replace(v773[1]*3,'^','¦a1000¦'),'¦'),
+		/* Averiguamos posición del subcampo t */
+		( if v1000.1='t' then proc('d1022a1022~',f(iocc,1,0),'~'), break, fi )
+		(
+			if not 'himnruwxyz7' : v1000.1 then
+				/* ATENCION: revisar subcampos; ^i ya fue tenido en cuenta arriba */
+				,if v1022[1]>'' and iocc > val(v1022[1]) then ' &#8212; ', fi,
+				,if v1000.1 = 'k' then '(',v1000*1,')', else v1000*1, fi, x1,
+			fi,
+		),
+	else /* primer indicador del 773 = 1 */
+		replace(v580^a,'--','&#8212;'),
+	fi,
+	'</p>'/
+fi,
+
+/* -------- 580: Linking Entry Complexity Note  --------- */
+if p(v580) and not v773[1].1='1' then
+	,(,
+		'<p class="note">',replace(v580^a,'--','&#8212;'),'</p>'/
+	,),
+fi,
+
+/* 500: Nota general */
+if p(v500) then
+	,(,
+		'<p class="note">',replace(v500^a,'--','&#8212;'),'</p>'/
+	,),
+fi,
+
+if p(v501) then
+	,(,
+		'<p class="note">',replace(v501^a,'--','&#8212;'),'</p>'/
+	,),
+fi,
+
+if p(v502) then
+	,(,
+		'<p class="note">',replace(v502^a,'--','&#8212;'),'</p>'/
+	,),
+fi,
+
+if p(v504) then
+	,(,
+		'<p class="note">',v504^a,'</p>'/
+	,),
+fi,
+
+if p(v505) then
+	,(,
+		'<p class="note">',
+		select v505.1
+			case '0' : '<span class="displayConstant">Contenido: </span>',
+			case '1' : '<span class="displayConstant">Contenido incompleto: </span>',
+			case '2' : '<span class="displayConstant">Contenido parcial: </span>',
+		endsel,
+		replace(replace(replace(replace(v505*4,
+			'--','&#8212;'),
+			'^t',' '),
+			'^r',' '),
+			'^g',' '),
+		'</p>'/
+	,),
+fi,
+
+if p(v520) then
+	,(,
+		'<p class="note">',v520^a,'</p>'/
+	,),
+fi,
+
+/* === Original version note (repetibilidad?) === */
+if p(v534) then
+	proc('d1000a1000¦',replace(v534*3,'^','¦a1000¦'),'¦'),
+	'<p class="note">',(v1000*1+| |),'</p>'/
+fi,
+
+
+/* =============================================
+ *           Area 8: Standard numbers
+ *  ATENCION: ISBN inválidos (^z)
+ * =============================================
+ */
+
+if s(v020^a,v020^z)>'' then
+	'<p class="note">',
+	(
+		'ISBN ',replace(s(v020^a,v020^z),' :',''),
+		,if iocc < nocc(v020) then '. &#8212; ' fi,
+	),
+	'</p>'/
+fi,
+
+if p(v022) then
+	,/,
+	'<p class="note">ISSN ',v022^a,'</p>'/
+fi,
+
+'</td>'/
+/* ====== End description ======= */
+
+
+'</tr>'/
+
+
+/* =============================================
+ *        Added entry headings (trazado)
+ * =============================================
+ */
+
+'<tr>'/
+'<td style="padding-left: 0; padding-top: 0;">'/
+
+/* ----- Tabla para contener el trazado ----- */
+'<table width="100%" cellspacing="0" cellpadding="1" class="AACR2Font" border="0">'/
+
+/* =======================================================
+ *             Subject added entries            
+ *
+ * Descriptores ignorados:
+ * 4 - Source not specified
+ * 6 - Répertoire de vedettes-matière
+ * 7 - Source specified in subfield $2
+ * +++++ La decisión ya fue tomada al crear la base +++++
+ * =======================================================
+ */
+proc('a1110~467~'),
+
+if s(v600,v610,v630,v650,v651,v653) > '' then
+	proc('d5555',
+		if p(v600) then ('a5555¦',v600*2,'¦'), fi,
+		if p(v610) then ('a5555¦',v610*2,'¦'), fi,
+		if p(v630) then ('a5555¦',v630*2,'¦'), fi,
+		if p(v650) then ('a5555¦',v650*2,'¦'), fi,
+		if p(v651) then ('a5555¦',v651*2,'¦'), fi,
+		if p(v653) then ('a5555¦',v653*2,'¦'), fi,
+	),
+
+	,(,
+		if iocc>nocc(v5555) then
+			break,
+		else
+			'<tr>'/
+			'<td width="50" align="right" valign="top">',
+			,f(iocc,1,0),'.&nbsp;</td>'/
+			'<td>',
+			
+			/* Codificamos el query en v7600 */
+			proc('d7000a7000¦',v5555*2,'¦'),
+			,@URLENCODE.PFT,
+			proc('d7600a7600¦',v7000[1],'¦'),
+			
+			/* Construimos el link */
+			'<a href="',v6001^u[1],
+				'?IsisScript=',v2000[1],
+				'&amp;db=',v2104[1],
+				'&amp;index=SUBJ',
+				'&amp;query=^a',v7600[1],
+			'">',
+			replace(replace(replace(replace(replace(replace(replace(
+			replace(replace(replace(replace(replace(replace(v5555*2,
+				'^x','&#8212;'),
+				'^y','&#8212;'),
+				'^z','&#8212;'),
+				'^v','&#8212;'),
+				'^b',' '),
+				'^c',' '),
+				'^d',' '),
+				'^l',' '),
+				'^p',' '),
+				'^q',' '),
+				'^t',' '),
+				s('^2',v5555^2),''),
+				s('^9',v5555^9),''),
+			'</a>'/
+			'</td></tr>'/,
+		fi,
+	,),
+fi,
+
+/* ==============================================================
+ *           Non-subject added entries
+ * ==============================================================
+ * Que hacemos con los titulos en ^t ??
+ * Campo 830 lleva una etiqueta "Serie"?
+ * Labels para el campo 246? ???
+ */
+
+if s(v700,v710,v711,v730) > '' then
+	proc('d7701d7702'),
+	/* El campo 7701 almacena los campos tal como serán mostrados.
+	 * El campo 7702 almacena los queries (luego se los codifica en 7700).
+	 */
+	/* -------------- Campo 700 ------------- */
+	if p(v700) then
+		proc('d1000',
+				(,
+					'a1000¦',replace(v700*3,'^','¦a1000¦'),'¦',
+					if iocc<nocc(v700) then 'a1000|##|' fi,
+				,)
+		),
+		proc('a7701¦',
+				,(,
+					if v1000 = '##' then
+						'¦a7701¦',
+					else if not '345689' : v1000.1 then
+						v1000*1,x1,
+					fi, fi,
+				,),
+		'¦'),
+		proc('a7702¦^iNAME^q',
+			,(,
+				if v1000 = '##' then '¦a7702¦^iNAME^q',
+				else if not '345689' : v1000.1 then '~'v1000, fi,
+				fi,
+			,),
+		'¦'),
+	fi,
+
+  /* -------------- Campo 710 ------------- */
+	if p(v710) then
+    proc('d1000',
+	    (,
+			  'a1000¦',replace(v710*3,'^','¦a1000¦'),'¦',
+			  if iocc<nocc(v710) then 'a1000|##|' fi,
+			,)
+	  ),
+	  proc('a7701¦',
+	    ,(,
+	       if v1000 = '##' then '¦a7701¦',
+		     else if not '34568' : v1000.1 then v1000*1,x1, fi,
+		     fi,
+	    ,),
+	  '¦'),
+	  proc('a7702¦^iNAME^q',
+	    ,(,
+	       if v1000 = '##' then '¦a7702¦^iNAME^q',
+		     else if not '34568' : v1000.1 then '~'v1000, fi,
+		     fi,
+	    ,),
+	  '¦'),
+  fi,
+
+  /* -------------- Campo 711 ------------- */
+	if p(v711) then
+    proc('d1000',
+	    (,
+			  'a1000¦',replace(v711*3,'^','¦a1000¦'),'¦',
+				if iocc<nocc(v711) then 'a1000|##|' fi,
+			,)
+	  ),
+	  proc('a7701¦',
+	    ,(,
+	       if v1000 = '##' then '¦a7701¦',
+		     else if not '34568' : v1000.1 then v1000*1,x1, fi,
+		     fi,
+	    ,),
+	  '¦'),
+	  proc('a7702¦^iNAME^q',
+	    ,(,
+	       if v1000 = '##' then '¦a7702¦^iNAME^q',
+		     else if not '34568' : v1000.1 then '~'v1000, fi,
+		     fi,
+	    ,),
+	  '¦'),
+  fi,
+
+  /* -------------- Campo 730 ------------- */
+	if p(v730) then
+		proc('d1000',
+			(,
+				'a1000¦',replace(v730*3,'^','¦a1000¦'),'¦',
+				if iocc<nocc(v730) then 'a1000|##|' fi,
+			,)
+		),
+		proc('a7701¦',
+			,(,
+				if v1000 = '##' then '¦a7701¦',
+				else if not '3568' : v1000.1 then v1000*1,x1, fi,
+				fi,
+			,),
+		'¦'),
+		proc('a7702¦^iTITLE^q',
+			,(,
+				if v1000 = '##' then '¦a7702¦^iTITLE^q',
+				else if not '3568' : v1000.1 then '~'v1000, fi,
+				fi,
+			,),
+		'¦'),
+	fi,
+
+	/* Quitamos ocurrencias vacías (ya no es necesario) */
+	/*
+	proc('d7701',|a7701~|v7701|~|,),
+	proc('d7702',|a7702~|v7702|~|,),
+	*/	
+	
+	proc(
+		/*if p(v246) then (if '13':v246.1 then 'a7701¦',v246*4,'¦' fi), fi,*/
+	),
+
+	/* v7709: contador (números romanos) */
+	proc('a7709¦',
+		,replace('I~II~III~IV~V~VI~VII~VIII~IX~X~XI~XII~XIII~XIV~XV~XVI~XVII~XVIII~XIX~XX~XXI~XXII~XXIII~XXIV~XXV','~','¦a7709¦'),
+	'¦'),
+
+	/* Recorremos la lista de added entries */
+	,(,
+		if iocc > nocc(v7701) then
+			break, /* no nos guiamos por las ocurrencias de v7709 */
+		else
+			'<tr><td width="50" align="right" valign="top">',
+			,v7709,'.&nbsp;</td>',
+			'<td>'/
+			
+			/* Codificamos el query en v7700 */
+			proc('d7000a7000¦',replace(v7702^q,'~','^'),'¦'),
+			,@URLENCODE.PFT,
+			proc('d7700a7700¦',v7000[1],'¦'),
+			
+			/* Construimos el link */
+			'<a href="',v6001^u[1],
+				'?IsisScript=',v2000[1],
+				'&amp;db=',v2104[1],
+				'&amp;index=',v7702^i,
+				'&amp;query=',replace(v7700[1],s(',^e',v7700^e[1]),''),
+			'">', /* ATENCION: subcampo "e" para todos? */
+			,v7701,
+			'</a>',
+			'</td></tr>'/
+		fi,
+	,),
+fi,
+
+'</table>'/
+/* ----- Fin de la tabla para contener el trazado ----- */
+
+'</td>'/
+'</tr>'/
+
+'<tr><td style="padding-top:0;">',
+'<table width="100%" cellpadding="0" cellspacing="0" class="AACR2Font">'/
+'<tr>'/
+'<td>',v003,'</td>'/
+'<td>',v001,'</td>'/
+'<td align="right">',
+	if p(v010) then
+		'LCCN <a target="_blank" title="Vea el registro en el catálogo de la Library of Congress"
+		href="http://catalog.loc.gov/cgi-bin/Pwebrecon.cgi?v3=1&amp;DB=local&amp;CMD=010a+',f(val(v010^a),1,0),'&amp;CNT=10+records+per+page">',f(val(v010^a),1,0),'</a>',
+	fi,
+'</td>'/
+'</tr>'/
+'</table>',
+'</td></tr>'
+
+/*
+'<tr><td colspan="2" align="center" style="font-size: 12em; color: #e9e9e9; padding: 1px;">&#183;</td></tr>'/
+*/
+
+'</table>'/
+
+'</div>'/
+'</div>'/

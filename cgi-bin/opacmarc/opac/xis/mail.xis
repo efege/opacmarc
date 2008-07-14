@@ -1,0 +1,92 @@
+<!--
+===========================================================================
+	mail.xis
+	
+	Genera un archivo temporal con el texto de un email solicitado por un
+	usuario del OPAC, con los resultados de una búsqueda.
+	
+	(c) 2003-2004  Fernando J. Gómez - CONICET - INMABB
+===========================================================================
+-->
+
+
+<!-- Cargamos en la lista las líneas del archivo temporal asociado a la búsqueda -->
+<list action="load" type="list"><pft>cat(v6003^t,'/',v2099)</pft></list>
+
+<!-- Creamos un archivo temporal para almacenar el texto que será enviado -->
+<file action="create" type="tempfile">2098</file>
+<file action="append" type="output"><pft>v2098</pft></file>
+
+<!-- Usamos la 1ra. línea del archivo temporal para armar el encabezamiento -->
+<do task="list">
+	<parm name="from">1</parm>
+	<parm name="count">1</parm>
+	<define>1 Isis_Item</define>
+	<loop>
+		<display><pft>
+			'BIBLIOTECA [nombre]'/
+			'Búsqueda en el catálogo (',
+			s(date)*6.2,'/',s(date)*4.2,'/',s(date).4,
+			',',
+			s(date)*9.2,':',s(date)*11.2,
+			')'/
+			'-----------------------------------------------'/
+			select v1^t
+				case 'SUBJ' : 'TEMA: ',
+				case 'NAME' : 'AUTOR: ',
+				case 'TITLE': 'TITULO: ',
+				case 'COL'  : 'SERIE: ',
+			endsel,
+			replace(v1^r,'&#8212;','--')/
+			'Ordenados por ',
+			select v1^s
+				case 'dateNew' : 'fecha (decreciente)',
+				case 'dateOld' : 'fecha (creciente)',
+				case 'title'   : 'título',
+				case 'author'  : 'autor/título',
+			endsel,/
+			'-----------------------------------------------'/#	
+		</pft></display>
+	</loop>
+</do>
+
+
+<!-- Recorremos las siguientes líneas del archivo temporal, una por registro -->
+<do task="list">
+	<parm name="from">2</parm> <!-- Ignoramos la 1ra. línea -->
+	<define>1 Isis_Item</define>
+	<define>1001 Isis_Current</define>
+	<define>1002 Isis_Total</define>
+	<loop>
+		<do task="mfnrange">
+			<parm name="db">BIBLIO</parm>
+			<parm name="from"><pft>v1^m</pft></parm>
+			<parm name="count">1</parm>
+			<loop>
+				<field action="import" tag="list">1001,1002</field>
+				<display><pft>,@MAIL.PFT,</pft></display>
+			</loop>
+		</do>
+	</loop>
+</do>
+
+<!-- Pie del mensaje -->
+<display><pft>
+	'-----------------------------------------------'/
+	'Por favor, no responda a este mensaje. Para comunicarse con la'/
+	'biblioteca, diríjase a [...]'/
+</pft></display>
+
+<!-- Cerramos el archivo temporal -->
+<file action="close" type="output"><pft>v2098</pft></file>
+
+<!-- Redireccionamos el browser hacia el script PHP que envía los emails -->
+<display><pft>
+	'Location: http://',
+	getenv('SERVER_NAME'),':',getenv('SERVER_PORT'),
+	v6003^h,'opac/php/mail.php',
+	'?mail_to=',v2105,
+	'&file=',replace(v2098,'\','/'),   /* REVISAR BARRAS (windows vs unix) */
+	/#
+</pft></display>
+

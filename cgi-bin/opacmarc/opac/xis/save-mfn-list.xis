@@ -1,0 +1,42 @@
+<!-- =========================================================
+	saveMfnList
+	
+	ATENCION: ¿es esto más eficiente que volver a
+	realizar la búsqueda? ¿En qué casos?
+	
+	(c) Fernando J. Gómez, INMABB, 2003
+	========================================================= -->
+
+
+<function name="saveMfnList" action="replace" tag="1">
+
+	<!-- Generamos la lista ordenada de MFNs -->
+	<do task="list">
+		<define>1111 Isis_Item</define>
+		<parm name="sort"><pft>v1111^k</pft></parm>
+		<loop>
+			<field action="import" tag="list">6111</field>
+			<field action="add" tag="6111"><pft>'^m',v1111^m,"^h"v1111^h</pft></field>
+			<field action="export" tag="list">6111</field>
+		</loop>
+	</do>
+	
+	<!-- Almacenamos la lista en un archivo temporal -->
+	<file action="create" type="tempfile">2098</file>
+	<!--display><pft>'Archivo temporal con los datos de la búsqueda: ',v2098,'<br>CI_TEMPDIR=',v6003^t</pft></display-->
+	<file action="append" type="output"><pft>v2098</pft></file>
+	<display><pft>v1/,(v6111/)</pft></display>
+	<file action="close" type="output"><pft>v2098</pft></file>
+	
+	<!-- Devolvemos el nombre del archivo temporal (sin el path) -->
+	<!-- ATENCION: en Linux el sistema de nombres es diferente -->
+	<return action="replace" tag="2099"><pft>
+		mid(v2098,instr(v2098,'TMP'),size(v2098))
+	</pft></return>
+	
+	<!-- Alternativa basada en un identificador de consulta creado "a mano" -->
+	<!--file action="create" type="output"><pft>'opac/tmp/',v2099</pft></file>
+	<display><pft>/*getenv('QUERY_STRING'),/,*/(v6111/)</pft></display>
+	<file action="close" type="output"><pft>v2099</pft></file-->
+
+</function>

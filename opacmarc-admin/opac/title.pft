@@ -1,0 +1,129 @@
+/* ======================================================================
+ *  title.pft - Extracción de títulos de la base bibliográfica.
+ *
+ *  TO-DO: agregar campos faltantes (505,711,76x-78x)
+ *  246: chequear indicador?
+ *
+ *  (c) 2003-2006  Fernando J. Gomez - CONICET - INMABB
+ * ======================================================================
+ */
+
+
+/* ------------------------------------------------------------------------------
+ *  EXPLICACION:
+ *
+ *  El input, v1, tiene la forma de este ejemplo:
+ *
+ *     !v245!14^aThe title :^bremainder of title /^cstatement of responsibility.
+ *
+ *  Luego del proc() del paso 1, tenemos un campo 1000 repetible, con este aspecto:
+ *
+ *     1000 "aThe title :"
+ *     1000 "bremainder of title /"
+ *     1000 "cstatement of responsibility."
+ *     1000 "##"
+ *
+ *  Y este es el aspecto de la salida que este PFT finalmente genera:
+ *
+ *     !ID 0
+ *     !v001!~aThe title :~bremainder of title
+ *     !v002!245
+ *     !v013!4
+ *     !v015!m
+ *
+ *  donde 
+ *
+ *     v001: el contenido del campo original, pero sin indicadores, tomando sólo algunos
+ *           subcampos seleccionados, y reemplazando '^' por '~'
+ *     v002: tag del campo original
+ *     v013: nro. de caracteres que se ignoran al ordenar
+ *     v015: nivel bibliográfico (m,s) (por ahora es un deseo; ¿cómo obtenemos el nivel bibliográfico del registro?)
+ *
+ * ------------------------------------------------------------------------------
+ */
+
+/* Normalizamos los 440 y 830 */
+if '440~830' : v1*2.3 and val(v1*7.1) > 0 then
+	proc('d1a1|',
+		/* usamos el indicador de ordenación; debe aplicarse también en biblio.fst */
+		v1.10, mid(s(mpu,v1*10,mpl),val(v1*7.1)+1,1), mid(v1*10,val(v1*7.1)+2,size(v1)),
+	'|'),
+fi,
+
+/* Eliminamos la coma que precede al ISBN en las series, y el punto y coma que precede al volumen */
+if '440~830' : v1*2.3 then
+	proc('d1a1|',
+		replace(replace(v1,
+			',^x','^x'),
+			' ;^v','^v'),
+	'|'),
+fi,
+
+
+
+/#,
+'!ID 0'/,
+'!v001!',
+
+
+/* ---------------------------------------------
+ * PASO 1: Dividimos el campo (v1) en subcampos
+ * ---------------------------------------------
+ */
+ 
+proc(
+		'd1000',
+		(,
+			'a1000¦', replace(v1*9,'^','¦a1000¦'), '¦a1000¦##¦',
+		),
+	),
+
+
+
+/* -----------------------------------------------
+ * PASO 2: Filtramos subcampos (loop sobre v1000)
+ * -----------------------------------------------
+ */
+
+(,
+	if v1000 = '##' then
+		/,                          /* marca el fin del v001 */
+		'!v002!',v1[1]*2.3,/,       /* v002: tag del campo */
+		
+		if '245~240' : v1[1]*2.3 then
+			'!v013!',v1[1]*7.1,/,    /* v013: 2do indicador del 245 o del 240 */
+			
+		else if v1[1]*2.3 = '740' then
+			'!v013!',v1[1]*6.1,/,    /* v013: 1er indicador del 740 */
+		fi,fi,
+		
+	else if v1000.1 = '9' then      /* un subcampo $9 en un título controlado es un identificador (para control de autoridades) */
+		/,'!v009!',v1000*1,          /* v009: identificador */
+		
+	else
+			select v1[1]*2.3
+				/* TO-DO: revisar los subcampos seleccionados */
+				/* títulos y variantes de título */
+				case '245' : if 'abnp'         : v1000.1 then '~',replace(v1000,' /',''), fi,
+				case '246' : if 'abgnp'        : v1000.1 then '~'v1000, fi,
+				case '740' : if 'anp'          : v1000.1 then '~'v1000, fi,
+				case '765' : if 't'            : v1000.1 then '~'v1000, fi,
+				case '773' : if 't'            : v1000.1 then '~'v1000, fi,
+				
+				/* títulos uniformes */
+				case '130' : if 'a'            : v1000.1 then '~'v1000, fi,
+				case '240' : if 'a'            : v1000.1 then '~'v1000, fi,
+				case '730' : if 'adfgkmnoprst' : v1000.1 then '~'v1000, fi,
+				case '700' : if 'tnp'          : v1000.1 then '~'v1000, fi,
+				
+				/* títulos de series */
+				case '440' : if 'anp'          : v1000.1 then '~',v1000, fi,
+				case '830' : if 'anp'          : v1000.1 then '~',v1000, fi,
+			endsel,
+	fi,fi,
+),
+
+/*if '440~830' : v1001*2.3 and not '.)' : right(v1001,1) then 
+	proc('d1001a1001|',v1001,'.|'),  /* añadimos punto final */
+/*fi,*/
+

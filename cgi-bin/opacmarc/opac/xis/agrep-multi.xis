@@ -1,0 +1,97 @@
+<!-- AGREP para expresiones formadas por dos palabras T1 y T2 -->
+
+<!-- TO-DO:
+			* mejorar el código
+			* marcar los términos modificados para que puedan ser presentados en bold
+			* considerar el caso en que agrep no devuelve nada?
+			* evitar el uso de agrep con palabras cortas
+			* si se encuentra un único matching, ¿en qué casos hacemos la búsqueda directamente?
+-->
+
+	<!-- la base donde haremos las búsquedas -->
+	<field action="replace" tag="31"><pft>if 'TITLE~ANY' : v2002 then 'BIBLIO' else v2002 fi</pft></field>
+
+	<do task="search">
+		<parm name="db"><pft>v31</pft></parm>
+		<parm name="count">1</parm>
+		<define>1002 Isis_Total</define>
+		
+		<parm name="expression"><pft>v4001[1]</pft></parm>
+		<loop><!-- hits para T1 --></loop>
+		<field action="replace" tag="11"><pft>v1002</pft></field>
+		
+		<parm name="expression"><pft>v4001[2]</pft></parm>
+		<loop><!-- hits para T2 --></loop>
+		<field action="replace" tag="12"><pft>v1002</pft></field>
+	</do>
+				
+	<!-- sugerencias de agrep para T1 -->
+	<proc>d5555</proc>
+	<call name="agrep"><pft>v4001[1]</pft></call>
+	<field action="replace" tag="1" split="occ"><pft>(v5555/)</pft></field>
+	<!--display><pft>'<br>agrep-multi.xis | Opciones para T1: ',v1+| ~ |</pft></display-->
+	
+	<!-- sugerencias de agrep para T2 -->
+	<proc>d5555</proc>
+	<call name="agrep"><pft>v4001[2]</pft></call>
+	<!--display><pft>'<br>agrep-multi.xis | v5555: ',v5555+| ~ |</pft></display-->
+	<field action="replace" tag="2" split="occ"><pft>(v5555/)</pft></field>
+	<!--display><pft>'<br>agrep-multi.xis | Opciones para T2: ',v2+| ~ |</pft></display-->
+
+	
+	<!-- ATENCION: si alguno de los términos T1 o T2 tienen hits, quedan automáticamente incluidos 
+	     dentro del conjunto de sugerencias generadas por agrep -->
+
+	<!-- Si no conseguimos alternativas para alguno de los dos términos, nos vamos -->
+	<!-- ATENCION: en v5555 quedan posiblemente cargadas las sugerencias que hubo para uno de los términos -->
+	<flow action="jump"><pft>if nocc(v1) = 0 or nocc(v2) = 0 then 'END_AGREP_FOR_TWO' fi</pft></flow>
+	
+	<!-- loop sobre todas las parejas de términos -->
+	<!-- v1: sugerencias para T1, v2: sugerencias para T2 -->
+	<do>
+		<parm name="count"><pft>f(nocc(v1),1,0)</pft></parm>
+		<define>11 Isis_Current</define>
+		<loop>
+			<field action="import" tag="list">1,2,31,2002,4002</field>
+			<do>
+				<parm name="count"><pft>f(nocc(v2),1,0)</pft></parm>
+				<define>12 Isis_Current</define>
+				<loop>
+  								<field action="import" tag="list">1,2,11,31,2002,4002</field>
+  								<field action="replace" tag="30"><pft>
+									( if iocc = val(v11[1]) then v1, break, fi )
+									if v2002 = 'TITLE' then '/(9204)' fi,
+									' AND '
+									( if iocc = val(v12[1]) then v2, break, fi )
+									if v2002 = 'TITLE' then '/(9204)' fi,
+  								</pft></field>
+  								<!--display><pft>'<br>agrep-multi.xis | Base: ',v31, ', query: #'v30,'#'</pft></display-->
+  								<do task="search">
+  									<parm name="db"><pft>v31</pft></parm>
+  									<parm name="expression"><pft>v30</pft></parm>
+  									<parm name="count">1</parm>
+  									<define>1002 Isis_Total</define>
+  									<loop></loop>
+  								</do>
+								<!--display><pft>' (',v1002,')'</pft></display-->
+  								<field action="add" tag="4002"><pft>
+  									if val(v1002) > 0 then replace(v30,'/(9204)',''),'^n',v1002, fi,
+  								</pft></field>
+  								<field action="export" tag="list">4002</field>
+  								<!--flow action="exit">now</flow-->
+				</loop>
+			</do>
+			<field action="export" tag="list">4002</field>
+		</loop>
+	</do>
+	
+	<proc>d5555</proc>
+	<field action="replace" tag="5555" split="occ"><pft>
+		if p(v4002) then
+			(,
+				replace(s(mpu,v4002^*),' AND ',' '), '^n',v4002^n, /
+			),
+		fi,
+	</pft></field>
+	
+	<label>END_AGREP_FOR_TWO</label>

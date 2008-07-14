@@ -1,0 +1,240 @@
+/* ====================================================================
+ * Formato para la visualización del esquema de clasificación MSC 2000.
+ *
+ * (c) 2002-2006  Fernando J. Gómez - CONICET - INMABB
+ *
+ * 
+ * TO-DO:
+ *			Mostrar el número de registros asociados a cada código
+ *
+ * 		Mostrar más claramente cómo funciona la expansión/contracción
+ *			de secciones.
+ *
+ *			¿Es necesario construir v9001 y v9002 por anticipado?
+ * ====================================================================
+ */
+ 
+
+/* Primero creamos un par de campos auxiliares, 9001 y 9002 */
+
+proc(
+		/* Cómo se visualizará el código (omitiendo las '-XX' y 'xx' finales) */
+		'd9001a9001~',
+			'<b>',
+			if v1 : '-XX' then       /* 47-XX -> 47 */
+				v1.2,
+			else if v1 : 'xx' then   /* 47Axx -> 47A */
+				v1.3,
+			else
+				v1,                   /* 47A05 -> 47A05 */
+			fi,fi,
+			'</b>',
+		'~',
+		
+		/* Cómo se presentará la descripción del código */
+		/* v902 es la versión resaltada (<span class="hl">) del campo 2 */
+		'd9002a9002~',
+			if v1 : 'XX' then
+				if not v2101 = 'CLASS-BROWSE' or not v2109 = '3' or not size(v2001) = 2 then
+					'<a style="font-weight: bold;" title="Ver las subsecciones de ',v1.2,'" ',
+						'href="',v6001^u,
+						'?IsisScript=',v2000,
+						'&amp;db=bibima',
+						'&amp;task=CLASS-BROWSE',
+						'&amp;searchType=SUBJ',
+						if v2109 <> '2' then  /* desde los niveles 1 y 3, pasamos al 2 */
+							'&amp;query=',v1.2,
+							'&amp;msclevel=3',  /* 2 -> 3 (05/abril) */
+						else                  /* desde el nivel 2, pasamos al 3 */
+							'&amp;query=',v1.2,
+							'&amp;msclevel=3',
+						fi,
+					'">',
+						v902,
+					'</a>',
+				else
+					'<b>',v902,'</b>',
+				fi,
+				
+			else if v1 : 'xx' and v2109 <> '3' then
+				'<a style="font-weight: bold;" title="Ver todos los temas de la sección ',v1,'" ',
+					'href="',v6001^u,
+					'?IsisScript=',v2000,
+					'&amp;task=CLASS-BROWSE',
+					'&amp;query=',v1.3,
+					'&amp;msclevel=3',
+					'&amp;db=bibima',
+					'&amp;searchType=SUBJ',
+				'">',
+					v902,
+				'</a>'
+				
+			else if v1 : 'xx' or p(v9) then
+				'<b>',v902,'</b>',
+				
+			else
+				v902,
+				
+			fi,fi,fi,
+		'~',
+	),
+
+
+/* Y ahora pasamos a construir la fila de la tabla */ 
+
+if v1 : 'XX' then
+
+	/* ---------------------------------------------- */
+	/*         Presentamos un nodo de nivel 1         */
+	/* ---------------------------------------------- */
+
+	if '2|3' : v2109 then
+		/* Fila para separar secciones */
+		'<tr>'
+			'<td colspan="4">',
+				'<span style="font-size:',if p(v984) then '.5em' else '1em', fi, '; line-height: 10px;">&nbsp;</span>',
+			'</td>'
+		'</tr>'/
+	fi,
+	
+	/* Fila para código + descripción */
+	'<tr class="msclevel1" ',if '2|3' : v2109 then 'style="background: #DDD;"' fi,'>'/,
+		/*'<td width="20" -style="width:1.5em;" class=', if v2109 <> '1' then '"borde-msc-XX"' else '"borde-msc"' fi, '>',
+			if v1^p > '' then
+				'<input type="checkbox" name="query" value="MSC:',v1^*,'" class="msc-checkbox">',
+			else
+				'&nbsp;',
+			fi,
+		'</td>'*/
+		
+		/* Columna 1: el código */
+		'<td class="', if v2109 <> '1' then 'borde-msc-XX' else 'borde-msc' fi, '" style="text-align: right; padding-left: 0.5em;">',
+			v9001,
+		'</td>'/,
+		
+		/* Columna 2: la descripción del código */
+		'<td colspan="3" class="', if v2109 <> '1' then 'borde-msc-XX' else 'borde-msc' fi, '">',
+			if v2109 <> '1' then
+				/*'<table style="font-size: 100%;" cellspacing="0">',
+					'<tr>',
+						'<td>'*/,v9002,/*'</td>',
+						'<!--td align="right" style="font-size: smaller;">',if v2109 = '2' or a(v2109) then 'expandir' else 'colapsar' fi,'</td-->',
+					'</tr>',
+				'</table>'*/
+			else
+				v9002,
+			fi,
+			if v2109 = '2' then
+				'&nbsp;&nbsp;&nbsp;<a style="font-size: 90%; font-style: italic;" href="">expandir</a>'
+			fi,
+		'</td>'/,
+	'</tr>'/,
+
+else if v1 : 'xx' or v1*2.1 = '-' or p(v9) /* or '15A~41A~43A~44A~85A~86A' : v1.3*/ then
+
+	/* ----------------------------------------------- */
+	/*         Presentamos un nodo de nivel 2          */
+	/* (incluye nodos de nivel 3 sin padre en nivel 2) */
+	/* ----------------------------------------------- */
+	
+	/* TO-DO: mostrar borde cuando se están presentando nodos de nivel 3 */
+	
+	if v2109 = '3' and not v1 : '-' then
+		/* Fila para separar */
+		'<tr>'
+			'<td colspan="4">',
+				'<span style="font-size: 1px; line-height: 1px;">&nbsp;</span>',
+			'</td>'
+		'</tr>'/
+	fi,
+
+	'<tr class="msclevel2">'/,
+		/* Columna 1: checkbox, o blanco */
+		'<td>'/,
+			if v1^p > '' then
+				/*'<input type="checkbox" name="query" id="MSC',v1^*,'" value="MSC:',v1^*,'" title="',v1^p,' resultados" class="msc-checkbox">',*/
+			else
+				'&nbsp;',
+			fi,
+		'</td>'/,
+		
+		'<!--td width="22" -style="width: 1.5em;" class="borde-msc">&nbsp;</td-->'/,
+			
+		/* Columna 2: el código */
+		'<td ',if v2109 = '3' and not v1 : '-' then 'class="borde-msc-xx"' fi, ' style="white-space: nowrap; text-align: right;">',
+			if v1^p > '' then
+				'<label for="MSC',v1,'">',
+					'<a -href="aa1">',v9001,'</a>',
+				'</label>',
+			else if val(v7) > 0 then
+				'<a class="mscActiveCode" href="',v6001^u,'?IsisScript=',v2000,'&amp;db=',v2104,'&amp;index=SUBJ&amp;query=',if v1 : 'xx' then v1.3, else v1, fi,,'" title="Buscar registros con el código ',v1,' (total: ',v7,')">',
+						v9001,
+				'</a>',
+			else
+				v9001,
+			fi,fi,
+		'</td>'/,
+		
+		/* Columna 3: la descripción del código */
+		'<td colspan="2" ',if v2109 = '3' and not v1 : '-' then 'class="borde-msc-xx"' fi, '>',
+			v9002,
+			if p(v3) then
+				x1,'<span class="msc-cross-ref">',v3+| |,'</span>',
+			fi,
+		'</td>'/,
+	'</tr>'/,
+		
+	if p(v9) then
+		/* Fila para separar */
+		'<tr>'
+			'<td colspan="4">',
+				'<span style="font-size: 1px; line-height: 3px;">&nbsp;</span>',
+			'</td>'
+		'</tr>'/
+	fi,
+	
+else
+	
+	/* ---------------------------------------------- */
+	/*         Presentamos un nodo de nivel 3         */
+	/* ---------------------------------------------- */
+	
+	'<tr class="borde-msc msclevel3">'/
+		'<!--td width="32" -style="width: 1.5em;" class="borde-msc">&nbsp;</td-->'/
+		
+		/* Columna 1: checkbox, o blanco */
+		'<td class="borde-msc">'/,
+			if v1^p > '' then
+				/*'<input type="checkbox" name="query" id="MSC',v1^*,'" class="msc-checkbox" value="MSC:',v1^*,'" title="',v1^p,' resultados">',*/
+			else
+				' &nbsp; ',
+			fi,
+		'</td>'/
+		
+		/* Columna 2: blanco */
+		'<td class="borde-msc">&nbsp;</td>'/
+		
+		/* Columna 3: el código */
+		'<td class="borde-msc" style="text-align: right;">',
+			if val(v7) > 0 then
+				/* '<input class="btnMSCcode" name="query" type="submit" value="',v1,'">', */
+				'<a class="mscActiveCode" href="',v6001^u,'?IsisScript=',v2000,'&amp;db=',v2104,'&amp;task=BIB-CLASS-SEARCH&amp;index=SUBJ&amp;query=',v1,'" title="Buscar registros con el código ',v1,' (total: ',v7,')">',v1,'</a>'
+			else if v1^p > '' then
+				'<label for="MSC',v1,'">',v9001,'</label>',
+			else
+				v9001,
+			fi,fi,
+		'</td>'/
+		
+		/* Columna 4: la descripción del código */
+		'<td class="borde-msc">',
+			v9002,
+			if p(v3) then
+				x1,'<span class="msc-cross-ref">',v3+| |, '</span>',
+			fi,
+		'</td>',
+	'</tr>'/,
+	
+fi,fi,
+
+proc('d9001d9002'),

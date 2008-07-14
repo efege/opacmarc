@@ -1,0 +1,79 @@
+/* =======================================================================
+ * Extraccion de encabezamientos tematicos de la base bibliografica
+ *
+ * Ver selsubj.pft
+ *
+ * ATENCION: filtramos el subcampo 9?
+ *
+ * (c) Fernando J. Gomez, INMABB, 2003
+ * =======================================================================
+ */
+
+/* --------------------------------------------------------------------
+ * EXPLICACION:
+ *
+ * v1 tiene la forma:
+ *
+ *    !v6xx!04^aSubject heading^zSubdivision1^zSubdivision2.^9heading_number
+ *
+ * Luego del proc() en el paso 1, este es el aspecto del campo 1000:
+ *
+ *     1000 "aSubject heading"
+ *     1000 "zSubdivision1"
+ *     1000 "zSubdivision2."
+ *     1000 "9heading_number"
+ *     1000 "##"
+ *
+ *   Y este es el aspecto de la salida que este PFT genera:
+ *
+ *     !ID 0
+ *     !v001!~aSubject heading~zSubdivision1~zSubdivision2.
+ *     !v002!6xx
+ *     !v009!heading_number
+ * --------------------------------------------------------------------
+ */
+
+
+/#,'!ID 0'/,
+'!v001!',
+
+
+/* ---------------------------------------------------------
+ * PASO 1: Dividimos el encabezamiento en subcampos
+ * ---------------------------------------------------------
+ */
+ 
+proc(
+		'd1000',
+		(,
+			'a1000¦',replace(v1*9,'^','¦a1000¦'),'¦a1000¦##¦',
+		),
+)
+
+
+
+/* ---------------------------------------------------------
+ * PASO 2: Filtramos subcampos (loop sobre v1000)
+ * ---------------------------------------------------------
+ */
+
+(,
+	if v1000 = '##' then
+		/,
+		'!v002!',
+		v1[1]*2.3,
+	else if v1000.1 = '9' then
+		/,
+		'!v009!',
+		v1000*1,
+	else
+		select v1[1]*2.3
+			case '611' :
+				/* el subcampo $e es "Relator term" excepto para el 611, donde significa "Subordinate unit" */
+				if not '234568' : v1000.1 then '~'v1000, fi,
+			elsecase
+				if not 'e234568' : v1000.1 then '~'v1000, fi,
+		endsel,
+	fi,fi,
+),
+

@@ -1,0 +1,105 @@
+<!-- =========================================================
+     show-suggestions.xis
+		
+		Sugerencias asociadas a la búsqueda actual (por tema):
+		"Vea todos los temas que incluyan el término ..."
+		"Vea otros temas que incluyan los término ..."
+		"Vea términos del índice cercanos al buscado"
+		"Vea también obras acerca de ..."
+		
+		TO-DO: para búsqueda por tema 600, 610, 611, ofrecer
+		       una búsqueda por autor.
+		
+		(c) Fernando J. Gómez, INMABB, 2003-2006
+     ========================================================= -->
+
+<display><pft>
+
+	if v2003 = '_SUBJ' then   /* SUSPENDIDO. Volver a 'SUBJ' para habilitarlo (no es recomendable en el estado actual) */
+		'<div align="right" style="margin: 0 0 0.5em 0em;">'/
+			'<table width="100%" cellpadding="2" cellspacing="2" border="0" style="background-color: #f0f0f0; line-height: 1.2em;" -class="smaller">'/
+			
+			/* Fila para colocar las sugerencias generadas on-the-fly */
+			'<tr><td id="concom1" valign="top" align="right" -width="9" style="padding-left: 2em;"></td>'/
+			'<td id="concom2"><!-- Aquí irán, si los hay, algunos headings sugeridos --></td></tr>'/
+			
+			'<tr>'/
+			'<td valign="top" align="right" -width="9" style="padding-left: 2em;"><!--&nbsp;<b>»</b--><img src="/opac/img/right.gif" alt="" border="0"></td>'/
+			'<td>'/
+			/* ATENCION: el split del heading se debe hacer sólo en base a ^x,^y,^z,^v, y no en base a ^d, etc. */
+			proc('a1901|',replace(v3003,'--','|a1901|'),'|'),
+			
+			/* Cuando hay paréntesis, aislamos el término previo */
+			/* ATENCION: Pero no cuando el término es geográfico!! */
+			/* (quizás en ese caso se podría aislar el término entre paréntesis) */
+			(,
+				if v1901:'(' AND v1901:')' then
+					proc('a1901~',mid(v1901,1,instr(v1901,'(')-1),'~'),
+				fi, 
+			),
+			
+			if nocc(v1901) = 1 then
+				'Vea todos los ',
+				
+				/* Codificamos el query en v7001 */
+				proc('d7000a7000|',v1901,'|'),
+				,@URLENCODE.PFT,
+				proc('d7001a7001|',v7000[1],'|'),
+				
+				/* Construimos el link */
+				'<a href="',v6001^u[1],'?IsisScript=',v2000[1],'&amp;db=',v2104[1],'&amp;searchType=SUBJ',
+				'&amp;query=',v7001,'">temas que incluyan el término <strong>',v1901,'</strong></a>',
+				
+			else,
+				'Vea otros temas que incluyan los términos ',
+				(,
+					/* Codificamos el query en v7001 */
+					proc('d7000a7000|',v1901,'|'),
+					,@URLENCODE.PFT,
+					proc('d7001a7001|',v7000[1],'|'),
+					
+					/* Construimos el link */
+					'<a href="',v6001^u[1],'?IsisScript=',v2000[1],'&amp;db=',v2104[1],'&amp;searchType=SUBJ',
+					'&amp;query=',v7001[1],'" title="Temas que incluyan &#39;',v1901,'&#39;"><strong>',v1901,'</strong></a>',
+					if iocc < nocc(v1901) then ' ; ', fi,
+				),
+			fi,
+			'</td></tr>'/
+			
+			'<tr>'/
+			'<td valign="top" align="right" -width="9" style="padding-left: 2em;"><!--&nbsp;<b>»</b--><img src="/opac/img/right.gif" alt="" border="0"></td>'/
+			
+			/* Codificamos el browseTerm en v7001 */
+			proc('d7000a7000|',v2001,'|'),
+			,@URLENCODE.PFT,
+			proc('d7001a7001|',v7000[1],'|'),
+			
+			/* Construimos el link */
+			'<td>Vea <a href="',v6001^u[1],'?IsisScript=',v2000[1],'&amp;db=',v2104[1],'&amp;index=SUBJ',
+			'&amp;browseTerm=',replace(v7001*2,'^','~'),'&amp;nearby=1">',
+			'términos del índice cercanos al buscado',
+			'<!--strong>',v3004,'</strong--></a>.'/
+			'</td>'/
+			'<td align="right" valign="top" -class="smaller" style="color: #999;"><!--(Sugerencias)--></td>'/
+			'</tr>',/
+			'</table>'/
+		'</div>'/
+		
+	else if val(v1003) > 0 then  /* sabemos (de heading-match-in-bib-record.xis) que hay works about */
+		
+		'<div class="headerSuggestion">'/
+			'Sugerencia: hay también ',
+			/* Codificamos el query en v7001 */
+			proc('d7000a7000|',v2001,'|'),
+			,@URLENCODE.PFT,
+			proc('d7001a7001|',v7000[1],'|'),
+			
+			/* Construimos el link */
+			'<a href="',
+				v6001^u[1],'?IsisScript=',v2000[1],'&amp;db=',v2104[1],'&amp;index=SUBJ&amp;wa=1&amp;query=',v7001,		
+				,'">obras acerca de <strong>',v3004,'</strong></a> (',v1003,'&nbsp;resultado', if val(v1003)>1 then 's', fi,')',
+		'</div>'/
+		
+	fi,fi,
+
+</pft></display>

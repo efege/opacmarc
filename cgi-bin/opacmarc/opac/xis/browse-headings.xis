@@ -1,0 +1,291 @@
+<!-- ========================================================
+	H-BROWSE
+
+	Browse en las bases de encabezamientos (nombres, títulos, temas)
+
+	Se llega aquí desde un "saltar a" (usando un término),
+	o desde un "siguientes" o "anteriores" (usando un MFN),
+	o desde un "ver términos cercanos" (usando un término)
+	
+	2007 : browseTerm (término inicial)
+	2009 : browseMfn (mfn inicial)
+	=================================================== -->
+
+<!-- ======== Cuántos términos hay en este índice ======== -->
+<!-- Necesario para saber cuándo deshabilitar el botón "Siguientes" -->
+<!-- ATENCION: viene con un punto; ej: 38.141 -->
+<field action="replace" tag="6018" split="occ"><pft>,cat('BASES.PAR'),</pft></field>
+<field action="replace" tag="6018"><pft>
+	(,
+		if v6018 : s(v2003[1],'_TOTAL=') then
+			'^t',mid(v6018,instr(v6018,'=')+1,size(v6018)),
+		fi,
+	),
+</pft></field>
+<!--display><pft>v6018</pft></display-->
+
+
+<!-- ATENCION: aun queda un WXIS|execution error|missing|expression| -->
+<!-- Por defecto, se muestra el índice desde el primer término -->
+<field action="replace" tag="2009"><pft>
+	if a(v2007) and a(v2009) then '1' fi
+</pft></field>
+
+<flow action="jump"><pft>
+	/* v2009: browseMfn. Si ya conocemos el MFN inicial, pasamos al display del índice */
+	if p(v2009) then 'DISPLAY_HEADER' fi,
+</pft></flow>
+
+
+<!-- Cuando hay un salto a una posición en un índice, tenemos
+	que averiguar el MFN a partir del cual mostrar headings.
+	Hacemos un keyrange a partir del término ingresado,
+	tomamos la primera clave mayor o igual a dicho término, y buscamos
+	su	primer posting.
+	
+	Pero ATENCION: en el caso de headings largos,
+	el posting en cuestión puede apuntar a un heading "prematuro"; 
+	ejemplo: "Authors, Spanish—20th century—Correspondence.".
+	Por lo tanto, hay que hacer un loop visitando los headings
+	sucesivos hasta localizar el correcto. (DONE)
+	
+	También necesitamos saber si se produce un (left-)matching entre la 
+	1ra clave encontrada y el término ingresado por el usuario; si no
+	se da un matching, se muestra un entorno de dicha clave, y un cartel
+	de advertencia (justo antes del heading asociado a la 1ra clave).
+	(DONE)
+	
+	Pero además, cuando se hace un browse a partir de un link 
+	"ver términos cercanos", necesariamente se requiere mostrar un 
+	entorno, y resaltar el término central. Esto parece requerir la 
+	presencia de un parámetro adicional (nearby?). (DONE)
+	
+	ATENCION: hay que preservar en variables separadas los valores
+	del MFN inicial del mfnrange, y el posible MFN "especial" ubicado 
+	a mitad del display. El primero es necesario para configurar los 
+	botones "anteriores" y "siguientes". (DONE)
+	
+	ATENCION: como si no tuviésemos ya bastante... otro problema: para
+	que las claves estén bien ordenadas en el diccionario de las bases
+	de headings, necesitamos eliminar los delimitadores de subcampo.
+	Por lo tanto, para dar con la clave correcta en el keyrange, el
+	término ingresado (v2007) también debe estar limpio de delimitadores.
+	No obstante, si luego tenemos que compararlo con términos del índice
+	(que sí poseen los delimitadores), veremos que también necesitamos 
+	una versión con delimitadores del v2007. Solución: usamos v2007 y 
+	v3007 (atención a la sutil diferencia!).
+
+-->
+
+<!-- Eliminamos posibles espacios iniciales -->
+<!-- TO-DO: crear una función para esto -->
+<do>
+	<loop>
+		<field action="import" tag="list">2007</field>
+		<field action="replace" tag="2007"><pft>
+			if v2007.1 = ' ' then v2007*1, fi
+		</pft></field>
+		<field action="export" tag="list">2007</field>
+		<flow action="skip"><pft>if v2007.1 <> ' ' then 'Quit' fi</pft></flow>
+	</loop>
+</do>
+
+<!-- Eliminamos el '\' que acompaña a las comillas simples -->
+<field action="replace" tag="2007"><pft>
+	replace(v2007,'\','')
+</pft></field>
+
+<!-- v3007: una copia de v2007, pero sin delimitadores ni otra puntuación
+	(usada para comparar contra las claves del diccionario -->
+<!-- ATENCION: Para saber si esto está bien, hay que chequearlo 
+	contra las FST de las bases de headings. ¿Qué pasa con '~d'? -->
+<!--display><pft>'<b>v2007:'v2007'</b>'</pft></display-->
+
+<!-- v111 es un flag para que headsort.pft no use ASCII < 32 -->
+<field action="replace" tag="3007"><pft>
+	,proc('d1a1¦~a',v2007,'¦a111¦*¦'),
+	,@HEADSORT.PFT,
+	,proc('d1d111'),
+</pft></field>
+
+<!--display><pft>ALL</pft></display-->
+
+
+<!-- Tomamos del diccionario la clave necesaria -->
+<do task="keyrange">
+	<parm name="db"><pft>v2003</pft></parm>
+	<!-- ATENCION: Truncamos en 30 char para evitar pasarnos de largo en el diccionario? -->
+	<field action="replace" tag="3008"><pft>
+		'~',
+		if ',. ' : right(v3007,1) then
+			/* puntos, comas al final: MOLESTAN. Idem el espacio, o lo que sea que agrega HEADSORT.PFT al final */
+			mid(v3007,1,size(v3007)-1),
+		else
+			v3007,
+		fi
+	</pft></field>
+	<parm name="from"><pft>v3008</pft></parm>
+	<parm name="count">1</parm>
+	<define>1 Isis_Key</define>
+	<loop>
+		<!--display><pft>'---'v1</pft></display-->
+		<field action="import" tag="list">2003</field>
+		<!-- v3009: el MFN del primer posting de la primera clave encontrada -->
+		<field action="replace" tag="3009"><pft>f(l([v2003]v1),1,0)</pft></field>
+		<field action="export" tag="list">1,3009</field>
+	</loop>
+</do>
+
+<flow action="jump"><pft>if size(v3007) < 28 then 'TEST_LEFT_MATCHING' fi</pft></flow>
+
+<!-- Para los términos largos, debemos asegurarnos de acertarle al heading correcto -->
+<!-- IMPORTANTE: la *comparación* se hace con v2007, el término original -->
+<do task="mfnrange">
+	<parm name="db"><pft>v2003</pft></parm>
+	<parm name="from"><pft>v3009</pft></parm>
+	<loop>
+		<field action="import" tag="list">2007</field>
+		<flow action="skip"><pft>if v1*2 <> v2007 then 'Next' fi</pft></flow>
+		<field action="replace" tag="3009"><pft>mfn</pft></field>
+		<field action="export" tag="list">3009</field>
+		<flow action="skip">Quit</flow>
+	</loop>
+</do>
+
+
+<!-- =============================== -->
+<label>TEST_LEFT_MATCHING</label>
+<!-- =============================== -->
+<!-- Veamos si hubo un left-matching entre clave y término ingresado.
+     Nos interesa detectar el no-matching, porque sólo en tal caso se genera el cartel
+     de advertencia.
+     El x1 es necesario porque el truncado de v3007 puede dejar un espacio al final.
+     ATENCION: nada de esto es necesario cuando se llega desde un link, ¿correcto?
+     ATENCION: acá se repite un "if then fi" del keyrange; ¿es necesario?
+-->
+<field action="replace" tag="1235"><pft>
+	proc('a1233¦',
+		if ',. ' : right(v3007.29,1) then
+			mid(s(mpu,v3007.29),1,size(v3007)-1),
+		else
+			mpu,v3007.29,
+		fi,
+	'¦')
+	if not s(v1,x1) : s('~',v1233) then
+		'NO_LEFT_MATCHING',
+	fi,
+</pft></field>
+
+<!--display><pft>
+	'<pre>#'v1'#<br>',
+	'#'v3007'#<br>',
+	'#'mid(s(mpu,v3007.29,mpl),1,size(v3007)-1)'#<br>',
+	'#',s('~',if ',. ':right(v3007.29,1) then mid(s(mpu,v3007.29),1,size(v3007)-1) else mpu,v3007.29 fi),'#',
+	'</pre>'
+</pft></display-->
+
+<!-- Definimos el MFN inicial para esta página, necesario para los links Anteriores, Siguientes -->
+<field action="replace" tag="2009"><pft>
+	if s(v1235,v2030) = '' then 
+		/* retrocedemos una posición, para que quede claro que no se esconde nada (aunque al usuario le parezca un error) */
+		/* TO-DO: esto debiera ser una opcion en el .conf */
+		f(val(v3009) - 0,1,0),
+	else
+		/* NO_LEFT_MATCHING o "nearby headings": retrocedemos algunas posiciones */
+		/*f(val(v3009) - (val(v2029) - 2)/2,1,0),*/  /* media pantalla parece mucho */
+		f(val(v3009) - 3,1,0),  /* 3 posiciones parece suficiente */
+	fi
+</pft></field>
+
+<!-- Pero al retroceder, no podemos ir más allá del MFN 1 -->
+<field action="replace" tag="2009"><pft>
+	f(rmax('1'/v2009),1,0)
+</pft></field>
+
+
+<!-- =============================== -->
+<label>DISPLAY_HEADER</label>
+<!-- =============================== -->
+<display><htmlpft><pft>
+	,cat('HEADING-BROWSE-TOP.HTM'),
+</pft></htmlpft></display>
+
+
+<display>
+	<div id="resultWrapper" class="browse-heads">  <!-- se cierra en el .xis -->
+</display>
+
+<!-- Navegación (anteriores, siguientes, saltar a) -->
+<display><htmlpft><pft>
+	proc('d1000a1000@bottom@'),
+	,cat('HEADING-BROWSE-NAV.HTM'),
+</pft></htmlpft></display>
+
+<display>
+	<table id="headingRecordList" cellspacing="0" border="1">
+	<!--form action="',v6001^u,'" method="get"-->
+	<!-- === Este formulario es un peligro (se abre en una tabla, se cierra en otra!) === -->
+</display>
+
+
+<!-- Recorremos los headings para mostrarlos -->
+
+<!-- ========================= -->
+<label>MFNRANGE</label>
+<!-- ========================= -->
+<do task="mfnrange">
+	<parm name="db"><pft>v2003</pft></parm>
+	<parm name="from"><pft>v2009</pft></parm>
+	<parm name="count"><pft>v2029</pft></parm>
+	<define>1001 Isis_Current</define>
+	
+	<loop>
+		<field action="import" tag="list">1235,2000,2003,2007,2009,2030,2101,2104,3009,6001</field>
+		
+		<!-- 1501: el heading tal como se mostrará en el listado -->
+		<field action="replace" tag="1501"><pft>
+			proc('a1880¦a', replace(v1,'~','¦a1880¦'), '¦'), /* split en subcampos */
+			/*v1880[1],*/
+			(,
+				if 'xyzv' : v1880.1 then
+					'&#8212;',v1880*1,    /* subdivisiones (en 6xx) van precedidas por raya */
+				else if 'cdqn' : v1880.1 then
+					x1,'<span class="headingQualifier">',v1880*1,'</span>' /* calificadores */
+				else if iocc = 1 then
+					v1880*1,
+				else
+					x1,v1880*1,
+				fi,fi,fi,
+			),
+		</pft></field>
+		
+		<!--proc>s</proc>
+		<display><pft>ALL</pft></display-->
+		<!--display><pft>'<ol><li>«'v1880+|»<li>«|,'»<li>1501:«',v1501,'»</ol>'</pft></display-->
+		
+		<!-- Fila especial: cambio de inicial, o posición donde debiera estar el término solicitado -->
+		<display><htmlpft><pft>
+			,cat('HEADING-BROWSE-MIDDLE.HTM'),
+		</pft></htmlpft></display>
+		
+		<!-- Fila con el heading -->
+		<display><pft>,@HEADINGS.PFT,</pft></display>
+		
+	</loop>
+	
+	<display>
+		</table>
+	</display>
+
+</do>
+
+
+<!-- ========= Navegación (anteriores, siguientes, saltar a) ========= -->
+<display><htmlpft><pft>
+	proc('d1000a1000@top@'),
+	,cat('HEADING-BROWSE-NAV.HTM'),
+</pft></htmlpft></display>
+
+<display>
+	</div>  <!-- resultWrapper -->
+</display>

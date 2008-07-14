@@ -1,0 +1,210 @@
+/* Migración de SeCS a MARC 21 */
+
+/* FG, mayo 2006 */
+
+	/* Eliminamos todos los campos */
+	'd*',
+
+	/* Leader */
+	'a905|n|',
+	'a906|a|',
+	'a907|s|',
+	'a908|#|',
+	'a909|#|',
+	'a917|#|',
+	'a918|#|',
+	'a919|#|',
+	
+	/* Nro. de control */
+	'a001|',v30,'|',
+	
+	/* Fecha última modificación */
+	'a005|',s(date).8, s(date)*9.6, '.0','|',
+	
+	/* El 008 */
+	'a008{',
+		/* 00-05 */                    '000000',
+		/* 06-14 */                    if v304 > '' then
+			                              'd',v301.4,v304.4,
+		                               else
+			                              'c',v301.4,'####',
+		                               fi,
+		/* 15-17 pais */               '|||' /* ref(['pais']l(['pais']v310),v2) */   /* tabla para mapear códigos de país */
+		/* 18 freq */ 					 	 select v380 /* TO-DO: añadir los códigos que faltan */
+													case 'A' : 'a', /* annual */
+													case 'B' : 'b', /* bimonthly (según MARC: Includes 6, 7, or 8 numbers a year.) */
+													case 'E' : 'e', /* biweekly */
+													case 'F' : 'f', /* semiannual */
+													case 'G' : 'g', /* biennial */
+													case 'K' : '#', /* No determinable frequency (Frequency is intentionally irregular.) */
+													case 'M' : 'm', /* monthly (según MARC: Includes 9, 10, 11, or 12 numbers a year.) */
+													case 'Q' : 'q', /* quarterly */
+													case 'S' : 's', /* semimonthly */
+													case 'T' : 't', /* three times a year */
+													case 'Z' : 'z', /* other */
+												 endsel,
+		/* 19 regularidad */           '|',
+		/* 20 indef. */                '#',
+		/* 21 tipo de R.C. */          'p',  /* p: periodical */
+		/* 22 forma del original */    '#',
+		/* 23 forma del ítem */        '#',
+		/* 24 Nature of entire work */ '#',
+		/* 25-27 Nature of contents */ '####',
+		/* 28 Publ. gubernamental */   '#',
+		/* 29 Publ. de conferencia */  '0',
+		/* 30-32 indef. */             '###',
+		/* 33 Alfabeto original */     v340,  /* pasar a minúscula */
+		/* 34 Entry convention */      '0',
+		/* 35-37 idioma */             '|||', /*ref(['idioma']l(['idioma']v350[1]),v2)*/  /* tabla para mapear idiomas */
+		/* 38-39 */                    '||',
+	'{',
+	
+	/* 022 - ISSN */
+	if p(v400) then
+		(
+			'a022|##^a',v400,'|',
+		)
+	fi,
+	
+	/* 210 - título abreviado */
+	if p(v150) then
+		'a210|0#^a',v150,'|',
+	fi,
+	
+	/*041 - otros idiomas */
+	
+	/* 110/710 - puntos de acceso */
+	
+	/* 245 - título */
+	'a245|0',
+		if '~The ~Les ~Las ~Los ~' : v100.4 then '4' else '0', fi,  /* TO-DO: L'Analyse */
+		'^a',v100,
+		" :^b"v110,
+		" =^b"v230,
+		".^n"v120,   /* nro. de sección/parte */
+		".^p"v130,   /* título de sección/parte */
+		" /^c"v140+|, |,  /* el v140 es correcto como mención de responsabilidad? */
+	'.|',
+	
+	/* 246 - variantes de título */
+	if p(v240) then
+		(
+			'a246|3#^a',v240,'|',   /* TO-DO: títulos paralelos (230) */
+		)
+	fi,
+	
+	/* 260 - publicación */
+	'a260|##',
+		'^a',v490,
+		' :^b', v480, if a(v480) then v140+|, |, fi,  /* TO-DO: hay casos donde el editor está implícito, e.g. Rendiconti del Circolo Matematico di Palermo */
+		',^c', v301, '-',v304, " "n304, '.',  /* TO-DO: usar sólo años (a veces hay meses, e.g. Bulletin of mathematical biophysics) */
+	'|',
+
+	/* 300 - descripción física */
+	/* mmm... creo que te lo debo */
+	
+	/* 310 - frecuencia actual */
+	/* ¿cuándo usamos "frecuencia varía"? */
+	/* TO-DO: ¿si no es ninguno de esos casos? */
+	'a310|##^a',
+			select v380
+				case 'A' : 'Anual',
+				case 'B' : 'Bimestral',
+				case 'E' : 'Quincenal',  /* ¿diferencia con S-bimensual? */
+				case 'F' : 'Semestral',
+				case 'G' : 'Bienal',
+				case 'K' : 'Irregular',
+				case 'M' : 'Mensual',
+				case 'Q' : 'Trimestral',
+				case 'S' : 'Bimensual',
+				case 'T' : 'Cuatrimestral',
+				case 'Z' : '', /* otras frecuencias */
+			endsel,
+			'.',
+	'|',
+	
+	/* 362 - fechas/designación secuencial */
+	'a362|0#^a',
+		"Vol. "v302,
+		if p(v302) and p(v303) then ', ' fi,
+		"no. "v303,
+		" ("v301")",
+		if p(v304) or p(v305) or p(v306) then
+			' - ',
+			"Vol. "v305,
+			if p(v305) and p(v306) then ', ' fi,
+			"no. "v306,
+			" ("v304").",
+		else
+			'- .',
+		fi,
+	'|',
+	
+	 /*
+				610   168      174
+				620    31       31
+				650     1        2
+				670     1        1
+				680     4        7
+				710   134      135
+				720    16       20
+				770     5        8
+				780     4        4
+				790     4        4
+	*/
+
+	/* 780 - título anterior */
+	if p(v610) then
+		'a780|00^t',replace(v610,'^i','^w'),'|', /* continuación */
+	fi
+	if p(v620) then
+		'a780|01^t',replace(v620,'^i','^w'),'|', /* continuación parcial */
+	fi
+	if p(v650) then
+		'a780|05^t',replace(v650,'^i','^w'),'|', /* absorbió */
+	fi
+	if p(v660) then
+		'a780|06^t',replace(v660,'^i','^w'),'|', /* absorbió en parte */
+	fi
+	if p(v670) then
+		'a780|07^t',replace(v670,'^i','^w'),'|', /* subdivisión de */
+	fi
+	if p(v680) then
+		'a780|04^t',replace(v680,'^i','^w'),'|', /* fusión de ... con ... */   /* TO-DO: generar un 580 */
+	fi
+	
+	/* 785 - título siguiente */
+	if p(v710) then
+		'a785|00^t',replace(v710,'^i','^w'),'|', /* continuado por */
+	fi
+	if p(v720) then
+		'a785|01^t',replace(v720,'^i','^w'),'|', /* continuado en parte */
+	fi
+	if p(v750) then
+		'a785|04^t',replace(v750,'^i','^w'),'|', /* absorbido por */
+	fi
+	if p(v760) then
+		'a785|05^t',replace(v760,'^i','^w'),'|', /* absorbido en parte por */
+	fi
+	if p(v770) then
+		'a785|06^t',replace(v770,'^i','^w'),'|', /* subdividido */    /* TO-DO: generar un 580 */
+	fi
+	if p(v780) then
+		'a785|17^t',replace(v780,'^i','^w'),'|', /* fusionado con */
+	fi
+	if p(v790) then
+		'a785|17^t',replace(v790,'^i','^w'),'|', /* para formar */
+	fi
+	if p(v780) and p(v790) then
+		'a580|##^aFusionado con ',v780,' para formar ',v790,'.|',
+	fi,
+	
+	/* 856 - URL */
+	if v900^w : 'http' then
+		'a856|4#^ySitio web^u',v900^w,'|',  /* TO-DO: revisar texto del link. ¿Puede haber más de una URL por registro de SeCS? */
+	fi,
+	
+	/* 866 - existencias */
+	if p(v98) then
+		'a866|#0^a',v98,'|',
+	fi,

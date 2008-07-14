@@ -1,0 +1,263 @@
+<!-- Generación de mensajes y sugerencias para búsquedas sin resultados:
+     * usar agrep para sugerir palabras cercanas ("did you mean...?")
+	  * repetir la misma búsqueda en otros índices
+-->
+
+<!-- Omitimos el agrep si se da alguna de estas situaciones:
+		a) la palabra es muy corta
+		b) se usó el operador de truncamiento
+		c) hay más de dos palabras
+	  TO-DO: las sugerencias muy cortas del agrep no deberían considerarse.
+	  TO-DO: ver qué hacer con las búsquedas avanzadas
+-->
+<proc><pft>'d4001a4001|',replace(replace(v3001,' OR ',''),' ','|a4001|'),'|'</pft></proc> <!-- usamos v3001 ( = v2001  limpio) -->
+<!--display><pft>'<span style="color: red">',v4001+| ~ |,'</span>'</pft></display-->
+<flow action="jump"><pft>
+	if size(v2001) <= 3 or nocc(v4001) > 2 or v2001 : '*' then 'DISPLAY_SUG' fi
+</pft></flow>
+
+<!-- En otro caso, llamamos al agrep. Si detecta coincidencias aproximadas,
+     las devuelve en el campo 5555 -->
+
+<flow action="jump"><pft>if nocc(v4001) = 2 and v4001[1] <> v4001[2] then 'AGREP_FOR_TWO' fi</pft></flow>
+
+<!--display><pft>'<br>AGREP para 1'</pft></display-->
+<proc><pft>'d4101a4101|',v2001,'|'</pft></proc>
+<call name="agrep"><pft>v4101</pft></call>
+<flow action="jump">POST_AGREP</flow>
+
+<label>AGREP_FOR_TWO</label>
+<!--display><pft>'<br>AGREP para 2'</pft></display-->
+<include>opac/xis/agrep-multi.xis</include>
+
+<!-- ================================================== -->
+<label>POST_AGREP</label>
+<!-- ================================================== -->
+
+<!--display><pft>'<br>zero-hits.xis | Sugerencias finales: ',v5555+| ~ |</pft></display-->
+
+<flow action="jump"><pft>
+	if v6001^x <> '1' or nocc(v5555) > 1 or size(v5555) < 7 then 'DISPLAY_SUG', fi
+</pft></flow>
+
+<!-- Si agrep sólo produce una sugerencia válida (y no es de longitud pequeña), la usamos para
+     generar una nueva búsqueda, sin necesidad de intervención por parte del usuario (siempre que
+     esta opción haya sido habilitada desde el .conf) -->
+<field action="replace" tag="2001"><pft>v5555^*</pft></field>
+<field action="replace" tag="2107">1</field>
+<flow action="jump"><pft>v2101</pft></flow> <!-- repite la tarea original -->
+
+
+<!-- ================================================== -->
+<label>DISPLAY_SUG</label>
+<!-- ================================================== -->
+
+<display>
+	<div class="warning">
+		No se encontraron coincidencias
+	</div>
+	<div id="sugerencias">
+		<h3>Algunas sugerencias:</h3>
+		<ul id="listaSugerencias">
+</display>
+
+
+<!-- Sugerencias del agrep, si las hay -->
+<display><pft>
+	if p(v5555) then 
+		'<li>Puede encontrar resultados para: ',
+			
+			/* Loop sobre ocurrencias de v5555 (expresiones sugeridas) */
+			(,
+				if iocc > val(v6001^b[1]) then break, fi,  /* v6001^b: AGREP_MAX_SUG */
+				
+				'<a href="',v6001^u[1],
+					'?IsisScript=',v2000[1],
+					'&amp;db=',v2104[1],
+					'&amp;task=',v2101[1],
+					'&amp;searchType=',v2002[1],
+					'&amp;query=',replace(v5555^*,' ','+'),
+				'" title="Haga clic para buscar ',v5555^*,'">',
+					v5555^*,
+				'</a>',
+				/* if v5555^n <> '' then ' (',v5555^n,')', fi, */
+				if iocc < nocc(v5555) and iocc < val(v6001^b[1]) then ', ', fi,
+			),
+		'</li>',
+	fi
+</pft></display>
+
+
+<flow action="jump"><pft>
+	if v2050 = '1' then 'CONSEJOS' fi   /* búsqueda avanzada: no probamos búsquedas diferentes */
+</pft></flow>
+
+
+<!-- Intentamos sugerir un tipo de búsqueda diferente -->
+
+<!-- Si la búsqueda era por autor, ofrecemos un browsing del índice respectivo -->
+<display><pft>
+	if v2002 = 'NAME' then
+		/* Codificamos el query en v7001 */
+		proc('d7000a7000|',v2001,'|'),
+		,@URLENCODE.PFT,
+		'<li>',
+			'Puede ver los ',
+			'<a href="',v6001^u,
+				'?IsisScript=',v2000,
+				'&amp;db=',v2104,
+				'&amp;task=H-BROWSE',
+				'&amp;browseTerm=',v7000,
+				'&amp;index=NAME',
+			'">'
+				' términos cercanos a <b>',v2001,'</b>',
+			'</a>',
+			' en el índice de autores.',
+		'</li>',
+	fi
+</pft></display>
+
+
+<!-- Probamos con otros tipos de búsqueda, usando otros índices -->
+<!-- TO-DO: de estas búsquedas, hay una que puede obviarse. Revisar la construcción de cada expression -->
+<do task="search">
+	<parm name="count">1</parm>
+	
+	<!-- 1. Como título -->
+	<parm name="db">BIBLIO</parm>
+	<parm name="expression"><pft>
+		replace(v3001,' ',s('/(9204)',' AND ')),'/(9204)',
+	</pft></parm>
+	<define>1002 Isis_Total</define>
+	<loop><!-- set v1002 --></loop>
+	<field action="replace" tag="1"><pft>v1002</pft></field>
+	
+	<!-- 2. Como autor -->
+	<parm name="db">NAME</parm>
+	<parm name="expression"><pft>
+		if p(v3002) then v3002 else replace(v2001,' ',' AND ') fi
+	</pft></parm>
+	<define>1002 Isis_Total</define>
+	<loop><!-- set v1002 --></loop>
+	<field action="replace" tag="2"><pft>v1002</pft></field>
+
+	<!-- 3. Como tema -->
+	<parm name="db">SUBJ</parm>
+	<parm name="expression"><pft>
+		if p(v3002) then v3002 else v2001 fi
+	</pft></parm>
+	<define>1002 Isis_Total</define>
+	<loop><!-- set v1002 --></loop>
+	<field action="replace" tag="3"><pft>v1002</pft></field>
+
+	<!-- 4. En cualquier campo -->
+	<parm name="db">BIBLIO</parm>
+	<parm name="expression"><pft>
+		replace(v3001,' ',s(x1,v2005,x1)),
+	</pft></parm>
+	<define>1002 Isis_Total</define>
+	<loop><!-- set v1002 --></loop>
+	<field action="replace" tag="4"><pft>v1002</pft></field>
+</do>
+
+<!--proc>s</proc>
+<display><pft>ALL</pft></display-->
+
+<display><htmlpft>
+	[pft]if val(v1) + val(v2) + val(v3) + val(v4) > 0 then[/pft]
+	
+		<li>Hay resultados para <b>[pft]v2001[/pft]</b> haciendo otras búsquedas: 
+		<ul id="otherSearches">
+
+		[pft]if val(v1) > 0 then[/pft]
+			<li>
+				<a href="[pft]v6001^u[/pft]?IsisScript=[pft]v2000[/pft]&amp;db=[pft]v2104[/pft]&amp;task=BIB-KW-SEARCH&amp;query=[pft]v2001[/pft]&amp;searchType=TITLE">
+					búsqueda por <b>título</b></a>
+				([pft]v1[/pft])
+			</li>
+		[pft]fi[/pft]
+		
+		[pft]if val(v2) > 0 then[/pft]
+			<li>
+				<a href="[pft]v6001^u[/pft]?IsisScript=[pft]v2000[/pft]&amp;db=[pft]v2104[/pft]&amp;task=H-KW-SEARCH&amp;query=[pft]v2001[/pft]&amp;searchType=NAME">
+					búsqueda por <b>autor</b></a>
+				([pft]v2[/pft])
+			</li>
+		[pft]fi[/pft]
+		
+		[pft]if val(v3) > 0 then[/pft]
+			<li>
+				<a href="[pft]v6001^u[/pft]?IsisScript=[pft]v2000[/pft]&amp;db=[pft]v2104[/pft]&amp;task=H-KW-SEARCH&amp;query=[pft]v2001[/pft]&amp;searchType=SUBJ">
+					búsqueda por <b>tema</b></a>
+				([pft]v3[/pft])
+			</li>
+		[pft]fi[/pft]
+		
+		[pft]if val(v4) > 0 then[/pft]
+			<li>
+				<a href="[pft]v6001^u[/pft]?IsisScript=[pft]v2000[/pft]&amp;db=[pft]v2104[/pft]&amp;task=BIB-KW-SEARCH&amp;query=[pft]v2001[/pft]&amp;searchType=ANY">
+					búsqueda por <b>todos los campos</b></a>
+				([pft]v4[/pft])
+			</li>
+		[pft]fi[/pft]
+		
+		</ul>
+		</li>
+	[pft]fi[/pft]
+</htmlpft></display>
+
+
+<!-- Finalmente, unas sugerencias genéricas -->
+
+<!-- ================================================== -->
+<label>CONSEJOS</label>
+<!-- ================================================== -->
+
+<display><htmlpft>
+
+	<!-- TO-DO: para búsquedas sobre la MSC, recordarle que debe usarse el inglés -->
+
+	<li>Revise la ortografía de las palabras usadas.</li>
+	
+	<!-- si hay más de 2 palabras, sugerimos usar menos -->
+	[pft]if nocc(v4001) > 2 then[/pft]
+		<li>Use un número menor de palabras</li>
+	[pft]fi[/pft]
+	
+	<!-- TO-DO: sugerir el uso de sinónimos, truncamiento. El truncamiento podría también
+	     ser aplicado por el sistema en forma automática -->
+	
+	<li>Intente con otro tipo de búsqueda.</li>
+	
+	[pft]if p(v2001) and not v2001 : '*' then[/pft]
+		<li>Puede buscar <b>[pft]v2001[/pft]</b> usando alguna de estas herramientas:<br>
+			<!--form action="http://www.google.com/search" method="GET" style="display: inline; margin-left: 2em">
+				<img src="[pft]v6003^h[/pft]opac/img/google-Logo_25wht.gif" alt="Google" align="top" border="0">
+				<input type="text" name="q" value="[pft]v2001[/pft]">
+				<input type="submit" value="Buscar" class="button"> 
+			</form-->
+			<!-- TO-DO: las búsquedas en Scopus y MathSciNet se pueden acotar a un campo específico, según la búsqueda original -->
+			[pft]
+				/* Codificamos el query */
+				proc('d7000a7000|',v2001,'|'),
+				,@URLENCODE.PFT,
+			[/pft]
+			<ul id="webSearches">
+				<li><a href="http://google.com/search?q=[pft]v7000[/pft]" title="Busca «[pft]v2001[/pft]» en Google"><!--img src="http://www.google.com/logos/Logo_25wht.gif" border="0"-->Google</a></li>
+				<li><a href="http://scholar.google.com/scholar?q=[pft]v7000[/pft]" title="Busca «[pft]v2001[/pft]» en Google Scholar"><!--img src="http://scholar.google.com/scholar/scholar_sm.gif" border="0"-->Google Scholar</a></li>
+				<li><a href="http://books.google.com/books?q=[pft]v7000[/pft]" title="Busca «[pft]v2001[/pft]» en Google Book Search">Google Book Search</a></li>
+				<li><a href="http://www.scopus.com/scopus/search/submit/xadvanced.url?searchfield=TITLE-ABS-KEY-AUTH%28[pft]v7000[/pft]%29" title="Busca «[pft]v2001[/pft]» en Scopus">Scopus</a></li>
+				<li><a href="http://www.ams.org/msnmain?pg3=ALLF&amp;s3=[pft]v7000[/pft]&amp;l=20&amp;reference_lists=show&amp;simple_headlines=full&amp;contributed_items=show&amp;fn=130&amp;form=basicsearch" title="Busca «[pft]v2001[/pft]» en MathSciNet">MathSciNet</a></li>
+			</ul>
+		</li>
+	[pft]fi[/pft]
+
+	</ul>
+	
+	<p>En caso de dudas, consulte con el personal de la biblioteca.</p>
+
+</div>  <!-- sugerencias -->
+
+
+
+</htmlpft></display>

@@ -1,0 +1,46 @@
+[pft]
+/* TO-DO: en aquellos casos en que deben mostrarse *ambas* filas especiales, esto es,
+   cuando el término solicitado no se encuentra en el índice y la posición en que
+   el término debiera encontrarse es la primera o la última para la respectiva inicial,
+   es necesario decidir en qué orden deben presentarse las filas. Probar con los términos
+   "b1" y "azzz" en BIBIMA.
+ */
+
+
+/* Pseudo-heading. ATENCION: el valor del colspan (depende de la presencia de una columna adicional con checkboxes)
+ */
+if v1235 = 'NO_LEFT_MATCHING' and mfn = val(v3009) then
+[/pft]
+	<tr class="deberiaEstarAqui">
+		<!--td>&nbsp;</td-->
+		[pft]if v2003 <> 'TITLE' then '<td>&nbsp;</td>' fi[/pft]
+		<td>
+			<span>[pft]v2007[/pft]</span> debería estar aquí
+		</td>
+	</tr>
+[pft]fi[/pft]
+
+
+[pft]
+/*
+	Cambio de inicial (3er carácter de v1)
+	ATENCION: usamos v14 para los títulos. ¿Se puede mejorar esto?
+*/
+	if ( p(v14) and s(mpu,v14,mpl) <> ref(mfn-1,mpu,v14,mpl) )
+	or
+	( a(v14) and s(mpu,v1*2.1,mpl) <> ref(mfn-1,mpu,v1*2.1,mpl) )
+	then
+[/pft]
+	<tr>
+		<td colspan="3" style="font-size: 1em; line-height: 1;">&nbsp;</td> <!-- fila de separación -->
+	</tr>
+	<tr>
+		<td colspan="3" class="initialLetter">
+			[pft]if p(v14) then v14, else v1*2.1, fi[/pft]
+		</td>
+		<!--td colspan="2" style="padding: 0; /*border-bottom: 1px solid #CCC;*/ background: #DDD; /*#E4E5B8*/;">&nbsp;</td-->
+	</tr>
+	<!--tr>
+		<td colspan="3" style="font-size: 1px; line-height: 1px;">&nbsp;</td>
+	</tr-->
+[pft]fi[/pft]

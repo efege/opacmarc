@@ -1,0 +1,56 @@
+
+<!-- El formulario para envío de resultados por email -->
+<!-- ATENCION: revisar parámetros presentes -->
+<div style="text-align: center; margin: 1.5em 15%; background: #EEB; padding: 0.3em; border: 1px solid brown; line-height: 1.5;">
+	<form name="emailForm" action="[pft]v6001^u[/pft]" method="GET" onsubmit="checkMail(); return false;">
+		<input type="hidden" name="IsisScript" value="[pft]v2000[/pft]">
+		<input type="hidden" name="task" value="SEND-MAIL">
+		<input type="hidden" name="db" value="[pft]v2104[/pft]">
+		<input type="hidden" name="cid" value="[pft]v2099[/pft]">
+		<input type="hidden" name="query" value="[pft]v2001[/pft]">
+		<input type="hidden" name="index" value="[pft]v2003[/pft]">
+		<input type="hidden" name="oper" value="[pft]v2005[/pft]">
+		<input type="hidden" name="trunc" value="[pft]v2006[/pft]">
+		<input type="hidden" name="sortBy" value="[pft]v2016[/pft]">
+		<input type="hidden" name="wa" value="[pft]v2031[/pft]">
+		
+		Puede enviar
+		[pft]if val(v1002) > 1 then[/pft]
+			los [pft]v1002[/pft] resultados
+		[pft]else[/pft]
+			este resultado
+		[pft]fi[/pft]
+		por <strong>correo electrónico</strong>.
+		
+		<br>
+		
+		<img src="[pft]v6003^h[/pft]opac/img/envelope-icon.gif" alt="" align="middle">
+		Dirección: <input type="text" name="mail_to" size="30">
+		<input type="submit" class="button" value="Enviar">
+	</form>
+</div>
+
+
+<!-- El formulario para envío de resultados por email -->
+<!-- ATENCION: revisar parámetros presentes -->
+<!--display><pft>
+	'<div style="text-align: center; margin: 1em 15%; background-color: #dadada; padding: 0.3em;" -class="smaller">'/
+	'<form name="emailForm" action="',v6001^u,'" method="get" onsubmit="checkMail();return false;">'/
+	'<input type="hidden" name="IsisScript" value="opac/mail.xis">'/
+	'<input type="hidden" name="cid" value="',v2099,'">'/
+	/*
+	'<input type="hidden" name="query" value="',v2001,'">'/
+	'<input type="hidden" name="index" value="',v2003,'">'/
+	|<input type="hidden" name="oper" value="|v2005|">|/
+	|<input type="hidden" name="trunc" value="|v2006|">|/
+	|<input type="hidden" name="sortBy" value="|v2016|">|/
+	|<input type="hidden" name="wa" value="|v2031|">|/
+	*/
+	'Puede enviar los ',v1002,' resultados por <strong>correo electrónico</strong>.'/
+	'<br><img src="[pft]v6003^h[/pft]opac/img/envelope-icon.gif" alt="" align="middle">'/
+	'Dirección: <input type="text" name="mail_to" size="30" style="background-color: #f3f3f3;">'/
+	'<input type="submit" class="button" value="Enviar">'/
+	'</form>'/
+	'</div>'/ 
+</pft></display-->
+

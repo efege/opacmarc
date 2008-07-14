@@ -1,0 +1,82 @@
+<!-- =========================================================
+     EXTRACT-KEYS.XIS
+
+     Extracción de claves de un registro bibliográfico
+		 (para controlar el funcionamiento del OPAC).
+		 
+		 (c) Fernando J. Gómez, INMABB, 2003		 
+     ========================================================= -->
+
+<display><div style="background-color: #f0f0f0; padding: 0.5em; margin-top: 1em;"></display>
+		 
+<do task="mfnrange">
+  <parm name="db">BIBLIO</parm>
+  <parm name="from"><pft>v2080</pft></parm>
+	<parm name="count">1</parm>
+	<parm name="gizmo">ASC2ANS</parm>
+  <loop>
+	  <field action="replace" tag="1111" split="flddir">ALL</field>
+		<field action="replace" tag="1112" split="occ"><pft>v1111</pft></field>
+		<display><pft>'<p class="alIndice">MFN ',mfn(1),' - Registro completo:<br>'/</pft></display>
+		<display><pft>'<pre style="font-size: 85%">'</pft></display>
+		<display><pft>(v1112*2/)</pft></display>
+	  <display><pft>'</pre>'</pft></display>
+
+		<display><pft>'<p class="alIndice">Al índice de temas:<br>'/</pft></display>
+		<display><pft>'<div class="extract">',newline('<br>'),@SELSUBJ.PFT,'</div>'</pft></display>
+		<display><pft>'<p class="alIndice">Al índice de autores:<br>'/</pft></display>
+		<display><pft>'<div class="extract">',newline('<br>'),@SELNAME.PFT,'</div>'</pft></display>
+		<display><pft>'<p class="alIndice">Al índice de títulos:<br>'/</pft></display>
+		<!-- ATENCION: sería bueno poder resaltar los non-filing characters -->
+		<display><pft>'<div class="extract">',newline('<br>'),@SELTITLE.PFT,'</div>'</pft></display>
+	</loop>
+
+		
+	<parm name="gizmo">DICTGIZ</parm>
+	<!-- ATENCION: la composición de gizmos anda bien? -->
+  <parm name="count">1</parm>
+  <parm name="fst"><pft>cat('BIBLIO.FST')</pft></parm>
+  <parm name="stw">BIBLIO.STW</parm>
+	<!-- ACTAB?? -->
+	<loop>
+    <extract>this</extract>
+		<proc>s</proc>
+		<field action="replace" tag="1111" split="flddir">ALL</field>
+		<field action="replace" tag="1112" split="occ"><pft>v1111</pft></field>
+		<field action="replace" tag="1112" split="occ"><pft>
+		  ,(, if v1112.2='09' then v1112^**1.35/ fi ,),
+		</pft></field>
+		<display><pft>'<p class="alIndice">Al diccionario de la base bibliográfica:</p>'/</pft></display>
+		<display><pft>'<table width="100%" cols="2" border="0" class="extract"><tr><td width="50%" valign="top">'/</pft></display>
+	  <display><pft>
+		      (
+						if getenv('LAST_TAG') <> v1112.4 then
+						  '<div style="color: white; background-color: #00c; font-weight: bold; margin: 1em 3em 0.5em 0em; padding: 3px 6px; font-family: verdana;">',
+						  select v1112.4
+							  case '9008' : 'Datos del campo 008',
+								case '9020' : 'Números normalizados',
+								case '9041' : 'Idiomas',
+								case '9050' : 'Cód. de clasificación',
+								case '9100' : 'Nombres, completos',
+								case '9104' : 'Nombres, por palabras',
+								case '9200' : 'Títulos, completos',
+								case '9204' : 'Títulos, por palabras',
+								case '9260' : 'Lugar de publicación',
+								case '9261' : 'Editorial',
+								case '9400' : 'Serie',
+								case '9600' : 'Temas, completos',
+								case '9604' : 'Temas, por palabras',
+								elsecase      'Otros',
+							endsel,
+							'</div>'/
+						fi,
+						mpu,v1112,mpl
+						putenv('LAST_TAG=',v1112.4),
+						if iocc = nocc(v1112)/2 then '</td><td valign="top">' else '<br>' fi,
+					)
+		</pft></display>
+		<display><pft>'</table>'/</pft></display>
+	</loop>
+</do>
+
+<display></div></display>

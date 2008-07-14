@@ -1,0 +1,129 @@
+table#msctable {
+	float: left;
+	/* width: ver class-search-browse.xis */
+}
+
+#aboutMSC {
+	background: #E0E0E0;
+	float: right;
+	margin-top: 0.2em;
+	padding: 0em 1.5%;
+	width: 41%;
+}
+
+#aboutMSC h3 {
+	border-bottom: 2px dotted #999;
+	font-size: 1.1em;
+	margin-bottom: 0.5em;
+	margin-top: 1.4em;
+	padding-bottom: 0.2em;
+}
+
+/* Visualización de códigos MSC */
+
+/*td#aboutMSCCell {
+	background: #DFDFDF;
+	padding: 0.7em;
+}*/
+
+/*div#aboutMSC a {
+	text-decoration: underline;
+}*/
+
+/*div#aboutMSC a:hover {
+	text-decoration: none;
+}*/
+
+/* agregar colores de celda para MSC */
+
+tr.msclevel1 {
+	/*background: #DDD;*/
+	/*background: #C9C9C9;*/ /*#D1D1D1*/
+	/*color: white;*/
+}
+
+/*tr.msclevel1 a {
+	color: white;
+}*/
+
+tr.msclevel2 {
+	/*background: #DCDCDC;*/
+}
+
+tr.msclevel3 {
+	/*background: #ECECEC;*/
+}
+
+.borde-msc-xx {
+	background: #EEE;
+	border-bottom: 1px solid #AFAFAF;
+	border-top: 1px solid #AFAFAF;
+}
+
+.borde-msc-XX {
+  border-top: 1px solid #A0A0A0; /* #666; */
+  border-bottom: 1px solid #A0A0A0;
+}
+
+.seccion {
+  background-color: #EEB; /*#FFC; /*#FCFCFC;*/
+  cursor: default;
+}
+
+.seccion-resaltada {
+  background-color: #D1D1D1;
+  cursor: pointer;
+}
+
+input.msc-checkbox {
+	margin: -1px;
+	/*size: */
+}
+
+table#msctable {
+	margin-top: 0em;
+	table-layout: fixed;
+}
+
+table#msctable td {
+	padding: 0.2em 0.3em;
+}
+
+/*table#msctable a {
+	text-decoration: none;
+}*/
+
+/*table#msctable a:hover {
+	text-decoration: underline;
+}*/
+
+/*table#msctable button {
+	height: 1.7em;
+	font-family: verdana;
+}*/
+
+.btnMSCcode {
+	background: #FED; /*#BFB99B*/ /*#ADA*/
+	border: 1px solid #666;
+	/*font-family: verdana, sans-serif;*/
+	font-weight: bold;
+	/*font-size:  colocar un valor apropiado */
+	/*height: 1.6em;*/          /* fijar height y width causa un molesto resize al hacer click (en mozilla) */
+	width: 5em;
+}
+
+/* códigos MSC que llevan a registros bibliográficos */
+.mscActiveCode {
+	background: #00B;
+	color: white !important;
+	font-weight: bold;
+	padding: 0.1em 0.2em;
+}
+
+/*.mscActiveCode:visited {
+	color: #DDD !important;      (quizas sea mejor modificar el background)
+}*/
+
+.msc-cross-ref {
+	color: #444;
+}

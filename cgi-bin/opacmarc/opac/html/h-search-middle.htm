@@ -1,0 +1,47 @@
+[pft]/*
+	Segunda parte del encabezado de keyword-match-in-heading
+*/[/pft]
+
+		[pft]
+		'<!--'
+		if v2002='SUBJ' then 'Temas' else 'Nombres' fi, ' encontrados: ',v1002,
+		/* Usar aquí la función rmin() */
+		if val(v1002)>1 then
+		  '&nbsp;&nbsp;<b>&#183;</b>&nbsp;&nbsp;Mostrando: ',v2004,'-', 
+		  if val(v2004)+val(v2029)-1 > val(v1002) then v1002 else f(val(v2004)+val(v2029)-1,1,0) fi,
+		  ' (en orden alfabético)'/
+		fi,
+		'-->'/
+		[/pft]
+		
+		<div class="resultSubheader">
+		[pft]
+			if val(v1002) = 1 then  
+				'Se encontró este único ',
+				if v2002 = 'SUBJ' then
+					' tema',
+				else
+					' nombre',
+				fi,
+				':'/,
+			else
+				'Mostrando ',
+				if val(v1002) = val(v2004) then
+					'el último ',
+				else
+					v2004,'-',
+				if val(v2004) + val(v2029) - 1 > val(v1002) then
+					v1002,
+				else
+					f(val(v2004) + val(v2029) - 1,1,0),
+				fi,
+			fi,
+			' de ',v1002,
+			if v2002 = 'SUBJ' then ' temas' else ' nombres' fi,
+			' encontrados, ordenados alfabéticamente.'/
+			fi,
+		[/pft]
+		</div>
+	
+		<table class="headingRecordList" align="center" cellspacing="0" cellpadding="2">
+		<!--form name="headingsForm" action="[pft]v6001^u[/pft]" method="GET"-->

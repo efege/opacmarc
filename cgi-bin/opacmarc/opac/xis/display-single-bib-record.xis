@@ -1,0 +1,426 @@
+<!-- ==========================================================
+	BIB-RECORD
+	
+	Display de un registro bibliográfico individual.
+	
+	Se llega aquí desde:
+	
+		1) Búsquedas en la base bibliográfica (por keyword, heading o class #)
+		   que generen un único resultado (previo paso por bib-*-search.xis,
+		   que se ocupa de generar el encabezado). Ejemplos:
+		   
+			  * title keywords:  query=world+directory searchType=TITLE
+			  * name heading:    index=NAME            query=^aFaure,+Robert,^d1918-1982.
+			  * class #:         index=SUBJ            query=11-06
+		   
+		2) Click en el índice de títulos (previo paso por bib-h-search.xis,
+		   que ocupa de generar el encabezado).
+		   
+				index=TITLE , query=^aAbelian+varieties+/^cSerge+Lang.
+			
+		3) Click en la lista de resultados de cualquier búsqueda en la base
+		   bibliográfica (por keyword, heading o class #) que tenga más de 1 resultado.
+		   
+			   task=BIB-RECORD , curr=1 , total=2 , cid=TMP13.$$$
+		   
+		4) Click en la lista de "recorriendo el catálogo".
+		
+				task=BIB-RECORD , curr=15 , cid=
+		
+		5) Cambio de estilo de visualización para un registro bibliográfico.
+		
+				task=BIB-RECORD , curr=15 , cid= , style=Ficha
+				task=BIB-RECORD , cid=TMP14.$$$ , curr=1 , total= , style=Ficha
+				task=BIB-RECORD , cid=TMP15.$$$ , curr=2 , total=4 , style=MARC
+		
+		6) Navegación (anterior/siguiente) por el conjunto de resultados de
+		   una búsqueda en la base bibliográfica, asociado a 2)
+		   
+				task=BIB-RECORD , cid=TMP17.$$$ , curr=2 , go=-1 , style=Etiquetado
+				
+		7) Acceso a un registro por su número de control (está presente v2106 = cn)
+	
+	ATENCION: comparar con LC.
+	
+	ATENCION: el regreso a la lista de resultados debería aprovechar los
+	datos del archivo temporal, sin volver a realizar la búsqueda.
+	
+	TO-DO: validar el MFN o nro. de control, y generar mensaje apropiado.
+	
+	========================================================== -->
+
+
+<!--display><pft>ALL</pft></display-->
+
+<!-- 2041 = mfn a mostrar -->
+<field action="replace" tag="2041"><pft>
+	/* 2017 = curr, 2099 = cid, 2041 = mfn, v2106 = cn */
+	if p(v2017) and a(v2099) and a(v2106) then
+		v2017,    /* browsing del catálogo: v2017 coincide con MFN */
+	else if p(v2041) then
+		v2041,    /* ATENCION: ¿en qué casos recibimos un mfn en v2041? */
+	else if p(v2106) then
+		f(l(['BIBLIO']'-NC='v2106),1,0),
+	fi,fi,fi,
+</pft></field>
+
+<!-- Número total de registros en el catálogo -->
+<field action="replace" tag="2027"><pft>
+	if p(v2017) and a(v2099) then
+		ref(['BIBLIO']1,f(maxmfn-1,1,0)),
+		/*
+			proc('d5001a5001¦',replace(s(cat('BASES.PAR')),s(#),'¦a5001¦'),'¦'),
+			(,
+				if v5001 : 'BIBLIOGRAPHIC_TOTAL=' then
+					mid(v5001,instr(v5001,'=') + 1,10),
+					break,
+				fi,
+			),
+		*/
+	fi,
+</pft></field>
+
+<flow action="jump"><pft>
+	if val(v2041) > 0 then 'MFN_OK' fi
+</pft></flow>
+
+<!-- TO-DO: verificar aquí si el nro de control (v2106) es correcto -->
+
+<!-- Si no se recibió un MFN, hay que usar el indentificador de consulta, para
+	tomar los datos del archivo temporal asociado a la búsqueda -->
+<!--display><pft>v6003^t,'/',v2099</pft></display-->
+<field action="replace" tag="6112" split="occ"><pft>cat(v6003^t,'/',v2099)</pft></field>
+
+<!-- Si el archivo no se encuentra o está vacío, mostramos un mensaje de error -->
+<flow action="jump"><pft>
+	if size(v6112) > 0 then 'TMP_FILE_OK' fi
+</pft></flow>
+<display><htmlpft>
+	<p class="warning">
+		Se produjo un error al intentar leer un archivo temporal ([pft]v2099[/pft]).
+	</p>
+	<p align="center">
+		<a href="#" onclick="history.back();return false;">Volver a la página previa</a>
+	</p>
+</htmlpft></display>
+<flow action="jump">FIN</flow>
+
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<label>TMP_FILE_OK</label>
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<!-- v2027: total de resultados -->
+<field action="replace" tag="2027"><pft>if a(v2027) then v6112^n[1] fi</pft></field>
+
+<proc><pft>
+	(,
+		if iocc - 1 = val(v2017[1]) then 
+			'a2041¦',v6112^m,'¦',   /* v2041: MFN del registro actual */
+			'a2010¦',v6112^h,'¦',   /* v2010: keys (para el resaltado) */
+			break,
+		fi
+	),
+</pft></proc>
+
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<label>MFN_OK</label>
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<!--proc>s</proc>
+<display><pft>ALL</pft></display-->
+
+<!-- Cuando task != 'BIB-RECORD' suponemos que el encabezado ya fue generado -->
+<display><htmlpft><pft>cat('BIB-RECORD-1.HTM')</pft></htmlpft></display>
+
+
+<!-- v2010: keys (claves para el resaltado), pasadas vía CGI o via archivo temporal -->
+<field action="replace" tag="1005" split="occ"><pft>
+	if p(v2010) then replace(v2010,'~',s(#)) fi,
+</pft></field>
+
+<!-- Estilo de visualización por defecto -->
+<field action="replace" tag="2008"><pft>
+	if a(v2008) then v6001^e fi
+</pft></field>
+
+<!--proc>s</proc>
+<display><pft>ALL</pft></display-->
+
+
+<display><htmlpft><pft>cat('BIB-RECORD-2.HTM')</pft></htmlpft></display>
+
+<!--proc>s</proc>
+<display><pft>ALL</pft></display-->
+
+
+
+<!-- Mostramos el registro, en el estilo elegido -->
+
+<do task="mfnrange">
+	<parm name="db">BIBLIO</parm>
+	<parm name="from"><pft>v2041</pft></parm>
+	<parm name="count">1</parm>
+	<parm name="isisxml style">0</parm>
+	<parm name="isisxml table"><pft>'root=record'/</pft></parm>
+	<loop>
+		<field action="import" tag="list">1005,2000,2008,2104,2017,6001,6002,6003</field>
+		
+		<!-- Aplicamos el resaltado al registro -->
+		<hl>
+			<parm name="prefix"><span class="hl"></parm>
+			<parm name="suffix"></span></parm>
+			
+			<!-- Esto debería subdividirse de manera más fina, para resaltar
+			     solamente lo que corresponde -->
+			<parm name="keys"><pft>
+				(,
+					if v1005.4 = '9204' then v1005*5/ fi,
+				),
+			</pft></parm>
+			
+			<field action="replace" tag="9245"><pft>
+				proc('d1000a1000¦',replace(v245*3,'^','¦a1000¦'),'¦'),
+				(,
+					if v1000.1 <> 'c' then '___'v1000*1, fi,
+				),
+			</pft></field>
+			<field action="hl" tag="9245"><pft>v9245*3</pft></field>
+			<field action="replace" tag="245"><pft>
+				proc('d1002a1002¦',replace(v9245,'___','¦a1002¦'),'¦'),
+				proc("a1002¦"v245^c"¦"),
+				v245.2,(|^|v1000.1,v1002),
+			</pft></field>
+
+			
+			<!-- Este enfoque genera problemas debido a que se necesita 
+				conservar una version sin resaltar, para generar los
+				enlaces. Pero... ¿hacen falta los enlaces? Parece que no.
+				¿Y hace falta, acaso, mostrar este campo? No, si los datos
+				ya se encuentran en un campo descriptivo, como el 505. -->
+			<!--field action="replace" tag="8740" split="occ"><pft>
+				(
+				  proc('a9740¦',replace(v740*3,'^','¦a9740¦'),'~¦'),
+				)
+				('^',v9740.1,x1,v9740*1),
+			</pft></field-->
+			<!--field action="hl" tag="8740" split="occ"><pft>replace(v8740,'~',s(#))</pft></field-->
+			<!--field action="replace" tag="740" split="occ"><pft>(v740.2,v8740/)</pft></field-->
+			
+			<!-- Si hay campo 500: hay que identificar una nota de traducción, aislarla y resaltarla -->
+			
+			<field action="replace" split="occ" tag="505">
+				<pft>(replace(v505,'^t','^t ')/)</pft> <!-- dejamos un espacio luego de ^t -->
+			</field>
+			<field action="hl" tag="505">
+				<pft>(v505/)</pft>                     <!-- aplicamos el resaltado -->
+			</field>
+			<field action="replace" split="occ" tag="505">
+				<pft>(replace(v505,'^t ','^t')/)</pft> <!-- quitamos el espacio luego de ^t -->
+			</field>
+			
+			<!-- Resaltado del campo 260 (puede estar ausente, en analíticas) -->
+			<parm name="keys"><pft>
+				(,
+					if v1005.3 = '926' then v1005*5/ fi,
+				),
+			</pft></parm>
+			<field action="replace" tag="9260"><pft>
+				proc('d1000a1000¦',replace(v260*3,'^','¦a1000¦'),'¦'),
+				v1000*1+|___|,
+			</pft></field>
+			<field action="hl" tag="9260"><pft>v9260</pft></field>
+			<field action="replace" tag="260"><pft>
+				proc('d1002a1002¦',replace(v9260,'___','¦a1002¦'),'¦'),
+				v260.2,(|^|v1000.1,v1002),
+			</pft></field>
+			
+			<!-- Problemas cuando el campo se repite!! -->
+			<!-- Por supuesto, además se complica la combinación de resaltado
+			con link desde el v650!! -->
+			<!-- Pero lo lograremos!! -->
+			<!--parm name="keys"><pft>(if v1005.4='9600' then v1005*5/ fi)</pft></parm>
+			<field action="replace" tag="650"><pft>
+			  if p(v650) then
+			    proc('a9650¦',replace(v650*3,'^','¦a9650¦'),'¦'),
+				  v650.2,('^',v9650.1,x1,v9650*1),
+				fi
+			</pft></field>
+			<field action="hl" tag="650" split="occ"><pft>(v650/)</pft></field-->
+			
+			<!--display><pft>ALL</pft></display-->
+			
+			<!-- Codificación de campos usados par generar URLs; vuelven en v9991 -->
+			<!-- Necesario por incompatibilidad entre IE e IIS (!) -->
+			<!-- Se usa para construir los links de ETIQUETADO y AACR2 -->
+			
+			<!-- Alternativa usando una función de wxis -->
+			<!--call name="urlencode"><pft>v100*2/(v700*2/)</pft></call>
+			<field action="replace" tag="8100" split="occ"><pft>(v9991/)</pft></field-->
+			
+			<!-- Alternativa usando un formato puro (que toma y devuelve los datos en v7000) -->
+			<proc><pft>'d7000', 'a7000¦',v100*2,'¦', ('a7000¦',v700*2,'¦'),</pft></proc>
+			<proc><pft>,@URLENCODE.PFT,</pft></proc>
+			<proc><pft>'d8100',('a8100¦',v7000,'¦')</pft></proc>
+			
+			<proc><pft>'d7000', 'a7000¦',v110*2,'¦', ('a7000¦',v710*2,'¦'),</pft></proc>
+			<proc><pft>,@URLENCODE.PFT,</pft></proc>
+			<proc><pft>'d8110',('a8110¦',v7000,'¦')</pft></proc>
+			
+			<!--display><pft>
+				select v2008
+					case 'Ficha AACR2': ,@AACR2.PFT,
+					case 'Etiquetado' : ,@ETIQUETADO.PFT,
+					case 'Cita'       : ,@CITA.PFT,
+					case 'Todos'      : ,@AACR2.PFT,'<p>'/
+										,@ETIQUETADO.PFT,'<p>'/
+										,@CITA.PFT,'<p>'/
+				endsel
+			</pft></display-->
+			
+			<flow action="jump"><pft>
+				if 'Ficha AACR2~Etiquetado~Completo~Breve~Cita~Todos' : v2008 then
+					v2008,
+				else
+					'DISPLAY_DONE',
+				fi
+			</pft></flow>
+			
+			<!-- ~~~~~~~~~~~~~~~~~~~~~~~~ -->
+			<label>Ficha</label>
+			<!-- ~~~~~~~~~~~~~~~~~~~~~~~~ -->
+			
+			<!-- AGREGADO 2004/03/07: Código tomado de catalis.xis para enviar el registro al browser -->
+			
+			<field action="replace" tag="2082" split="flddir"><pft>ALL</pft></field>
+			<field action="replace" tag="3082" split="occ"><pft>v2082</pft></field>
+			<!-- Omitimos campos de control (tag < 010) y "virtuales" (tag > 999); 
+				 sustituimos indicadores en blanco -->
+			<field action="replace" tag="3082" split="occ"><pft>
+				(,
+					if v3082.4 = '0000' or v3082.2 <> '00' then , 
+					else
+						v3082*2.4, replace(v3082*6.2,' ','#'), v3082*8/, 
+					fi,
+				),
+			</pft></field>
+			<!--proc><pft>'d008a008~',replace(v008,' ','#'),'~'</pft></proc-->
+			<!-- ATENCION: lo mismo que con el 008, hay que hacer con tag <= 010 ? -->
+
+			<!-- Datafields: cada datafield genera una occ de v3083 -->
+			<!-- ATENCION: en el test de abajo para decidir si un campo es o no datafield, teníamos
+				un error: v1106:v3082.3, que dejaba afuera al campo 110 (corregido 09/nov/03).
+				 Errores de este tipo son muy graves, pues lo que no sea enviado al cliente,
+				 no será retornado por éste al momento de volver a grabar el registro, con
+				 la consiguiente pérdida de información. -->
+			<display><pft>
+				proc('d3083a3083¦',
+					(, 
+						if size(v3082) > 3 and not '859~905~906~907~909~917~918~919~980~981~991~992' : v3082.3 and not '1106' : v3082.4 then 
+							if '100~700' : v3082.3 and v3082:'^9' then ,,
+								/* tomamos datos de base de autoridades (nombres personales) 	*/
+								/*v3082.4, ref(['AUTH']l(['AUTH']v3082^9),v100), '^9',v3082^9,*/
+								replace(v3082,'"','\"'),
+							else
+								replace(v3082,'"','\"'),  /* comillas dobles pueden molestar al usar strings de JS */
+							fi,
+							'¦a3083¦',
+						fi 
+					),
+				'¦'),
+			</pft></display>
+			
+			<!-- AGREGADO 2004/03/07: usamos marc2aacr.js en browsers con JavaScript -->
+			
+			<display><htmlpft><pft>cat('BIB-RECORD-3.HTM')</pft></htmlpft></display>
+			<flow action="jump">DISPLAY_DONE</flow>
+			
+			<!-- ~~~~~~~~~~~~~~~~~~~~~~~~ -->
+			<label>Completo</label>
+			<!-- ~~~~~~~~~~~~~~~~~~~~~~~~ -->
+			<display><htmlpft><pft>cat('COMPLETO.HTM')</pft></htmlpft></display>
+			<flow action="jump">DISPLAY_DONE</flow>
+			
+			<!-- ~~~~~~~~~~~~~~~~~~~~~~~~ -->
+			<label>Etiquetado</label>
+			<!-- ~~~~~~~~~~~~~~~~~~~~~~~~ -->
+			<display><htmlpft>
+				<div style="text-align: center;">
+					<div style="text-align: left; width: 85%; padding-top: 0.7em; margin-left: auto; margin-right: auto;">
+						[pft],@ETIQUETADO.PFT,[/pft]
+					</div>
+				</div>
+			</htmlpft></display>
+			<flow action="jump">DISPLAY_DONE</flow>
+			
+			<!-- ~~~~~~~~~~~~~~~~~~~~~~~~ -->
+			<label>Breve</label>
+			<!-- ~~~~~~~~~~~~~~~~~~~~~~~~ -->
+			<display><div style="margin: 0.5em;"></display>
+			<display><htmlpft><pft>cat('BIB-LIST-HEAD.HTM')</pft></htmlpft></display>
+			<proc><pft>'a1001~',v2017,'~'</pft></proc> <!-- el contador -->
+			<display><pft>@WORK_HEADING.PFT</pft></display>
+			<display></table></div></display>
+			<flow action="jump">DISPLAY_DONE</flow>
+			
+			<!-- ~~~~~~~~~~~~~~~~~~~~~~~~ -->
+			<label>Cita</label>
+			<!-- ~~~~~~~~~~~~~~~~~~~~~~~~ -->
+			<display><pft>@CITA.PFT</pft></display>
+			<flow action="jump">DISPLAY_DONE</flow>
+			
+			<!-- ~~~~~~~~~~~~~~~~~~~~~~~~ -->
+			<label>Todos</label>
+			<!-- ~~~~~~~~~~~~~~~~~~~~~~~~ -->
+			<display><pft>
+				,@AACR2.PFT,'<p>'/,@ETIQUETADO.PFT,'<p>'/,@CITA.PFT,'<p>'/
+			</pft></display>
+			<flow action="jump">DISPLAY_DONE</flow>
+			
+			<!-- ~~~~~~~~~~~~~~~~~~~~~~~~ -->
+			<label>DISPLAY_DONE</label>
+			<!-- ~~~~~~~~~~~~~~~~~~~~~~~~ -->
+			
+		</hl>
+		
+		<flow action="jump"><pft>
+			if not 'Ficha AACR2~Etiquetado~Completo~Breve~Cita' : v2008 then
+				v2008,
+			else
+				'OUT',
+			fi
+		</pft></flow>		
+		
+		<!-- ~~~~~~~~~~~~~~~~~~~~~~~~ -->
+		<label>XML</label>
+		<!-- ~~~~~~~~~~~~~~~~~~~~~~~~ -->
+		<!-- Generamos el registro en XML y nos vamos -->
+		<display><pft>'<?xml version="1.0" encoding="ISO-8859-1"?>'/</pft></display>
+		<!--display><pft>'<?xml:stylesheet type="text/xsl" href="/opac/xmlverbatimwrapper.xsl" ?>'/</pft></display-->
+		<proc>d2000d2008d6001d6002</proc>
+		<display><isisxml>*</isisxml></display>
+		<flow action="exit">Now</flow>
+		
+		<!-- ~~~~~~~~~~~~~~~~~~~~~~~~ -->
+		<label>Todos</label>
+		<!-- ~~~~~~~~~~~~~~~~~~~~~~~~ -->
+		<label>MARC</label>
+		<!-- ~~~~~~~~~~~~~~~~~~~~~~~~ -->
+		<!--display><pft>ALL</pft></display-->
+		<!--proc>d1005d2000d2008d6001d6002</proc-->
+		<include>opac/xis/marc.xis</include>
+		
+		<!-- ~~~~~~~~~~~~~~~~~~~~~~~~ -->
+		<label>OUT</label>
+		<!-- ~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	</loop>
+</do>
+
+<display>
+	</div> <!-- resultWrapper -->
+</display>
+
+<!-- Email -->
+<display><htmlpft><pft>
+	if v6001^n = '1' then ,cat('MAIL-RESULTS.HTM'), fi
+</pft></htmlpft></display>
