@@ -25,7 +25,10 @@
 	<file action="create" type="tempfile">2098</file>
 	<!--display><pft>'Archivo temporal con los datos de la búsqueda: ',v2098,'<br>CI_TEMPDIR=',v6003^t</pft></display-->
 	<file action="append" type="output"><pft>v2098</pft></file>
-	<display><pft>v1/,(v6111/)</pft></display>
+	<display><pft>
+        v1/,      /* los parámetros pasados a la función */
+        (v6111/)  /* la lista de MFNs */
+    </pft></display>
 	<file action="close" type="output"><pft>v2098</pft></file>
 	
 	<!-- Devolvemos el nombre del archivo temporal (sin el path) -->

@@ -230,7 +230,7 @@
 	<li>Intente con otro tipo de búsqueda.</li>
 	
 	[pft]if p(v2001) and not v2001 : '*' then[/pft]
-		<li>Puede buscar <b>[pft]v2001[/pft]</b> usando alguna de estas herramientas:<br>
+		<li>Si lo desea, puede buscar <b>[pft]v2001[/pft]</b> en la Web usando alguna de estas herramientas:<br>
 			<!--form action="http://www.google.com/search" method="GET" style="display: inline; margin-left: 2em">
 				<img src="[pft]v6003^h[/pft]opac/img/google-Logo_25wht.gif" alt="Google" align="top" border="0">
 				<input type="text" name="q" value="[pft]v2001[/pft]">
@@ -246,8 +246,6 @@
 				<li><a href="http://google.com/search?q=[pft]v7000[/pft]" title="Busca «[pft]v2001[/pft]» en Google"><!--img src="http://www.google.com/logos/Logo_25wht.gif" border="0"-->Google</a></li>
 				<li><a href="http://scholar.google.com/scholar?q=[pft]v7000[/pft]" title="Busca «[pft]v2001[/pft]» en Google Scholar"><!--img src="http://scholar.google.com/scholar/scholar_sm.gif" border="0"-->Google Scholar</a></li>
 				<li><a href="http://books.google.com/books?q=[pft]v7000[/pft]" title="Busca «[pft]v2001[/pft]» en Google Book Search">Google Book Search</a></li>
-				<li><a href="http://www.scopus.com/scopus/search/submit/xadvanced.url?searchfield=TITLE-ABS-KEY-AUTH%28[pft]v7000[/pft]%29" title="Busca «[pft]v2001[/pft]» en Scopus">Scopus</a></li>
-				<li><a href="http://www.ams.org/msnmain?pg3=ALLF&amp;s3=[pft]v7000[/pft]&amp;l=20&amp;reference_lists=show&amp;simple_headlines=full&amp;contributed_items=show&amp;fn=130&amp;form=basicsearch" title="Busca «[pft]v2001[/pft]» en MathSciNet">MathSciNet</a></li>
 			</ul>
 		</li>
 	[pft]fi[/pft]

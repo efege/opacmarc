@@ -197,7 +197,11 @@ function marc2aacr(materialType,f001,f005,f008,marcDatafields,ejemplares)
 			description += mainEntryHeading;
 			description += "</div>\n\n";
 		}
-	}
+	} else if (MAIN_ENTRY_TOP && GHOST_MAIN_ENTRY) {    // Agregado para Museo Mitre, 2008-03-12
+        description += "<div id='mainEntryHeading'>";
+        description += "&nbsp;";
+        description += "</div>\n\n";
+    }
 
 
 	/*if ( fields_byTag["100"] || fields_byTag["110"] || fields_byTag["111"] || fields_byTag["130"] )
@@ -223,7 +227,7 @@ function marc2aacr(materialType,f001,f005,f008,marcDatafields,ejemplares)
 	// Begin bibliographic description
 	// -------------------------------------------------------------
 
-	description += "<div id='Description' style='border-bottom: 1px dashed #CCC;" + (("" != mainEntryTag && MAIN_ENTRY_TOP) ? "border-top: 1px dashed #CCC;" : "") + "'>\n";
+	description += "<div id='Description' " + (("" != mainEntryTag && MAIN_ENTRY_TOP) ? " class='mainEntryTop'" : "") + ">\n";
 
 	// ---------------------------------------------------------
 	// Campo 245

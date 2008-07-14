@@ -6,14 +6,15 @@
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 
 <link rel="stylesheet" type="text/css" href="[pft]v6003^h[/pft]common/css/opac.css" title="basic">
-<link rel="stylesheet" type="text/css" href="[pft]v6003^h[/pft]opac/css/banner/[pft]v2104[/pft].css" title="basic">
+<!--link rel="stylesheet" type="text/css" href="[pft]v6003^h[/pft]opac/css/banner/[pft]v2104[/pft].css" title="basic"-->
 <link rel="stylesheet" type="text/css" href="[pft]v6003^h[/pft]common/css/aacr.css">
 <link rel="stylesheet" type="text/css" href="[pft]v6003^h[/pft]common/css/wh.css">
-<!--link rel="stylesheet" type="text/css" href="[pft]v6003^h[/pft]common/css/etiquetado.css"-->
+<link rel="stylesheet" type="text/css" href="[pft]v6003^h[/pft]common/css/etiquetado.css">
 <link rel="stylesheet" type="text/css" href="[pft]v6003^h[/pft]common/css/complete.css">
 <link rel="stylesheet" type="text/css" href="[pft]v6003^h[/pft]common/css/novedades.css">
 <link rel="stylesheet" type="text/css" href="[pft]v6003^h[/pft]common/css/msc.css">
 <link rel="stylesheet" type="text/css" href="[pft]v6003^h[/pft]opac/css/print.css" title="print">
+<link rel="stylesheet" type="text/css" href="[pft]v6003^h[/pft]opac/css/custom-[pft]v2104[/pft].css">
 
 <!-- Comentarios condicionales, para cargar hojas de estilo que sólo verá IE -->
 <!--[if IE]>
@@ -25,11 +26,25 @@
 
 <script type="text/javascript" src="[pft]v6003^h[/pft]opac/js/opac.js"></script>
 
-<!-- Funciones JS para generar el display AACR2 (ficha) -->
+<!-- JS para generar el display AACR2 (ficha) -->
+<script type="text/javascript">
+    var MAIN_ENTRY_TOP = [pft]v6001^1[/pft];  // (boolean)
+    var GHOST_MAIN_ENTRY = true;  // agregado para Museo Mitre, 2008-03-12
+</script>
 <script type="text/javascript" src="[pft]v6003^h[/pft]common/js/marc2aacr.js"></script>
 <script type="text/javascript" src="[pft]v6003^h[/pft]common/js/isbn-hyphen.js"></script>
 <script type="text/javascript" src="[pft]v6003^h[/pft]common/js/getMaterialType.js"></script>
 
+<!-- Efecto cebra en tablas (2008-03-04) -->
+<script type="text/javascript" src="[pft]v6003^h[/pft]opac/js/zebra-table.js"></script>
+<script type="text/javascript">
+function init() {
+    if (document.getElementById("etiq")) {
+        stripe("etiq");
+    }
+}
+window.onload = init
+</script>
 
 [pft]
 	/* Limpiamos el heading buscado (tan pronto? sí, pues lo necesitamos para el <title>) */
