@@ -6,8 +6,8 @@
 	<div style="background: #FFF; float: left; padding: 1em 2%; width: 96%">
 	<h2 style="margin: 0 0 1em;">Últimas adquisiciones</h2>
 	<p>Este es el material bibliográfico (excepto revistas) que la biblioteca ha incorporado recientemente.</p>
-	<p style="border-bottom: 1px solid #CCC; padding-bottom: 1em;">También puede consultar el <a href="http://inmabb.criba.edu.ar/biblioteca/rev2006.html">listado de
-	   revistas suscriptas para 2006</a>.</p>
+	<!--p style="border-bottom: 1px solid #CCC; padding-bottom: 1em;">También puede consultar el <a href="http://inmabb.criba.edu.ar/biblioteca/rev2006.html">listado de
+	   revistas suscriptas para 2006</a>.</p-->
 </display>
 
 <do task="list">

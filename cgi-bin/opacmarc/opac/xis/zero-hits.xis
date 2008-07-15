@@ -10,6 +10,7 @@
 	  TO-DO: las sugerencias muy cortas del agrep no deberían considerarse.
 	  TO-DO: ver qué hacer con las búsquedas avanzadas
 -->
+<!--display><pft>'3001: ',v3001,'<br>'</pft></display-->
 <proc><pft>'d4001a4001|',replace(replace(v3001,' OR ',''),' ','|a4001|'),'|'</pft></proc> <!-- usamos v3001 ( = v2001  limpio) -->
 <!--display><pft>'<span style="color: red">',v4001+| ~ |,'</span>'</pft></display-->
 <flow action="jump"><pft>
@@ -213,19 +214,30 @@
 <label>CONSEJOS</label>
 <!-- ================================================== -->
 
+<!--display><pft>ALL</pft></display-->
+
 <display><htmlpft>
 
-	<!-- TO-DO: para búsquedas sobre la MSC, recordarle que debe usarse el inglés -->
+	<!-- TO-DO: para búsquedas sobre la MSC (db=bibima, searchType=SUBJ):
+		* pruebe buscando por título o por todos los campos (poner links)
+		* puede navegar por la MSC
+	-->
 
 	<li>Revise la ortografía de las palabras usadas.</li>
 	
 	<!-- si hay más de 2 palabras, sugerimos usar menos -->
 	[pft]if nocc(v4001) > 2 then[/pft]
-		<li>Use un número menor de palabras</li>
+		<li>Use menos palabras</li>
 	[pft]fi[/pft]
 	
 	<!-- TO-DO: sugerir el uso de sinónimos, truncamiento. El truncamiento podría también
 	     ser aplicado por el sistema en forma automática -->
+
+	[pft]if v2104 = 'bibima' and v2002 = 'SUBJ' then[/pft]
+		<li>Asegúrese de usar términos de búsqueda <b>en inglés</b></li> <!-- TO-DO: explicar por qué, y remitir a la MSC -->
+		<li>El uso de raíces a veces ayuda (ejemplo: chao* para encontrar chaos y chaotic; otro?)</li>
+	[pft]fi[/pft]
+
 	
 	<li>Intente con otro tipo de búsqueda.</li>
 	
@@ -246,6 +258,9 @@
 				<li><a href="http://google.com/search?q=[pft]v7000[/pft]" title="Busca «[pft]v2001[/pft]» en Google"><!--img src="http://www.google.com/logos/Logo_25wht.gif" border="0"-->Google</a></li>
 				<li><a href="http://scholar.google.com/scholar?q=[pft]v7000[/pft]" title="Busca «[pft]v2001[/pft]» en Google Scholar"><!--img src="http://scholar.google.com/scholar/scholar_sm.gif" border="0"-->Google Scholar</a></li>
 				<li><a href="http://books.google.com/books?q=[pft]v7000[/pft]" title="Busca «[pft]v2001[/pft]» en Google Book Search">Google Book Search</a></li>
+				<!-- TO-DO: usar archivo de config para decidir cuáles links mostrar -->
+				<li><a href="http://www.scopus.com/scopus/search/submit/xadvanced.url?searchfield=TITLE-ABS-KEY-AUTH%28[pft]v7000[/pft]%29" title="Busca «[pft]v2001[/pft]» en Scopus">Scopus</a></li>
+				<li><a href="http://www.ams.org/msnmain?pg3=ALLF&amp;s3=[pft]v7000[/pft]&amp;l=20&amp;reference_lists=show&amp;simple_headlines=full&amp;contributed_items=show&amp;fn=130&amp;form=basicsearch" title="Busca «[pft]v2001[/pft]» en MathSciNet">MathSciNet</a></li>
 			</ul>
 		</li>
 	[pft]fi[/pft]
