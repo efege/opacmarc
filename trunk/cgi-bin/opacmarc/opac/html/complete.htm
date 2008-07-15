@@ -263,7 +263,7 @@
 						),
 					fi[/pft]
 					
-					[pft]if p(v538) then (,[/pft]
+					[pft]if p(v538^a) then (,[/pft]
 						<!-- Nota de requerimientos de sistema -->
 						<p>
 							[pft]v538^a[/pft]
@@ -283,14 +283,14 @@
 						</p>
 					[pft]), fi[/pft]
 					
-					[pft]if p(v546) then (,[/pft]
+					[pft]if p(v546^a) then (,[/pft]
 						<!-- Nota de idioma -->
 						<p>
 							[pft]v546^a[/pft]
 						</p>
 					[pft]), fi[/pft]
 					
-					[pft]if p(v511) then (,[/pft]
+					[pft]if p(v511^a) then (,[/pft]
 						<!-- Nota de intérpretes -->
 						<p>
 							[pft]
@@ -300,21 +300,21 @@
 						</p>
 					[pft]), fi[/pft]
 					
-					[pft]if p(v502) then (,[/pft]
+					[pft]if p(v502^a) then (,[/pft]
 						<!-- Nota de tesis -->
 						<p>
 							[pft]v502^a[/pft]
 						</p>
 					[pft]), fi[/pft]
 					
-					[pft]if p(v521) then (,[/pft]
+					[pft]if p(v521^a) then (,[/pft]
 						<!-- Nota de audiencia -->
 						<p>
 							[pft]v521^a[/pft]
 						</p>
 					[pft]), fi[/pft]
 					
-					[pft]if p(v530) then (,[/pft]
+					[pft]if p(v530^a) then (,[/pft]
 						<!-- Nota sobre otros formatos disponibles -->
 						<p>
 							[pft]v530^a,
@@ -323,7 +323,7 @@
 						</p>
 					[pft]), fi[/pft]
 					
-					[pft]if p(v520) then (,[/pft]
+					[pft]if p(v520^a) then (,[/pft]
 						<!-- Nota de resumen, abstract -->
 						<!-- TO-DO: usar indicadores -->
 						<p>
@@ -332,14 +332,14 @@
 						</p>
 					[pft]), fi[/pft]
 					
-					[pft]if p(v504) then (,[/pft]
+					[pft]if p(v504^a) then (,[/pft]
 						<!-- Nota de bibliografía -->
 						<p>
 							[pft]v504^a[/pft]
 						</p>
 					[pft]), fi[/pft]
 					
-					[pft]if p(v510) then[/pft]
+					[pft]if p(v510^a) then[/pft]
 						<!-- Nota de reseña -->
 						<p>
 							<span class="label">Reseña:</span>
@@ -506,10 +506,10 @@
 					<li>
 						[pft]
 						/* TO-DO: cuando no hay subcampos $t, no hace falta usar <li> */
-						replace(replace(replace(replace(replace(replace(replace(v505*2,
+						replace(replace(replace(replace(replace(replace(v505*2,
 							'Capítulos:',''),  /* ya lo usamos como etiqueta, ahora no lo necesitamos */
 							' -- ','<li>'),
-							' ;','<li>'),
+							/*' ;','<li>'),*/  /* no, porque puede haber un punto y coma dentro de un 505$r */
 							'^t',' <span class="titulo505">'),
 							' /^r','</span> / '),
 							'^g',' '),
@@ -656,7 +656,30 @@
 		
 		[pft]if p(v859) or p(v092) then[/pft]
 			<div id="ubicacion">
-				<h3 class="label">Ubicación</h3>
+			
+				[pft] if v859[1]^a='AR-BaUNS' then /* para Biblioteca Central UNS, feb/mar 2007 */[/pft]
+					<script type="text/javascript">
+						function verDisponibilidad() {
+							var ventana = window.open("","","width=600,height=450,top=10,left=15,resizable=yes,scrollbars=yes");
+							ventana.location.href = "[pft]v6003^h[/pft]/opac/php/disponibilidad.php?ncontrol=[pft]v001[/pft]";
+						}
+					</script>
+					<style type="text/css">
+						input.disponibilidad {
+							color: black;
+							font-weight: normal;
+							font-family: arial, sans-serif;
+						}
+					</style>
+					<h3 class="label">
+						Ubicación
+						<input type="button" name="disponibilidad"
+						value="Ver disponibilidad" class="disponibilidad" onclick="verDisponibilidad();return false">
+					</h3>
+				[pft] else [/pft]
+					<h3 class="label">Ubicación</h3>
+				[pft] fi [/pft]
+
 				<ul>
 					[pft]if p(v092) then[/pft]
 					
@@ -666,7 +689,7 @@
 						
 					[pft]else[/pft]
 					
-						[pft](, /* loop sobre ocurrencias del 859 */[/pft]
+						[pft] (, /* loop sobre ocurrencias del 859 */[/pft]
 							<li>
 								[pft]
 									/* La base del INMABB tiene un tratamiento especial */
@@ -682,16 +705,55 @@
 									else
 										|<div class="STparte">|v859^3|</div>| /* parte de una obra en varias partes, e.g. "Vol. 1", "Tomo 3", etc. */
 										'<div class="STresto">',
-											'<a href="',v6001^u[1],
+											/*'<a href="',v6001^u[1],
 												'?IsisScript=',v2000[1],
 												'&amp;db=',v2104[1],
 												'&amp;task=BROWSE-CATALOG',
-												'&amp;browseTerm=',v859^h,'" title="Ver material ubicado cerca de éste">',
+												'&amp;browseTerm=',v859^h,'" title="Ver material ubicado cerca de éste">',*/
 											v859^k|<!--br-->&nbsp;|        /* separamos con saltos de línea o con espacios? */
 											v859^h,
 											'<!--br-->&nbsp;',replace(v859^i,' ','<!--br-->&nbsp;'),
 											|<!--br-->&nbsp;|v859^v,
-											'</a>',
+											/*'</a>',*/
+											
+                                            /* Opcionalmente mostramos la sección (859$b) */
+                                            if v859^b <> '' and v6001^z[1] : s('~',v2104[1],'~') then
+                                            
+                                    		    /* prueba */
+                                    		    /*proc('d6200',
+                                                    'a6200|^csubsueloA^tSubsuelo A|',
+                                                    'a6200|^cCP^tMmostrador gral.|',
+                                    		    ),*/
+                                    		    
+                                    		    /* traducimos el código a una frase */
+                                    		    /* ESTO NO ANDA PORQUE NO SE PERMITEN LOOPS ANIDADOS */
+                                        		proc('d6201a6201~',
+                                        		/*
+                                        		    (,
+                                                        if v6200^c = v859^b then
+                                                            v6200^t,
+                                                            break,
+                                                        fi,
+                                        		    ),
+                                        		*/
+                                        		    
+                                    		    /* OPCIONES: modificar 859$b al momento de generar el opac, o
+                                    		    usar una base isis para la tabla con el mapeo */ 
+                                        		    /* si usamos una base isis MAP_859b: */
+                                        		    ref(
+                                        		        ['MAP_859b']l(['MAP_859b']v859^b),
+                                        		        v2
+                                        		    ),
+                                        		'~'),
+                                        		
+                                                '<span class="seccion859"> [',
+                                        		    ref(
+                                        		        ['MAP_859b']l(['MAP_859b']v859^b), /* ANDA (19/set) */
+                                        		        v2
+                                        		    ),
+                                                ']</span>',
+                                            fi,
+											
 										'</div>'/
 										
 										/* Nro. de inventario */
@@ -701,7 +763,7 @@
 									fi,
 								[/pft]
 							</li>
-						[pft]),[/pft]
+						[pft] ), /* cierra loop sobre ocurrencias del 859 */ [/pft]
 						
 					[pft]fi[/pft]
 				</ul>
@@ -723,9 +785,11 @@
 									v856^y,
 								else if v856 : '^3' then
 									v856^3,
+								else if v856 : '^z' then
+								    v856^z,
 								else
 									v856^u,
-								fi,fi,
+								fi,fi,fi,
 								[/pft]</a>
 							[pft]if v856^u : '.pdf' then
 									' <img src="',v6003^h[1],'opac/img/pdf_icon.gif" border="0">' fi

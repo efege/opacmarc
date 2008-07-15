@@ -7,7 +7,8 @@
  * (c) 2003-2004 Fernando J. Gómez - CONICET - INMABB
  * --------------------------------------------------------------------
  *
- * Inicialmente basado en las Guidelines for OPAC displays, de M. Yee.
+ * Inicialmente basado en el Work Heading de las Guidelines for
+ * OPAC displays, de M. Yee.
  *
  * TO-DO: considerar otros campos de título: 630, 730, 246.
  *
@@ -430,7 +431,62 @@ if not v6001^s = '0' then     /* v6001^s: DISPLAY_LOCATION */
 		if p(v773) then proc('a859|',ref(['BIBLIO']l(['BIBLIO']'-NC='v773^w),v859[1]),'|'), fi,
 		
 		if p(v859) then
-			
+		
+		    /* 859 $b: sección */
+            if v859^b[1] <> '' and v6001^z : s('~',v2104,'~') then
+		    
+        		/* -- Donde solicitar el material -- */
+    		    /* Esto fue hecho por Claudio para la ABR. Necesitamos quedarnos con el esqueleto y mandar la tabla
+    		       a un archivo externo */
+    		    /* Podemos usar un archivo txt como este:
+        				^cDP^tMostrador gral.
+        				^cBF^tMostrador gral.
+        				^cBW^tMostrador gral.
+        			    ^cIH^tMostrador gral.
+        		  y cargar esas líneas como ocurrencias de un campo repetible 6200.
+        		  PENDIENTE: en qué parte del .xis leer el archivo con el mapeo:
+        		  
+                    <field action="replace" tag="6200" split="occ"><pft>
+                    	cat(getenv('PATH_WXIS'),'opac/config/local.conf')
+                    </pft></field>
+    		    */
+    			/*select s(v859^b[1])
+    				case 'DP'  : 'Mostrador gral.',
+    				case 'BF'  : 'Mostrador gral.',
+    				case 'BW'  : 'Mostrador gral.',
+    				case 'IH'  : 'Mostrador gral.',
+    				case 'SL'  : 'Mostrador gral.',
+    				case 'SR'  : 'Mostrador gral.',
+    				case 'HM'  : 'Hemeroteca',
+    				case 'JN'  : 'Sala Juvenil',
+    				case 'IN'  : 'Sala Infantil',
+    				elsecase '',
+    			endsel,*/
+    		    
+    		    /* prueba */
+    		    proc('d6200',
+                    'a6200|^csubsueloA^tSubsuelo A|',
+                    'a6200|^cCP^tMmostrador gral.|',
+    		    ),
+    		    
+    		    /* traducimos el código a una frase */
+        		proc('d6201a6201~',
+        		    (,
+                        if v6200^c = v859^b[1] then
+                            v6200^t,
+                            break,
+                        fi,
+        		    ),
+        		'~'),
+        		
+        		/* TO-DO: copiar el ref() de complete.htm */
+        		
+        		'<span style="font-weight: bold;font-size: 0.7em;font-family: Verdana, Arial, Helvetica, sans-serif; color: #006699;"
+        			title="Solicitar en ',v6201,'">',
+        			v6201,
+        		'</span><br>',
+            fi,
+    			
 			if v2104 = 'bibima' and v859^p : 'A-' then  /* La base del INMABB tiene un tratamiento especial */
 				'<ul>'
 					(, /* loop sobre ocurrencias del 859 */

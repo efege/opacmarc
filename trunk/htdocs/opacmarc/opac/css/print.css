@@ -1,15 +1,17 @@
 /* Hoja de estilo para la impresión de listados de registros */
 
-@media print {
+/*@media print {*/
 
 	body {
 		background-color: #FFF !important;        /* fondo blanco */
 		color: rgb(0,0,0) !important;                         /* texto negro */
 	}
 	
+	div#searchFormWrapper {
+	    display: none;
+	}
 	
-	
-	/* Quiséramos evitar los saltos de página en medio de un registro */
+	/* Quisiéramos evitar los saltos de página en medio de un registro */
 	tr.whOdd, tr.whEven {
 		page-break-inside: avoid; /* IE6 y Mozilla 1.x lo ignoran, pero igual, dejémoslo para el futuro... */
 	}
@@ -27,4 +29,4 @@
 		width: 100%;
 	}
 	
-}
+/*}*/

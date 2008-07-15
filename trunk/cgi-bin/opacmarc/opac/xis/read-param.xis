@@ -43,9 +43,10 @@
 		,else if v6000 : 'CALL_NUMBER_BROWSE='    then '^w',mid(v6000,instr(v6000,'=')+1,size(v6000))
 		,else if v6000 : 'AGREP_AUTO_SEARCH='     then '^x',mid(v6000,instr(v6000,'=')+1,size(v6000))
 		,else if v6000 : 'SHOW_SUGGESTIONS='      then '^y',mid(v6000,instr(v6000,'=')+1,size(v6000))
+		,else if v6000 : 'SHOW_SECTION='          then '^z',mid(v6000,instr(v6000,'=')+1,size(v6000))
 		,else if v6000 : 'MAIN_ENTRY_TOP='        then '^1',mid(v6000,instr(v6000,'=')+1,size(v6000))
 		,else if v6000 : 'ETIQ_773_MODE='         then '^7',mid(v6000,instr(v6000,'=')+1,size(v6000))
-		,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,
+		,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,
 	),
 </pft></field>
 
@@ -117,6 +118,7 @@
 	'DATES.TXT=',       v6003^b,'/opac/',v2104,'/dates.txt'/
 	'LANG_CODES.TXT=',  v6003^b,'/opac/',v2104,'/langcode.txt'/
 	'LIT_CODES.TXT=',   v6003^b,'/opac/',v2104,'/litcode.txt'/
+	'MAP_859b.*=',      v6003^b,'/opac/',v2104,'/map_859b.*'/
 	'MSC.*=',           v6003^b,'/opac/msc2000/msc.*'/
 	'NAME.*=',          v6003^b,'/opac/',v2104,'/name.*'/
 	'NOVEDADES.TXT=',   v6003^b,'/opac/',v2104,'/novedades.txt'/
