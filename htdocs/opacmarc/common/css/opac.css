@@ -1,4 +1,7 @@
-/* reset browser defaults */
+/* --------------------------------
+ * reset browser defaults
+ * --------------------------------
+ */
 body, p, h1, h2, h3, h4, h5, h6, table, tr, td, div, form, ul, ol, dl, li, pre {
 	border: 0;
 	margin: 0;
@@ -14,7 +17,7 @@ hr {
 }
 
 body {
-	background: #EEE; /*#C9C7BA; /*#C8B9A6; /*D0D0D0; /*#F6F6F6;*/
+	background-color: #EEE; /*#C9C7BA; /*#C8B9A6; /*D0D0D0; /*#F6F6F6;*/
 	font-family: arial, 'trebuchet ms', verdana, sans-serif; 
 	font-size: small; /* trebuchet: 96%; verdana: 94% */
 	line-height: 1.3em; 
@@ -579,7 +582,11 @@ ul.navigation li {
 }
 
 
-/* ********************** PAGINAS AUXILIARES *********************** */
+/* --------------------------------
+ * PAGINAS AUXILIARES
+ * --------------------------------
+ */
+ 
 
 div#about {
 	/*background: #ECFBEC;*/
@@ -610,7 +617,11 @@ h3#feedback_reply {
 	text-align: center;
 }
 
-/* ********************* FOOTER ********************** */
+
+/* --------------------------------
+ * FOOTER
+ * --------------------------------
+ */
 
 div#footer {
 	background: #FFF;
@@ -637,7 +648,11 @@ div#opac_numbers {
 }
 
 
-/* ************** SUGERENCIAS *********** */
+/* --------------------------------
+ * SUGERENCIAS
+ * --------------------------------
+ */
+ 
 div#sugerencias {
 	/*background: #FFC;*/
 	/*border: 3px solid #FFC;*/
@@ -687,7 +702,11 @@ ul#webSearches li:first-child {
 }
 
 
-/* ************** HOME *********** */
+/* --------------------------------
+ * HOME
+ * --------------------------------
+ */
+
 div#home {
 	border-top: 1px dotted #999;
 	padding-top: 1em;
@@ -713,26 +732,32 @@ div#home div {
 	-moz-border-radius: 8px;
 }
 
-div#otros-recursos {
+div#home div#otros-recursos {
 	float: right;
 }
-div#de-nuevo {
+div#home div#de-nuevo, div#home div#textos {
 	float: left;
 }
-div#otros-recursos ul, div#de-nuevo ul {
+div#home div#de-nuevo a {
+	font-weight: bold;
+}
+div#home div#otros-recursos ul, div#home div#de-nuevo ul {
 	line-height: 1.5;
 	margin-left: 1em;
 }
 div#home ul li {
 	/*background: url(http://www.stylegala.com/img/_bullets/0199_small%20old%20simple%20arrow.png) no-repeat 0 0.4em;*/
-	float: left;
+	/*float: left;*/
 	list-style: none;
 	margin: 0.1em 0.7em 0.1em 0;
 	padding: 0em 0.2em;
 	white-space: nowrap;
 }
+div#home div#otros-recursos li {
+	float: left;
+}
 
-/* **************************************** */
+/* ---------------------------------------------- */
 .warning {
 	background: #FFF; /* #CC0033; */
 	border-top: 1px solid #C00;
@@ -747,7 +772,7 @@ div#home ul li {
 	/*width: 80%;*/
 }
 
-/* **************************************** */
+/* ---------------------------------------------- */
 
 tr.deberiaEstarAqui {
 	background: #EEE;
@@ -767,7 +792,11 @@ tr.deberiaEstarAqui td span {
 }
 
 
-/* ************** SIGNATURAS TOPOGRÁFICAS **************** */
+/* --------------------------------
+ * SIGNATURAS TOPOGRÁFICAS
+ * --------------------------------
+ */
+
 div.STparte {
 	padding: 0.1em;
 	/*border-bottom: 1px solid #CCC;*/
@@ -781,14 +810,14 @@ div.STresto {
 }
 
 
-/* ****************************************************** */
+/* ---------------------------------------------------- */
 .hide {
 	display: none;
 }
 
-/* **************************************** */
+/* ---------------------------------------------------- */
 .opacAacrDiv {
-	background: #FFFFF0; /*#FFF*/ /*#FEFEF0 /*#FFF8DC*/
+	background: #FFF; /*#FEFEF0; /*#FFF8DC*/
 	border-top: 0px solid #CCC;
 	margin: 0.5em 0 0 0;
 	padding: 0.5em 1.5em 0.5em 1.5em;
@@ -805,9 +834,9 @@ div.STresto {
 	background: transparent !important; /* cancela una declaración de aacr.css */
 }
 
+/* ---------------------------------------------------- */
 
-/* ************************************************** */
+/* esto queda para el final, pues al validador de CSS no le gusta -moz */
 .searchFormCell {
 	-moz-border-radius: 8px;
-	/* esto queda para el final, pues al validador de CSS no le gusta */
 }

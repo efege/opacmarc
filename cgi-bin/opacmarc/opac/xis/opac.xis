@@ -455,13 +455,21 @@ Parámetros CGI
 <display><htmlpft><pft>
     if a(v2011) and not '~SHOW_FEEDBACK_FORM~SHOW_ABOUT' : v2101 then
         /*,cat('FORM-SIMPLE.HTM'),*/  /* Quitado a pedido de Raúl, 2007-12-17 */
-        /*,cat('FORM_ADVANCED.HTM'),*/
         /*,cat('HOME.HTM'),*/  /* Quitado ídem */ /* ATENCION: error en la visualización si el archivo home.htm no existe */
     fi
     if p(v2011) then
           /* A pedido de Raúl, esto sólo debe aparecer en las páginas de los formularios */
         ,cat('OPAC-FOOTER.HTM'),
-    fi
+    fi,
+
+    /*Cuándo mostrar cada pieza:
+    
+        ,cat('FORM-SIMPLE.HTM'),
+        
+        ,cat('HOME.HTM'),*/  /* ATENCION: error en la visualización si el archivo home.htm no existe */
+        
+        /*,cat('OPAC-FOOTER.HTM'),*/
+    
 </pft></htmlpft></display>
 
 

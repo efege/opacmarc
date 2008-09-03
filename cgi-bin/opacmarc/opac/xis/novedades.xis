@@ -13,7 +13,7 @@
 <do task="list">
 	<define>1 Isis_Item</define>
 	<parm name="reverse">On</parm>
-	<parm name="count">50</parm>   <!-- TO-DO: llevar este número a opacmarc.conf -->
+	<parm name="count">100</parm>   <!-- TO-DO: llevar este número a opacmarc.conf -->
 	<loop>
 		<field action="import" tag="list">2000,2104,6001,6003</field>
 		<!--display><pft>'<br>001: ',v1,' ; mfn: ',f(l(['BIBLIO']'-NC='v1),1,0)</pft></display-->

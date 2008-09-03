@@ -3,23 +3,31 @@
 # ------------------------------------------------------------------
 
 # Ubicación de mx y demás utilitarios
-export PATH=$PATH:/home/fer/bin/cisis
+export PATH=$PATH:/home/fernando/bin/cisis
 
 # En este directorio se encuentran los archivos necesarios para generar el OPAC
 # contiene los directorios bin, common, opac, work
-OPACMARC_DIR=/home/fer/opacmarc-admin
+OPACMARC_DIR=/home/fernando/svn/opacmarc/opacmarc-admin
+
+# *** IGNORE ESTA SECCION POR EL MOMENTO ***
+# En este directorio está la base bibliográfica original. El valor predeterminado
+# es $OPACMARC_DIR/work/$DB_NAME/original
+# Si update-opac.sh se ejecuta en la misma máquina donde se alojan las bases
+# de Catalis, etonces puede indicar aquí la ruta correspondiente: 
+# SOURCE_DIR=/var/www/bases/catalis_pack/catalis/$DB_NAME
+# *** HASTA ACA ***
 
 # En este directorio están almacenadas las imágenes de las tapas (si las hay)
-DIR_IMG=/home/fer/www/html/catalis_pack_devel/opac/img/$DB_NAME
+DIR_IMG=/home/fernando/svn/opacmarc/htdocs/opacmarc/opac/img/$DB_NAME
 
 # A este directorio van a parar los archivos generados (si se usa MOVE=1)
-TARGET_DIR=/home/fer/www/bases/catalis_pack_devel/opac/$DB_NAME
+TARGET_DIR=/home/fernando/svn/opacmarc/bases/opacmarc/opac/$DB_NAME
 
 # Use MOVE=1 para mover los archivos generados al directorio destino ($TARGET_DIR)
-MOVE=0
+MOVE=1
 
 # Use CLEAN=1 para eliminar archivos temporales creados durante la generación del OPAC
-CLEAN=0
+CLEAN=1
 
 # Use CONVERT_WINDOWS=1 si desea usar en un servidor Windows las bases generadas
 CONVERT_WINDOWS=0
