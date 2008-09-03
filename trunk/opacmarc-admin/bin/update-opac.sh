@@ -78,8 +78,12 @@
 #
 # TO-DO:
 #
-# Aceptar como input otras opciones además de un archivo .zip:
-# archivos biblio.mst + biblio.xrf, archivo .iso, archivo .id, archivo .mrc
+# Agregar un parámetro de configuración para indicar en qué directorio
+# se encuentra la base original.
+#
+# Verificar que la base no contenga caracteres "prohibidos", i.e. aquellos
+# que se usan como delimitadores en los proc. Por ejemplo: "|" en un nombre.
+# ¿Este problema desaparecería con mx 5.x?
 #
 # Medir el tiempo de ejecucion del script, y revisar de manera general
 # su diseño, porque es lento en máquinas viejas con bases grandes.
@@ -194,6 +198,8 @@ fi
 #     MRC:     dbname.mrc
 #     ISO:     dbname.iso o biblio.iso
 #     ID:      dbname.id o biblio.id
+# ATENCION: si no se tiene cuidado, es posible que se tome una base obsoleta
+# p.ej. en formato zip en lugar de la actual en formato mst/xrf.
 echo
 if [ -f $SOURCE_DIR/$DB_NAME.zip ]; then
 	unzip -oq $SOURCE_DIR/$DB_NAME.zip -d tmp || error
@@ -253,12 +259,17 @@ mv -f tmp/bibliotmp.xrf tmp/biblio.xrf || error
 #     * archivo EMA.001 (listado de existencias, generado desde SeCS)
 #     * base oem2ansi (el gizmo para cambio de codificación)
 #     * archivo secs2marc.proc (migración SeCS => MARC21)
+#
+# NOTE: $DB_NAME-secstitle.zip contiene: secstitle.mst, secstitle.xrf, EMA.001
+#
+# TO-DO: dejar esta parte del código en un archivo aparte?
 # ------------------------------------------------------------------
 if [ -f $SOURCE_DIR/$DB_NAME-secstitle.zip ]; then    # testeamos si existe la base secstitle asociada
 	echo
 	cecho "blue" "Procesando base SECSTITLE..."
 	
 	# TO-DO: usar mxcp para eliminar espacios en la base title
+	# TO-DO: usar dos2unix para el listado de existencias
 	
 	# paso 0: descomprimimos la base
 	unzip -oq $SOURCE_DIR/$DB_NAME-secstitle.zip -d tmp || error "No se pudo descomprimir el archivo $SOURCE_DIR/$DB_NAME-secstitle.zip"
@@ -643,7 +654,7 @@ echo
 cecho "blue" "Listado de novedades."
 # -----------------------------------------------------
 # TO-DO: generalizar para cualquier año y/o mes, y para otros criterios (e.g. en ABCI por inventario)
-mx biblio "pft=if v859^y[1]*6 = '2006' then v1/ fi" now | sort > novedades.txt || error "Hubo una falla al ejecutar mx"
+mx biblio "pft=if '~2006~2007~2008~2009~2010~' : s('~',v859^y[1]*6.4,'~') then v1/ fi" now | sort > novedades.txt || error "Hubo una falla al ejecutar mx"
 
 echo
 # -----------------------------------------------------

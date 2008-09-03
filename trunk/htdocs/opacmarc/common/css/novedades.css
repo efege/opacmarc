@@ -1,13 +1,13 @@
 /* listado de novedades */
 
-div.novedad {
+div.novedad { /* usando porcentajes se logra el efecto de 2 columnas */
 	/*background: #DDD;*/
-	border-bottom: 2px solid #CCC;
+	border-top: 2px solid #CCC;
 	float: left;
-	margin-left: 50px;
 	margin-bottom: 0.7em;
+	margin-left: 3%; /*50px;*/
 	padding: 0.5em 1em;
-	width: 40em;
+	width: 43%; /*40em;*/
 }
 
 h3.title {

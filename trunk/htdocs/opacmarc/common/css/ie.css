@@ -35,3 +35,11 @@ div#otros-recursos, div#de-nuevo { /* el uso de porcentajes hace saltar los link
 	padding-left: 7px;
 	padding-right: 7px;
 }
+
+div.novedad {
+	margin-left: 2%;
+}
+
+div#home {
+	border-top: none;
+}
