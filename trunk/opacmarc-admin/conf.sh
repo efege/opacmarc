@@ -18,10 +18,10 @@ OPACMARC_DIR=/home/fernando/svn/opacmarc/opacmarc-admin
 # *** HASTA ACA ***
 
 # En este directorio están almacenadas las imágenes de las tapas (si las hay)
-DIR_IMG=/home/fernando/svn/opacmarc/htdocs/opacmarc/opac/img/$DB_NAME
+DIR_IMG=/home/fernando/svn/opacmarc/htdocs/opac/img/$DB_NAME
 
 # A este directorio van a parar los archivos generados (si se usa MOVE=1)
-TARGET_DIR=/home/fernando/svn/opacmarc/bases/opacmarc/opac/$DB_NAME
+TARGET_DIR=/home/fernando/svn/opacmarc/bases/opac/$DB_NAME
 
 # Use MOVE=1 para mover los archivos generados al directorio destino ($TARGET_DIR)
 MOVE=1
