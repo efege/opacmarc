@@ -12,7 +12,7 @@
 <link rel="stylesheet" type="text/css" href="[pft]v6003^h[/pft]common/css/complete.css">
 <link rel="stylesheet" type="text/css" href="[pft]v6003^h[/pft]common/css/novedades.css">
 <link rel="stylesheet" type="text/css" href="[pft]v6003^h[/pft]common/css/msc.css">
-<link rel="stylesheet" type="text/css" href="[pft]v6003^h[/pft]opac/css/print.css" title="print">
+<link rel="stylesheet" type="text/css" href="[pft]v6003^h[/pft]opac/css/print.css" media="print" title="print">
 
 <!-- Hoja de estilo opcional con adaptaciones locales, específicas para una base de datos -->
 <link rel="stylesheet" type="text/css" href="[pft]v6003^h[/pft]opac/css/custom/[pft]v2104[/pft].css">
@@ -24,6 +24,7 @@
 <!--[if lt IE 6]>
 	<link rel="stylesheet" type="text/css" href="[pft]v6003^h[/pft]common/css/ie5x.css">
 <![endif]-->
+
 
 <script type="text/javascript" src="[pft]v6003^h[/pft]opac/js/opac.js"></script>
 
@@ -38,12 +39,17 @@
 
 <!-- Efecto cebra en tablas (2008-03-04) -->
 <script type="text/javascript" src="[pft]v6003^h[/pft]opac/js/zebra-table.js"></script>
+
+<!-- JavaScript opcional para uso local, específico para una base de datos -->
+<script type="text/javascript" src="[pft]v6003^h[/pft]opac/js/custom/[pft]v2104[/pft].js"></script>
+
 <script type="text/javascript">
 function init() {
     if (document.getElementById("etiq")) {
         stripe("etiq");
     }
 }
+
 window.onload = init
 </script>
 
@@ -57,6 +63,14 @@ window.onload = init
 <title>
 [pft]
 	'Catálogo',
+	
+	/* FIXME -- Usar config para especificar el nombre a mostrar */
+	select v2104
+	    case 'bibima': ' INMABB',
+	    case 'abr': ' Biblioteca Rivadavia',
+	    case 'allbc': ' Biblioteca Central UNS'
+	endsel,
+	
 	if v2101 = 'BIB-CLASS-SEARCH' then
 		' - MSC 2000: ',v2001,
 	else if v2101 = 'CLASS-BROWSE' then
