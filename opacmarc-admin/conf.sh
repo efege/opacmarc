@@ -27,7 +27,7 @@ TARGET_DIR=/home/fernando/svn/opacmarc/bases/opacmarc/opac/$DB_NAME
 MOVE=1
 
 # Use CLEAN=1 para eliminar archivos temporales creados durante la generación del OPAC
-CLEAN=1
+CLEAN=0
 
 # Use CONVERT_WINDOWS=1 si desea usar en un servidor Windows las bases generadas
 CONVERT_WINDOWS=0

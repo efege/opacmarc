@@ -454,8 +454,8 @@ Parámetros CGI
 <!-- 2011 = showForm -->
 <display><htmlpft><pft>
     if a(v2011) and not '~SHOW_FEEDBACK_FORM~SHOW_ABOUT' : v2101 then
-        /*,cat('FORM-SIMPLE.HTM'),*/  /* Quitado a pedido de Raúl, 2007-12-17 */
-        /*,cat('HOME.HTM'),*/  /* Quitado ídem */ /* ATENCION: error en la visualización si el archivo home.htm no existe */
+        ,cat('FORM-SIMPLE.HTM'),  /* TO-DO: Quitar para Museo Mitre */
+        ,cat('HOME.HTM'),         /* Idem Mitre */ /* ATENCION: error en la visualización si el archivo home.htm no existe */
     fi
     if p(v2011) then
           /* A pedido de Raúl, esto sólo debe aparecer en las páginas de los formularios */
