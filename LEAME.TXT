@@ -1,4 +1,4 @@
-Opacmarc - Versión 2006.11.13
+Opacmarc - Versión de desarrollo
 
 
 Para conocer los términos bajo los cuales se ofrece este software, lea LICENCIA.TXT.
