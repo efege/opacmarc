@@ -178,6 +178,8 @@ def build_env():
     # GENERAMOS EL ARCHIVO CIPAR
     # Tomamos como base un cipar incluido en la distribución y lo adecuamos a nuestro OPACMARC_DIR.
     # Hay que usar el path *absoluto* para el cipar
+    # TO-DO: si este CIPAR es constante, podemos generarlo por única vez desde el script de
+    # instalación (ver http://code.google.com/p/opacmarc/issues/detail?id=10)
     CIPAR = os.path.join(OPACMARC_DIR, 'opac', 'opac.cip')
     try:
         f1 = open(CIPAR + '.dist', 'r')  # archivo CIPAR de la distribución

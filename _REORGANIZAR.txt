@@ -1,0 +1,39 @@
+Reorganización de opacmarc-admin:
+
+    - contiene:
+        common  => aux ?   *tab, *.fst, *.stw, *.pft, country.*, dictgiz.*, lang.*  
+        
+        
+admin
+    conf (podria juntarse con cgi-bin/opac/config/)
+        conf.sh
+        opac.conf
+    bin
+        update-opac.*
+    data
+        lang.txt
+        oem2ansi (gizmo)
+        shared (common): *.tab, *.fst, *.stw, *.pft, country.*, dictgiz.*, lang.*
+        opac.cip.dist (plantilla), opac.cip (se genera automáticamente en base a la plantilla)
+    code
+        *.pft
+        *.fst
+        *.proc
+    work
+        one subdir per database, with subdirectories: original (source), tmp, pre
+
+bases
+    common <= lo mismo que admin/common (unificar)
+    opac
+        un subdir por base de datos
+
+cgi-bin
+    common
+    opac
+
+htdocs
+    common
+    opac
+
+logs
+
