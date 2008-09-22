@@ -9,8 +9,8 @@
 AC-ANSI.TAB=G:\svn\opacmarc/util/ac-ansi.tab
 BIBLIO.FST=G:\svn\opacmarc/util/biblio.fst
 BIBLIO.STW=G:\svn\opacmarc/util/biblio.stw
-COUNTRY.*=G:\svn\opacmarc/admin/common/country.*
-DICTGIZ.*=G:\svn\opacmarc/admin/common/dictgiz.*
+COUNTRY.*=G:\svn\opacmarc/util/country.*
+DICTGIZ.*=G:\svn\opacmarc/bases/common/dictgiz.*
 HEADSORT.PFT=G:\svn\opacmarc/util/headsort.pft
 UC-ANSI.TAB=G:\svn\opacmarc/util/uc-ansi.tab
 

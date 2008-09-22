@@ -30,13 +30,13 @@ TARGET_DIR = __OPACMARC_DIR__/bases/opac/
 IMAGES=1
 
 # Tomar registros bibliográficos de publicaciones seriadas de SeCS
-SECS=1
+SECS=0
 
 # Use MOVE=1 para mover los archivos generados al directorio destino (TARGET_DIR).
 MOVE=1
 
 # Use CLEAN=1 para eliminar archivos temporales creados durante la generación del OPAC.
-CLEAN=0
+CLEAN=1
 
 
 # ------------------------------------------------------------------
