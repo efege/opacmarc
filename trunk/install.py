@@ -54,12 +54,14 @@ def set_config():
     replace_config_path(FILES['cipar'])
     replace_config_path(FILES['httpd'])
     replace_config_path(FILES['local'])
+    replace_config_path(FILES['update'])
 
 def create_dirs():
     # En Windows crear directorio temp para búsquedas de wxis (también en Linux para cache?), y ajustar config.
     # No necesitamos tener ese dir en el repositorio; svn:ignore temp
     try:
         os.mkdir('temp')
+        print
         print "Directorio temp creado."
     except:
         print
@@ -81,6 +83,7 @@ def create_db():
     run('id2i bases/id/country.id create=bases/common/country')
     run('id2i bases/id/lang.id create=bases/common/lang')
     run('id2i bases/id/dictgiz.id create=bases/common/dictgiz')
+    run('id2i bases/id/oem2ansi.id create=admin/opac/oem2ansi')
     run('id2i bases/id/demo.id create=admin/work/demo/original/biblio')
 
     # Genera los invertidos correspondientes
@@ -90,7 +93,17 @@ def create_db():
     print
     print "Bases auxiliares creadas."
 
-# FIXME - Cambiar saltos de línea en archivos .tab (usar os.linesep?)
+def create_table(table_type):
+    f = open(FILES[table_type], 'w')
+    values = list(getattr(tablas, table_type))
+    while values:
+        for val in values[:32]:
+            f.write(val + ' ')
+        f.write(os.linesep)
+        values = values[32:]
+    f.close()
+    print
+    print "Tabla %s creada." % table_type
 
 def show_msg():    
     # Mostrar mensajes útiles para el usuario (tips, tareas que debe realizar luego de instalar)
@@ -101,6 +114,7 @@ def show_msg():
 # Ejecutar update-opac.py para la base demo?
   
 # Realizar tests? E.g. búsquedas con acentos y agrep.
+
 
 # ---------------------
 # MAIN
@@ -113,15 +127,19 @@ import shutil
 OPACMARC_DIR = os.path.abspath(os.path.dirname(sys.argv[0]))
 sys.path.insert(0, os.path.join(OPACMARC_DIR, 'util'))
 from util import run_command, error
+import tablas
 
+# Archivos que crea o modifica el script de instalación.
+# TO-DO: agregar aquí los de create_db()
 FILES = {
     'footer' : os.path.join(OPACMARC_DIR, 'cgi-bin', 'opac', 'html', 'opac-footer.htm'),
-    'cipar'  : os.path.join(OPACMARC_DIR, 'admin', 'opac', 'opac.cip'),
-    'httpd'  : os.path.join(OPACMARC_DIR, 'httpd-opacmarc.conf'),
+    'cipar'  : os.path.join(OPACMARC_DIR, 'config', 'opac.cip'),
+    'httpd'  : os.path.join(OPACMARC_DIR, 'config', 'httpd-opacmarc.conf'),
     'local'  : os.path.join(OPACMARC_DIR, 'config', 'local.conf'),
+    'update' : os.path.join(OPACMARC_DIR, 'config', 'update.conf'),
+    'actab'  : os.path.join(OPACMARC_DIR, 'util', 'ac-ansi.tab'),
+    'uctab'  : os.path.join(OPACMARC_DIR, 'util', 'uc-ansi.tab'),
 }
-
-# FIXME - add cisis path to env
 
 print '''
 -----------------------------------------------------
@@ -133,4 +151,6 @@ set_version()
 set_config()
 create_dirs()
 create_db()
+create_table('actab')
+create_table('uctab')
 show_msg()

@@ -116,7 +116,7 @@ def read_config():
     # TO-DO: see also
     #  - http://docs.python.org/lib/module-ConfigParser.html
     #  - http://cfgparse.sourceforge.net/
-    config_file = os.path.join(OPACMARC_DIR, 'config', 'opac.conf')
+    config_file = os.path.join(OPACMARC_DIR, 'config', 'update.conf')
     config = ConfigParser.ConfigParser()
     config.optionxform = str  # make option names case sensitive
     try:
@@ -135,24 +135,24 @@ def build_env():
     # Hay que usar el path *absoluto* para el cipar
     # TO-DO: si este CIPAR es constante, podemos generarlo por única vez desde el script de
     # instalación (ver http://code.google.com/p/opacmarc/issues/detail?id=10)
-    CIPAR = os.path.join(OPACMARC_DIR, 'admin', 'opac', 'opac.cip')
-    try:
-        f1 = open(CIPAR + '.dist', 'r')  # archivo CIPAR de la distribución
-        f2 = open(CIPAR, 'w')
-        #for line in f1: f2.write(line.replace('__OPACMARC_DIR__', OPACMARC_DIR))
-        f2.write(
-            f1.read().replace('__OPACMARC_DIR__', OPACMARC_DIR)
-        )
-        f1.close()
-        f2.close()
-    except:
-        raise
-        error("No se pudo generar el archivo cipar.")
+    CIPAR = os.path.join(OPACMARC_DIR, 'config', 'opac.cip')
+    #try:
+    #    f1 = open(CIPAR + '.dist', 'r')  # archivo CIPAR de la distribución
+    #    f2 = open(CIPAR, 'w')
+    #    #for line in f1: f2.write(line.replace('__OPACMARC_DIR__', OPACMARC_DIR))
+    #    f2.write(
+    #        f1.read().replace('__OPACMARC_DIR__', OPACMARC_DIR)
+    #    )
+    #    f1.close()
+    #    f2.close()
+    #except:
+    #    raise
+    #    error("No se pudo generar el archivo cipar.")
     
     # Este diccionario es pasado en las llamadas al sistema
     return {
         'CIPAR':                CIPAR,
-        # Las variables que siguen son definidas en opac.conf
+        # Las variables que siguen son definidas en update.conf
         'PATH':                 os.getenv('PATH') + os.pathsep + CONFIG.get('Global', 'PATH_CISIS'),
         'SUBJ_TAGS':            CONFIG.get('Global', 'SUBJ_TAGS'),
         'NAME_TAGS':            CONFIG.get('Global', 'NAME_TAGS'),
@@ -180,9 +180,9 @@ def print_usage():
             
         Para correr este script, se necesitan los siguientes archivos:
         
-            - opac.conf       archivo de configuracion
-            - common/*.*
-            - opac/*.* 
+            - config/update.conf       archivo de configuracion
+            - admin/common/*.*
+            - admin/opac/*.* 
     '''
     print usage_msg
     sys.exit()
@@ -322,7 +322,7 @@ def get_secs_db():
     #     * base oem2ansi (el gizmo para cambio de codificación)
     #     * archivo secs2marc.proc (migración SeCS => MARC21)
     #
-    # TO-DO: Independizarse del nombre de la base (usar opac.conf)
+    # TO-DO: Independizarse del nombre de la base (usar update.conf)
     # ------------------------------------------------------------------
     
     # TO-DO SeCS
@@ -625,7 +625,7 @@ def build_agrep_dictionaries():
     print "   - subj"
     # Para bibima usamos la base MSC; para el resto, la base SUBJ
     # TO-DO: la base subj también sirve para bibima; usar cat & uniq
-    # TO-DO: independizarse del nombre de la base (usar opac.conf)
+    # TO-DO: independizarse del nombre de la base (usar update.conf)
     if DB_NAME == 'bibima':
         run('''mx dict=MSC "pft=v1^*/" k1=a k2=zz now > dictSUBJ.txt''')
     else:
@@ -677,7 +677,7 @@ def build_aux_files():
     run('''mx tmp/langcode "pft=v1,'^p',v2,'^',/" now -all > langcode.txt''')
     
 
-    # TO-DO: independizarse del nombre de la base (usar opac.conf)
+    # TO-DO: independizarse del nombre de la base (usar update.conf)
     if DB_NAME == "bibima":
         print
         # -----------------------------------------------------
