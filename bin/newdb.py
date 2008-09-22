@@ -1,5 +1,8 @@
 # coding=windows-1252
 
+# Genera las carpetas y archivos asociados a una nueva base de datos para
+# consultar a través de OpacMarc.
+#
 # Fernando Gómez, 2008-09-20
 
 import os
@@ -10,7 +13,7 @@ sys.path.insert(0, os.path.join(OPACMARC_DIR, 'util'))
 from util import error
 
 # Plantillas para archivos
-# TO-DO: usar los textos que aparecen en los demo.htm.
+# TO-DO: usar los mismos textos que aparecen en los demo.htm.
 about_tpl = '''<p>Agregue aquí un texto explicando a los usuarios qué encontrarán en este catálogo.</p>'''
 banner_tpl = '''<h1>Cabecera para la base <i>%s</i></h1>'''
 home_tpl = '''<p>Puede agregar aquí contenido adicional para las páginas de la base <i>%s</i></p>'''
@@ -57,7 +60,7 @@ try:
     os.mkdir('htdocs/opac/local/img/%s' % DB_NAME)
 
 except:
-    error("Hubo un error. Posiblemente ya existe una base con ese nombre.")
+    error("Hubo un error al crear directorios. Posiblemente ya existe una base con el nombre '%s'." % DB_NAME)
 
 # Creamos archivos
 try:
@@ -109,6 +112,6 @@ hágalo editando el archivo
 
     config/local.conf
 
-''' % (DB_NAME,)*7  # FIXME
+''' % ((DB_NAME,)*7)   # Requiere los paréntesis, de lo contrario TypeError
 sys.exit(0)
 

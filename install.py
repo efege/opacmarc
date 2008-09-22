@@ -16,6 +16,8 @@ def set_version():
     # svnversion produce identificadores de la forma '322' o '322M'.
     # En el 2do caso, significa que se trata de la revisión 322 con
     # modificaciones locales.
+    # FIXME - En Windows con Tortoise no tenemos svnversion. Alternativa: ver cómo
+    # extraer la información de SubWCRev.exe
     version = os.popen('svnversion').read().replace(os.linesep, '')
     footer_file = file(FILES['footer'])
     aux_file = file('footer.tmp', 'w')
@@ -30,9 +32,11 @@ def set_version():
 def replace_config_path(config_file):
     # Crea un archivo de configuración a partir de una plantilla y del valor
     # actual de OPACMARC_DIR.
+    # TO-DO: guardar las plantillas en una carpeta 'templates'?
     if os.path.isfile(config_file):
         print
         print "ATENCION: ya existe el archivo de configuracion %s." % os.path.abspath(config_file)
+        print
     else:
         try:
             f1 = open(config_file + '.dist', 'r')
@@ -42,25 +46,26 @@ def replace_config_path(config_file):
             )
             f1.close()
             f2.close()
-            print
             print 'Generado el archivo %s.' % config_file
         except:
             print
             print "ERROR: No se pudo generar el archivo %s." % config_file
+            print
 
 def set_config():
-    # Crea archivos de configuración.
+    # Crea archivos de configuración con los paths correctos.
     replace_config_path(FILES['httpd'])   # modelo de config. para Apache
     replace_config_path(FILES['local'])   # config. local (para opac.xis) 
     replace_config_path(FILES['update'])  # para update-opac.py
     replace_config_path(FILES['cipar'])   # para las llamadas a mx desde update-opac.py
+    
+    # TO-DO: local.conf > SCRIPT_URL > "wxis.exe" vs "wxis"
 
 def create_dirs():
     # En Windows crear directorio temp para búsquedas de wxis (también en Linux para cache?), y ajustar config.
     # No necesitamos tener ese dir en el repositorio; svn:ignore temp
     try:
         os.mkdir('temp')
-        print
         print "Directorio temp creado."
     except:
         pass
@@ -91,22 +96,19 @@ def create_db():
     run('mx bases/common/country "fst=1 0 v1" fullinv=bases/common/country')
     run('mx bases/common/lang "fst=1 0 v1" fullinv=bases/common/lang')
     
-    print
     print "Bases auxiliares creadas."
 
 def create_table(table_type):
     f = open(FILES[table_type], 'w')
     values = list(getattr(tablas, table_type))
     while values:
-        f.write(' '.join(values[:32]) + os.linesep)
+        f.write(' '.join(values[:32]) + '\n')  # CURIOSO: usando os.linesep en vez de '\n' no se puede leer la tabla en Windows
         values = values[32:]
     f.close()
-    print
     print "Tabla %s creada." % table_type
 
 def show_msg():    
     # Mostrar mensajes útiles para el usuario (tips, tareas que debe realizar luego de instalar)
-    print
     print '''
 -----------------------------------------------------
   INSTALACION FINALIZADA
@@ -114,10 +116,13 @@ def show_msg():
 '''
     print '''Algunos mensajes para el admin:
         - configurar permiso de escritura en temp y logs
+        - use config/http-opacmarc.conf como base para configurar Apache
         - ejecutar newdb.py con la base demo?
+        - copie wxis (wxis.exe en Windows) en la carpeta cgi-bin
+        - Windows: copie agrep.exe en la carpeta bin
         - ejecutar update-opac.py demo
-        - wxis, agrep?
-        - Realizar tests? E.g. búsquedas con acentos y agrep.
+        - Entrar con un browser a la URL...
+        - Realizar tests? E.g. búsquedas con acentos y con errores.
     '''
 
 
