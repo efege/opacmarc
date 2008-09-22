@@ -11,7 +11,7 @@ from util import error
 
 # Plantillas para archivos
 # TO-DO: usar los textos que aparecen en los demo.htm.
-banner_tpl = '''<p>Agregue aquí un texto explicando a los usuarios qué encontrarán en este catálogo.</p>'''
+about_tpl = '''<p>Agregue aquí un texto explicando a los usuarios qué encontrarán en este catálogo.</p>'''
 banner_tpl = '''<h1>Cabecera para la base <i>%s</i></h1>'''
 home_tpl = '''<p>Puede agregar aquí contenido adicional para las páginas de la base <i>%s</i></p>'''
 css_tpl = '''/* Puede definir aquí estilos CSS específicos para la base %s */'''
@@ -54,7 +54,7 @@ try:
     for dir_name in ('original', 'tmp', 'preprocess'):
         os.mkdir('admin/work/%s/%s' % (DB_NAME, dir_name))
     
-    os.mkdir('htdocs/opac/img/%s' % DB_NAME)
+    os.mkdir('htdocs/opac/local/img/%s' % DB_NAME)
 
 except:
     error("Hubo un error. Posiblemente ya existe una base con ese nombre.")
@@ -62,7 +62,7 @@ except:
 # Creamos archivos
 try:
     f = open('cgi-bin/opac/local/about/%s.htm' % DB_NAME, 'w')
-    f.write(about_tpl % DB_NAME)
+    f.write(about_tpl)
     f.close()
     
     f = open('cgi-bin/opac/local/banner/%s.htm' % DB_NAME, 'w')
@@ -73,7 +73,7 @@ try:
     f.write(home_tpl % DB_NAME)
     f.close()
     
-    f = open('htdocs/opac/css/custom/%s.css' % DB_NAME, 'w')
+    f = open('htdocs/opac/local/css/%s.css' % DB_NAME, 'w')
     f.write(css_tpl % DB_NAME)
     f.close()
 except:
@@ -92,23 +92,23 @@ y luego ejecutar:
 
     admin/bin/update-opac.py %s
     
-Ademas, si desea personalizar la presentacion del OPAC para esta base, puede
+Además, si desea personalizar la presentacion del OPAC para esta base, puede
 editar los siguientes archivos:
 
     cgi-bin/opac/local/about/%s.htm
     cgi-bin/opac/local/banner/%s.htm
     cgi-bin/opac/local/home/%s.htm
-    htdocs/opac/css/custom/%s.css
+    htdocs/opac/local/css/%s.css
     
-Si necesita imagenes auxiliares (p.ej. un logo) debera colocarlas en la carpeta
+Si necesita imágenes auxiliares (p.ej. un logo) deberá colocarlas en la carpeta
 
-    htdocs/opac/img/%s/
+    htdocs/opac/local/img/%s/
     
-Puede que necesite modificar algunos parámetros de configuración para el OPAC;
+Si necesita modificar algunos parámetros de configuración para el OPAC,
 hágalo editando el archivo
 
     config/local.conf
-    
-''' % (DB_NAME,)*7
+
+''' % (DB_NAME,)*7  # FIXME
 sys.exit(0)
 

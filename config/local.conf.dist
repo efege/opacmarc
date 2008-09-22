@@ -7,7 +7,7 @@
 #     2. sobreescribir parámetros de configuración que aparecen
 #        en opacmarc.conf.
 #
-# Manténga este archivo pequeño. Sólo necesita incluir aquí un
+# Mantenga este archivo pequeño. Sólo necesita incluir aquí un
 # parámetro si su valor difiere del que aparece en opacmarc.conf.
 # ================================================================
 
@@ -17,43 +17,35 @@
 # -------------------------------------------------------
 
 # SCRIPT_URL: la URL de wxis (relativa a la raíz del servidor).
-# Si se usa wxis directamente, la URL será algo como "/cgi-bin/wxis"  
-# Si, en cambio, se usa wxis a través de PHP, la URL será algo como "/wxis.php"
 SCRIPT_URL=/cgi-bin/wxis
 
 # PATH_HTDOCS: prefijo para las URLs de imágenes, scripts, estilos.
-# Si instala OPACMARC en la raíz del servidor, el valor será "/"
-# (sin las comillas).
+# Si instala OPACMARC en la raíz del servidor, el valor será "/" (sin las comillas).
 PATH_HTDOCS=/
   
   
 # -------------------------------------------------------
 # DIRECTORIOS
-# En cada caso se menciona un valor a manera de referencia.
 # No coloque una barra final en los caminos (paths).
 # -------------------------------------------------------
   
 # PATH_DB: directorio que contiene las bases de datos usadas por OPACMARC.
-# Valor de referencia: /var/www/bases/opacmarc
-PATH_DB=
+PATH_DB=__OPACMARC_DIR__/bases
   
 # PATH_CGI-BIN: directorio cgi-bin de OPACMARC.
-# Valor de referencia: /var/www/cgi-bin/opacmarc
-PATH_CGI-BIN=
+PATH_CGI-BIN=__OPACMARC_DIR__/cgi-bin
   
 # PATH_TEMP: directorio para archivos temporales. Necesita permiso de escritura
 # para el usuario del servidor web.
 # Esta variable se debe definir en Windows, pero no es necesaria en Linux.
-# Valor de referencia (Windows): \opacmarc\temp
-#PATH_TEMP=
+PATH_TEMP=__OPACMARC_DIR__/temp
 
 # Directorio para los logs de acceso al OPAC. Necesita permiso de escritura
 # para el usuario del servidor web.
-# Valor de referencia: /var/www/bases/opacmarc/logs
-PATH_LOGS=
+PATH_LOGS=__OPACMARC_DIR__/logs
   
 # PATH_AGREP: ubicación del ejecutable agrep
-# Valores de referencia: PATH_AGREP=\httpd\cgi-bin\agrep.exe (Windows); PATH_AGREP=/usr/bin/agrep (Linux)
+# Valores de referencia: PATH_AGREP=__OPACMARC_DIR__/bin/agrep.exe (Windows); PATH_AGREP=/usr/bin/agrep (Linux)
 PATH_AGREP=
 
 
