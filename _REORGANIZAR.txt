@@ -1,3 +1,6 @@
+Ver también lo que empezamos a hacer para Catalis: http://dpaste.com/hold/67286/
+
+
 Reorganización de opacmarc-admin:
 
     - contiene:
@@ -37,3 +40,11 @@ htdocs
 
 logs
 
+bin
+    agrep.exe (en Windows)
+    newdb.py
+    
+config
+    Aquí podemos juntar lo que está en cgi-bin/opac/config/*.conf y en admin/*.conf
+    Pero antes tenemos que verificar que desde wxis podemos leer este dir, e.g.:
+        cat(getenv('PATH_WXIS'),'../config/opacmarc.conf')

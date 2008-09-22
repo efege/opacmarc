@@ -17,14 +17,14 @@
 # -------------------------------------------------------
 
 # SCRIPT_URL: la URL de wxis (relativa a la raíz del servidor).
-# Si se usa wxis directamente, la URL será algo como "/cgi-bin/opacmarc/wxis"  
-# Si, en cambio, se usa wxis a través de PHP, la URL será algo como "/opacmarc/wxis.php"
-SCRIPT_URL=/cgi-bin/opacmarc/wxis
+# Si se usa wxis directamente, la URL será algo como "/cgi-bin/wxis"  
+# Si, en cambio, se usa wxis a través de PHP, la URL será algo como "/wxis.php"
+SCRIPT_URL=/cgi-bin/wxis
 
 # PATH_HTDOCS: prefijo para las URLs de imágenes, scripts, estilos.
-# Si instala OPACMARC en la raíz del servidor, el valor será "/opacmarc/"
+# Si instala OPACMARC en la raíz del servidor, el valor será "/"
 # (sin las comillas).
-PATH_HTDOCS=/opacmarc/
+PATH_HTDOCS=/
   
   
 # -------------------------------------------------------
@@ -41,18 +41,19 @@ PATH_DB=
 # Valor de referencia: /var/www/cgi-bin/opacmarc
 PATH_CGI-BIN=
   
-# PATH_TEMP: directorio para archivos temporales. Necesita permiso de escritura.
-# Esta variable se debe definir en Windows, pero no en Linux.
-# Valor de referencia (Windows): \httpd\temp\opacmarc\opac
+# PATH_TEMP: directorio para archivos temporales. Necesita permiso de escritura
+# para el usuario del servidor web.
+# Esta variable se debe definir en Windows, pero no es necesaria en Linux.
+# Valor de referencia (Windows): \opacmarc\temp
 #PATH_TEMP=
 
-# Directorio para los logs de acceso al OPAC. Necesita permiso de escritura.
-# Valor de referencia: /var/www/bases/opacmarc/opac/access_logs
+# Directorio para los logs de acceso al OPAC. Necesita permiso de escritura
+# para el usuario del servidor web.
+# Valor de referencia: /var/www/bases/opacmarc/logs
 PATH_LOGS=
   
 # PATH_AGREP: ubicación del ejecutable agrep
-# Valores de referencia: PATH_AGREP=\httpd\cgi-bin\agrep.exe (Windows);
-# PATH_AGREP=/usr/bin/agrep (Linux)
+# Valores de referencia: PATH_AGREP=\httpd\cgi-bin\agrep.exe (Windows); PATH_AGREP=/usr/bin/agrep (Linux)
 PATH_AGREP=
 
 

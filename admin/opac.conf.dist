@@ -7,28 +7,36 @@
 # Using module ConfigParser, a section header is mandatory
 [Global]
 
+# ------------------------------------------------------------------
+# Paths
+# ------------------------------------------------------------------
+
 # Ubicación de mx y demás utilitarios
 PATH_CISIS = /home/fernando/bin/cisis
 
 # En este directorio están almacenadas las imágenes de las tapas (si las hay).
 # ATENCION: no incluir al final de la ruta el directorio con el nombre de la base.
-DIR_IMG = G:\svn\opacmarc\htdocs\opac\local\img\
+DIR_IMG = __OPACMARC_DIR__/htdocs/opac/local/img/
 
 # A este directorio van a parar los archivos generados (si se usa MOVE=1).
 # ATENCION: no incluir al final de la ruta el directorio con el nombre de la base.
-TARGET_DIR = G:\svn\opacmarc\bases\opac\
+TARGET_DIR = __OPACMARC_DIR__/bases/opac/
+
+# ------------------------------------------------------------------
+# Opciones
+# ------------------------------------------------------------------
 
 # Procesar imágenes asociadas a registros bibliográficos
-IMAGES = 1
+IMAGES=1
 
 # Tomar registros bibliográficos de publicaciones seriadas de SeCS
-SECS = 1
+SECS=1
 
 # Use MOVE=1 para mover los archivos generados al directorio destino (TARGET_DIR).
-MOVE = 1
+MOVE=1
 
 # Use CLEAN=1 para eliminar archivos temporales creados durante la generación del OPAC.
-CLEAN = 0
+CLEAN=0
 
 
 # ------------------------------------------------------------------
@@ -39,7 +47,7 @@ CLEAN = 0
 # Valor del parámetro tell del mx
 TELL = 5000
 
-# Lista de tags de los cuales vamos a extraer los encabezamientos
+# Lista de tags de los cuales vamos a extraer los encabezamientos.
 # subject headings
 SUBJ_TAGS = v600v610v611v630v650v651v653v655v656
 # name headings
