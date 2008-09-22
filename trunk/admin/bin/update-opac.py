@@ -109,53 +109,8 @@
 # Python Standard Logging: http://www.onlamp.com/lpt/a/5914
 #
 
-
-def error(msg = 'Error'):
-    '''Displays an error message and exits.'''
-    sys.exit(msg + '\n')
-
-
 def run(command, msg = 'Error'):
-    '''Runs a system command and checks for an error.
-    
-    Accepts a string:
-    
-        run('mx tmp count=3 pft=mfn/ now')
-        
-    a list:
-    
-        run(['mx', 'tmp', 'count=3', 'pft=mfn/', 'now'])
-        
-    and a "broken" list (REALLY??):
-    
-        run([
-            "mx",
-            "tmp",
-            "count=3",
-            "pft=mfn,x3,'!'/",
-            "now"
-        ])
-    '''
-    try:
-        # NOTE: ENV is a global variable; shell=True is needed on Linux to avoid using lists for commands with arguments
-        subprocess.check_call(command, env=ENV, shell=True)
-    except subprocess.CalledProcessError:
-        error(msg + ':\n  ' + command)
-
-
-def emptydir(dir):
-    '''Removes every file in a directory.'''
-    
-    # TO-DO: hacerlo recursivo. See 'rmall.py' in Programming Python:
-    #    http://books.google.com/books?id=E6FcH4d-hAAC&pg=PA233&lpg=PA233&dq=python+rmall&source=web&ots=Xx3ulBkFBS&sig=pleFTG4fmym0b9UB6kXe-bplX9Y
-    #    http://safari.oreilly.com/0596000855/python2-CHP-5-SECT-7
-    try:
-        for f in os.listdir(dir):
-            os.remove(os.path.join(dir, f))
-    except:
-        error("Error al vaciar el directorio %s" % dir)
-        raise
-        
+    return run_command(command, msg = msg, env = ENV)
 
 def read_config():
     # TO-DO: see also
@@ -166,10 +121,10 @@ def read_config():
     config.optionxform = str  # make option names case sensitive
     try:
         config.readfp(open(config_file))
-        print "Archivo de configuracion leido: %s" % config_file
+        print "Archivo de configuracion leido: %s" % os.path.abspath(config_file)
         return config
     except:
-        error("No se ha podido leer el archivo de configuracion %s." % config_file)
+        error("No se ha podido leer el archivo de configuracion %s." % os.path.abspath(config_file))
 
 
 def build_env():
@@ -180,7 +135,7 @@ def build_env():
     # Hay que usar el path *absoluto* para el cipar
     # TO-DO: si este CIPAR es constante, podemos generarlo por única vez desde el script de
     # instalación (ver http://code.google.com/p/opacmarc/issues/detail?id=10)
-    CIPAR = os.path.join(OPACMARC_DIR, 'opac', 'opac.cip')
+    CIPAR = os.path.join(OPACMARC_DIR, 'admin/opac', 'opac.cip')
     try:
         f1 = open(CIPAR + '.dist', 'r')  # archivo CIPAR de la distribución
         f2 = open(CIPAR, 'w')
@@ -191,6 +146,7 @@ def build_env():
         f1.close()
         f2.close()
     except:
+        raise
         error("No se pudo generar el archivo cipar.")
     
     # Este diccionario es pasado en las llamadas al sistema
@@ -235,16 +191,17 @@ def print_usage():
 def goto_work_dir():
 
     # Directorio de trabajo
-    WORK_DIR = os.path.join(OPACMARC_DIR, 'work', DB_NAME)
+    WORK_DIR = os.path.join(OPACMARC_DIR, 'admin/work', DB_NAME)
     if not os.path.isdir(WORK_DIR):
         error("No se ha encontrado el directorio de trabajo para la base %s:\n     %s" % (DB_NAME, WORK_DIR))
     
     # Nos ubicamos en el directorio de trabajo
+    print
     try:
         os.chdir(WORK_DIR)
-        print "Directorio de trabajo: %s" % WORK_DIR
+        print "Directorio de trabajo: %s" % os.path.abspath(WORK_DIR)
     except:
-        error("No se puede ingresar al directorio de trabajo, %s." % WORK_DIR)
+        error("No se puede ingresar al directorio de trabajo, %s." % os.path.abspath(WORK_DIR))
     
     #TO-DO: eliminar en WORK_DIR todos los archivos *.* (sólo nos interesa conservar la carpeta 'original')
     
@@ -297,17 +254,17 @@ def get_biblio_db():
     if os.path.isfile(SOURCE_DIR + '/' + DB_NAME + '.zip'):
         #unzip -oq $SOURCE_DIR/$DB_NAME.zip -d tmp || error
         zipfile.ZipFile(SOURCE_DIR + '/' + DB_NAME + '.zip', 'r')  # ???  Ver http://www.thescripts.com/forum/thread25297.html
-        print "Usando como base original: %s" + sep + "%s.zip" % (SOURCE_DIR, DB_NAME)
+        print "Usando como base original: %s%s%s.zip" % (os.path.abspath(SOURCE_DIR), sep, DB_NAME)
     
     elif os.path.isfile(SOURCE_DIR + '/biblio.zip'):
         #unzip -oq $SOURCE_DIR/biblio.zip -d tmp || error
-        print "Usando como base original: " + SOURCE_DIR + sep + "biblio.zip"
+        print "Usando como base original: %s%sbiblio.zip" % (os.path.abspath(SOURCE_DIR), sep)
     
     # ARCHIVOS MST/XRF
     elif os.path.isfile(SOURCE_DIR + '/biblio.mst') and os.path.isfile(SOURCE_DIR + '/biblio.xrf'):
         shutil.copy(SOURCE_DIR + '/biblio.mst', 'tmp')
         shutil.copy(SOURCE_DIR + '/biblio.xrf', 'tmp')
-        print "Usando como base original: " + SOURCE_DIR + sep + "biblio.{mst,xrf}" 
+        print "Usando como base original: %s%sbiblio.{mst,xrf}" % (os.path.abspath(SOURCE_DIR), sep)
     
     # ARCHIVOS MARC
     elif os.path.isfile(SOURCE_DIR + '/' + DB_NAME + '.mrc'):
@@ -379,7 +336,7 @@ def process_images():
     if not os.path.isdir(DIR_IMG):
         print "No se encuentra el directorio de imágenes: %s" % DIR_IMG
     else:
-        print "Procesando imágenes..."
+        print "Procesando imagenes..."
         file = open('tmp/lista_img.txt', 'w')
         #pattern = re.compile(r'00[0-9]{4}\.[a-z]{3}$')
         pattern = re.compile(r'.\.(gif|jpeg|jpg|png)$', re.IGNORECASE)
@@ -610,7 +567,7 @@ def process_analytics():
     # ------------------------------------------------------------------
      
     print
-    print "Detectando registros analíticos..."
+    print "Detectando registros analiticos..."
     # Para los registros analíticos, creamos un 773$9 donde guardar el MFN
     # del registro asociado, y así ahorrar futuros lookups en el diccionario
     # ATENCION: esto debe hacerse *después* de aplicado el msrt y generado el diccionario
@@ -820,18 +777,21 @@ def move_files():
     emptydir(TARGET_DIR)
     try:
         for f in os.listdir('.'):
-            if '.' in f:    # solo archivos *.* (excluyo directorios)
+            if os.path.isfile(f):    # solo archivos (excluyo directorios)
                 shutil.move(f, TARGET_DIR)
     except:
-        #raise
-        error("No se puede mover los archivos a %s" % TARGET_DIR)
         raise
 
+def clean_cache():
+    CACHE_DIR = os.path.join(OPACMARC_DIR, 'temp')
+    emptydir(CACHE_DIR)
 
 def end():
-    print
-    print "*** La actualización ha finalizado exitosamente. ***"
-    print
+    print '''
+-----------------------------------------------------
+  La actualizacion ha finalizado exitosamente.
+-----------------------------------------------------
+'''
     sys.exit(0)
 
 
@@ -850,6 +810,10 @@ import zipfile       # for reading .zip files
 import subprocess    # for running system commands (mx, i2id, etc)
 import ConfigParser  # for reading config file 
 
+OPACMARC_DIR = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]), "../.."))
+sys.path.insert(0, os.path.join(OPACMARC_DIR, 'util'))
+from util import run_command, error, emptydir
+
 
 print '''
 -----------------------------------------------------
@@ -863,7 +827,6 @@ if len(sys.argv) < 2:
 
 # Read config file and define global variables
 DB_NAME = sys.argv[1]
-OPACMARC_DIR = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]), ".."))
 CONFIG = read_config()
 TELL = CONFIG.get('Global', 'TELL')  # used by many calls to cisis utilities
 ENV = build_env()
@@ -896,5 +859,7 @@ if CONFIG.get('Global', 'CLEAN') == '1':
 if CONFIG.get('Global', 'MOVE') == '1':
     move_files()
 
+clean_cache()
+    
 # Say goodbye
 end()

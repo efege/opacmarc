@@ -456,6 +456,7 @@ Parámetros CGI
     if a(v2011) and not '~SHOW_FEEDBACK_FORM~SHOW_ABOUT' : v2101 then
         ,cat('FORM-SIMPLE.HTM'),  /* TO-DO: Quitar para Museo Mitre */
         ,cat('HOME.HTM'),         /* Idem Mitre */ /* ATENCION: error en la visualización si el archivo home.htm no existe */
+        ,cat('OPAC-FOOTER.HTM'),
     fi
     if p(v2011) then
           /* A pedido de Raúl, esto sólo debe aparecer en las páginas de los formularios */

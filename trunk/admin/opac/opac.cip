@@ -6,30 +6,30 @@
 # -----------------------------------------------------------------
 # Archivos utilizados en la generación del OPAC y en Catalis
 # -----------------------------------------------------------------
-AC-ANSI.TAB=/home/fernando/svn/opacmarc/opacmarc-admin/common/ac-ansi.tab
-BIBLIO.FST=/home/fernando/svn/opacmarc/opacmarc-admin/common/biblio.fst
-BIBLIO.STW=/home/fernando/svn/opacmarc/opacmarc-admin/common/biblio.stw
-COUNTRY.*=/home/fernando/svn/opacmarc/opacmarc-admin/common/country.*
-DICTGIZ.*=/home/fernando/svn/opacmarc/opacmarc-admin/common/dictgiz.*
-HEADSORT.PFT=/home/fernando/svn/opacmarc/opacmarc-admin/common/headsort.pft
-UC-ANSI.TAB=/home/fernando/svn/opacmarc/opacmarc-admin/common/uc-ansi.tab
+AC-ANSI.TAB=G:\svn\opacmarc/util/ac-ansi.tab
+BIBLIO.FST=G:\svn\opacmarc/util/biblio.fst
+BIBLIO.STW=G:\svn\opacmarc/util/biblio.stw
+COUNTRY.*=G:\svn\opacmarc/admin/common/country.*
+DICTGIZ.*=G:\svn\opacmarc/admin/common/dictgiz.*
+HEADSORT.PFT=G:\svn\opacmarc/util/headsort.pft
+UC-ANSI.TAB=G:\svn\opacmarc/util/uc-ansi.tab
 
 
 # -----------------------------------------------------------------
 # Archivos utilizados solamente en la generación del OPAC
 # -----------------------------------------------------------------
-ELIMDUP2.PFT=/home/fernando/svn/opacmarc/opacmarc-admin/opac/elimdup2.pft
-HEAD.PFT=/home/fernando/svn/opacmarc/opacmarc-admin/opac/head.pft
-HEADINGS.FST=/home/fernando/svn/opacmarc/opacmarc-admin/opac/headings.fst
-LANG.*=/home/fernando/svn/opacmarc/opacmarc-admin/opac/lang.*
-LANG.FST=/home/fernando/svn/opacmarc/opacmarc-admin/opac/lang.fst
-LANG.TXT=/home/fernando/svn/opacmarc/opacmarc-admin/opac/lang.txt
-LOCATION_SORT.PFT=/home/fernando/svn/opacmarc/opacmarc-admin/opac/location_sort.pft
+ELIMDUP2.PFT=G:\svn\opacmarc/admin/opac/elimdup2.pft
+HEAD.PFT=G:\svn\opacmarc/admin/opac/head.pft
+HEADINGS.FST=G:\svn\opacmarc/admin/opac/headings.fst
+LANG.*=G:\svn\opacmarc/admin/opac/lang.*
+LANG.FST=G:\svn\opacmarc/admin/opac/lang.fst
+LANG.TXT=G:\svn\opacmarc/admin/opac/lang.txt
+LOCATION_SORT.PFT=G:\svn\opacmarc/admin/opac/location_sort.pft
 MSC.*=/home/fernando/svn/opacmarc/bases/opacmarc/opac/msc2000/msc.*
-NAME.PFT=/home/fernando/svn/opacmarc/opacmarc-admin/opac/name.pft
-OEM2ANSI.*=/home/fernando/svn/opacmarc/opacmarc-admin/opac/oem2ansi.*
-RECODE.PFT=/home/fernando/svn/opacmarc/opacmarc-admin/opac/recode.pft
-REGPUNT.PFT=/home/fernando/svn/opacmarc/opacmarc-admin/opac/regpunt.pft
-SECS2MARC.PROC=/home/fernando/svn/opacmarc/opacmarc-admin/opac/secs2marc.proc
-SUBJ.PFT=/home/fernando/svn/opacmarc/opacmarc-admin/opac/subj.pft
-TITLE.PFT=/home/fernando/svn/opacmarc/opacmarc-admin/opac/title.pft
+NAME.PFT=G:\svn\opacmarc/admin/opac/name.pft
+OEM2ANSI.*=G:\svn\opacmarc/admin/opac/oem2ansi.*
+RECODE.PFT=G:\svn\opacmarc/admin/opac/recode.pft
+REGPUNT.PFT=G:\svn\opacmarc/admin/opac/regpunt.pft
+SECS2MARC.PROC=G:\svn\opacmarc/admin/opac/secs2marc.proc
+SUBJ.PFT=G:\svn\opacmarc/admin/opac/subj.pft
+TITLE.PFT=G:\svn\opacmarc/admin/opac/title.pft

@@ -127,7 +127,7 @@
 	'UPDATED.TXT=',     v6003^b,'/opac/',v2104,'/updated.txt'/
 
 	/* ----- Archivos HTML ----- */
-	'ABOUT.HTM=',         v6003^c,'/opac/about/',v2104,'.htm'/
+	'ABOUT.HTM=',         v6003^c,'/opac/local/about/',v2104,'.htm'/
 	'BIB-LIST-HEAD.HTM=', v6003^c,'/common/html/bib-list-head.htm'/
 	'BIB-NAV.HTM=', v6003^c,'/opac/html/bib-nav.htm'/
 	'BIB-RECORD-1.HTM=',  v6003^c,'/opac/html/bib-record-1.htm'/
@@ -143,7 +143,7 @@
 	'HEADING-BROWSE-MIDDLE.HTM=',v6003^c,'/opac/html/heading-browse-middle.htm'/
 	'HEADING-BROWSE-NAV.HTM=',v6003^c,'/opac/html/heading-browse-nav.htm'/
 	'HEADING-BROWSE-TOP.HTM=',v6003^c,'/opac/html/heading-browse-top.htm'/
-	'HOME.HTM=',          v6003^c,'/opac/home/',v2104,'.htm'/
+	'HOME.HTM=',          v6003^c,'/opac/local/home/',v2104,'.htm'/
 	'H-SEARCH-BOTTOM.HTM=',v6003^c,'/opac/html/h-search-bottom.htm'/
 	'H-SEARCH-TOP-1.HTM=',v6003^c,'/opac/html/h-search-top-1.htm'/
 	'H-SEARCH-TOP-2.HTM=',v6003^c,'/opac/html/h-search-top-2.htm'/
@@ -154,8 +154,8 @@
 	'SAMPLE-RECORD.TXT=', v6003^c,'/opac/sample-record.txt'/
 	'SORTED-BY.HTM=',     v6003^c,'/opac/html/sorted-by.htm'/
 	
-	'OPAC-BANNER.HTM=',   v6003^c,'/opac/banner/',v2104,'.htm'/
-	'PRESENTATION.HTM=',  v6003^c,'/opac/present/',v2104,'.htm'/
+	'OPAC-BANNER.HTM=',   v6003^c,'/opac/local/banner/',v2104,'.htm'/
+	'PRESENTATION.HTM=',  v6003^c,'/opac/local/present/',v2104,'.htm'/
 	'ABOUT-MSC.HTM=',     v6003^c,'/opac/html/about-msc.htm'/
 	
 	/* ----- Archivos PFT ----- */

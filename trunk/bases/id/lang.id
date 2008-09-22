@@ -1,0 +1,328 @@
+!ID 000001
+!v001!AKK
+!v002!Akkadian
+!v003!Acadio
+!ID 000002
+!v001!ALB
+!v002!Albanian
+!v003!Albanés
+!ID 000003
+!v001!ARA
+!v002!Arabic
+!v003!Arabe
+!ID 000004
+!v001!ARC
+!v002!Aramaic
+!v003!Arameo
+!ID 000005
+!v001!ARM
+!v002!Armenian
+!v003!Armenio
+!ID 000006
+!v001!ARN
+!v002!Mapuche
+!v003!Mapuche
+!ID 000007
+!v001!BAQ
+!v002!Basque
+!v003!Vasco
+!ID 000008
+!v001!BUL
+!v002!Bulgarian
+!v003!Búlgaro
+!ID 000009
+!v001!CAI
+!v002!Central American Indian (Other)
+!v003!Indios de Centroamérica (Otros)
+!ID 000010
+!v001!CAS
+!v002!cas?
+!v003!cas?
+!ID 000011
+!v001!CAT
+!v002!Catalan
+!v003!Catalán
+!ID 000012
+!v001!CHI
+!v002!Chinese
+!v003!Chino
+!ID 000013
+!v001!CZE
+!v002!Czech
+!v003!Checo
+!ID 000014
+!v001!DAN
+!v002!Danish
+!v003!Danés
+!ID 000015
+!v001!DEU
+!v002!deu?
+!v003!deu?
+!ID 000016
+!v001!DUT
+!v002!Dutch
+!v003!Holandés
+!ID 000017
+!v001!DYU
+!v002!Dyula
+!v003!Dyula?
+!ID 000018
+!v001!ENG
+!v002!English
+!v003!Inglés
+!ID 000019
+!v001!EPO
+!v002!Esperanto
+!v003!Esperanto
+!ID 000020
+!v001!EST
+!v002!Estonian
+!v003!Estonio
+!ID 000021
+!v001!FIN
+!v002!Finnish
+!v003!Finés
+!ID 000022
+!v001!FRE
+!v002!French
+!v003!Francés
+!ID 000023
+!v001!FRM
+!v002!French, Middle (ca. 1400-1600)
+!v003!Francés medio (ca. 1400-1600)
+!ID 000024
+!v001!FRO
+!v002!French, Old (ca. 842-1400)
+!v003!Francés antiguo (ca. 842-1400)
+!ID 000025
+!v001!GER
+!v002!German
+!v003!Alemán
+!ID 000026
+!v001!GLG
+!v002!Galician
+!v003!Gallego
+!ID 000027
+!v001!GRC
+!v002!Greek, Ancient (to 1453)
+!v003!Griego antiguo (hasta 1453)
+!ID 000028
+!v001!GRE
+!v002!Greek, Modern (1453- )
+!v003!Griego moderno (1453- )
+!ID 000029
+!v001!GRN
+!v002!Guarani
+!v003!Guaraní
+!ID 000030
+!v001!GUJ
+!v002!Gujarati
+!v003!Gujarati
+!ID 000031
+!v001!HEB
+!v002!Hebrew
+!v003!Hebreo
+!ID 000032
+!v001!HIN
+!v002!Hindi
+!v003!Hindi?
+!ID 000033
+!v001!HUN
+!v002!Hungarian
+!v003!Húngaro
+!ID 000034
+!v001!IND
+!v002!Indonesian
+!v003!Indonesio
+!ID 000035
+!v001!ILE
+!v002!Interlingue
+!v003!Interlingüe
+!ID 000036
+!v001!ITA
+!v002!Italian
+!v003!Italiano
+!ID 000037
+!v001!JAP
+!v002!jap?
+!v003!jap?
+!ID 000038
+!v001!JPN
+!v002!Japanese
+!v003!Japonés
+!ID 000039
+!v001!KAN
+!v002!Kannada
+!v003!Kannada?
+!ID 000040
+!v001!KOR
+!v002!Korean
+!v003!Coreano
+!ID 000041
+!v001!KUR
+!v002!Kurdish
+!v003!Kurdo?
+!ID 000042
+!v001!LAD
+!v002!Ladino
+!v003!Ladino
+!ID 000043
+!v001!LAT
+!v002!Latin
+!v003!Latín
+!ID 000044
+!v001!LAV
+!v002!Latvian
+!v003!Latvian?
+!ID 000045
+!v001!LIT
+!v002!Lithuanian
+!v003!Lituano
+!ID 000046
+!v001!MAP
+!v002!Austronesian (Other)
+!v003!Austronesian (Other)?
+!ID 000047
+!v001!MUL
+!v002!Multiple languages
+!v003!Múltiples idiomas
+!ID 000048
+!v001!NAI
+!v002!North American Indian (Other)
+!v003!Indios de Norteamérica (Otros)
+!ID 000049
+!v001!NAV
+!v002!Navajo
+!v003!Navajo
+!ID 000050
+!v001!NIC
+!v002!Niger-Kordofanian (Other)
+!v003!Niger-Kordofanian (Other)
+!ID 000051
+!v001!NOR
+!v002!Norwegian
+!v003!Noruego
+!ID 000052
+!v001!OCI
+!v002!Occitan (post-1500)
+!v003!Occitano? (post-1500)
+!ID 000053
+!v001!ORM
+!v002!Oromo
+!v003!Oromo?
+!ID 000054
+!v001!PAN
+!v002!Panjabi
+!v003!Panjabi
+!ID 000055
+!v001!PER
+!v002!Persian
+!v003!Persa
+!ID 000056
+!v001!PLI
+!v002!Pali
+!v003!Pali?
+!ID 000057
+!v001!POL
+!v002!Polish
+!v003!Polaco
+!ID 000058
+!v001!POR
+!v002!Portuguese
+!v003!Portugués
+!ID 000059
+!v001!QUE
+!v002!Quechua
+!v003!Quechua
+!ID 000060
+!v001!ROA
+!v002!Romance (Other)
+!v003!Romance (Otros)
+!ID 000061
+!v001!RUM
+!v002!Romanian
+!v003!Rumano
+!ID 000062
+!v001!RUS
+!v002!Russian
+!v003!Ruso
+!ID 000063
+!v001!SAI
+!v002!South American Indian (Other)
+!v003!Indios de Sudamérica (Otros)
+!ID 000064
+!v001!SAN
+!v002!Sanskrit
+!v003!Sánscrito
+!ID 000065
+!v001!SCC
+!v002!Serbian
+!v003!Serbio
+!ID 000066
+!v001!SCO
+!v002!Scots
+!v003!Scots?
+!ID 000067
+!v001!SCR
+!v002!Croatian
+!v003!Croata
+!ID 000068
+!v001!SLO
+!v002!Slovak
+!v003!Eslovaco
+!ID 000069
+!v001!SLV
+!v002!Slovenian
+!v003!Esloveno
+!ID 000070
+!v001!SOT
+!v002!Sotho
+!v003!Sotho?
+!ID 000071
+!v001!SPA
+!v002!Spanish
+!v003!Español
+!ID 000072
+!v001!SWA
+!v002!Swahili
+!v003!Swahili
+!ID 000073
+!v001!SWE
+!v002!Swedish
+!v003!Sueco
+!ID 000074
+!v001!SYR
+!v002!Syriac
+!v003!Sirio?
+!ID 000075
+!v001!TGL
+!v002!Tagalog
+!v003!Tagalog?
+!ID 000076
+!v001!THA
+!v002!Thai
+!v003!Thai
+!ID 000077
+!v001!TUR
+!v002!Turkish
+!v003!Turco
+!ID 000078
+!v001!UKR
+!v002!Ukrainian
+!v003!Ucraniano
+!ID 000079
+!v001!UND
+!v002!Undetermined
+!v003!Sin determinar
+!ID 000080
+!v001!VIE
+!v002!Vietnamese
+!v003!Vietnamita
+!ID 000081
+!v001!WEL
+!v002!Welsh
+!v003!Galés
+!ID 000082
+!v001!YID
+!v002!Yiddish
+!v003!Yiddish
