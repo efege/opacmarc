@@ -116,7 +116,7 @@ def read_config():
     # TO-DO: see also
     #  - http://docs.python.org/lib/module-ConfigParser.html
     #  - http://cfgparse.sourceforge.net/
-    config_file = os.path.join(os.path.dirname(sys.argv[0]), "../opac.conf")
+    config_file = os.path.join(OPACMARC_DIR, 'config', 'opac.conf')
     config = ConfigParser.ConfigParser()
     config.optionxform = str  # make option names case sensitive
     try:
@@ -135,7 +135,7 @@ def build_env():
     # Hay que usar el path *absoluto* para el cipar
     # TO-DO: si este CIPAR es constante, podemos generarlo por única vez desde el script de
     # instalación (ver http://code.google.com/p/opacmarc/issues/detail?id=10)
-    CIPAR = os.path.join(OPACMARC_DIR, 'admin/opac', 'opac.cip')
+    CIPAR = os.path.join(OPACMARC_DIR, 'admin', 'opac', 'opac.cip')
     try:
         f1 = open(CIPAR + '.dist', 'r')  # archivo CIPAR de la distribución
         f2 = open(CIPAR, 'w')
@@ -191,7 +191,7 @@ def print_usage():
 def goto_work_dir():
 
     # Directorio de trabajo
-    WORK_DIR = os.path.join(OPACMARC_DIR, 'admin/work', DB_NAME)
+    WORK_DIR = os.path.join(OPACMARC_DIR, 'admin', 'work', DB_NAME)
     if not os.path.isdir(WORK_DIR):
         error("No se ha encontrado el directorio de trabajo para la base %s:\n     %s" % (DB_NAME, WORK_DIR))
     
@@ -810,7 +810,7 @@ import zipfile       # for reading .zip files
 import subprocess    # for running system commands (mx, i2id, etc)
 import ConfigParser  # for reading config file 
 
-OPACMARC_DIR = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]), "../.."))
+OPACMARC_DIR = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]), '..', '..'))
 sys.path.insert(0, os.path.join(OPACMARC_DIR, 'util'))
 from util import run_command, error, emptydir
 

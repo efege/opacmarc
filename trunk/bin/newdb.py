@@ -10,6 +10,7 @@ sys.path.insert(0, os.path.join(OPACMARC_DIR, 'util'))
 from util import error
 
 # Plantillas para archivos
+# TO-DO: usar los textos que aparecen en los demo.htm.
 banner_tpl = '''<p>Agregue aquí un texto explicando a los usuarios qué encontrarán en este catálogo.</p>'''
 banner_tpl = '''<h1>Cabecera para la base <i>%s</i></h1>'''
 home_tpl = '''<p>Puede agregar aquí contenido adicional para las páginas de la base <i>%s</i></p>'''
@@ -106,7 +107,7 @@ Si necesita imagenes auxiliares (p.ej. un logo) debera colocarlas en la carpeta
 Puede que necesite modificar algunos parámetros de configuración para el OPAC;
 hágalo editando el archivo
 
-    cgi-bin/opac/config/local.conf
+    config/local.conf
     
 ''' % (DB_NAME,)*7
 sys.exit(0)

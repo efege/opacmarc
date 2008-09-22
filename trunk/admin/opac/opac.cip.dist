@@ -9,8 +9,8 @@
 AC-ANSI.TAB=__OPACMARC_DIR__/util/ac-ansi.tab
 BIBLIO.FST=__OPACMARC_DIR__/util/biblio.fst
 BIBLIO.STW=__OPACMARC_DIR__/util/biblio.stw
-COUNTRY.*=__OPACMARC_DIR__/admin/common/country.*
-DICTGIZ.*=__OPACMARC_DIR__/admin/common/dictgiz.*
+COUNTRY.*=__OPACMARC_DIR__/util/country.*
+DICTGIZ.*=__OPACMARC_DIR__/bases/common/dictgiz.*
 HEADSORT.PFT=__OPACMARC_DIR__/util/headsort.pft
 UC-ANSI.TAB=__OPACMARC_DIR__/util/uc-ansi.tab
 

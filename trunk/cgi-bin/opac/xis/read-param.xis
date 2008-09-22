@@ -1,17 +1,17 @@
 <!--
-   Los archivos de configuración se leen en este orden (local, global) debido a que
-   si v6000 = '^a1^a0' entonces v6000^a = '1', es decir, la primera ocurrencia de un
-   subcampo les gana a todas las posteriores.
+   IMPORTANTE! Los archivos de configuración se leen en este orden (local, global)
+   debido a que si v6000 = '^avalor_1^avalor_2' entonces v6000^a = 'valor_1', es decir,
+   la primera ocurrencia de un subcampo les gana a todas las posteriores.
 -->
 
 <!-- Leemos el archivo de configuración local local.conf -->
 <field action="replace" tag="6000" split="occ"><pft>
-	cat(getenv('PATH_WXIS'),'opac/config/local.conf')
+	cat(getenv('PATH_WXIS'),'../config/local.conf')
 </pft></field>
 
 <!-- Leemos el archivo de configuración opacmarc.conf -->
 <field action="add" tag="6000" split="occ"><pft>
-	cat(getenv('PATH_WXIS'),'opac/config/opacmarc.conf')
+	cat(getenv('PATH_WXIS'),'../config/opacmarc.conf')
 </pft></field>
 
 
