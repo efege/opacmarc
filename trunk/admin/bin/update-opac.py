@@ -130,28 +130,9 @@ def read_config():
 def build_env():
     '''Builds the environment dictionary, used for calling cisis commands.'''
     
-    # GENERAMOS EL ARCHIVO CIPAR
-    # Tomamos como base un cipar incluido en la distribución y lo adecuamos a nuestro OPACMARC_DIR.
-    # Hay que usar el path *absoluto* para el cipar
-    # TO-DO: si este CIPAR es constante, podemos generarlo por única vez desde el script de
-    # instalación (ver http://code.google.com/p/opacmarc/issues/detail?id=10)
-    CIPAR = os.path.join(OPACMARC_DIR, 'config', 'opac.cip')
-    #try:
-    #    f1 = open(CIPAR + '.dist', 'r')  # archivo CIPAR de la distribución
-    #    f2 = open(CIPAR, 'w')
-    #    #for line in f1: f2.write(line.replace('__OPACMARC_DIR__', OPACMARC_DIR))
-    #    f2.write(
-    #        f1.read().replace('__OPACMARC_DIR__', OPACMARC_DIR)
-    #    )
-    #    f1.close()
-    #    f2.close()
-    #except:
-    #    raise
-    #    error("No se pudo generar el archivo cipar.")
-    
     # Este diccionario es pasado en las llamadas al sistema
     return {
-        'CIPAR':                CIPAR,
+        'CIPAR':                os.path.join(OPACMARC_DIR, 'config', 'opac.cip'),  # Hay que usar el path *absoluto* para el cipar
         # Las variables que siguen son definidas en update.conf
         'PATH':                 os.getenv('PATH') + os.pathsep + CONFIG.get('Global', 'PATH_CISIS'),
         'SUBJ_TAGS':            CONFIG.get('Global', 'SUBJ_TAGS'),
@@ -237,7 +218,7 @@ def get_biblio_db():
     # se tome una base obsoleta, p.ej. una copia vieja en formato zip en lugar de la actual
     # en formato mst/xrf.
     
-    # TO-DO: remove %s from strings
+    # TO-DO: remove %s from strings (???)
     
     # TO-DO: revisar completamente esta sección
     
@@ -272,7 +253,7 @@ def get_biblio_db():
         print "Importando archivo $SOURCE_DIR/$DB_NAME.mrc..."
         # FIXME -- para importar mrc podemos usar mx 5
         #php $OPACMARC_DIR/bin/mrc2isis.php $SOURCE_DIR/$DB_NAME.mrc > tmp/$DB_NAME.id || error "Falla al ejecutar mrc2isis.php"
-        run('''id2i tmp/''' + DB_NAME + '''.id create=tmp/biblio''')
+        run('''id2i tmp/%s.id create=tmp/biblio''' % DB_NAME)
     
     # ARCHIVOS ISO
     elif os.path.isfile(SOURCE_DIR + '/' + DB_NAME + '.iso'):
