@@ -530,6 +530,7 @@
 	<div id="sidebar">
 	
 		<!-- ******************** IMAGEN DE TAPA ******************** -->
+		<!-- TO-DO: guardar el path "opac/local/img/" en archivo de config -->
 		[pft]if p(v985) then[/pft]
 			<div id="imageCell">
 				<p>
@@ -537,6 +538,32 @@
 				</p>
 			</div>
 		[pft]fi[/pft]
+		
+        <!-- Google Book Search API, 2008-09-24 -->
+        <!-- FIXME - El renderizado de la página queda suspendido mientras se está esperando/procesando este JS -->
+        [pft]if v6001^p : v2104 then[/pft]
+            [pft]if p(v020^a) or p(v010^a) then[/pft]
+                <div id="gbs_preview" style="margin-top: 0.5em; float: right;" align="center">
+                    <script type="text/javascript" src="http://books.google.com/books/previewlib.js"></script>
+                    <script type="text/javascript">
+                    GBS_setLanguage("es");
+                    [pft]
+                        'GBS_insertPreviewButtonPopup("',
+                        
+                            if p(v020^a) then
+                                |ISBN:|v020^a[1].10,
+                            else,
+                                |LCCN:|v010^a[1]*3.8,
+                            fi,
+                        
+                        '");'
+                        /* ( |ISBN:|v20^a.10+|,| )  más de un ISBN? */
+                        /* Para más de una clave por libro, ver http://code.google.com/apis/books/examples/linkSingleBook.html */
+                    [/pft]
+                    </script>
+                </div>
+            [pft]fi[/pft]
+        [pft]fi[/pft]
 		
 		<!-- Nota local, sobre existencias en la biblioteca (TO-DO: debiera ser un 590) -->
 		[pft](, if v500^5 <> '' then[/pft]
@@ -1078,18 +1105,6 @@
 			</div-->
 		[pft]fi*/[/pft]
 		
-
-        <!-- Google Book Search API, 2008-09-24 -->
-        <script type="text/javascript" src="http://books.google.com/books/previewlib.js"></script>
-        <div style="margin-top: 1em;" align="center">
-            <script type="text/javascript">
-            GBS_setLanguage("es");
-            [pft]
-                'GBS_insertPreviewButtonPopup("ISBN:', v020^a[1].10, '");'/
-            [/pft]
-            </script>
-        </div>
-
 	</div> <!-- sidebar -->
 
 
@@ -1109,4 +1124,3 @@
 	[pft]fi[/pft]
 		
 </div> <!-- recordWrapper -->
-

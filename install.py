@@ -60,6 +60,9 @@ def set_config():
     replace_config_path(FILES['cipar'])   # para las llamadas a mx desde update-opac.py
     
     # TO-DO: local.conf > SCRIPT_URL > "wxis.exe" vs "wxis"
+    # TO-DO: ver cómo podemos crear un cipar para read-param.xis. Puede ser un archivo fijo
+    #        en el cual se reemplaza '__DB_NAME__' por v2104, y '__DATE__' por s(date).8 
+
 
 def create_dirs():
     # En Windows crear directorio temp para búsquedas de wxis (también en Linux para cache?), y ajustar config.

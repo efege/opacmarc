@@ -35,6 +35,7 @@
 		,else if v6000 : 'SHOW_EXTERNAL_LINKS='   then '^l',mid(v6000,instr(v6000,'=')+1,size(v6000))
 		,else if v6000 : 'SHOW_245c='             then '^m',mid(v6000,instr(v6000,'=')+1,size(v6000))
 		,else if v6000 : 'EMAIL_RECORDS='         then '^n',mid(v6000,instr(v6000,'=')+1,size(v6000))
+        ,else if v6000 : 'GOOGLE_BOOK_PREVIEW='   then '^p',mid(v6000,instr(v6000,'=')+1,size(v6000))		
 		,else if v6000 : 'BIB_RECORDS_PER_PAGE='  then '^r',mid(v6000,instr(v6000,'=')+1,size(v6000))
 		,else if v6000 : 'DISPLAY_LOCATION='      then '^s',mid(v6000,instr(v6000,'=')+1,size(v6000))
 		,else if v6000 : 'DISPLAY_DOC_TYPE='      then '^t',mid(v6000,instr(v6000,'=')+1,size(v6000))
@@ -46,7 +47,7 @@
 		,else if v6000 : 'SHOW_SECTION='          then '^z',mid(v6000,instr(v6000,'=')+1,size(v6000))
 		,else if v6000 : 'MAIN_ENTRY_TOP='        then '^1',mid(v6000,instr(v6000,'=')+1,size(v6000))
 		,else if v6000 : 'ETIQ_773_MODE='         then '^7',mid(v6000,instr(v6000,'=')+1,size(v6000))
-		,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,
+		,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,
 	),
 </pft></field>
 
