@@ -202,6 +202,9 @@
 		border: 1px solid #908470;
 		/*margin: 0 0 0.7em;*/
 	}
+	div#gbs_preview img {
+		border: none;
+	}
 	
 	div#recordID {
 		/*background: #FFF;*/
