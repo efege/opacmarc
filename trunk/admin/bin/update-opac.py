@@ -764,6 +764,7 @@ def move_files():
         raise
 
 def clean_cache():
+    # FIXME -- CACHE_DIR may not exist (fix it in emptydir?) 
     CACHE_DIR = os.path.join(OPACMARC_DIR, 'temp')
     emptydir(CACHE_DIR)
 

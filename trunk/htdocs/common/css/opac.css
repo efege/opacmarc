@@ -704,6 +704,8 @@ ul#webSearches li:first-child {
 
 /* --------------------------------
  * HOME
+ *
+ * FIXME -- Estos estilos son para la base bibima, y por lo tanto deben ser movidos a un archivo local.
  * --------------------------------
  */
 
@@ -728,15 +730,17 @@ div#home div {
 	background: #FFF8DC; /*#FAFAD2; /*#FFC; /*#E0ECFF; /*#C3D9FF;*/
 	border: 1px solid #CCC;
 	padding: 0.3em 1% 0.5em;
-	width: 47%;
+	/*width: 47%;*/
 	-moz-border-radius: 8px;
 }
 
-div#home div#otros-recursos {
-	float: right;
+div#home div#otros-recursos, div#home div#de-nuevo {
+	float: left;
+	margin-top: 0.5em;
+	width: 97.8%;
 }
 div#home div#de-nuevo, div#home div#textos {
-	float: left;
+	/*float: left;*/
 }
 div#home div#de-nuevo a {
 	font-weight: bold;
@@ -754,7 +758,7 @@ div#home ul li {
 	white-space: nowrap;
 }
 div#home div#otros-recursos li {
-	float: left;
+	/*float: left;*/
 }
 
 /* ---------------------------------------------- */
