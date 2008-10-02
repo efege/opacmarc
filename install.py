@@ -32,14 +32,14 @@ def set_version():
 def replace_config_path(config_file):
     # Crea un archivo de configuración a partir de una plantilla y del valor
     # actual de OPACMARC_DIR.
-    # TO-DO: guardar las plantillas en una carpeta 'templates'?
     if os.path.isfile(config_file):
         print
         print "ATENCION: ya existe el archivo de configuracion %s." % os.path.abspath(config_file)
         print
     else:
+        config_template = os.path.join(os.path.dirname(config_file), 'templates', os.path.basename(config_file) + '.dist')
         try:
-            f1 = open(config_file + '.dist', 'r')
+            f1 = open(config_template, 'r')
             f2 = open(config_file, 'w')
             f2.write(
                 f1.read().replace('__OPACMARC_DIR__', OPACMARC_DIR)
@@ -86,9 +86,19 @@ def create_dirs():
     #   print "ATENCION: No se pudo crear la carpeta logs."
 
 def create_db():
-    # Crea las bases isis auxiliares a partir de archivos de texto (.id)
+    
+    # FIXME: asegurarse de que los cisis están en el path. Esto parece que
+    #        va a requerir tocar un config *antes* de ejecutar este script.
+    #        Podemos intentar encontrarlos (subprocess), y en caso de fracasar
+    #        se genera un mensaje de error.
+    
     # FIXME: ajustar saltos de línea de los .id (usar os.linesep?)
     # En Linux hay problemas si usan '\r\n', pero en Windows pueden usar '\n'
+    
+    # Las rutas en las llamadas a los cisis son relativas a OPACMARC_DIR
+    os.chdir(OPACMARC_DIR)
+    
+    # Crea las bases isis auxiliares a partir de archivos de texto (.id)
     run('id2i bases/id/country.id create=bases/common/country')
     run('id2i bases/id/lang.id create=bases/common/lang')
     run('id2i bases/id/dictgiz.id create=bases/common/dictgiz')
@@ -139,6 +149,7 @@ import sys
 import shutil
 
 OPACMARC_DIR = os.path.abspath(os.path.dirname(sys.argv[0]))
+
 sys.path.insert(0, os.path.join(OPACMARC_DIR, 'util'))
 from util import run_command, error
 import tablas
@@ -157,9 +168,9 @@ FILES = {
 
 print '''
 -----------------------------------------------------
-  install.py - SCRIPT DE INSTALACION DE OPACMARC
+  %s - SCRIPT DE INSTALACION DE OPACMARC
 -----------------------------------------------------
-'''
+''' % os.path.basename(sys.argv[0])
 
 set_version()
 set_config()
