@@ -5,9 +5,17 @@
 
 # Utility functions
 
-import subprocess
+
 import sys
 import os
+
+# The subprocess module appeared with Python 2.4. If using an older version,
+# import a copy of subprocess.py borrowed from Python 2.5.
+# Based on http://coding.derkeiler.com/Archive/Python/comp.lang.python/2007-03/msg02717.html
+try:
+    import subprocess
+except:
+    import subprocess_for_23 as subprocess
 
 def error(msg = 'Error'):
     '''Displays an error message and exits.'''
