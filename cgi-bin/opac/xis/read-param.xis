@@ -1,3 +1,16 @@
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<!--                       CIPAR                        -->
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<parm name="cipar"><pft>
+    replace(replace(
+        s(cat(getenv('PATH_WXIS'),'../local-data/config/opac.cip')),
+        '__DB__', v2104),
+        '__DATE__', s(date).8)
+</pft></parm>
+
+
+
 <!--
    IMPORTANTE! Los archivos de configuración se leen en este orden (local, global)
    debido a que si v6000 = '^avalor_1^avalor_2' entonces v6000^a = 'valor_1', es decir,
@@ -91,116 +104,4 @@
 <field action="replace" tag="6001"><pft>
 	if p(v2092) then replace(v6001,s('^s'v6001^s),s('^s'v2092)) fi,
 </pft></field>
-
-
-
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<!--                       CIPAR                        -->
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<!--
-TO-DO: este cipar tiene una parte principal que es estática,
-es decir, no depende de la petición y por lo tanto puede leerse
-de un archivo generado previamente. La parte restante depende
-de la base consultada (v2104), y de la fecha actual (para el log).
-El archivo puede servir de plantilla para insertar los valores
-que dependen de la consulta:
-
-<parm name="cipar"><pft>
-    replace(replace(
-        s(cat('cipar-template')),
-        '__DB__', v2104)
-        '__DATE__', s(date).8)
-</pft></parm>
-
- -->
-<parm name="cipar"><pft>
-	/* ----- BASES (common) ----- */
-	'BIBLIO.FST=',      v6003^b,'/common/biblio.fst'/
-	'BIBLIO.STW=',      v6003^b,'/common/biblio.stw'/
-	'COUNTRY.*=',       v6003^b,'/common/country.*'/
-	'DICTGIZ.*=',       v6003^b,'/common/dictgiz.*'/
-	'HEADSORT.PFT=',    v6003^b,'/common/headsort.pft'/
-	'LANG.*=',          v6003^b,'/common/lang.*'/
-	'SELSUBJ.PFT=',     v6003^b,'/common/selsubj.pft'/
-	'SELNAME.PFT=',     v6003^b,'/common/selname.pft'/
-	'SELTITLE.PFT=',    v6003^b,'/common/seltitle.pft'/
-	
-	'ACTAB=',           v6003^b,'/common/ac-ansi.tab'/
-	'UCTAB=',           v6003^b,'/common/uc-ansi.tab'/
-
-	'MSC.*=',           v6003^b,'/opac/msc2000/msc.*'/
-
-	/* ----- Archivos HTML ----- */
-	'BIB-LIST-HEAD.HTM=', v6003^c,'/common/html/bib-list-head.htm'/
-	'BIB-NAV.HTM=',       v6003^c,'/opac/html/bib-nav.htm'/
-	'BIB-RECORD-1.HTM=',  v6003^c,'/opac/html/bib-record-1.htm'/
-	'BIB-RECORD-2.HTM=',  v6003^c,'/opac/html/bib-record-2.htm'/
-	'BIB-RECORD-3.HTM=',  v6003^c,'/opac/html/bib-record-3.htm'/
-	'BROWSE-CATALOG-NAV.HTM=',v6003^c,'/opac/html/browse-catalog-nav.htm'/
-	'COMPLETO.HTM=',      v6003^c,'/opac/html/complete.htm'/
-	'CONTROL-FORM.HTM=',  v6003^c,'/opac/control-form.htm'/
-	'FEEDBACK_REPLY.HTM=',v6003^c,'/opac/html/feedback-reply.htm'/
-	'FEEDBACK_FORM.HTM=', v6003^c,'/opac/html/feedback-form.htm'/
-	'FORM-SIMPLE.HTM=',   v6003^c,'/opac/html/form-simple.htm'/
-	'FORM_ADVANCED.HTM=', v6003^c,'/opac/html/form-advanced.htm'/
-	'HEADING-BROWSE-MIDDLE.HTM=',v6003^c,'/opac/html/heading-browse-middle.htm'/
-	'HEADING-BROWSE-NAV.HTM=',v6003^c,'/opac/html/heading-browse-nav.htm'/
-	'HEADING-BROWSE-TOP.HTM=',v6003^c,'/opac/html/heading-browse-top.htm'/
-	'H-SEARCH-BOTTOM.HTM=',v6003^c,'/opac/html/h-search-bottom.htm'/
-	'H-SEARCH-TOP-1.HTM=',v6003^c,'/opac/html/h-search-top-1.htm'/
-	'H-SEARCH-TOP-2.HTM=',v6003^c,'/opac/html/h-search-top-2.htm'/
-	'MAIL-RESULTS.HTM=',  v6003^c,'/opac/html/mail.htm'/
-	'NOVEDAD.HTM=',       v6003^c,'/opac/html/novedad.htm'/
-	'OPAC-FOOTER.HTM=',   v6003^c,'/opac/html/opac-footer.htm'/
-	'OPAC-HEAD.HTM=',     v6003^c,'/opac/html/opac-head.htm'/
-	'SAMPLE-RECORD.TXT=', v6003^c,'/opac/sample-record.txt'/
-	'SORTED-BY.HTM=',     v6003^c,'/opac/html/sorted-by.htm'/
-	'ABOUT-MSC.HTM=',     v6003^c,'/opac/html/about-msc.htm'/
-	
-	/* ----- Archivos PFT ----- */
-	'AACR2.PFT=',         v6003^c,'/opac/pft/aacr2.pft'/
-	'CITA.PFT=',          v6003^c,'/opac/pft/cita.pft'/
-	'CLEAN-HEADING.PFT=', v6003^c,'/opac/pft/clean-heading.pft'/
-	'COMPACT-DATES.PFT=', v6003^c,'/opac/pft/compact-dates.pft'/
-	'DICTGIZ.PFT=',       v6003^c,'/opac/pft/dictgiz.pft'/
-	'HEADINGS.PFT=',      v6003^c,'/opac/pft/headings.pft'/
-	'MAIL.PFT=',          v6003^c,'/opac/pft/mail.pft'/
-	'MSC.PFT=',           v6003^c,'/opac/pft/msc.pft'/
-	
-	/* ----- Archivos PFT (compartidos con Catalis) ----- */
-	'BIB_SORT_KEY.PFT=',  v6003^c,'/common/pft/bib-sort-key.pft'/
-	'DOCUMENT-TYPE.PFT=', v6003^c,'/common/pft/doc-type.pft'/
-	'ETIQUETADO.PFT=',    v6003^c,'/common/pft/etiquetado.pft'/
-	'URLENCODE.PFT=',     v6003^c,'/common/pft/urlencode.pft'/
-	'WORK_HEADING.PFT=',  v6003^c,'/common/pft/wh.pft'/
-	
-	/* ----- Directorio para archivos temporales ----- */
-	'CI_TEMPDIR=',v6003^t,/
-	
-    
-    /* Todo lo que sigue depende de la consulta */
-    
-	/* ----- BASES ----- */
-	'BASES.PAR=',       v6003^b,'/opac/',v2104,'/bases.txt'/
-	'BIB_CODES.TXT=',   v6003^b,'/opac/',v2104,'/bibcode.txt'/
-	'BIBLIO.*=',        v6003^b,'/opac/',v2104,'/biblio.*'/
-	'DATES.TXT=',       v6003^b,'/opac/',v2104,'/dates.txt'/
-	'LANG_CODES.TXT=',  v6003^b,'/opac/',v2104,'/langcode.txt'/
-	'LIT_CODES.TXT=',   v6003^b,'/opac/',v2104,'/litcode.txt'/
-	'MAP_859b.*=',      v6003^b,'/opac/',v2104,'/map_859b.*'/
-	'NAME.*=',          v6003^b,'/opac/',v2104,'/name.*'/
-	'NOVEDADES.TXT=',   v6003^b,'/opac/',v2104,'/novedades.txt'/
-	'SUBJ.*=',          v6003^b,'/opac/',v2104,'/subj.*'/
-	'TITLE.*=',         v6003^b,'/opac/',v2104,'/title.*'/
-	'UPDATED.TXT=',     v6003^b,'/opac/',v2104,'/updated.txt'/
-    
-    /* HTML PFT */
-	'ABOUT.HTM=',         v6003^c,'/opac/local/about/',v2104,'.htm'/
-	'HOME.HTM=',          v6003^c,'/opac/local/home/',v2104,'.htm'/
-	'OPAC-BANNER.HTM=',   v6003^c,'/opac/local/banner/',v2104,'.htm'/
-	'PRESENTATION.HTM=',  v6003^c,'/opac/local/present/',v2104,'.htm'/
-    
-	/* ----- Archivo de logs (uno por fecha) ----- */
-	'LOGFILE.TXT=',v6003^l,'/log-',s(date).8,'.txt'/
-</pft></parm>
 
