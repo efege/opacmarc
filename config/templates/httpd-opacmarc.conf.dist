@@ -1,0 +1,31 @@
+# A sample Apache virtual host configuration for OpacMarc.
+# Modify as needed.
+
+Listen 88
+NameVirtualHost *:88
+<VirtualHost *:88>
+
+    ServerName 127.0.0.1
+    
+    DocumentRoot "__OPACMARC_DIR__/htdocs/"
+    <Directory "__OPACMARC_DIR__/htdocs/">
+        Order allow,deny
+        Allow from all
+        Options -Indexes
+    </Directory>
+
+    ScriptAlias /cgi-bin/ "__OPACMARC_DIR__/cgi-bin/"
+    <Directory "__OPACMARC_DIR__/cgi-bin/">
+        Order allow,deny
+        Allow from all
+    </Directory>
+    
+    # Archivos estáticos (css, js, imágenes, etc.) específicos de cada base
+    AliasMatch ^/static/(.*)/ "__OPACMARC_DIR__/local-data/bases/$1/static/"
+    <DirectoryMatch "__OPACMARC_DIR__/local-data/bases/(.*)/static/">
+        Order allow,deny
+        Allow from all
+        Options -Indexes
+    </DirectoryMatch>
+ 
+</VirtualHost>

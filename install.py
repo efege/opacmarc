@@ -18,6 +18,8 @@ def set_version():
     # modificaciones locales.
     # FIXME - En Windows con Tortoise no tenemos svnversion. Alternativa: ver cómo
     # extraer la información de SubWCRev.exe
+    # FIXME - Esto solo funciona cuando install.py se ejecuta sobre una working copy,
+    # pero no sobre código exportado.
     version = os.popen('svnversion').read().replace(os.linesep, '')
     footer_file = file(FILES['footer'])
     aux_file = file('footer.tmp', 'w')
@@ -37,7 +39,7 @@ def replace_config_path(config_file):
         print "ATENCION: ya existe el archivo de configuracion %s." % os.path.abspath(config_file)
         print
     else:
-        config_template = os.path.join(os.path.dirname(config_file), 'templates', os.path.basename(config_file) + '.dist')
+        config_template = os.path.join(OPACMARC_DIR, 'config', 'templates', os.path.basename(config_file) + '.dist')
         try:
             f1 = open(config_template, 'r')
             f2 = open(config_file, 'w')
@@ -46,10 +48,10 @@ def replace_config_path(config_file):
             )
             f1.close()
             f2.close()
-            print 'Generado el archivo %s.' % config_file
+            print 'Generado el archivo %s.' % os.path.basename(config_file)
         except:
             print
-            print "ERROR: No se pudo generar el archivo %s." % config_file
+            print "ERROR: No se pudo generar el archivo %s." % os.path.basename(config_file)
             print
 
 def set_config():
@@ -57,7 +59,8 @@ def set_config():
     replace_config_path(FILES['httpd'])   # modelo de config. para Apache
     replace_config_path(FILES['local'])   # config. local (para opac.xis) 
     replace_config_path(FILES['update'])  # para update-opac.py
-    replace_config_path(FILES['cipar'])   # para las llamadas a mx desde update-opac.py
+    replace_config_path(FILES['cipar-update']) # para las llamadas a mx desde update-opac.py
+    replace_config_path(FILES['cipar-opac'])   # para opac.xis
     
     # TO-DO: local.conf > SCRIPT_URL > "wxis.exe" vs "wxis"
     # TO-DO: ver cómo podemos crear un cipar para read-param.xis. Puede ser un archivo fijo
@@ -91,23 +94,22 @@ def create_db():
     #        va a requerir tocar un config *antes* de ejecutar este script.
     #        Podemos intentar encontrarlos (subprocess), y en caso de fracasar
     #        se genera un mensaje de error.
+    #        También podemos exigir que los cisis estén en __OPACMARC_DIR__/bin
     
     # FIXME: ajustar saltos de línea de los .id (usar os.linesep?)
     # En Linux hay problemas si usan '\r\n', pero en Windows pueden usar '\n'
     
-    # Las rutas en las llamadas a los cisis son relativas a OPACMARC_DIR
-    os.chdir(OPACMARC_DIR)
-    
     # Crea las bases isis auxiliares a partir de archivos de texto (.id)
-    run('id2i bases/id/country.id create=bases/common/country')
-    run('id2i bases/id/lang.id create=bases/common/lang')
-    run('id2i bases/id/dictgiz.id create=bases/common/dictgiz')
-    run('id2i bases/id/oem2ansi.id create=admin/opac/oem2ansi')
-    run('id2i bases/id/demo.id create=admin/work/demo/original/biblio')
+    run('%s/id2i bases/id/country.id create=bases/common/country' % CISIS_PATH)
+    run('%s/id2i bases/id/lang.id create=bases/common/lang' % CISIS_PATH)
+    run('%s/id2i bases/id/dictgiz.id create=bases/common/dictgiz' % CISIS_PATH)
+    run('%s/id2i bases/id/oem2ansi.id create=admin/opac/oem2ansi' % CISIS_PATH)
+    
+    run('%s/id2i bases/id/demo.id create=local-data/bases/demo/db/original/biblio' % CISIS_PATH)
 
     # Genera los invertidos correspondientes
-    run('mx bases/common/country "fst=1 0 v1" fullinv=bases/common/country')
-    run('mx bases/common/lang "fst=1 0 v1" fullinv=bases/common/lang')
+    run('%s/mx bases/common/country "fst=1 0 v1" fullinv=bases/common/country' % CISIS_PATH)
+    run('%s/mx bases/common/lang "fst=1 0 v1" fullinv=bases/common/lang' % CISIS_PATH)
     
     print "Bases auxiliares creadas."
 
@@ -158,13 +160,16 @@ import tablas
 # TO-DO: agregar aquí los que usa create_db()
 FILES = {
     'footer' : os.path.join(OPACMARC_DIR, 'cgi-bin', 'opac', 'html', 'opac-footer.htm'),
-    'cipar'  : os.path.join(OPACMARC_DIR, 'config', 'opac.cip'),
-    'httpd'  : os.path.join(OPACMARC_DIR, 'config', 'httpd-opacmarc.conf'),
-    'local'  : os.path.join(OPACMARC_DIR, 'config', 'local.conf'),
-    'update' : os.path.join(OPACMARC_DIR, 'config', 'update.conf'),
-    'actab'  : os.path.join(OPACMARC_DIR, 'util', 'ac-ansi.tab'),
-    'uctab'  : os.path.join(OPACMARC_DIR, 'util', 'uc-ansi.tab'),
+    'cipar-update' : os.path.join(OPACMARC_DIR, 'local-data', 'config', 'opac.cip'),
+    'cipar-opac' : os.path.join(OPACMARC_DIR, 'local-data', 'config', 'update.cip'),
+    'httpd' : os.path.join(OPACMARC_DIR, 'local-data', 'config', 'httpd-opacmarc.conf'),
+    'local' : os.path.join(OPACMARC_DIR, 'local-data', 'config', 'local.conf'),
+    'update' : os.path.join(OPACMARC_DIR, 'local-data', 'config', 'update.conf'),
+    'actab' : os.path.join(OPACMARC_DIR, 'util', 'ac-ansi.tab'),
+    'uctab' : os.path.join(OPACMARC_DIR, 'util', 'uc-ansi.tab'),
 }
+
+CISIS_PATH = os.path.join(OPACMARC_DIR, 'bin', 'cisis-1660')
 
 print '''
 -----------------------------------------------------
@@ -172,9 +177,12 @@ print '''
 -----------------------------------------------------
 ''' % os.path.basename(sys.argv[0])
 
+# Varias rutas son relativas a OPACMARC_DIR
+os.chdir(OPACMARC_DIR)
+
 set_version()
 set_config()
-create_dirs()
+#create_dirs()
 create_db()
 create_table('actab')
 create_table('uctab')

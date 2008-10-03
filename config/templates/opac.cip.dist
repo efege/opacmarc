@@ -1,0 +1,109 @@
+##########################################
+#  ATENCION - NO MODIFIQUE ESTE ARCHIVO  #
+##########################################
+
+# -----------------------------------------------------------------
+# BASES (common)
+# -----------------------------------------------------------------
+BIBLIO.FST=__OPACMARC_DIR__/bases/common/biblio.fst
+BIBLIO.STW=__OPACMARC_DIR__/bases/common/biblio.stw
+COUNTRY.*=__OPACMARC_DIR__/bases/common/country.*
+DICTGIZ.*=__OPACMARC_DIR__/bases/common/dictgiz.*
+HEADSORT.PFT=__OPACMARC_DIR__/bases/common/headsort.pft
+LANG.*=__OPACMARC_DIR__/bases/common/lang.*
+SELSUBJ.PFT=__OPACMARC_DIR__/bases/common/selsubj.pft
+SELNAME.PFT=__OPACMARC_DIR__/bases/common/selname.pft
+SELTITLE.PFT=__OPACMARC_DIR__/bases/common/seltitle.pft
+
+ACTAB=__OPACMARC_DIR__/bases/common/ac-ansi.tab
+UCTAB=__OPACMARC_DIR__/bases/common/uc-ansi.tab
+
+MSC.*=__OPACMARC_DIR__/bases/opac/msc2000/msc.*
+
+# -----------------------------------------------------------------
+# HTMLPFT
+# -----------------------------------------------------------------
+BIB-LIST-HEAD.HTM=__OPACMARC_DIR__/cgi-bin/common/html/bib-list-head.htm
+BIB-NAV.HTM=__OPACMARC_DIR__/cgi-bin/opac/html/bib-nav.htm
+BIB-RECORD-1.HTM=__OPACMARC_DIR__/cgi-bin/opac/html/bib-record-1.htm
+BIB-RECORD-2.HTM=__OPACMARC_DIR__/cgi-bin/opac/html/bib-record-2.htm
+BIB-RECORD-3.HTM=__OPACMARC_DIR__/cgi-bin/opac/html/bib-record-3.htm
+BROWSE-CATALOG-NAV.HTM=__OPACMARC_DIR__/cgi-bin/opac/html/browse-catalog-nav.htm
+COMPLETO.HTM=__OPACMARC_DIR__/cgi-bin/opac/html/complete.htm
+CONTROL-FORM.HTM=__OPACMARC_DIR__/cgi-bin/opac/control-form.htm
+FEEDBACK_REPLY.HTM=__OPACMARC_DIR__/cgi-bin/opac/html/feedback-reply.htm
+FEEDBACK_FORM.HTM=__OPACMARC_DIR__/cgi-bin/opac/html/feedback-form.htm
+FORM-SIMPLE.HTM=__OPACMARC_DIR__/cgi-bin/opac/html/form-simple.htm
+FORM_ADVANCED.HTM=__OPACMARC_DIR__/cgi-bin/opac/html/form-advanced.htm
+HEADING-BROWSE-MIDDLE.HTM=__OPACMARC_DIR__/cgi-bin/opac/html/heading-browse-middle.htm
+HEADING-BROWSE-NAV.HTM=__OPACMARC_DIR__/cgi-bin/opac/html/heading-browse-nav.htm
+HEADING-BROWSE-TOP.HTM=__OPACMARC_DIR__/cgi-bin/opac/html/heading-browse-top.htm
+H-SEARCH-BOTTOM.HTM=__OPACMARC_DIR__/cgi-bin/opac/html/h-search-bottom.htm
+H-SEARCH-TOP-1.HTM=__OPACMARC_DIR__/cgi-bin/opac/html/h-search-top-1.htm
+H-SEARCH-TOP-2.HTM=__OPACMARC_DIR__/cgi-bin/opac/html/h-search-top-2.htm
+MAIL-RESULTS.HTM=__OPACMARC_DIR__/cgi-bin/opac/html/mail.htm
+NOVEDAD.HTM=__OPACMARC_DIR__/cgi-bin/opac/html/novedad.htm
+OPAC-FOOTER.HTM=__OPACMARC_DIR__/cgi-bin/opac/html/opac-footer.htm
+OPAC-HEAD.HTM=__OPACMARC_DIR__/cgi-bin/opac/html/opac-head.htm
+SAMPLE-RECORD.TXT=__OPACMARC_DIR__/cgi-bin/opac/sample-record.txt
+SORTED-BY.HTM=__OPACMARC_DIR__/cgi-bin/opac/html/sorted-by.htm
+ABOUT-MSC.HTM=__OPACMARC_DIR__/cgi-bin/opac/html/about-msc.htm
+
+# -----------------------------------------------------------------
+# PFT
+# -----------------------------------------------------------------
+AACR2.PFT=__OPACMARC_DIR__/cgi-bin/opac/pft/aacr2.pft
+CITA.PFT=__OPACMARC_DIR__/cgi-bin/opac/pft/cita.pft
+CLEAN-HEADING.PFT=__OPACMARC_DIR__/cgi-bin/opac/pft/clean-heading.pft
+COMPACT-DATES.PFT=__OPACMARC_DIR__/cgi-bin/opac/pft/compact-dates.pft
+DICTGIZ.PFT=__OPACMARC_DIR__/cgi-bin/opac/pft/dictgiz.pft
+HEADINGS.PFT=__OPACMARC_DIR__/cgi-bin/opac/pft/headings.pft
+MAIL.PFT=__OPACMARC_DIR__/cgi-bin/opac/pft/mail.pft
+MSC.PFT=__OPACMARC_DIR__/cgi-bin/opac/pft/msc.pft
+
+# -----------------------------------------------------------------
+# PFT (compartidos con Catalis)
+# -----------------------------------------------------------------
+BIB_SORT_KEY.PFT=__OPACMARC_DIR__/cgi-bin/common/pft/bib-sort-key.pft
+DOCUMENT-TYPE.PFT=__OPACMARC_DIR__/cgi-bin/common/pft/doc-type.pft
+ETIQUETADO.PFT=__OPACMARC_DIR__/cgi-bin/common/pft/etiquetado.pft
+URLENCODE.PFT=__OPACMARC_DIR__/cgi-bin/common/pft/urlencode.pft
+WORK_HEADING.PFT=__OPACMARC_DIR__/cgi-bin/common/pft/wh.pft
+
+# -----------------------------------------------------------------
+# Directorio para archivos temporales
+# -----------------------------------------------------------------
+CI_TEMPDIR=__OPACMARC_DIR__/local-data/temp
+
+
+# Todo lo que sigue depende de la consulta que está siendo procesada
+# (a través de los parámetros __DB__ y __DATE__)
+
+# -----------------------------------------------------------------
+# BASES
+# -----------------------------------------------------------------
+BASES.PAR=__OPACMARC_DIR__/local-data/bases/__DB__/db/public/bases.txt
+BIB_CODES.TXT=__OPACMARC_DIR__/local-data/bases/__DB__/db/public/bibcode.txt
+BIBLIO.*=__OPACMARC_DIR__/local-data/bases/__DB__/db/public/biblio.*
+DATES.TXT=__OPACMARC_DIR__/local-data/bases/__DB__/db/public/dates.txt
+LANG_CODES.TXT=__OPACMARC_DIR__/local-data/bases/__DB__/db/public/langcode.txt
+LIT_CODES.TXT=__OPACMARC_DIR__/local-data/bases/__DB__/db/public/litcode.txt
+MAP_859b.*=__OPACMARC_DIR__/local-data/bases/__DB__/db/public/map_859b.*
+NAME.*=__OPACMARC_DIR__/local-data/bases/__DB__/db/public/name.*
+NOVEDADES.TXT=__OPACMARC_DIR__/local-data/bases/__DB__/db/public/novedades.txt
+SUBJ.*=__OPACMARC_DIR__/local-data/bases/__DB__/db/public/subj.*
+TITLE.*=__OPACMARC_DIR__/local-data/bases/__DB__/db/public/title.*
+UPDATED.TXT=__OPACMARC_DIR__/local-data/bases/__DB__/db/public/updated.txt
+
+# -----------------------------------------------------------------
+# HTMLPFT
+# -----------------------------------------------------------------
+ABOUT.HTM=__OPACMARC_DIR__/cgi-bin/opac/local/about/__DB__.htm
+HOME.HTM=__OPACMARC_DIR__/cgi-bin/opac/local/home/__DB__.htm
+OPAC-BANNER.HTM=__OPACMARC_DIR__/cgi-bin/opac/local/banner/__DB__.htm
+PRESENTATION.HTM=__OPACMARC_DIR__/cgi-bin/opac/local/present/__DB__.htm
+
+# -----------------------------------------------------------------
+# Archivo de logs (uno por fecha)
+# -----------------------------------------------------------------
+LOGFILE.TXT=__OPACMARC_DIR__/local-data/logs/log-__DATE__.txt

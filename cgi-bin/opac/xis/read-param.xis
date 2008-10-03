@@ -4,12 +4,12 @@
    la primera ocurrencia de un subcampo les gana a todas las posteriores.
 -->
 
-<!-- Leemos el archivo de configuración local local.conf -->
+<!-- Leemos el archivo de configuración local, local.conf -->
 <field action="replace" tag="6000" split="occ"><pft>
-	cat(getenv('PATH_WXIS'),'../config/local.conf')
+	cat(getenv('PATH_WXIS'),'../local-data/config/local.conf')
 </pft></field>
 
-<!-- Leemos el archivo de configuración opacmarc.conf -->
+<!-- Leemos el archivo de configuraciones predeterminadas, opacmarc.conf -->
 <field action="add" tag="6000" split="occ"><pft>
 	cat(getenv('PATH_WXIS'),'../config/opacmarc.conf')
 </pft></field>
@@ -97,6 +97,22 @@
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 <!--                       CIPAR                        -->
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<!--
+TO-DO: este cipar tiene una parte principal que es estática,
+es decir, no depende de la petición y por lo tanto puede leerse
+de un archivo generado previamente. La parte restante depende
+de la base consultada (v2104), y de la fecha actual (para el log).
+El archivo puede servir de plantilla para insertar los valores
+que dependen de la consulta:
+
+<parm name="cipar"><pft>
+    replace(replace(
+        s(cat('cipar-template')),
+        '__DB__', v2104)
+        '__DATE__', s(date).8)
+</pft></parm>
+
+ -->
 <parm name="cipar"><pft>
 	/* ----- BASES (common) ----- */
 	'BIBLIO.FST=',      v6003^b,'/common/biblio.fst'/
@@ -112,25 +128,11 @@
 	'ACTAB=',           v6003^b,'/common/ac-ansi.tab'/
 	'UCTAB=',           v6003^b,'/common/uc-ansi.tab'/
 
-	/* ----- BASES (specific) ----- */
-	'BASES.PAR=',       v6003^b,'/opac/',v2104,'/bases.txt'/
-	'BIB_CODES.TXT=',   v6003^b,'/opac/',v2104,'/bibcode.txt'/
-	'BIBLIO.*=',        v6003^b,'/opac/',v2104,'/biblio.*'/
-	'DATES.TXT=',       v6003^b,'/opac/',v2104,'/dates.txt'/
-	'LANG_CODES.TXT=',  v6003^b,'/opac/',v2104,'/langcode.txt'/
-	'LIT_CODES.TXT=',   v6003^b,'/opac/',v2104,'/litcode.txt'/
-	'MAP_859b.*=',      v6003^b,'/opac/',v2104,'/map_859b.*'/
 	'MSC.*=',           v6003^b,'/opac/msc2000/msc.*'/
-	'NAME.*=',          v6003^b,'/opac/',v2104,'/name.*'/
-	'NOVEDADES.TXT=',   v6003^b,'/opac/',v2104,'/novedades.txt'/
-	'SUBJ.*=',          v6003^b,'/opac/',v2104,'/subj.*'/
-	'TITLE.*=',         v6003^b,'/opac/',v2104,'/title.*'/
-	'UPDATED.TXT=',     v6003^b,'/opac/',v2104,'/updated.txt'/
 
 	/* ----- Archivos HTML ----- */
-	'ABOUT.HTM=',         v6003^c,'/opac/local/about/',v2104,'.htm'/
 	'BIB-LIST-HEAD.HTM=', v6003^c,'/common/html/bib-list-head.htm'/
-	'BIB-NAV.HTM=', v6003^c,'/opac/html/bib-nav.htm'/
+	'BIB-NAV.HTM=',       v6003^c,'/opac/html/bib-nav.htm'/
 	'BIB-RECORD-1.HTM=',  v6003^c,'/opac/html/bib-record-1.htm'/
 	'BIB-RECORD-2.HTM=',  v6003^c,'/opac/html/bib-record-2.htm'/
 	'BIB-RECORD-3.HTM=',  v6003^c,'/opac/html/bib-record-3.htm'/
@@ -144,7 +146,6 @@
 	'HEADING-BROWSE-MIDDLE.HTM=',v6003^c,'/opac/html/heading-browse-middle.htm'/
 	'HEADING-BROWSE-NAV.HTM=',v6003^c,'/opac/html/heading-browse-nav.htm'/
 	'HEADING-BROWSE-TOP.HTM=',v6003^c,'/opac/html/heading-browse-top.htm'/
-	'HOME.HTM=',          v6003^c,'/opac/local/home/',v2104,'.htm'/
 	'H-SEARCH-BOTTOM.HTM=',v6003^c,'/opac/html/h-search-bottom.htm'/
 	'H-SEARCH-TOP-1.HTM=',v6003^c,'/opac/html/h-search-top-1.htm'/
 	'H-SEARCH-TOP-2.HTM=',v6003^c,'/opac/html/h-search-top-2.htm'/
@@ -154,9 +155,6 @@
 	'OPAC-HEAD.HTM=',     v6003^c,'/opac/html/opac-head.htm'/
 	'SAMPLE-RECORD.TXT=', v6003^c,'/opac/sample-record.txt'/
 	'SORTED-BY.HTM=',     v6003^c,'/opac/html/sorted-by.htm'/
-	
-	'OPAC-BANNER.HTM=',   v6003^c,'/opac/local/banner/',v2104,'.htm'/
-	'PRESENTATION.HTM=',  v6003^c,'/opac/local/present/',v2104,'.htm'/
 	'ABOUT-MSC.HTM=',     v6003^c,'/opac/html/about-msc.htm'/
 	
 	/* ----- Archivos PFT ----- */
@@ -179,6 +177,29 @@
 	/* ----- Directorio para archivos temporales ----- */
 	'CI_TEMPDIR=',v6003^t,/
 	
+    
+    /* Todo lo que sigue depende de la consulta */
+    
+	/* ----- BASES ----- */
+	'BASES.PAR=',       v6003^b,'/opac/',v2104,'/bases.txt'/
+	'BIB_CODES.TXT=',   v6003^b,'/opac/',v2104,'/bibcode.txt'/
+	'BIBLIO.*=',        v6003^b,'/opac/',v2104,'/biblio.*'/
+	'DATES.TXT=',       v6003^b,'/opac/',v2104,'/dates.txt'/
+	'LANG_CODES.TXT=',  v6003^b,'/opac/',v2104,'/langcode.txt'/
+	'LIT_CODES.TXT=',   v6003^b,'/opac/',v2104,'/litcode.txt'/
+	'MAP_859b.*=',      v6003^b,'/opac/',v2104,'/map_859b.*'/
+	'NAME.*=',          v6003^b,'/opac/',v2104,'/name.*'/
+	'NOVEDADES.TXT=',   v6003^b,'/opac/',v2104,'/novedades.txt'/
+	'SUBJ.*=',          v6003^b,'/opac/',v2104,'/subj.*'/
+	'TITLE.*=',         v6003^b,'/opac/',v2104,'/title.*'/
+	'UPDATED.TXT=',     v6003^b,'/opac/',v2104,'/updated.txt'/
+    
+    /* HTML PFT */
+	'ABOUT.HTM=',         v6003^c,'/opac/local/about/',v2104,'.htm'/
+	'HOME.HTM=',          v6003^c,'/opac/local/home/',v2104,'.htm'/
+	'OPAC-BANNER.HTM=',   v6003^c,'/opac/local/banner/',v2104,'.htm'/
+	'PRESENTATION.HTM=',  v6003^c,'/opac/local/present/',v2104,'.htm'/
+    
 	/* ----- Archivo de logs (uno por fecha) ----- */
 	'LOGFILE.TXT=',v6003^l,'/log-',s(date).8,'.txt'/
 </pft></parm>
