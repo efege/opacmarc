@@ -27,26 +27,28 @@ PATH_HTDOCS=/
 # -------------------------------------------------------
 # DIRECTORIOS
 # No coloque una barra final en los caminos (paths).
+#
+# ATENCION -- es posible que ya no necesitemos especificar estos paths (2008-10-03)
 # -------------------------------------------------------
   
 # PATH_DB: directorio que contiene las bases de datos usadas por OPACMARC.
-PATH_DB=__OPACMARC_DIR__/bases
+#PATH_DB=__OPACMARC_DIR__/local-data/bases
   
 # PATH_CGI-BIN: directorio cgi-bin de OPACMARC.
-PATH_CGI-BIN=__OPACMARC_DIR__/cgi-bin
+#PATH_CGI-BIN=__OPACMARC_DIR__/cgi-bin
   
 # PATH_TEMP: directorio para archivos temporales. Necesita permiso de escritura
 # para el usuario del servidor web.
 # Esta variable se debe definir en Windows, pero no es necesaria en Linux.
-PATH_TEMP=__OPACMARC_DIR__/temp
+#PATH_TEMP=__OPACMARC_DIR__/local-data/temp
 
 # Directorio para los logs de acceso al OPAC. Necesita permiso de escritura
 # para el usuario del servidor web.
-PATH_LOGS=__OPACMARC_DIR__/logs
+#PATH_LOGS=__OPACMARC_DIR__/local-data/logs
   
 # PATH_AGREP: ubicación del ejecutable agrep
 # Valores de referencia: PATH_AGREP=__OPACMARC_DIR__/bin/agrep.exe (Windows); PATH_AGREP=/usr/bin/agrep (Linux)
-PATH_AGREP=
+#PATH_AGREP=
 
 
 # -------------------------------------------------------

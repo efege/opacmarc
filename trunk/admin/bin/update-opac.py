@@ -116,7 +116,7 @@ def read_config():
     # TO-DO: see also
     #  - http://docs.python.org/lib/module-ConfigParser.html
     #  - http://cfgparse.sourceforge.net/
-    config_file = os.path.join(OPACMARC_DIR, 'config', 'update.conf')
+    config_file = os.path.join(OPACMARC_DIR, 'local-data', 'config', 'update.conf')
     config = ConfigParser.ConfigParser()
     config.optionxform = str  # make option names case sensitive
     try:
@@ -132,7 +132,7 @@ def build_env():
     
     # Este diccionario es pasado en las llamadas al sistema
     return {
-        'CIPAR':                os.path.join(OPACMARC_DIR, 'config', 'opac.cip'),  # Hay que usar el path *absoluto* para el cipar
+        'CIPAR':                os.path.join(OPACMARC_DIR, 'local-data', 'config', 'update.cip'),  # Hay que usar el path *absoluto* para el cipar
         # Las variables que siguen son definidas en update.conf
         'PATH':                 os.getenv('PATH') + os.pathsep + CONFIG.get('Global', 'PATH_CISIS'),
         'SUBJ_TAGS':            CONFIG.get('Global', 'SUBJ_TAGS'),
@@ -172,7 +172,7 @@ def print_usage():
 def goto_work_dir():
 
     # Directorio de trabajo
-    WORK_DIR = os.path.join(OPACMARC_DIR, 'admin', 'work', DB_NAME)
+    WORK_DIR = os.path.join(OPACMARC_DIR, 'local-data', 'bases', DB_NAME, 'db', 'update')
     if not os.path.isdir(WORK_DIR):
         error("No se ha encontrado el directorio de trabajo para la base %s:\n     %s" % (DB_NAME, WORK_DIR))
     
@@ -223,7 +223,7 @@ def get_biblio_db():
     # TO-DO: revisar completamente esta sección
     
     # En este directorio se encuentra la base original 
-    SOURCE_DIR = os.path.join('.', 'original')
+    SOURCE_DIR = os.path.join('..', 'original')
     
     # The OS path separator, e.g. "/" on Linux, "\\" on Windows.
     #sep = os.path.sep  # not available in Python 2.3
@@ -312,7 +312,7 @@ def get_secs_db():
 
 def process_images():
     # Si hay imágenes de tapa, creamos un campo 985
-    DIR_IMG = os.path.join(CONFIG.get('Global', 'DIR_IMG'), DB_NAME)
+    DIR_IMG = CONFIG.get('Global', 'DIR_IMG').replace('__DB__', DB_NAME)
     print
     if not os.path.isdir(DIR_IMG):
         print "No se encuentra el directorio de imágenes: %s" % DIR_IMG
@@ -756,7 +756,7 @@ def move_files():
     #        (ver la idea en http://athleticsnyc.com/blog/entry/on-using-subversion-for-web-projects)
     print
     print "Moviendo los archivos generados..."
-    TARGET_DIR = os.path.join(CONFIG.get('Global', 'TARGET_DIR'), DB_NAME)
+    TARGET_DIR = CONFIG.get('Global', 'TARGET_DIR').replace('__DB__', DB_NAME)
     emptydir(TARGET_DIR)
     try:
         for f in os.listdir('.'):
