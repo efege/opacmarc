@@ -6,6 +6,9 @@
 # TO-DO: Considerar también la situación en que ya existe una instalación
 # y se desea preservar los datos locales.
 
+# TO-DO: en los archivos htmlpft de la base demo (y de una nueva base), corregir
+# automáticamente los paths que aparecen como contenido.
+
 def run(command, msg = 'Error'):
     # FIXME! (see update-opac.py)
     ENV = {'PATH': os.getenv('PATH') + os.pathsep + 'G:\\programas\\cisis\\5.2\\1030'}  # CONFIG.get('Global', 'PATH_CISIS')
@@ -62,7 +65,8 @@ def set_config():
     replace_config_path(FILES['cipar-update']) # para las llamadas a mx desde update-opac.py
     replace_config_path(FILES['cipar-opac'])   # para opac.xis
     
-    # TO-DO: local.conf > SCRIPT_URL > "wxis.exe" vs "wxis"
+    # TO-DO: local.conf -> SCRIPT_URL -> "wxis.exe" vs "wxis"
+    # TO-DO: local.conf -> path agrep
     # TO-DO: ver cómo podemos crear un cipar para read-param.xis. Puede ser un archivo fijo
     #        en el cual se reemplaza '__DB_NAME__' por v2104, y '__DATE__' por s(date).8 
 

@@ -59,19 +59,17 @@
 # 
 # * si tenemos imagenes de tapas, añadimos un campo con esa info
 # 
-# * si tenemos registros de SeCS, los añadimos a la base
-# 
 # * procesamiento de las bases:
-# 		BIBLIO_DATABASE_1
-# 		SUBJ_DATABASE
-# 		NAME_DATABASE
-# 		TITLE_DATABASE
-# 		BIBLIO_DATABASE_2
-# 		FULLINV
-# 		POSTINGS
-# 		AGREP_DICTIONARIES
-# 		ARCHIVOS_AUXILIARES
-# 		
+#         BIBLIO_DATABASE_1
+#         SUBJ_DATABASE
+#         NAME_DATABASE
+#         TITLE_DATABASE
+#         BIBLIO_DATABASE_2
+#         FULLINV
+#         POSTINGS
+#         AGREP_DICTIONARIES
+#         ARCHIVOS_AUXILIARES
+#         
 # * limpieza (borrado de temporales) (opcional)
 # 
 # * movemos los archivos generados al directorio destino (opcional)
@@ -134,7 +132,7 @@ def build_env():
     return {
         'CIPAR':                os.path.join(OPACMARC_DIR, 'local-data', 'config', 'update.cip'),  # Hay que usar el path *absoluto* para el cipar
         # Las variables que siguen son definidas en update.conf
-        'PATH':                 os.getenv('PATH') + os.pathsep + CONFIG.get('Global', 'PATH_CISIS'),
+        'PATH':                 CONFIG.get('Global', 'PATH_CISIS') + os.pathsep + os.getenv('PATH'),
         'SUBJ_TAGS':            CONFIG.get('Global', 'SUBJ_TAGS'),
         'NAME_TAGS':            CONFIG.get('Global', 'NAME_TAGS'),
         'TITLE_TAGS':           CONFIG.get('Global', 'TITLE_TAGS'),
@@ -308,6 +306,33 @@ def get_secs_db():
     
     # TO-DO SeCS
     pass
+    
+    if os.path.isfile(SOURCE_DIR + '/' + DB_NAME + '-secstitle.mst'):   # testeamos si existe la base secstitle asociada
+        print
+        print "Procesando base SECSTITLE..."
+    
+        # TO-DO: usar mxcp para eliminar espacios en la base title
+        # TO-DO: usar dos2unix para el listado de existencias que proviene de DOS
+        
+        # paso 0: descomprimimos la base
+        #unzip -oq $SOURCE_DIR/$DB_NAME-secstitle.zip -d tmp || error "No se pudo descomprimir el archivo $SOURCE_DIR/$DB_NAME-secstitle.zip"
+        run('mx $SOURCE_DIR/$DB_NAME-secstitle create=tmp/title now -all')
+        
+        # paso 1: recodificamos caracteres
+        run('mx tmp/secstitle gizmo=OEM2ANSI create=tmp/title now -all')
+        
+        # paso 2: creamos una base de holdings
+        run('mx seq=tmp/EMA.001 create=tmp/holdings now -all')
+        run('mx tmp/holdings "fst=2 0 v2" fullinv=tmp/holdings')
+        
+        # paso 3: insertamos la información sobre holdings en los registros bibliográficos
+        run('''mx tmp/title "proc='a98|',ref(['tmp/holdings']l(['tmp/holdings']v40^c),v3),'|'" copy=tmp/title now -all''')
+        
+        # paso 4: migramos a MARC
+        run('mx tmp/title "proc=@SECS2MARC.PROC" create=tmp/title_marc now -all')
+        
+        # paso 5: añadimos los registros a la base biblio
+        run('mx tmp/title_marc append=tmp/biblio now -all')
 
 
 def process_images():
@@ -767,7 +792,7 @@ def move_files():
 
 def clean_cache():
     # FIXME -- CACHE_DIR may not exist (fix it in emptydir?) 
-    CACHE_DIR = os.path.join(OPACMARC_DIR, 'temp')
+    CACHE_DIR = os.path.join(OPACMARC_DIR, 'local-data', 'temp')
     emptydir(CACHE_DIR)
 
 def end():
@@ -818,8 +843,6 @@ ENV = build_env()
 # Prepare the input data
 goto_work_dir()
 get_biblio_db()
-if CONFIG.get('Global', 'SECS') == '1':
-    get_secs_db()
 if CONFIG.get('Global', 'IMAGES') == '1':
     process_images()
 
