@@ -15,6 +15,7 @@
    IMPORTANTE! Los archivos de configuración se leen en este orden (específico -> general)
    debido a que si v6000 = '^avalor_1^avalor_2' entonces v6000^a = 'valor_1', es decir,
    la primera ocurrencia de un subcampo les gana a todas las posteriores.
+   IMPORTANTE! para el primero action=replace, y para los restantes action=add
 -->
 
 <!-- Leemos el archivo de configuración asociado a la base actual -->
@@ -23,7 +24,7 @@
 </pft></field>
 
 <!-- Leemos el archivo de configuración local -->
-<field action="replace" tag="6000" split="occ"><pft>
+<field action="add" tag="6000" split="occ"><pft>
 	cat(getenv('PATH_WXIS'),'../local-data/config/local.conf')
 </pft></field>
 
@@ -76,8 +77,9 @@
 		,else if v6000 : 'AVAILABLE_IN='   then '^a',mid(v6000,instr(v6000,'=')+1,size(v6000))
 		,else if v6000 : 'INDEX_BROWSE='   then '^i',mid(v6000,instr(v6000,'=')+1,size(v6000))
 		,else if v6000 : 'NEW_SEARCH='     then '^s',mid(v6000,instr(v6000,'=')+1,size(v6000))
+        ,else if v6000 : 'PAGE_TITLE_NAME=' then '^t',mid(v6000,instr(v6000,'=')+1,size(v6000))
 		,else if v6000 : 'KEYWORD_SEARCH=' then '^w',mid(v6000,instr(v6000,'=')+1,size(v6000))
-		,fi,fi,fi,fi,fi,
+		,fi,fi,fi,fi,fi,fi,
 	),
 </pft></field>
 

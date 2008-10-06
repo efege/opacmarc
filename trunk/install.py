@@ -35,21 +35,24 @@ def set_version():
     
     print "Identificador de version generado."
 
-def replace_config_path(config_file):
+def replace_config_path(config_file, force_forward=False):
     # Crea un archivo de configuración a partir de una plantilla y del valor
     # actual de OPACMARC_DIR.
-    # FIXME - Ajustar las barras en el path cuando sea apropiado.
     if os.path.isfile(config_file):
         print
         print "ATENCION: ya existe el archivo de configuracion %s." % os.path.abspath(config_file)
         print
     else:
         config_template = os.path.join(OPACMARC_DIR, 'config', 'templates', os.path.basename(config_file) + '.dist')
+        if force_forward:
+            replacement = OPACMARC_DIR.replace('\\', '/')
+        else:
+            replacement = OPACMARC_DIR
         try:
             f1 = open(config_template, 'r')
             f2 = open(config_file, 'w')
             f2.write(
-                f1.read().replace('__OPACMARC_DIR__', OPACMARC_DIR)
+                f1.read().replace('__OPACMARC_DIR__', replacement)
             )
             f1.close()
             f2.close()
@@ -61,9 +64,7 @@ def replace_config_path(config_file):
 
 def set_config():
     # Crea archivos de configuración con los paths correctos.
-    # FIXME - para apache necesitamos usar en los paths la barra "/" en lugar de "\"
-    # (especialmente para evitar problemas en las directivas que usan expresiones regulares)
-    replace_config_path(FILES['httpd'])   # modelo de config. para Apache
+    replace_config_path(FILES['httpd'], force_forward=True)   # modelo de config. para Apache (requiere barras hacia adelante, incluso en Windows)
     replace_config_path(FILES['local'])   # config. local (para opac.xis) 
     replace_config_path(FILES['update'])  # para update-opac.py
     replace_config_path(FILES['cipar-update']) # para las llamadas a mx desde update-opac.py

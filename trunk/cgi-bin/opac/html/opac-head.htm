@@ -63,13 +63,12 @@ window.onload = init
 <title>
 [pft]
 	'Catálogo',
-	
-	/* FIXME -- Usar config para especificar el nombre a mostrar */
-	select v2104
+    ' ', v6002^t, /* nombre a mostrar: ver config. */
+	/*select v2104
 	    case 'bibima': ' INMABB',
 	    case 'abr': ' Biblioteca Rivadavia',
 	    case 'allbc': ' Biblioteca Central UNS'
-	endsel,
+	endsel,*/
 	
 	if v2101 = 'BIB-CLASS-SEARCH' then
 		' - MSC 2000: ',v2001,
