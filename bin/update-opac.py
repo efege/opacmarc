@@ -819,16 +819,16 @@ import zipfile       # for reading .zip files
 import subprocess    # for running system commands (mx, i2id, etc)
 import ConfigParser  # for reading config file 
 
-OPACMARC_DIR = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]), '..', '..'))
+OPACMARC_DIR = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]), '..'))
 sys.path.insert(0, os.path.join(OPACMARC_DIR, 'util'))
 from util import run_command, error, emptydir
 
 
 print '''
 -----------------------------------------------------
-  update-opac.py - SCRIPT DE ACTUALIZACION DEL OPAC
+  %s - SCRIPT DE ACTUALIZACION DEL OPAC
 -----------------------------------------------------
-'''
+''' % os.path.basename(sys.argv[0])
 
 #Check mandatory argument
 if len(sys.argv) < 2:

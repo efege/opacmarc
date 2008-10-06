@@ -12,17 +12,22 @@
 
 
 <!--
-   IMPORTANTE! Los archivos de configuración se leen en este orden (local, global)
+   IMPORTANTE! Los archivos de configuración se leen en este orden (específico -> general)
    debido a que si v6000 = '^avalor_1^avalor_2' entonces v6000^a = 'valor_1', es decir,
    la primera ocurrencia de un subcampo les gana a todas las posteriores.
 -->
 
-<!-- Leemos el archivo de configuración local, local.conf -->
+<!-- Leemos el archivo de configuración asociado a la base actual -->
+<field action="replace" tag="6000" split="occ"><pft>
+	cat(getenv('PATH_WXIS'),'../local-data/bases/',v2104,'/config/options.conf')
+</pft></field>
+
+<!-- Leemos el archivo de configuración local -->
 <field action="replace" tag="6000" split="occ"><pft>
 	cat(getenv('PATH_WXIS'),'../local-data/config/local.conf')
 </pft></field>
 
-<!-- Leemos el archivo de configuraciones predeterminadas, opacmarc.conf -->
+<!-- Leemos la configuración predeterminada -->
 <field action="add" tag="6000" split="occ"><pft>
 	cat(getenv('PATH_WXIS'),'../config/opacmarc.conf')
 </pft></field>
