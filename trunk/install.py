@@ -11,7 +11,8 @@
 
 def run(command, msg = 'Error'):
     # FIXME! (see update-opac.py)
-    ENV = {'PATH': os.getenv('PATH') + os.pathsep + 'G:\\programas\\cisis\\5.2\\1030'}  # CONFIG.get('Global', 'PATH_CISIS')
+    #ENV = {'PATH': os.getenv('PATH') + os.pathsep + 'G:\\programas\\cisis\\5.2\\1660'}  # CONFIG.get('Global', 'PATH_CISIS')
+    ENV = {}
     return run_command(command, msg = msg, env = ENV)
 
 def set_version():
@@ -37,6 +38,7 @@ def set_version():
 def replace_config_path(config_file):
     # Crea un archivo de configuración a partir de una plantilla y del valor
     # actual de OPACMARC_DIR.
+    # FIXME - Ajustar las barras en el path cuando sea apropiado.
     if os.path.isfile(config_file):
         print
         print "ATENCION: ya existe el archivo de configuracion %s." % os.path.abspath(config_file)
@@ -59,6 +61,8 @@ def replace_config_path(config_file):
 
 def set_config():
     # Crea archivos de configuración con los paths correctos.
+    # FIXME - para apache necesitamos usar en los paths la barra "/" en lugar de "\"
+    # (especialmente para evitar problemas en las directivas que usan expresiones regulares)
     replace_config_path(FILES['httpd'])   # modelo de config. para Apache
     replace_config_path(FILES['local'])   # config. local (para opac.xis) 
     replace_config_path(FILES['update'])  # para update-opac.py
@@ -93,12 +97,6 @@ def create_dirs():
     #   print "ATENCION: No se pudo crear la carpeta logs."
 
 def create_db():
-    
-    # FIXME: asegurarse de que los cisis están en el path. Esto parece que
-    #        va a requerir tocar un config *antes* de ejecutar este script.
-    #        Podemos intentar encontrarlos (subprocess), y en caso de fracasar
-    #        se genera un mensaje de error.
-    #        También podemos exigir que los cisis estén en __OPACMARC_DIR__/bin
     
     # FIXME: ajustar saltos de línea de los .id (usar os.linesep?)
     # En Linux hay problemas si usan '\r\n', pero en Windows pueden usar '\n'
@@ -174,6 +172,10 @@ FILES = {
 }
 
 CISIS_PATH = os.path.join(OPACMARC_DIR, 'bin', 'cisis-1660')
+if not os.path.isdir(CISIS_PATH):
+    print
+    print "No se encuentra el directorio con los utilitarios cisis:\n    %s" % CISIS_PATH
+    sys.exit()
 
 print '''
 -----------------------------------------------------

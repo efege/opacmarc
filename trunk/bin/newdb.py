@@ -14,10 +14,13 @@ from util import error
 
 # Plantillas para archivos
 # TO-DO: usar los mismos textos que aparecen en los demo.htm.
-about_tpl = '''<p>Agregue aquí un texto explicando a los usuarios qué encontrarán en este catálogo.</p>'''
-banner_tpl = '''<h1>Cabecera para la base <i>%s</i></h1>'''
-home_tpl = '''<p>Puede agregar aquí contenido adicional para las páginas de la base <i>%s</i></p>'''
-css_tpl = '''/* Puede definir aquí estilos CSS específicos para la base %s */'''
+templates = {
+    'about' : '''<p>Agregue aquí un texto explicando a los usuarios qué encontrarán en este catálogo de la base %s.</p>''',
+    'banner' : '''<h1>Cabecera para la base <i>%s</i></h1>''',
+    'home' : '''<p>Puede agregar aquí contenido adicional para las páginas de la base <i>%s</i></p>''',
+    'css' : '''/* Puede definir aquí estilos CSS específicos para la base %s */''',
+    'conf' : '''# Parámetros de configuración específicos para la base %s''',
+}
 
 
 def print_usage():
@@ -46,42 +49,42 @@ if len(sys.argv) < 2:
 
 DB_NAME = sys.argv[1]
 
-os.chdir(OPACMARC_DIR)
+DB_DIR = os.path.join(OPACMARC_DIR, 'local-data', 'bases', DB_NAME)
+
+if os.path.isdir(DB_DIR):
+    error("Ya existe un directorio con el nombre '%s'." % DB_NAME)
+
+#os.chdir(OPACMARC_DIR)
 
 # Creamos directorios
 try:
-    os.mkdir('bases/opac/%s' % DB_NAME)
+    os.mkdir(DB_DIR)
     
-    os.mkdir('admin/work/%s' % DB_NAME)
-    
-    for dir_name in ('original', 'tmp', 'preprocess'):
-        os.mkdir('admin/work/%s/%s' % (DB_NAME, dir_name))
-    
-    os.mkdir('htdocs/opac/local/img/%s' % DB_NAME)
+    for dir_name in ('config', 'db', 'htmlpft', 'pft', 'static'):
+        os.mkdir(os.path.join(DB_DIR, dir_name))
 
-except:
-    error("Hubo un error al crear directorios. Posiblemente ya existe una base con el nombre '%s'." % DB_NAME)
+    for dir_name in ('original', 'public', 'update'):
+        os.mkdir(os.path.join(DB_DIR, 'db', dir_name))
 
-# Creamos archivos
-try:
-    f = open('cgi-bin/opac/local/about/%s.htm' % DB_NAME, 'w')
-    f.write(about_tpl)
-    f.close()
-    
-    f = open('cgi-bin/opac/local/banner/%s.htm' % DB_NAME, 'w')
-    f.write(banner_tpl % DB_NAME)
-    f.close()
-
-    f = open('cgi-bin/opac/local/home/%s.htm' % DB_NAME, 'w')
-    f.write(home_tpl % DB_NAME)
-    f.close()
-    
-    f = open('htdocs/opac/local/css/%s.css' % DB_NAME, 'w')
-    f.write(css_tpl % DB_NAME)
-    f.close()
+    for dir_name in ('css', 'img', 'js'):
+        os.mkdir(os.path.join(DB_DIR, 'static', dir_name))
+        
 except:
     raise
-    sys.exit(1)
+
+# Creamos archivos
+for file_name in ('about', 'banner', 'home'):
+    f = open(os.path.join(DB_DIR, 'htmlpft', '%s.htm' % file_name), 'w')
+    f.write(templates[file_name] % DB_NAME)
+    f.close()
+    
+f = open(os.path.join(DB_DIR, 'static', 'css', 'styles.css'), 'w')
+f.write(templates['css'] % DB_NAME)
+f.close()
+
+f = open(os.path.join(DB_DIR, 'config', 'options.conf'), 'w')
+f.write(templates['conf'] % DB_NAME)
+f.close()
     
 
 print
@@ -89,29 +92,29 @@ print "Se han creado los directorios y archivos necesarios para trabajar con la 
 print
 print '''Ahora debe copiar la base bibliografica original en la carpeta
 
-    admin/work/%s/original/
+    local-data/bases/%s/db/original/
     
 y luego ejecutar:
 
-    admin/bin/update-opac.py %s
+    bin/update-opac.py %s
     
 Además, si desea personalizar la presentacion del OPAC para esta base, puede
 editar los siguientes archivos:
 
-    cgi-bin/opac/local/about/%s.htm
-    cgi-bin/opac/local/banner/%s.htm
-    cgi-bin/opac/local/home/%s.htm
-    htdocs/opac/local/css/%s.css
+    local-data/bases/%s/htmlpft/about.htm
+    local-data/bases/%s/htmlpft/banner.htm
+    local-data/bases/%s/htmlpft/home.htm
+    local-data/bases/%s/static/css/styles.css
     
 Si necesita imágenes auxiliares (p.ej. un logo) deberá colocarlas en la carpeta
 
-    htdocs/opac/local/img/%s/
+    local-data/bases/%s/static/img/
     
 Si necesita modificar algunos parámetros de configuración para el OPAC,
 hágalo editando el archivo
 
-    config/local.conf
+    local-data/bases/%s/config/options.conf
 
-''' % ((DB_NAME,)*7)   # Requiere los paréntesis, de lo contrario TypeError
+''' % ((DB_NAME,)*8)   # Requiere los paréntesis, de lo contrario TypeError
 sys.exit(0)
 

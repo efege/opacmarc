@@ -1,9 +1,9 @@
 # A sample Apache virtual host configuration for OpacMarc.
 # Modify as needed.
 
-Listen 8080
-NameVirtualHost *:8080
-<VirtualHost *:8080>
+Listen 8081
+NameVirtualHost *:8081
+<VirtualHost *:8081>
 
     ServerName 127.0.0.1
     
@@ -21,7 +21,8 @@ NameVirtualHost *:8080
     </Directory>
     
     # Archivos estáticos (css, js, imágenes, etc.) específicos de cada base
-    AliasMatch ^/static/([^/]+)/ "__OPACMARC_DIR__/local-data/bases/$1/static/"
+    # ATENCION: aparentemente el segundo grupo ($2) debe figurar explícitamente.
+    AliasMatch "^/static/([^/]+)/(.+)" "__OPACMARC_DIR__/local-data/bases/$1/static/$2"
     <DirectoryMatch "__OPACMARC_DIR__/local-data/bases/([^/]+)/static/">
         Order allow,deny
         Allow from all
