@@ -1,7 +1,7 @@
 
 <div id="recordWrapper">
 
-	[pft]if v6001^t : v2104 then[/pft]
+	[pft]if v6001^t = '1' then[/pft]
 		<!-- mostramos el tipo de documento en base a opacmarc.conf -->
 		<div id="doctype">
 			[pft]@DOCUMENT-TYPE.PFT,[/pft]
@@ -530,11 +530,10 @@
 	<div id="sidebar">
 	
 		<!-- ******************** IMAGEN DE TAPA ******************** -->
-		<!-- TO-DO: guardar el path "opac/local/img/" en archivo de config -->
 		[pft]if p(v985) then[/pft]
 			<div id="imageCell">
 				<p>
-					<img src="[pft]v6003^h[/pft]opac/local/img/[pft]v2104,'/',v001,'.',v985^a[/pft]" alt="Imagen de la tapa">
+					<img src="[pft]v6003^h[/pft]static/[pft]v2104[/pft]/img/[pft]v001,'.',v985^a[/pft]" alt="Imagen de la tapa">
 				</p>
 			</div>
 		[pft]fi[/pft]
@@ -542,7 +541,7 @@
         <!-- Google Book Search API, 2008-09-24 -->
         <!-- FIXME - El renderizado de la página queda suspendido mientras se está esperando/procesando este JS -->
         <!-- FIXME - Más de un ISBN por registro, obra en varias partes (e.g. "A century of mathematics in America") -->
-        [pft]if v6001^p : v2104 then[/pft]
+        [pft]if v6001^p = '1' then[/pft]
             [pft]if p(v020^a) or p(v010^a) then[/pft]
                 <div id="gbs_preview" style="margin-top: 0.5em; float: right;" align="center">
                     <script type="text/javascript" src="http://books.google.com/books/previewlib.js"></script>
@@ -785,7 +784,7 @@
 										'</div>'/
 										
 										/* Nro. de inventario */
-										if v6001^i[1] : v2104[1] then
+										if v6001^i[1] = '1' then
 											|<div>Inv.&nbsp;|v859^p|</div>|
 										fi
 									fi,
