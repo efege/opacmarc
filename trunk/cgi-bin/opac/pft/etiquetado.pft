@@ -19,7 +19,7 @@
 '<table width="100%" cellspacing="0" border="0" id="etiq">'/
 
 /* v6001^t = DISPLAY_DOC_TYPE  (ATENCION: quitar referencia a 'catalis') */
-if v6001^t : v2104 or v2000 : 'catalis' then
+if v6001^t = '1' or v2000 : 'catalis' then
 	'<thead>'
 		'<tr>'
 			'<th colspan="2" class="materialTypeHeader">',

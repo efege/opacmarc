@@ -23,7 +23,7 @@ MSC.*=__OPACMARC_DIR__/bases/opac/msc2000/msc.*
 # -----------------------------------------------------------------
 # HTMLPFT
 # -----------------------------------------------------------------
-BIB-LIST-HEAD.HTM=__OPACMARC_DIR__/cgi-bin/common/html/bib-list-head.htm
+BIB-LIST-HEAD.HTM=__OPACMARC_DIR__/cgi-bin/opac/html/bib-list-head.htm
 BIB-NAV.HTM=__OPACMARC_DIR__/cgi-bin/opac/html/bib-nav.htm
 BIB-RECORD-1.HTM=__OPACMARC_DIR__/cgi-bin/opac/html/bib-record-1.htm
 BIB-RECORD-2.HTM=__OPACMARC_DIR__/cgi-bin/opac/html/bib-record-2.htm
@@ -64,11 +64,11 @@ MSC.PFT=__OPACMARC_DIR__/cgi-bin/opac/pft/msc.pft
 # -----------------------------------------------------------------
 # PFT (compartidos con Catalis)
 # -----------------------------------------------------------------
-BIB_SORT_KEY.PFT=__OPACMARC_DIR__/cgi-bin/common/pft/bib-sort-key.pft
-DOCUMENT-TYPE.PFT=__OPACMARC_DIR__/cgi-bin/common/pft/doc-type.pft
-ETIQUETADO.PFT=__OPACMARC_DIR__/cgi-bin/common/pft/etiquetado.pft
-URLENCODE.PFT=__OPACMARC_DIR__/cgi-bin/common/pft/urlencode.pft
-WORK_HEADING.PFT=__OPACMARC_DIR__/cgi-bin/common/pft/wh.pft
+BIB_SORT_KEY.PFT=__OPACMARC_DIR__/cgi-bin/opac/pft/bib-sort-key.pft
+DOCUMENT-TYPE.PFT=__OPACMARC_DIR__/cgi-bin/opac/pft/doc-type.pft
+ETIQUETADO.PFT=__OPACMARC_DIR__/cgi-bin/opac/pft/etiquetado.pft
+URLENCODE.PFT=__OPACMARC_DIR__/cgi-bin/opac/pft/urlencode.pft
+WORK_HEADING.PFT=__OPACMARC_DIR__/cgi-bin/opac/pft/wh.pft
 
 # -----------------------------------------------------------------
 # Directorio para archivos temporales

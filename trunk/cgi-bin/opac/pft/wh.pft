@@ -380,7 +380,7 @@ fi,
  * ------------------------------------------------
  */
 
-if v6001^t : v2104 then  /* v6001^t = DISPLAY_DOC_TYPE */
+if v6001^t = '1' then  /* v6001^t = DISPLAY_DOC_TYPE */
 	'<td class="whData docType',
 	if val(v1001) = val(v2004) or v1011 = 'TRUE' then
 		' whFirstRow',

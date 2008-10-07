@@ -24,7 +24,7 @@
 								<select name="searchType" id="searchType" size="5">
 									<option value="NAME"  [pft]if v2002 = 'NAME' then 'selected' fi[/pft]>Autor</option>
 									<option value="TITLE" [pft]if v2002 = 'TITLE' or a(v2002) then 'selected' fi[/pft]>Título</option>
-									<option value="SUBJ"  [pft]if v2002 = 'SUBJ' then 'selected' fi[/pft]>Tema[pft]if v6001^k : v2104 then ' (MSC)' fi[/pft]</option>
+									<option value="SUBJ"  [pft]if v2002 = 'SUBJ' then 'selected' fi[/pft]>Tema[pft]if v6001^k = '1' then ' (MSC)' fi[/pft]</option>
 									<option value="SN"    [pft]if v2002 = 'SN' then 'selected' fi[/pft]>Números (ISBN, etc)</option>
 									<option value="ANY"   [pft]if v2002 = 'ANY' then 'selected' fi[/pft]>Cualquier campo</option>
 								</select>
@@ -75,10 +75,10 @@
 						<tr>
 							<td style="width: 1em; vertical-align: top;">
 								<select name="index" id="browseType" size="[pft]if v2104 <> 'bibima' then '3' else '2' fi[/pft]">
-									<option value="NAME" [pft]if v2003 = 'NAME' or (v2003 = 'SUBJ' and v6001^k : v2104) or v2003 = 'COL' or a(v2003) then 'selected' fi[/pft]>Autor</option>
+									<option value="NAME" [pft]if v2003 = 'NAME' or (v2003 = 'SUBJ' and v6001^k = '1') or v2003 = 'COL' or a(v2003) then 'selected' fi[/pft]>Autor</option>
 									<option value="TITLE" [pft]if v2003 = 'TITLE' then 'selected' fi[/pft]>Título</option>
 									[pft]if v2104 <> 'bibima' then[/pft]
-										<option value="SUBJ" [pft]if v2003 = 'SUBJ' then 'selected' fi[/pft]>Tema[pft]if v6001^k : v2104 then ' (MSC)' fi[/pft]</option>
+										<option value="SUBJ" [pft]if v2003 = 'SUBJ' then 'selected' fi[/pft]>Tema[pft]if v6001^k = '1' then ' (MSC)' fi[/pft]</option>
 									[pft]fi[/pft]
 									<!--option value="SN" [pft]if v2003 = 'SN' then 'selected' fi[/pft]>ISBN/ISSN</option-->
 								</select>
@@ -118,7 +118,7 @@
 			
 		</div>  <!-- browseIndexes -->
 
-			[pft]if v6001^k : v2104 then[/pft]
+			[pft]if v6001^k = '1' then[/pft]
 				<div class="searchFormCell" style="width: 48.4%; float: right; padding: 0.2em 3px;">
 					<h4 class="searchFormHead" style="border: none;">
 					Búsquedas por tema:
