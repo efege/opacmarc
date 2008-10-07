@@ -9,6 +9,38 @@
 # TO-DO: en los archivos htmlpft de la base demo (y de una nueva base), corregir
 # automáticamente los paths que aparecen como contenido.
 
+import os
+import sys
+import shutil
+
+OPACMARC_DIR = os.path.abspath(os.path.dirname(sys.argv[0]))
+
+sys.path.insert(0, os.path.join(OPACMARC_DIR, 'util'))
+from util import run_command, error
+import tablas
+
+LOCAL_DATA_DIR = os.path.join(OPACMARC_DIR, 'local-data')
+
+# Archivos que crea o modifica el script de instalación.
+# TO-DO: agregar aquí los que usa create_db()
+FILES = {
+    'footer' : os.path.join(OPACMARC_DIR, 'cgi-bin', 'opac', 'html', 'opac-footer.htm'),
+    'cipar-update' : os.path.join(LOCAL_DATA_DIR, 'config', 'opac.cip'),
+    'cipar-opac' : os.path.join(LOCAL_DATA_DIR, 'config', 'update.cip'),
+    'httpd' : os.path.join(LOCAL_DATA_DIR, 'config', 'httpd-opacmarc.conf'),
+    'local' : os.path.join(LOCAL_DATA_DIR, 'config', 'local.conf'),
+    'update' : os.path.join(LOCAL_DATA_DIR, 'config', 'update.conf'),
+    'actab' : os.path.join(OPACMARC_DIR, 'util', 'ac-ansi.tab'),
+    'uctab' : os.path.join(OPACMARC_DIR, 'util', 'uc-ansi.tab'),
+}
+
+CISIS_PATH = os.path.join(OPACMARC_DIR, 'bin', 'cisis-1660')
+if not os.path.isdir(CISIS_PATH):
+    print
+    print "No se encuentra el directorio con los utilitarios cisis:\n    %s" % CISIS_PATH
+    sys.exit()
+
+
 def run(command, msg = 'Error'):
     # FIXME! (see update-opac.py)
     #ENV = {'PATH': os.getenv('PATH') + os.pathsep + 'G:\\programas\\cisis\\5.2\\1660'}  # CONFIG.get('Global', 'PATH_CISIS')
@@ -62,8 +94,8 @@ def replace_config_path(config_file, force_forward=False):
             print "ERROR: No se pudo generar el archivo %s." % os.path.basename(config_file)
             print
 
-def set_config():
-    # Crea archivos de configuración con los paths correctos.
+def build_config_files():
+    # Crea archivos de configuración con los paths apropiados.
     replace_config_path(FILES['httpd'], force_forward=True)   # modelo de config. para Apache (requiere barras hacia adelante, incluso en Windows)
     replace_config_path(FILES['local'])   # config. local (para opac.xis) 
     replace_config_path(FILES['update'])  # para update-opac.py
@@ -76,28 +108,11 @@ def set_config():
     #        en el cual se reemplaza '__DB_NAME__' por v2104, y '__DATE__' por s(date).8 
 
 
-def create_dirs():
-    # En Windows crear directorio temp para búsquedas de wxis (también en Linux para cache?), y ajustar config.
-    # No necesitamos tener ese dir en el repositorio; svn:ignore temp
-    try:
-        os.mkdir('temp')
-        print "Directorio temp creado."
-    except:
-        pass
-        # posiblemente ya existe el dir. temp
-        #print
-        #print "ATENCION: No se pudo crear la carpeta temp."
-      
-    # Crear directorio logs, e incluir dentro de él un README?
-    # No necesitamos tener ese dir en el repositorio; svn:ignore logs
-    #try:
-    #   os.mkdir('logs')
-    #   print "Directorio logs creado."
-    #except:
-    #   print
-    #   print "ATENCION: No se pudo crear la carpeta logs."
+def make_local_dirs():
+    for dir_name in ('bases', 'bin', 'config', 'logs', 'temp'):
+        os.mkdir(os.path.join(LOCAL_DATA_DIR, dir_name))
 
-def create_db():
+def create_aux_db():
     
     # FIXME: ajustar saltos de línea de los .id (usar os.linesep?)
     # En Linux hay problemas si usan '\r\n', pero en Windows pueden usar '\n'
@@ -108,8 +123,6 @@ def create_db():
     run('%s/id2i bases/id/dictgiz.id create=bases/common/dictgiz' % CISIS_PATH)
     run('%s/id2i bases/id/oem2ansi.id create=admin/opac/oem2ansi' % CISIS_PATH)
     
-    run('%s/id2i bases/id/demo.id create=local-data/bases/demo/db/original/biblio' % CISIS_PATH)
-
     # Genera los invertidos correspondientes
     run('%s/mx bases/common/country "fst=1 0 v1" fullinv=bases/common/country' % CISIS_PATH)
     run('%s/mx bases/common/lang "fst=1 0 v1" fullinv=bases/common/lang' % CISIS_PATH)
@@ -125,6 +138,16 @@ def create_table(table_type):
     f.close()
     print "Tabla %s creada." % table_type
 
+def setup_demo_db():
+    """Crea archivo maestro a partir de archivo de texto."""
+    run('%s/id2i bases/id/demo.id create=%s/bases/demo/db/original/biblio' % (CISIS_PATH, LOCAL_DATA_DIR))
+
+def set_demo():
+    #newdb.py demo
+    setup_demo_db()  # y no olvidar imágenes de portadas
+    #update-opac.py demo
+
+    
 def show_msg():    
     # Mostrar mensajes útiles para el usuario (tips, tareas que debe realizar luego de instalar)
     print '''
@@ -132,65 +155,39 @@ def show_msg():
   INSTALACION FINALIZADA
 -----------------------------------------------------
 '''
-    print '''Algunos mensajes para el admin:
-        - configurar permiso de escritura en temp y logs
-        - use config/http-opacmarc.conf como base para configurar Apache
-        - ejecutar newdb.py con la base demo?
-        - copie wxis (wxis.exe en Windows) en la carpeta cgi-bin
+    print '''
+        - Configure permiso de escritura en temp y logs (mostrar ejemplo)
+        - Use local-data/config/httpd-opacmarc.conf como base para configurar Apache
+        - Copie wxis (wxis.exe en Windows) en la carpeta cgi-bin
         - Windows: copie agrep.exe en la carpeta bin
-        - ejecutar update-opac.py demo
-        - Entrar con un browser a la URL...
-        - Realizar tests? E.g. búsquedas con acentos y con errores.
+        - Entre con un browser a http://...
+        - Realizar tests? E.g. búsquedas con acentos y con errores (agrep).
     '''
 
 
+def main():
 
-# ---------------------
-# MAIN
-# ---------------------
+    print '''
+    -----------------------------------------------------
+      %s - SCRIPT DE INSTALACION DE OPACMARC
+    -----------------------------------------------------
+    ''' % os.path.basename(sys.argv[0])
 
-import os
-import sys
-import shutil
+    # Varias rutas son relativas a OPACMARC_DIR
+    os.chdir(OPACMARC_DIR)
 
-OPACMARC_DIR = os.path.abspath(os.path.dirname(sys.argv[0]))
+    set_version()
+    make_local_dirs()
+    build_config_files()
+    create_aux_db()
+    create_table('actab')
+    create_table('uctab')
+    
+    set_demo()
+    
+    show_msg()
 
-sys.path.insert(0, os.path.join(OPACMARC_DIR, 'util'))
-from util import run_command, error
-import tablas
 
-# Archivos que crea o modifica el script de instalación.
-# TO-DO: agregar aquí los que usa create_db()
-FILES = {
-    'footer' : os.path.join(OPACMARC_DIR, 'cgi-bin', 'opac', 'html', 'opac-footer.htm'),
-    'cipar-update' : os.path.join(OPACMARC_DIR, 'local-data', 'config', 'opac.cip'),
-    'cipar-opac' : os.path.join(OPACMARC_DIR, 'local-data', 'config', 'update.cip'),
-    'httpd' : os.path.join(OPACMARC_DIR, 'local-data', 'config', 'httpd-opacmarc.conf'),
-    'local' : os.path.join(OPACMARC_DIR, 'local-data', 'config', 'local.conf'),
-    'update' : os.path.join(OPACMARC_DIR, 'local-data', 'config', 'update.conf'),
-    'actab' : os.path.join(OPACMARC_DIR, 'util', 'ac-ansi.tab'),
-    'uctab' : os.path.join(OPACMARC_DIR, 'util', 'uc-ansi.tab'),
-}
-
-CISIS_PATH = os.path.join(OPACMARC_DIR, 'bin', 'cisis-1660')
-if not os.path.isdir(CISIS_PATH):
-    print
-    print "No se encuentra el directorio con los utilitarios cisis:\n    %s" % CISIS_PATH
-    sys.exit()
-
-print '''
------------------------------------------------------
-  %s - SCRIPT DE INSTALACION DE OPACMARC
------------------------------------------------------
-''' % os.path.basename(sys.argv[0])
-
-# Varias rutas son relativas a OPACMARC_DIR
-os.chdir(OPACMARC_DIR)
-
-set_version()
-set_config()
-#create_dirs()
-create_db()
-create_table('actab')
-create_table('uctab')
-show_msg()
+if __name__ == "__main__":
+    main()
+    
