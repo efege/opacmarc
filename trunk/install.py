@@ -1,13 +1,15 @@
 # coding=windows-1252
 
-# Script de instalación para OpacMarc
-# Issue 10: http://code.google.com/p/opacmarc/issues/detail?id=10
+"""
+Script de instalación para OpacMarc
+Issue 10: http://code.google.com/p/opacmarc/issues/detail?id=10
 
-# TO-DO: Considerar también la situación en que ya existe una instalación
-# y se desea preservar los datos locales.
+TO-DO: Considerar también la situación en que ya existe una instalación
+y se desea preservar los datos locales.
 
-# TO-DO: en los archivos htmlpft de la base demo (y de una nueva base), corregir
-# automáticamente los paths que aparecen como contenido.
+TO-DO: en los archivos htmlpft de la base demo (y de una nueva base), corregir
+automáticamente los paths que aparecen como contenido.
+"""
 
 import os
 import sys
@@ -24,7 +26,7 @@ LOCAL_DATA_DIR = os.path.join(OPACMARC_DIR, 'local-data')
 # Archivos que crea o modifica el script de instalación.
 # TO-DO: agregar aquí los que usa create_db()
 FILES = {
-    'footer' : os.path.join(OPACMARC_DIR, 'cgi-bin', 'opac', 'html', 'opac-footer.htm'),
+    'footer' : os.path.join(OPACMARC_DIR, 'cgi-bin', 'html', 'opac-footer.htm'),
     'cipar-update' : os.path.join(LOCAL_DATA_DIR, 'config', 'opac.cip'),
     'cipar-opac' : os.path.join(LOCAL_DATA_DIR, 'config', 'update.cip'),
     'httpd' : os.path.join(LOCAL_DATA_DIR, 'config', 'httpd-opacmarc.conf'),
@@ -48,7 +50,7 @@ def run(command, msg = 'Error'):
     return run_command(command, msg = msg, env = ENV)
 
 def set_version():
-    # Genera un identificador de la versión y lo inserta en el footer.
+    """Genera un identificador de la versión y lo inserta en el footer."""
     # svnversion produce identificadores de la forma '322' o '322M'.
     # En el 2do caso, significa que se trata de la revisión 322 con
     # modificaciones locales.
@@ -68,8 +70,8 @@ def set_version():
     print "Identificador de version generado."
 
 def replace_config_path(config_file, force_forward=False):
-    # Crea un archivo de configuración a partir de una plantilla y del valor
-    # actual de OPACMARC_DIR.
+    """Crea un archivo de configuración a partir de una plantilla y del valor actual de OPACMARC_DIR."""
+    
     if os.path.isfile(config_file):
         print
         print "ATENCION: ya existe el archivo de configuracion %s." % os.path.abspath(config_file)
@@ -95,7 +97,8 @@ def replace_config_path(config_file, force_forward=False):
             print
 
 def build_config_files():
-    # Crea archivos de configuración con los paths apropiados.
+    """Crea archivos de configuración con los paths apropiados."""
+    
     replace_config_path(FILES['httpd'], force_forward=True)   # modelo de config. para Apache (requiere barras hacia adelante, incluso en Windows)
     replace_config_path(FILES['local'])   # config. local (para opac.xis) 
     replace_config_path(FILES['update'])  # para update-opac.py
@@ -109,10 +112,12 @@ def build_config_files():
 
 
 def make_local_dirs():
+    """Crea la estructura de directorios para los datos locales."""
     for dir_name in ('bases', 'bin', 'config', 'logs', 'temp'):
         os.mkdir(os.path.join(LOCAL_DATA_DIR, dir_name))
 
 def create_aux_db():
+    """Crea bases ISIS auxiliares."""
     
     # FIXME: ajustar saltos de línea de los .id (usar os.linesep?)
     # En Linux hay problemas si usan '\r\n', pero en Windows pueden usar '\n'
@@ -130,6 +135,7 @@ def create_aux_db():
     print "Bases auxiliares creadas."
 
 def create_table(table_type):
+    """Crea una tabla con códigos de caracteres (actab , uctab)."""
     f = open(FILES[table_type], 'w')
     values = list(getattr(tablas, table_type))
     while values:
@@ -143,6 +149,7 @@ def setup_demo_db():
     run('%s/id2i bases/id/demo.id create=%s/bases/demo/db/original/biblio' % (CISIS_PATH, LOCAL_DATA_DIR))
 
 def set_demo():
+    """Procesa la base demo."""
     #newdb.py demo
     setup_demo_db()  # y no olvidar imágenes de portadas
     #update-opac.py demo
@@ -173,7 +180,7 @@ def main():
     -----------------------------------------------------
     ''' % os.path.basename(sys.argv[0])
 
-    # Varias rutas son relativas a OPACMARC_DIR
+    # Algunas rutas son relativas a OPACMARC_DIR
     os.chdir(OPACMARC_DIR)
 
     set_version()
