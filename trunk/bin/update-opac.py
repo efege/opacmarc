@@ -791,7 +791,7 @@ def remove_tmp_files():
 
 
 def move_files():
-    # Movemos los archivos generados.
+    """Movemos los archivos generados."""
     # TO-DO: sacamos de servicio el OPAC mientras se están pisando los archivos viejos?
     #        Otra opción: cambiar un link simbólico que apunte a la carpeta con los nuevos archivos
     #        (ver la idea en http://athleticsnyc.com/blog/entry/on-using-subversion-for-web-projects)

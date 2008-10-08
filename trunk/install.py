@@ -6,9 +6,6 @@ Issue 10: http://code.google.com/p/opacmarc/issues/detail?id=10
 
 TO-DO: Considerar también la situación en que ya existe una instalación
 y se desea preservar los datos locales.
-
-TO-DO: en los archivos htmlpft de la base demo (y de una nueva base), corregir
-automáticamente los paths que aparecen como contenido.
 """
 
 import os
@@ -107,8 +104,6 @@ def build_config_files():
     
     # TO-DO: local.conf -> SCRIPT_URL -> "wxis.exe" vs "wxis"
     # TO-DO: local.conf -> path agrep
-    # TO-DO: ver cómo podemos crear un cipar para read-param.xis. Puede ser un archivo fijo
-    #        en el cual se reemplaza '__DB_NAME__' por v2104, y '__DATE__' por s(date).8 
 
 
 def make_local_dirs():
@@ -144,20 +139,6 @@ def create_table(table_type):
     f.close()
     print "Tabla %s creada." % table_type
 
-def setup_demo_db():   # ABORTADO #
-    """Crea archivo maestro a partir de archivo de texto."""
-    run('%s/id2i bin/install/data/demo.id create=%s/bases/demo/db/original/biblio' % (CISIS_PATH, LOCAL_DATA_DIR))
-    # FIXME copy
-    shutil.copy('bin/install/data/demo-img/*', '%s/bases/demo/static/img/' % LOCAL_DATA_DIR) 
-
-def set_demo():
-    """Procesa la base demo."""   # ABORTADO #
-    #FIXME add_db.py demo
-    import add_db
-    add_db.main('demo')
-    setup_demo_db()
-    #FIXME update-opac.py demo
-
     
 def show_msg():    
     # Mostrar mensajes útiles para el usuario (tips, tareas que debe realizar luego de instalar)
@@ -168,12 +149,12 @@ def show_msg():
 '''
     print '''
         - Configure permiso de escritura en temp y logs (mostrar ejemplo)
-        - Use local-data/config/httpd-opacmarc.conf como base para configurar Apache
+        - Use %s/config/httpd-opacmarc.conf como base para configurar Apache
         - Copie wxis (wxis.exe en Windows) en la carpeta cgi-bin
         - Windows: copie agrep.exe en la carpeta bin
         - Entre con un browser a http://...
         - Realizar tests? E.g. búsquedas con acentos y con errores (agrep).
-    '''
+    ''' % LOCAL_DATA_DIR
 
 
 def main():
@@ -193,8 +174,6 @@ def main():
     create_aux_db()
     create_table('actab')
     create_table('uctab')
-    
-    #set_demo()  # esto puede ser parte de un testeo, pero no necesariamente de la instalación
     
     show_msg()
 

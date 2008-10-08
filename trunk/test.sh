@@ -15,6 +15,9 @@ CISIS_DIR=$HOME/bin/cisis1660
 # wxis 16/60
 WXIS=$HOME/www/cgi-bin/wxis1660-7.1
 
+# agrep
+AGREP=`which agrep`
+
 # archivo con la configuración de un virtual host para OpacMarc
 APACHE_VHOST=/etc/apache2/sites-available/opacmarc-test
 
@@ -34,9 +37,10 @@ rm -rf $TEST_DIR
 # o bien exportamos desde la working copy local
 svn export $HOME/svn/opacmarc $TEST_DIR
 
-# links a binarios cisis
+# links a binarios
 ln -s $WXIS $TEST_DIR/cgi-bin/wxis
 ln -s $CISIS_DIR $TEST_DIR/bin/cisis-1660
+ln -s $AGREP $TEST_DIR/bin/agrep
 
 # instalación
 python $TEST_DIR/install.py
