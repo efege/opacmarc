@@ -39,7 +39,7 @@ copy %WXIS% %TEST_DIR%\cgi-bin\wxis.exe
 copy %AGREP% %TEST_DIR%\bin\agrep.exe
 
 :: ejecutamos script de inicialización
-python %TEST_DIR%\install.py
+python %TEST_DIR%\bin\install.py
 
 :: pisamos configuración de apache
 copy "%TEST_DIR%\local-data\config\httpd-opacmarc.conf" "%APACHE_VHOST%"

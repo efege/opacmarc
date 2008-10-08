@@ -43,7 +43,7 @@ ln -s $CISIS_DIR $TEST_DIR/bin/cisis-1660
 ln -s $AGREP $TEST_DIR/bin/agrep
 
 # instalación
-python $TEST_DIR/install.py
+python $TEST_DIR/bin/install.py
 
 # permisos de escritura
 sudo chgrp $APACHE_USER $TEST_DIR/local-data/logs

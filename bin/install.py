@@ -12,7 +12,8 @@ import os
 import sys
 import shutil
 
-OPACMARC_DIR = os.path.abspath(os.path.dirname(sys.argv[0]))
+parent_dir = os.path.join(os.path.dirname(sys.argv[0]), '..') 
+OPACMARC_DIR = os.path.abspath(parent_dir)
 
 sys.path.insert(0, os.path.join(OPACMARC_DIR, 'util'))
 from util import run_command, error
@@ -121,7 +122,7 @@ def create_aux_db():
     run('%s/id2i bin/install/data/country.id create=bases/common/country' % CISIS_PATH)
     run('%s/id2i bin/install/data/lang.id create=bases/common/lang' % CISIS_PATH)
     run('%s/id2i bin/install/data/dictgiz.id create=bases/common/dictgiz' % CISIS_PATH)
-    run('%s/id2i bin/install/data/oem2ansi.id create=admin/opac/oem2ansi' % CISIS_PATH)
+    run('%s/id2i bin/install/data/oem2ansi.id create=bin/update_db/oem2ansi' % CISIS_PATH)
     
     # Genera los invertidos correspondientes
     run('%s/mx bases/common/country "fst=1 0 v1" fullinv=bases/common/country' % CISIS_PATH)
