@@ -299,7 +299,7 @@ table#bibRecordList td {
 
 table#bibRecordList th {
 	background: #CCC; /*#E0EEE0; /*#CCC; /*#ECFBEC; /*#908470;*/
-	/*background-image: url(../../opac/img/999999a.gif);*/
+	/*background-image: url(../img/999999a.gif);*/
 	border: none; /* para cancelar el efecto de border="1" */
 	border-top: 1px solid #999;
 	border-left: 1px solid #BBB;
@@ -549,7 +549,7 @@ ul.navigation li {
 }
 
 #linkPrevResult {
-	background-image: url(../../opac/img/left.gif);
+	background-image: url(../img/left.gif);
 	background-position: 0 50%;
 	background-repeat: no-repeat;
 	/*border: 1px dotted #999;*/
@@ -557,7 +557,7 @@ ul.navigation li {
 	/*text-decoration: none;*/
 }
 #linkPrevResultDisabled {
-	background-image: url(../../opac/img/left-gris.gif);
+	background-image: url(../img/left-gris.gif);
 	background-position: 0 50%;
 	background-repeat: no-repeat;
 	/*border: 1px dotted #999;*/
@@ -565,7 +565,7 @@ ul.navigation li {
 	padding-left: 14px;
 }
 #linkNextResult {
-	background-image: url(../../opac/img/right.gif);
+	background-image: url(../img/right.gif);
 	background-position: 100% 50%;
 	background-repeat: no-repeat;
 	/*border: 1px dotted #999;*/
@@ -573,7 +573,7 @@ ul.navigation li {
 	/*text-decoration: none;*/
 }
 #linkNextResultDisabled {
-	background-image: url(../../opac/img/right-gris.gif);
+	background-image: url(../img/right-gris.gif);
 	background-position: 100% 50%;
 	background-repeat: no-repeat;
 	/*border: 1px dotted #999;*/
@@ -671,7 +671,7 @@ ul#listaSugerencias {
 }
 
 ul#listaSugerencias li {
-	background-image: url(../../opac/img/right.gif);
+	background-image: url(../img/right.gif);
 	background-position: 0px 0.0em;
 	background-repeat: no-repeat;
 	margin: 0.6em 0;

@@ -1,3 +1,7 @@
+/*
+    Hoja de estilo de muestra. Modifíquela a su gusto para adaptarla a la base __DB__.
+*/
+
 
 /* *********************** BANNER ********************* */
 
@@ -22,7 +26,7 @@ table#banner td#logo img {
 
 table#banner td#ident {
 	background-color: #666;
-	/*background-image: url(../../img/gradient-120a.jpg);*/
+	/*background-image: url(../../../img/gradient-120a.jpg);*/
 	/*background-position: 0 100%;*/
 	color: #FFF;
 	font-family: arial, sans-serif;
@@ -47,7 +51,7 @@ table#banner td#menu a {
 }
 
 div#bannerMessage {
-	background-image: url(../../img/icon_caution.gif);
+	background-image: url(../../../img/icon_caution.gif);
 	background-repeat: no-repeat;
 	background-position: 0 50%;
 	font-size: 90%;

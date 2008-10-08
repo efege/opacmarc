@@ -12,7 +12,7 @@
 		padding: 0;
 	}
 	div#columnsWrapper {
-		background-image: url(../../opac/img/999999a.gif);
+		background-image: url(../img/999999a.gif);
 		background-position: 61% 0;
 		background-repeat: repeat-y;
 		float:left;
@@ -109,7 +109,7 @@
 		padding-top: 0.5em;
 	}
 	div#contents li {
-		background-image: url(../../opac/img/0180_bullet.gif);
+		background-image: url(../img/0180_bullet.gif);
 		background-position: 0 0.25em;
 		background-repeat: no-repeat;
 		margin-top: 0.4em;
@@ -168,7 +168,7 @@
 		margin: 0.5em 1em 0.7em 0.5em;
 	}
 	#sidebar ul li {
-		background-image: url(../../opac/img/0180_bullet.gif);
+		background-image: url(../img/0180_bullet.gif);
 		background-position: 0 0.25em;
 		background-repeat: no-repeat;
 		padding-left: 1.2em;
@@ -231,7 +231,7 @@
 	/* Experimento */
 	#googleSearch a {
 		/*text-indent: 9999px;*/
-		background: url(../../opac/img/google_booksearch.gif) no-repeat 0 0;
+		background: url(../img/google_booksearch.gif) no-repeat 0 0;
 	}
 	/* Fin exp. */
 	
@@ -241,7 +241,7 @@
 	}
 	
 	a.pdfLink {
-		background-image: url(../../opac/img/pdf_icon.gif);
+		background-image: url(../img/pdf_icon.gif);
 		background-repeat: no-repeat;
 		background-position: 100% 0.2em;
 		display: block;

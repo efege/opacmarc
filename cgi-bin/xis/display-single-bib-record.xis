@@ -408,7 +408,7 @@
 		<!-- ~~~~~~~~~~~~~~~~~~~~~~~~ -->
 		<!--display><pft>ALL</pft></display-->
 		<!--proc>d1005d2000d2008d6001d6002</proc-->
-		<include>opac/xis/marc.xis</include>
+		<include>xis/marc.xis</include>
 		
 		<!-- ~~~~~~~~~~~~~~~~~~~~~~~~ -->
 		<label>OUT</label>

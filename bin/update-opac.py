@@ -107,6 +107,22 @@
 # Python Standard Logging: http://www.onlamp.com/lpt/a/5914
 #
 
+
+# Import modules
+import os            # path.*, mkdir, listdir, etc 
+import sys           # argv for processing script arguments
+import shutil        # shell utils (copy, move, rmtree...)
+import re            # regular expressions
+import zipfile       # for reading .zip files
+import subprocess    # for running system commands (mx, i2id, etc)
+import ConfigParser  # for reading config file 
+
+OPACMARC_DIR = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]), '..'))
+sys.path.insert(0, os.path.join(OPACMARC_DIR, 'util'))
+from util import run_command, error, emptydir
+
+
+
 def run(command, msg = 'Error'):
     return run_command(command, msg = msg, env = ENV)
 
@@ -806,67 +822,57 @@ def end():
 
 
 
-# ---------------------
-# MAIN
-# ---------------------
+def main():
 
-# Import modules
-import os            # path.*, mkdir, listdir, etc 
-import sys           # argv for processing script arguments
-import shutil        # shell utils (copy, move, rmtree...)
-import re            # regular expressions
-import zipfile       # for reading .zip files
-import subprocess    # for running system commands (mx, i2id, etc)
-import ConfigParser  # for reading config file 
+    global CONFIG, DB_NAME, TELL, ENV
 
-OPACMARC_DIR = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]), '..'))
-sys.path.insert(0, os.path.join(OPACMARC_DIR, 'util'))
-from util import run_command, error, emptydir
-
-
-print '''
------------------------------------------------------
-  %s - SCRIPT DE ACTUALIZACION DEL OPAC
------------------------------------------------------
-''' % os.path.basename(sys.argv[0])
-
-#Check mandatory argument
-if len(sys.argv) < 2:
-    print_usage()
-
-# Read config file and define global variables
-DB_NAME = sys.argv[1]
-CONFIG = read_config()
-TELL = CONFIG.get('Global', 'TELL')  # used by many calls to cisis utilities
-ENV = build_env()
-
-# Prepare the input data
-goto_work_dir()
-get_biblio_db()
-if CONFIG.get('Global', 'IMAGES') == '1':
-    process_images()
-
-# Do the hard work
-process_biblio_db()
-build_subj_db()
-build_name_db()
-recode_headings()
-build_title_db()
-process_biblio_db_2()
-fullinv()
-process_analytics()
-compact_db()
-compute_postings()
-build_agrep_dictionaries()
-build_aux_files()
-
-# Clean and/or move files if needed
-if CONFIG.get('Global', 'CLEAN') == '1':
-    remove_tmp_files()
-if CONFIG.get('Global', 'MOVE') == '1':
-    move_files()
-
-clean_cache()
+    print '''
+    -----------------------------------------------------
+      %s - SCRIPT DE ACTUALIZACION DEL OPAC
+    -----------------------------------------------------
+    ''' % os.path.basename(sys.argv[0])
     
-# Say goodbye
-end()
+    #Check mandatory argument
+    if len(sys.argv) < 2:
+        print_usage()
+    
+    # Read config file and define global variables
+    DB_NAME = sys.argv[1]
+    CONFIG = read_config()
+    TELL = CONFIG.get('Global', 'TELL')  # used by many calls to cisis utilities
+    ENV = build_env()
+    
+    # Prepare the input data
+    goto_work_dir()
+    get_biblio_db()
+    if CONFIG.get('Global', 'IMAGES') == '1':
+        process_images()
+    
+    # Do the hard work
+    process_biblio_db()
+    build_subj_db()
+    build_name_db()
+    recode_headings()
+    build_title_db()
+    process_biblio_db_2()
+    fullinv()
+    process_analytics()
+    compact_db()
+    compute_postings()
+    build_agrep_dictionaries()
+    build_aux_files()
+    
+    # Clean and/or move files if needed
+    if CONFIG.get('Global', 'CLEAN') == '1':
+        remove_tmp_files()
+    if CONFIG.get('Global', 'MOVE') == '1':
+        move_files()
+    
+    clean_cache()
+        
+    # Say goodbye
+    end()
+
+
+if __name__ == "__main__":
+    main()
