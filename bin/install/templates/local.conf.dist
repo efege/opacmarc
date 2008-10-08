@@ -48,7 +48,7 @@ PATH_HTDOCS=/
   
 # PATH_AGREP: ubicación del ejecutable agrep
 # Valores de referencia: PATH_AGREP=__OPACMARC_DIR__/bin/agrep.exe (Windows); PATH_AGREP=/usr/bin/agrep (Linux)
-#PATH_AGREP=
+#PATH_AGREP=__OPACMARC_DIR__/bin/agrep
 
 
 # -------------------------------------------------------

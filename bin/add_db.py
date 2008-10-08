@@ -36,10 +36,7 @@ def print_usage():
 
 
 def main():
-    # Plantillas para archivos    # FIXME: tomar datos de bin/add_db/templates/
-    #     DB_DIR/htmlpft/{about,banner,home}.htm
-    #     DB_DIR/static/css/styles.css
-    #     DB_DIR/config/options.conf
+    # Plantillas para archivost
     template_dest = {
         'about.htm' : 'htmlpft',
         'banner.htm' : 'htmlpft',
@@ -54,8 +51,8 @@ def main():
         print_usage()
     
     DB_NAME = sys.argv[1]
-    
-    DB_DIR = os.path.join(OPACMARC_DIR, 'local-data', 'bases', DB_NAME)
+    LOCAL_DATA_DIR = os.path.join(OPACMARC_DIR, 'local-data')
+    DB_DIR = os.path.join(LOCAL_DATA_DIR, 'bases', DB_NAME)
     
     if os.path.isdir(DB_DIR):
         error("Ya existe un directorio con el nombre '%s'." % DB_NAME)
@@ -83,7 +80,7 @@ def main():
         f1 = open(os.path.join(OPACMARC_DIR, 'bin', 'add_db', 'templates', tpl), 'r')
         f2 = open(os.path.join(DB_DIR, template_dest[tpl], tpl), 'w')
         f2.write(
-            f1.read().replace('__OPACMARC_DIR__', OPACMARC_DIR).replace('__DB__', DB_NAME)
+            f1.read().replace('__LOCAL_DATA_DIR__', LOCAL_DATA_DIR).replace('__DB__', DB_NAME)
         )
         f1.close()
         f2.close()
@@ -110,7 +107,7 @@ def main():
     print
     print '''Ahora debe copiar la base bibliografica original en la carpeta
     
-        local-data/bases/%s/db/original/
+        %s/bases/%s/db/original/
         
     y luego ejecutar:
     
@@ -119,21 +116,21 @@ def main():
     Además, si desea personalizar la presentacion del OPAC para esta base, puede
     editar los siguientes archivos:
     
-        local-data/bases/%s/htmlpft/about.htm
-        local-data/bases/%s/htmlpft/banner.htm
-        local-data/bases/%s/htmlpft/home.htm
-        local-data/bases/%s/static/css/styles.css
+        %s/bases/%s/htmlpft/about.htm
+        %s/bases/%s/htmlpft/banner.htm
+        %s/bases/%s/htmlpft/home.htm
+        %s/bases/%s/static/css/styles.css
         
     Si necesita imágenes auxiliares (p.ej. un logo) deberá colocarlas en la carpeta
     
-        local-data/bases/%s/static/img/
+        %s/bases/%s/static/img/
         
     Si necesita modificar algunos parámetros de configuración para el OPAC,
     hágalo editando el archivo
     
-        local-data/bases/%s/config/options.conf
+        %s/bases/%s/config/options.conf
     
-    ''' % ((DB_NAME,)*8)   # Requiere los paréntesis, de lo contrario TypeError
+    ''' % ((LOCAL_DATA_DIR, DB_NAME, DB_NAME) + (LOCAL_DATA_DIR, DB_NAME)*6)   # Requiere los paréntesis, de lo contrario TypeError
     sys.exit(0)
 
 
