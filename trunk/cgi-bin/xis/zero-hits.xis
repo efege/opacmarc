@@ -29,7 +29,7 @@
 
 <label>AGREP_FOR_TWO</label>
 <!--display><pft>'<br>AGREP para 2'</pft></display-->
-<include>opac/xis/agrep-multi.xis</include>
+<include>xis/agrep-multi.xis</include>
 
 <!-- ================================================== -->
 <label>POST_AGREP</label>

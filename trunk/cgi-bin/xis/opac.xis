@@ -29,12 +29,12 @@
 <!-- ============================================================= -->
 
 <!-- function urlencode [reemplazada por URLENCODE.PFT] -->
-<!--include>opac/xis/urlencode.xis</include-->
+<!--include>xis/urlencode.xis</include-->
 
 <!-- function saveMfnList -->
-<include>opac/xis/save-mfn-list.xis</include>
+<include>xis/save-mfn-list.xis</include>
 
-<include>opac/xis/agrep.xis</include>
+<include>xis/agrep.xis</include>
 
 
 <!-- ================================================== -->
@@ -190,7 +190,7 @@ Parámetros CGI
 
 <!-- Lee parámetros de la aplicación -->
 <!-- Por las dudas, es recomendable que esto aparezca *después* de haber aumentado el valor de buffersize -->
-<include>opac/xis/read-param.xis</include>
+<include>xis/read-param.xis</include>
 
 
 <!-- ======== Cookie ======== -->
@@ -314,73 +314,73 @@ Parámetros CGI
 <label>CLASS-KW-SEARCH</label>
 <label>CLASS-BROWSE</label>
 <!-- ================================================== -->
-<include>opac/xis/class-search-browse.xis</include>
+<include>xis/class-search-browse.xis</include>
 <flow action="jump">FIN</flow>
 
 <!-- ================================================== -->
 <label>H-KW-SEARCH</label>
 <!-- ================================================== -->
-<include>opac/xis/keyword-match-in-heading.xis</include>
+<include>xis/keyword-match-in-heading.xis</include>
 <flow action="jump">FIN</flow>
 
 <!-- ================================================== -->
 <label>H-BROWSE</label>
 <!-- ================================================== -->
-<include>opac/xis/browse-headings.xis</include>
+<include>xis/browse-headings.xis</include>
 <flow action="jump">FIN</flow>
 
 <!-- ================================================== -->
 <label>BIB-KW-SEARCH</label>
 <!-- ================================================== -->
-<include>opac/xis/keyword-match-in-bib-record.xis</include>
+<include>xis/keyword-match-in-bib-record.xis</include>
 <flow action="jump">FIN</flow>
 
 <!-- ================================================== -->
 <label>BIB-CLASS-SEARCH</label>
 <!-- ================================================== -->
-<include>opac/xis/bib-class-search.xis</include>
+<include>xis/bib-class-search.xis</include>
 <flow action="jump">FIN</flow>
 
 <!-- ================================================== -->
 <label>BIB-H-SEARCH</label>
 <!-- ================================================== -->
-<include>opac/xis/heading-match-in-bib-record.xis</include>
+<include>xis/heading-match-in-bib-record.xis</include>
 <flow action="jump">FIN</flow>
 
 <!-- ================================================== -->
 <label>BIB-RECORD</label>
 <!-- ================================================== -->
-<include>opac/xis/display-single-bib-record.xis</include>
+<include>xis/display-single-bib-record.xis</include>
 <flow action="jump">FIN</flow>
 
 <!-- ================================================== -->
 <label>BROWSE-CATALOG</label>
 <!-- ================================================== -->
-<include>opac/xis/browse-catalog.xis</include>
+<include>xis/browse-catalog.xis</include>
 <flow action="jump">FIN</flow>
 
 <!-- ================================================== -->
 <label>SEND-MAIL</label>
 <!-- ================================================== -->
-<include>opac/xis/mail.xis</include>
+<include>xis/mail.xis</include>
 <flow action="jump">FIN</flow>
 
 <!-- ================================================== -->
 <label>TEST_CONDITION</label>
 <!-- ================================================== -->
-<include>opac/xis/bib-test-cond.xis</include>
+<include>xis/bib-test-cond.xis</include>
 <flow action="jump">FIN</flow>
 
 <!-- ================================================== -->
 <label>EXTRACT_KEYS</label>
 <!-- ================================================== -->
-<include>opac/xis/extract-keys.xis</include>
+<include>xis/extract-keys.xis</include>
 <flow action="jump">FIN</flow>
 
 <!-- ================================================== -->
 <label>ZERO_HITS</label>
 <!-- ================================================== -->
-<include>opac/xis/zero-hits.xis</include>
+<include>xis/zero-hits.xis</include>
 <flow action="jump">FIN</flow>
 
 
@@ -442,7 +442,7 @@ Parámetros CGI
 <!-- ================================================== -->
 <label>SHOW_NEW_MATERIAL</label>
 <!-- ================================================== -->
-<include>opac/xis/novedades.xis</include>
+<include>xis/novedades.xis</include>
 <flow action="jump">FIN</flow>
 
 
@@ -523,7 +523,7 @@ Parámetros CGI
 </display>
 <flow action="exit">Now</flow>
 
-<include>opac/xis/error.xis</include>
+<include>xis/error.xis</include>
 
 </section>
 </IsisScript>

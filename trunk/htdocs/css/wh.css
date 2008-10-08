@@ -109,7 +109,7 @@ table#bibRecordList span.whEdition {
 }
 
 table#bibRecordList td.spanish {
-	background-image: url('../../opac/img/orange-8x16.png');
+	background-image: url('../img/orange-8x16.png');
 	background-repeat: no-repeat;
 	background-position: 8px 0;
 }

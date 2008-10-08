@@ -343,7 +343,7 @@ para mostrar).
 <!-- ====================================== -->
 <label>SHOW_SUGGESTIONS</label>
 <!-- ====================================== -->
-<include>opac/xis/show-suggestions.xis</include>
+<include>xis/show-suggestions.xis</include>
 
 
 

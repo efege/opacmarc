@@ -77,7 +77,7 @@ def replace_config_path(config_file, force_forward=False):
         print "ATENCION: ya existe el archivo de configuracion %s." % os.path.abspath(config_file)
         print
     else:
-        config_template = os.path.join(OPACMARC_DIR, 'config', 'templates', os.path.basename(config_file) + '.dist')
+        config_template = os.path.join(OPACMARC_DIR, 'bin', 'install', 'templates', os.path.basename(config_file) + '.dist')
         if force_forward:
             replacement = OPACMARC_DIR.replace('\\', '/')
         else:
@@ -123,10 +123,10 @@ def create_aux_db():
     # En Linux hay problemas si usan '\r\n', pero en Windows pueden usar '\n'
     
     # Crea las bases isis auxiliares a partir de archivos de texto (.id)
-    run('%s/id2i bases/id/country.id create=bases/common/country' % CISIS_PATH)
-    run('%s/id2i bases/id/lang.id create=bases/common/lang' % CISIS_PATH)
-    run('%s/id2i bases/id/dictgiz.id create=bases/common/dictgiz' % CISIS_PATH)
-    run('%s/id2i bases/id/oem2ansi.id create=admin/opac/oem2ansi' % CISIS_PATH)
+    run('%s/id2i bin/install/data/country.id create=bases/common/country' % CISIS_PATH)
+    run('%s/id2i bin/install/data/lang.id create=bases/common/lang' % CISIS_PATH)
+    run('%s/id2i bin/install/data/dictgiz.id create=bases/common/dictgiz' % CISIS_PATH)
+    run('%s/id2i bin/install/data/oem2ansi.id create=admin/opac/oem2ansi' % CISIS_PATH)
     
     # Genera los invertidos correspondientes
     run('%s/mx bases/common/country "fst=1 0 v1" fullinv=bases/common/country' % CISIS_PATH)
@@ -144,15 +144,19 @@ def create_table(table_type):
     f.close()
     print "Tabla %s creada." % table_type
 
-def setup_demo_db():
+def setup_demo_db():   # ABORTADO #
     """Crea archivo maestro a partir de archivo de texto."""
-    run('%s/id2i bases/id/demo.id create=%s/bases/demo/db/original/biblio' % (CISIS_PATH, LOCAL_DATA_DIR))
+    run('%s/id2i bin/install/data/demo.id create=%s/bases/demo/db/original/biblio' % (CISIS_PATH, LOCAL_DATA_DIR))
+    # FIXME copy
+    shutil.copy('bin/install/data/demo-img/*', '%s/bases/demo/static/img/' % LOCAL_DATA_DIR) 
 
 def set_demo():
-    """Procesa la base demo."""
-    #newdb.py demo
-    setup_demo_db()  # y no olvidar imágenes de portadas
-    #update-opac.py demo
+    """Procesa la base demo."""   # ABORTADO #
+    #FIXME add_db.py demo
+    import add_db
+    add_db.main('demo')
+    setup_demo_db()
+    #FIXME update-opac.py demo
 
     
 def show_msg():    
@@ -190,7 +194,7 @@ def main():
     create_table('actab')
     create_table('uctab')
     
-    set_demo()
+    #set_demo()  # esto puede ser parte de un testeo, pero no necesariamente de la instalación
     
     show_msg()
 

@@ -48,3 +48,62 @@ config
     Aquí podemos juntar lo que está en cgi-bin/opac/config/*.conf y en admin/*.conf
     Pero antes tenemos que verificar que desde wxis podemos leer este dir, e.g.:
         cat(getenv('PATH_WXIS'),'../config/opacmarc.conf')
+        
+--------------------
+
+2008-10-08
+
+Cómo organizar archivos usados para tareas de administración.
+
+Tenemos por el momento tres tareas definidas, y cada una de ellas requiere
+de un conjunto de archivos auxiliares, además del respectivo archivo .py:
+
+    - install / init
+        archivos .id para generar bases isis auxiliares
+        templates para config
+        
+        base demo: .id e imágenes
+    
+    - add_db
+        templates para la nueva base: html, css, conf
+    
+    - update_db
+        pft, fst (lo de admin/opac/)
+        más otros archivos comunes (lo de bases/common/)
+    
+
+La propuesta es que por cada tarea tengamos un directorio dentro de bin/
+y guardemos en él los archivos específicos requeridos por esa tarea (posiblemente
+clasificados dentro de subcarpetas más específicas), sin importar qué tipo de
+archivos sean, a excepción de archivos de configuración que necesariamente
+irán a parar a local-data/config/. Ejemplo:
+
+    bin/
+        add_db/
+            templates/
+                *.htm, *.css, *.conf
+        
+        update_db/
+            *.pft, *.fst
+        
+        install/
+            data/
+                *.id + demo img
+            templates/
+                *.conf
+         
+¿Dónde ponemos los scripts respectivos? install.py, add_db.py, update_db.py, ...
+
+¿Dónde ponemos archivos comunes a más de una tarea?
+
+¿Dónde ponemos archivos compartidos por alguna tarea y por cgi-bin?
+
+Si alguna de estas tareas requiere parámetros de configuración (archivos .conf o .cipar),
+éstos se guardarán en local-data/config/, y sus respectivos templates (sólo usados por
+install.py) en...? O bien podríamos consolidar en un único archivo de configuración local
+los parámetros de todas las tareas, agrupados por bloques. O bien para no sobrecargar
+al opac.xis, podemos usar un .conf para cgi-bin (el opac propiamente dicho), y un .conf
+para bin (las tareas de admin).
+
+
+

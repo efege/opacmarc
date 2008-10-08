@@ -18,18 +18,18 @@ UC-ANSI.TAB=__OPACMARC_DIR__/util/uc-ansi.tab
 # -----------------------------------------------------------------
 # Archivos utilizados solamente en la generación del OPAC
 # -----------------------------------------------------------------
-ELIMDUP2.PFT=__OPACMARC_DIR__/admin/opac/elimdup2.pft
-HEAD.PFT=__OPACMARC_DIR__/admin/opac/head.pft
-HEADINGS.FST=__OPACMARC_DIR__/admin/opac/headings.fst
-LANG.*=__OPACMARC_DIR__/admin/opac/lang.*
-LANG.FST=__OPACMARC_DIR__/admin/opac/lang.fst
-LANG.TXT=__OPACMARC_DIR__/admin/opac/lang.txt
-LOCATION_SORT.PFT=__OPACMARC_DIR__/admin/opac/location_sort.pft
+ELIMDUP2.PFT=__OPACMARC_DIR__/bin/update_db/elimdup2.pft
+HEAD.PFT=__OPACMARC_DIR__/bin/update_db/head.pft
+HEADINGS.FST=__OPACMARC_DIR__/bin/update_db/headings.fst
+LANG.*=__OPACMARC_DIR__/bin/update_db/lang.*
+LANG.FST=__OPACMARC_DIR__/bin/update_db/lang.fst
+LANG.TXT=__OPACMARC_DIR__/bin/update_db/lang.txt
+LOCATION_SORT.PFT=__OPACMARC_DIR__/bin/update_db/location_sort.pft
 MSC.*=__OPACMARC_DIR__/bases/opac/msc2000/msc.*
-NAME.PFT=__OPACMARC_DIR__/admin/opac/name.pft
-OEM2ANSI.*=__OPACMARC_DIR__/admin/opac/oem2ansi.*
-RECODE.PFT=__OPACMARC_DIR__/admin/opac/recode.pft
-REGPUNT.PFT=__OPACMARC_DIR__/admin/opac/regpunt.pft
-SECS2MARC.PROC=__OPACMARC_DIR__/admin/opac/secs2marc.proc
-SUBJ.PFT=__OPACMARC_DIR__/admin/opac/subj.pft
-TITLE.PFT=__OPACMARC_DIR__/admin/opac/title.pft
+NAME.PFT=__OPACMARC_DIR__/bin/update_db/name.pft
+OEM2ANSI.*=__OPACMARC_DIR__/bin/update_db/oem2ansi.*
+RECODE.PFT=__OPACMARC_DIR__/bin/update_db/recode.pft
+REGPUNT.PFT=__OPACMARC_DIR__/bin/update_db/regpunt.pft
+SECS2MARC.PROC=__OPACMARC_DIR__/bin/update_db/secs2marc.proc
+SUBJ.PFT=__OPACMARC_DIR__/bin/update_db/subj.pft
+TITLE.PFT=__OPACMARC_DIR__/bin/update_db/title.pft
