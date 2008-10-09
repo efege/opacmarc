@@ -5,18 +5,18 @@
 # -----------------------------------------------------------------
 # BASES (common)
 # -----------------------------------------------------------------
-BIBLIO.FST=__OPACMARC_DIR__/bases/common/biblio.fst
-BIBLIO.STW=__OPACMARC_DIR__/bases/common/biblio.stw
-COUNTRY.*=__OPACMARC_DIR__/bases/common/country.*
-DICTGIZ.*=__OPACMARC_DIR__/bases/common/dictgiz.*
-HEADSORT.PFT=__OPACMARC_DIR__/bases/common/headsort.pft
-LANG.*=__OPACMARC_DIR__/bases/common/lang.*
-SELSUBJ.PFT=__OPACMARC_DIR__/bases/common/selsubj.pft
-SELNAME.PFT=__OPACMARC_DIR__/bases/common/selname.pft
-SELTITLE.PFT=__OPACMARC_DIR__/bases/common/seltitle.pft
+BIBLIO.FST=__OPACMARC_DIR__/util/biblio.fst
+BIBLIO.STW=__OPACMARC_DIR__/util/biblio.stw
+COUNTRY.*=__OPACMARC_DIR__/util/country.*
+DICTGIZ.*=__OPACMARC_DIR__/util/dictgiz.*
+HEADSORT.PFT=__OPACMARC_DIR__/util/headsort.pft
+LANG.*=__OPACMARC_DIR__/util/lang.*
+SELSUBJ.PFT=__OPACMARC_DIR__/util/selsubj.pft
+SELNAME.PFT=__OPACMARC_DIR__/util/selname.pft
+SELTITLE.PFT=__OPACMARC_DIR__/util/seltitle.pft
 
-ACTAB=__OPACMARC_DIR__/bases/common/ac-ansi.tab
-UCTAB=__OPACMARC_DIR__/bases/common/uc-ansi.tab
+ACTAB=__OPACMARC_DIR__/util/ac-ansi.tab
+UCTAB=__OPACMARC_DIR__/util/uc-ansi.tab
 
 MSC.*=__OPACMARC_DIR__/bases/opac/msc2000/msc.*
 

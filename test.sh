@@ -48,8 +48,11 @@ ln -s $AGREP $TEST_DIR/bin/agrep
 python $TEST_DIR/bin/install.py
 
 # permisos de escritura
-sudo chgrp $APACHE_USER $TEST_DIR/local-data/logs
-chmod g+w $TEST_DIR/local-data/logs
+for dir in logs temp
+do
+    sudo chgrp $APACHE_USER $TEST_DIR/local-data/$dir
+    chmod g+w $TEST_DIR/local-data/$dir
+done
 
 # creación de base demo
 python $TEST_DIR/bin/add_db.py demo
@@ -59,7 +62,7 @@ cp $TEST_DIR/bin/install/data/demo-img/* $TEST_DIR/local-data/bases/demo/htdocs/
 # actualización de base demo
 python $TEST_DIR/bin/update_db.py demo
 
-# pisamos config para apache
+# pisamos config para apache y lo reiniciamos
 sudo cp $TEST_DIR/local-data/config/httpd-opacmarc.conf $APACHE_VHOST
 sudo apache2ctl restart
 

@@ -158,23 +158,17 @@ def print_usage():
     
     # A message to explain the script's usage
     usage_msg = '''
-    ''' + SCRIPT_NAME + '''
+%s
+
+    Genera las bases de datos y archivos auxiliares para OPACMARC. 
+
+    Uso:
+        python %s <BASE> [<NUM_REGISTROS>]
     
-        Genera las bases de datos y archivos auxiliares para OPACMARC. 
-    
-        Uso:
-            update-opac.py <BASE> [<NUM_REGISTROS>]
-        
-        Ejemplos:
-            update-opac.py demo
-            update-opac.py /var/bases/opac/demo 100
-            
-        Para correr este script, se necesitan los siguientes archivos:
-        
-            - config/update.conf       archivo de configuracion
-            - admin/common/*.*
-            - admin/opac/*.* 
-    '''
+    Ejemplos:
+        %s demo
+        %s /var/bases/opac/demo 100
+    ''' % ((SCRIPT_NAME,)*4)
     print usage_msg
     sys.exit()
 

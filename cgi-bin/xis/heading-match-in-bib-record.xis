@@ -78,7 +78,7 @@
 </pft></field>
 
 <!-- Esta tabla de conversión debe estar sincronizada entre 
-     postings.xis, bib-h-search.xis y dictgiz.seq -->
+     postings.xis, bib-h-search.xis y dictgiz.id -->
 <!-- SUBCAMPO9: Anular esto -->
 <field action="replace" tag="3001" split="occ"><pft>@DICTGIZ.PFT</pft></field>
 
