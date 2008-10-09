@@ -453,7 +453,7 @@ Parámetros CGI
 <!-- Las páginas se cierran con los formularios de búsqueda (casi siempre) y con el footer (siempre) -->
 <!-- 2011 = showForm -->
 <display><htmlpft><pft>
-    if a(v2011) and not '~SHOW_FEEDBACK_FORM~SHOW_ABOUT' : v2101 then
+    if a(v2011) and not '~SHOW_FEEDBACK_FORM~' : v2101 then
         ,cat('FORM-SIMPLE.HTM'),  /* TO-DO: Quitar para Museo Mitre */
         ,cat('HOME.HTM'),         /* Idem Mitre */ /* ATENCION: error en la visualización si el archivo home.htm no existe */
         ,cat('OPAC-FOOTER.HTM'),

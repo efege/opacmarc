@@ -27,8 +27,7 @@
 #
 # -----------------------------------------------------------------------
 #
-# Requiere algunos utilitarios CISIS: mx, msrt, i2id, id2i; para convertir
-# las bases al "formato Windows" necesita además crunchmf y crunchif.
+# Requiere algunos utilitarios CISIS: mx, msrt, i2id, id2i.
 #
 # La base de origen debe tener la codificación "ANSI" (aka windows-1252,
 # aka latin-1). Las bases creadas con Catalis ya traen esa codificación;
@@ -253,18 +252,41 @@ def get_biblio_db():
         print "Usando como base original: %s%sbiblio.zip" % (os.path.abspath(SOURCE_DIR), sep)
     
     # ARCHIVOS MST/XRF
-    elif os.path.isfile(SOURCE_DIR + '/biblio.mst') and os.path.isfile(SOURCE_DIR + '/biblio.xrf'):
-        shutil.copy(SOURCE_DIR + '/biblio.mst', 'tmp')
-        shutil.copy(SOURCE_DIR + '/biblio.xrf', 'tmp')
+    elif os.path.isfile('%s/biblio.mst' % SOURCE_DIR) and os.path.isfile('%s/biblio.xrf' % SOURCE_DIR):
+        shutil.copy('%s/biblio.mst' % SOURCE_DIR, 'tmp')
+        shutil.copy('%s/biblio.xrf' % SOURCE_DIR, 'tmp')
         print "Usando como base original: %s%sbiblio.{mst,xrf}" % (os.path.abspath(SOURCE_DIR), sep)
     
     # ARCHIVOS MARC
-    elif os.path.isfile(SOURCE_DIR + '/' + DB_NAME + '.mrc'):
+    elif os.path.isfile('%s/%s.mrc' % (SOURCE_DIR, DB_NAME)):
         print
-        print "Importando archivo $SOURCE_DIR/$DB_NAME.mrc..."
-        # FIXME -- para importar mrc podemos usar mx 5
-        #php $OPACMARC_DIR/bin/mrc2isis.php $SOURCE_DIR/$DB_NAME.mrc > tmp/$DB_NAME.id || error "Falla al ejecutar mrc2isis.php"
-        run('''id2i tmp/%s.id create=tmp/biblio''' % DB_NAME)
+        print "Importando archivo %s%s%s.mrc..." % (SOURCE_DIR, sep, DB_NAME)
+        
+        # basado en im2c.sh (código escrito en la 1ra reunión de CaMPI en Bariloche, julio 2007)
+        # FIXME - a esto aún le falta depurar algunos detalles. Ver im2c.sh.
+        LEADER_BASE_TAG_1 = '1000'
+        
+        # creamos una base isis a partir del registro MARC
+        # BUG: mx no almacena la posición 09 del leader!! (informar a Spinak/Bireme)
+        run('''mx iso=marc=%s/%s.mrc isotag1=%s create=tmp/marctmp now -all''' % (SOURCE_DIR, DB_NAME, LEADER_BASE_TAG_1))
+
+        # eliminamos del registro importado algunos campos locales que utiliza Catalis
+        # TO-DO: verificar que la lista sea completa
+        run('''mx tmp/marctmp "proc='d905 d906 d907 d908 d909 d917 d918 d919 d985'" copy=tmp/marctmp now -all''')
+        
+        # traemos los datos del leader a los campos 9xx
+        run('''mx tmp/marctmp "proc='d1005d1006d1007d1008d1009d1017d1018d1019','a905|',v1005,'|a906|',v1006,'|a907|',v1007,'|a908|',v1008,'|a909|',v1009,'|a917|',v1017,'|a918|',v1018,'|a919|',v1019,'|'" copy=tmp/marctmp now -all''')
+        
+        # sustituimos delimitadores de subcampos: hex 1F => ^
+        run('''mx tmp/marctmp gizmo=DELIMSUBCAMPO copy=tmp/marctmp now -all''')
+        
+        # sustitución de blancos en campos de datos
+        run('''mx tmp/marctmp "proc=@BLANCOS.PFT" copy=tmp/marctmp now -all''')
+        
+        # FIXME - falta sustitución de blancos en indicadores
+        # FIXME - cambiamos la codificación, si la original no es latin1
+        
+        run('''mx tmp/marctmp create=tmp/biblio now -all''')
     
     # ARCHIVOS ISO
     elif os.path.isfile(SOURCE_DIR + '/' + DB_NAME + '.iso'):

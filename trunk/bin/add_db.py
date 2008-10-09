@@ -1,3 +1,4 @@
+#!/usr/bin/python
 # coding=windows-1252
 
 # Genera las carpetas y archivos asociados a una nueva base de datos para
@@ -39,7 +40,7 @@ def main():
         'about.htm' : 'htmlpft',
         'banner.htm' : 'htmlpft',
         'home.htm' : 'htmlpft',
-        'styles.css' : 'static/css',
+        'styles.css' : 'htdocs/css',
         'options.conf' : 'config',
     }
     
@@ -60,14 +61,14 @@ def main():
     try:
         os.mkdir(DB_DIR)
         
-        for dir_name in ('config', 'db', 'htmlpft', 'pft', 'static'):
+        for dir_name in ('config', 'db', 'htmlpft', 'pft', 'htdocs'):
             os.mkdir(os.path.join(DB_DIR, dir_name))
     
         for dir_name in ('original', 'public', 'update'):
             os.mkdir(os.path.join(DB_DIR, 'db', dir_name))
     
         for dir_name in ('css', 'img', 'js'):
-            os.mkdir(os.path.join(DB_DIR, 'static', dir_name))
+            os.mkdir(os.path.join(DB_DIR, 'htdocs', dir_name))
             
     except:
         raise
@@ -90,7 +91,7 @@ def main():
         f.write(templates[file_name] % DB_NAME)
         f.close()
         
-    f = open(os.path.join(DB_DIR, 'static', 'css', 'styles.css'), 'w')
+    f = open(os.path.join(DB_DIR, 'htdocs', 'css', 'styles.css'), 'w')
     f.write(templates['css'] % DB_NAME)
     f.close()
     
@@ -117,11 +118,11 @@ def main():
         %s/bases/%s/htmlpft/about.htm
         %s/bases/%s/htmlpft/banner.htm
         %s/bases/%s/htmlpft/home.htm
-        %s/bases/%s/static/css/styles.css
+        %s/bases/%s/htdocs/css/styles.css
         
     Si necesita imágenes auxiliares (p.ej. un logo) deberá colocarlas en la carpeta
     
-        %s/bases/%s/static/img/
+        %s/bases/%s/htdocs/img/
         
     Si necesita modificar algunos parámetros de configuración para el OPAC,
     hágalo editando el archivo

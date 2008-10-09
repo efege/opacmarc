@@ -12,23 +12,24 @@
 <!-- Operador booleano (default) (aun necesario?) -->
 <field action="replace" tag="2005"><pft>if a(v2005) then 'AND' fi</pft></field>
 
+<!-- XXXTRUNCATEXXX es un string improbable, para evitar que el símbolo de truncación se pierda durante la limpieza -->
 <call name="cleanQuery"><pft>
-	replace(v2001,'*','XXXTRUNCATEXXX'), /* XXXTRUNCATEXXX es un string improbable, para evitar que el símbolo de truncación se pierda durante la limpieza */
+	replace(v2001,'*','XXXTRUNCATEXXX'),
 </pft></call>
 <!-- ATENCION: Cuando la búsqueda proviene de un link 
 	("Vea otros temas que incluyan los términos..."), no hay que 
 	perder ninguna palabra, ya que éstas después no salen resaltadas. 
 	Ejemplo: Rio de Janeiro -->
 	
-<!--display><pft>ALL</pft></display-->
-
 <!-- Search expression -->
 <field action="replace" tag="3001"><pft>
-	replace(v3001,'XXXTRUNCATEXXX','$'),
+	replace(v3333,'XXXTRUNCATEXXX','$'),
 </pft></field>
 <field action="replace" tag="3002"><pft>
 	replace(v3001,' ',s(v2006,x1,v2005,x1)),v2006,
 </pft></field>
+
+<!--display><pft>ALL</pft></display-->
 
 <!-- Show search expression -->
 <!--display><pft>

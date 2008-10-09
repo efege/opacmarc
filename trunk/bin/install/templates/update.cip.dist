@@ -3,33 +3,46 @@
 ##########################################
 
 
-# -----------------------------------------------------------------
-# Archivos utilizados en la generación del OPAC y en Catalis
-# -----------------------------------------------------------------
+# --------------------------------------------------------------------------
+# Archivos utilizados en la actualización del OPAC y en Catalis
+# --------------------------------------------------------------------------
+
+# Bases
+COUNTRY.*=__OPACMARC_DIR__/util/country.*
+DICTGIZ.*=__OPACMARC_DIR__/bases/common/dictgiz.*
+
+# Otros
 AC-ANSI.TAB=__OPACMARC_DIR__/util/ac-ansi.tab
 BIBLIO.FST=__OPACMARC_DIR__/util/biblio.fst
 BIBLIO.STW=__OPACMARC_DIR__/util/biblio.stw
-COUNTRY.*=__OPACMARC_DIR__/util/country.*
-DICTGIZ.*=__OPACMARC_DIR__/bases/common/dictgiz.*
 HEADSORT.PFT=__OPACMARC_DIR__/util/headsort.pft
 UC-ANSI.TAB=__OPACMARC_DIR__/util/uc-ansi.tab
 
 
-# -----------------------------------------------------------------
-# Archivos utilizados solamente en la generación del OPAC
-# Nota: OEM2ANSI sólo se requiere si la base a procesar proviene
-# de MS-DOS.
-# -----------------------------------------------------------------
+
+# --------------------------------------------------------------------------
+# Archivos utilizados solamente en la actualización del OPAC
+# Nota: OEM2ANSI sólo se requiere si la base a procesar proviene de MS-DOS.
+# --------------------------------------------------------------------------
+
+# Bases
+DELIMSUBCAMPO.*=__OPACMARC_DIR__/bin/update_db/delimsubcampo.*
+LANG.*=__OPACMARC_DIR__/bin/update_db/lang.*
+MSC.*=__OPACMARC_DIR__/bases/opac/msc2000/msc.*
+OEM2ANSI.*=__OPACMARC_DIR__/bin/update_db/oem2ansi.*
+
+LANG.TXT=__OPACMARC_DIR__/bin/update_db/lang.txt
+
+# FST
+HEADINGS.FST=__OPACMARC_DIR__/bin/update_db/headings.fst
+LANG.FST=__OPACMARC_DIR__/bin/update_db/lang.fst
+
+# PFT
+BLANCOS.PFT=__OPACMARC_DIR__/bin/update_db/blancos.pft
 ELIMDUP2.PFT=__OPACMARC_DIR__/bin/update_db/elimdup2.pft
 HEAD.PFT=__OPACMARC_DIR__/bin/update_db/head.pft
-HEADINGS.FST=__OPACMARC_DIR__/bin/update_db/headings.fst
-LANG.*=__OPACMARC_DIR__/bin/update_db/lang.*
-LANG.FST=__OPACMARC_DIR__/bin/update_db/lang.fst
-LANG.TXT=__OPACMARC_DIR__/bin/update_db/lang.txt
 LOCATION_SORT.PFT=__OPACMARC_DIR__/bin/update_db/location_sort.pft
-MSC.*=__OPACMARC_DIR__/bases/opac/msc2000/msc.*
 NAME.PFT=__OPACMARC_DIR__/bin/update_db/name.pft
-OEM2ANSI.*=__OPACMARC_DIR__/bin/update_db/oem2ansi.*
 RECODE.PFT=__OPACMARC_DIR__/bin/update_db/recode.pft
 REGPUNT.PFT=__OPACMARC_DIR__/bin/update_db/regpunt.pft
 SECS2MARC.PROC=__OPACMARC_DIR__/bin/update_db/secs2marc.proc
