@@ -17,6 +17,8 @@ UC-ANSI.TAB=__OPACMARC_DIR__/util/uc-ansi.tab
 
 # -----------------------------------------------------------------
 # Archivos utilizados solamente en la generación del OPAC
+# Nota: OEM2ANSI sólo se requiere si la base a procesar proviene
+# de MS-DOS.
 # -----------------------------------------------------------------
 ELIMDUP2.PFT=__OPACMARC_DIR__/bin/update_db/elimdup2.pft
 HEAD.PFT=__OPACMARC_DIR__/bin/update_db/head.pft

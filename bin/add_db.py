@@ -10,9 +10,7 @@
 import os
 import sys
 
-OPACMARC_DIR = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]), ".."))
-sys.path.insert(0, os.path.join(OPACMARC_DIR, 'util'))
-from util import error
+from opac_util import error, OPACMARC_DIR, LOCAL_DATA_DIR
 
     
 def print_usage():
@@ -51,7 +49,6 @@ def main():
         print_usage()
     
     DB_NAME = sys.argv[1]
-    LOCAL_DATA_DIR = os.path.join(OPACMARC_DIR, 'local-data')
     DB_DIR = os.path.join(LOCAL_DATA_DIR, 'bases', DB_NAME)
     
     if os.path.isdir(DB_DIR):
@@ -76,6 +73,7 @@ def main():
         raise
     
     # Creamos archivos a partir de templates
+    # FIXME - los paths deben quedar con la barra correcta (os.sep)
     for tpl in template_dest:
         f1 = open(os.path.join(OPACMARC_DIR, 'bin', 'add_db', 'templates', tpl), 'r')
         f2 = open(os.path.join(DB_DIR, template_dest[tpl], tpl), 'w')

@@ -12,14 +12,9 @@ import os
 import sys
 import shutil
 
-parent_dir = os.path.join(os.path.dirname(sys.argv[0]), '..') 
-OPACMARC_DIR = os.path.abspath(parent_dir)
-
-sys.path.insert(0, os.path.join(OPACMARC_DIR, 'util'))
-from util import run_command, error
+from opac_util import run_command, error, OPACMARC_DIR, LOCAL_DATA_DIR
 import tablas
 
-LOCAL_DATA_DIR = os.path.join(OPACMARC_DIR, 'local-data')
 
 # Archivos que crea o modifica el script de instalación.
 # TO-DO: agregar aquí los que usa create_db()
@@ -98,10 +93,10 @@ def build_config_files():
     """Crea archivos de configuración con los paths apropiados."""
     
     replace_config_path(FILES['httpd'], force_forward=True)   # modelo de config. para Apache (requiere barras hacia adelante, incluso en Windows)
-    replace_config_path(FILES['local'])   # config. local (para opac.xis) 
-    replace_config_path(FILES['update'])  # para update-opac.py
-    replace_config_path(FILES['cipar-update']) # para las llamadas a mx desde update-opac.py
-    replace_config_path(FILES['cipar-opac'])   # para opac.xis
+    replace_config_path(FILES['local'])   # config. local para opac.xis
+    replace_config_path(FILES['update'])  # config. para update-opac.py
+    replace_config_path(FILES['cipar-update']) # cipar para llamadas a mx desde update-opac.py
+    replace_config_path(FILES['cipar-opac'])   # cipar para opac.xis
     
     # TO-DO: local.conf -> SCRIPT_URL -> "wxis.exe" vs "wxis"
     # TO-DO: local.conf -> path agrep
@@ -109,6 +104,7 @@ def build_config_files():
 
 def make_local_dirs():
     """Crea la estructura de directorios para los datos locales."""
+    os.mkdir(LOCAL_DATA_DIR)
     for dir_name in ('bases', 'bin', 'config', 'logs', 'temp'):
         os.mkdir(os.path.join(LOCAL_DATA_DIR, dir_name))
 
@@ -122,6 +118,7 @@ def create_aux_db():
     run('%s/id2i bin/install/data/country.id create=bases/common/country' % CISIS_PATH)
     run('%s/id2i bin/install/data/lang.id create=bases/common/lang' % CISIS_PATH)
     run('%s/id2i bin/install/data/dictgiz.id create=bases/common/dictgiz' % CISIS_PATH)
+    
     run('%s/id2i bin/install/data/oem2ansi.id create=bin/update_db/oem2ansi' % CISIS_PATH)
     
     # Genera los invertidos correspondientes
@@ -141,7 +138,7 @@ def create_table(table_type):
     print "Tabla %s creada." % table_type
 
     
-def show_msg():    
+def show_end_msg():    
     # Mostrar mensajes útiles para el usuario (tips, tareas que debe realizar luego de instalar)
     print '''
 -----------------------------------------------------
@@ -152,7 +149,7 @@ def show_msg():
         - Configure permiso de escritura en temp y logs (mostrar ejemplo)
         - Use %s/config/httpd-opacmarc.conf como base para configurar Apache
         - Copie wxis (wxis.exe en Windows) en la carpeta cgi-bin
-        - Windows: copie agrep.exe en la carpeta bin
+        - Windows: copie agrep.exe en la carpeta bin; Linux: cree un link simbólico a agrep desde bin/
         - Entre con un browser a http://...
         - Realizar tests? E.g. búsquedas con acentos y con errores (agrep).
     ''' % LOCAL_DATA_DIR
@@ -176,7 +173,7 @@ def main():
     create_table('actab')
     create_table('uctab')
     
-    show_msg()
+    show_end_msg()
 
 
 if __name__ == "__main__":

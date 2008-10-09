@@ -117,10 +117,7 @@ import zipfile       # for reading .zip files
 import subprocess    # for running system commands (mx, i2id, etc)
 import ConfigParser  # for reading config file 
 
-OPACMARC_DIR = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]), '..'))
-sys.path.insert(0, os.path.join(OPACMARC_DIR, 'util'))
-from util import run_command, error, emptydir
-
+from opac_util import run_command, error, emptydir, OPACMARC_DIR, LOCAL_DATA_DIR
 
 
 def run(command, msg = 'Error'):
@@ -130,7 +127,7 @@ def read_config():
     # TO-DO: see also
     #  - http://docs.python.org/lib/module-ConfigParser.html
     #  - http://cfgparse.sourceforge.net/
-    config_file = os.path.join(OPACMARC_DIR, 'local-data', 'config', 'update.conf')
+    config_file = os.path.join(LOCAL_DATA_DIR, 'config', 'update.conf')
     config = ConfigParser.ConfigParser()
     config.optionxform = str  # make option names case sensitive
     try:
@@ -146,7 +143,7 @@ def build_env():
     
     # Este diccionario es pasado en las llamadas al sistema
     return {
-        'CIPAR':                os.path.join(OPACMARC_DIR, 'local-data', 'config', 'update.cip'),  # Hay que usar el path *absoluto* para el cipar
+        'CIPAR':                os.path.join(LOCAL_DATA_DIR, 'config', 'update.cip'),  # Hay que usar el path *absoluto* para el cipar
         # Las variables que siguen son definidas en update.conf
         'PATH':                 CONFIG.get('Global', 'PATH_CISIS') + os.pathsep + os.getenv('PATH'),
         'SUBJ_TAGS':            CONFIG.get('Global', 'SUBJ_TAGS'),
@@ -186,7 +183,7 @@ def print_usage():
 def goto_work_dir():
 
     # Directorio de trabajo
-    WORK_DIR = os.path.join(OPACMARC_DIR, 'local-data', 'bases', DB_NAME, 'db', 'update')
+    WORK_DIR = os.path.join(LOCAL_DATA_DIR, 'bases', DB_NAME, 'db', 'update')
     if not os.path.isdir(WORK_DIR):
         error("No se ha encontrado el directorio de trabajo para la base %s:\n     %s" % (DB_NAME, WORK_DIR))
     
@@ -808,7 +805,7 @@ def move_files():
 
 def clean_cache():
     # FIXME -- CACHE_DIR may not exist (fix it in emptydir?) 
-    CACHE_DIR = os.path.join(OPACMARC_DIR, 'local-data', 'temp')
+    CACHE_DIR = os.path.join(LOCAL_DATA_DIR, 'temp')
     emptydir(CACHE_DIR)
 
 def end():

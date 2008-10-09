@@ -41,14 +41,14 @@ copy %AGREP% %TEST_DIR%\bin\agrep.exe
 :: ejecutamos script de inicialización
 python %TEST_DIR%\bin\install.py
 
-:: pisamos configuración de apache
-copy "%TEST_DIR%\local-data\config\httpd-opacmarc.conf" "%APACHE_VHOST%"
-
-:: procesamos con la base demo
-python %TEST_DIR%\bin\newdb.py demo
-:: FIXME - crear base original a partir de id
+:: procesamos la base demo
+python %TEST_DIR%\bin\add_db.py demo
+%CISIS_DIR%\id2i %TEST_DIR%\bin\install\data\demo.id create=%TEST_DIR%\local-data\bases\demo\db\original\biblio
+copy %TEST_DIR%\bin\install\data\demo-img\* %TEST_DIR%\local-data\bases\demo\static\img\
 python %TEST_DIR%\bin\update-opac.py demo
 
+:: pisamos configuración de apache
+copy "%TEST_DIR%\local-data\config\httpd-opacmarc.conf" "%APACHE_VHOST%"
 
 :: reiniciamos Apache
 ::G:

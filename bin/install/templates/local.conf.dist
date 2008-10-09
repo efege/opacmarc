@@ -40,7 +40,7 @@ PATH_HTDOCS=/
 # PATH_TEMP: directorio para archivos temporales. Necesita permiso de escritura
 # para el usuario del servidor web.
 # Esta variable se debe definir en Windows, pero no es necesaria en Linux.
-#PATH_TEMP=__OPACMARC_DIR__/local-data/temp
+PATH_TEMP=__OPACMARC_DIR__/local-data/temp
 
 # Directorio para los logs de acceso al OPAC. Necesita permiso de escritura
 # para el usuario del servidor web.
