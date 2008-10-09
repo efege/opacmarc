@@ -17,6 +17,12 @@ try:
 except:
     import subprocess_for_23 as subprocess
 
+
+parent_dir = os.path.join(os.path.dirname(sys.argv[0]), '..') 
+OPACMARC_DIR = os.path.abspath(parent_dir)
+LOCAL_DATA_DIR = os.path.join(OPACMARC_DIR, 'local-data')
+    
+    
 def error(msg = 'Error'):
     '''Displays an error message and exits.'''
     sys.exit(msg + '\n')

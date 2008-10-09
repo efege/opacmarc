@@ -49,10 +49,10 @@ python $TEST_DIR/bin/install.py
 sudo chgrp $APACHE_USER $TEST_DIR/local-data/logs
 chmod g+w $TEST_DIR/local-data/logs
 
-# base demo
+# creación de base demo
 python $TEST_DIR/bin/add_db.py demo
-$CISIS_DIR/id2i bin/install/data/demo.id create=$TEST_DIR/local-data/bases/demo/db/original/biblio
-cp bin/install/data/demo-img/* $TEST_DIR/local-data/bases/demo/static/img/ 
+$CISIS_DIR/id2i $TEST_DIR/bin/install/data/demo.id create=$TEST_DIR/local-data/bases/demo/db/original/biblio
+cp $TEST_DIR/bin/install/data/demo-img/* $TEST_DIR/local-data/bases/demo/static/img/ 
 
 # actualización de base demo
 python $TEST_DIR/bin/update-opac.py demo
