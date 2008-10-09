@@ -20,10 +20,18 @@ NameVirtualHost *:8081
         Allow from all
     </Directory>
     
+    # Archivos estáticos (css, js, imágenes, etc.) locales, comunes a todas las bases
+    Alias /local/ "__OPACMARC_DIR__/local-data/htdocs/"
+    <Directory "__OPACMARC_DIR__/local-data/htdocs/">
+        Order allow,deny
+        Allow from all
+        Options -Indexes
+    </Directory>
+    
     # Archivos estáticos (css, js, imágenes, etc.) específicos de cada base
     # ATENCION: aparentemente el segundo grupo ($2) debe figurar explícitamente.
-    AliasMatch "^/static/([^/]+)/(.+)" "__OPACMARC_DIR__/local-data/bases/$1/static/$2"
-    <DirectoryMatch "__OPACMARC_DIR__/local-data/bases/([^/]+)/static/">
+    AliasMatch "^/local-base/([^/]+)/(.+)" "__OPACMARC_DIR__/local-data/bases/$1/htdocs/$2"
+    <DirectoryMatch "__OPACMARC_DIR__/local-data/bases/([^/]+)/htdocs/">
         Order allow,deny
         Allow from all
         Options -Indexes

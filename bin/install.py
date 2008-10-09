@@ -1,3 +1,4 @@
+#!/usr/bin/python
 # coding=windows-1252
 
 """
@@ -104,9 +105,14 @@ def build_config_files():
 
 def make_local_dirs():
     """Crea la estructura de directorios para los datos locales."""
+    
+    # TO-DO: agregar archivos (templates) en algunos de estos directorios?
+    
     os.mkdir(LOCAL_DATA_DIR)
-    for dir_name in ('bases', 'bin', 'config', 'logs', 'temp'):
+    for dir_name in ('bases', 'bin', 'config', 'htdocs', 'logs', 'temp'):
         os.mkdir(os.path.join(LOCAL_DATA_DIR, dir_name))
+    for dir_name in ('css', 'img', 'js'):
+        os.mkdir(os.path.join(LOCAL_DATA_DIR, 'htdocs', dir_name))
 
 def create_aux_db():
     """Crea bases ISIS auxiliares."""
@@ -120,6 +126,7 @@ def create_aux_db():
     run('%s/id2i bin/install/data/dictgiz.id create=bases/common/dictgiz' % CISIS_PATH)
     
     run('%s/id2i bin/install/data/oem2ansi.id create=bin/update_db/oem2ansi' % CISIS_PATH)
+    run('%s/id2i bin/install/data/delimsubcampo.id create=bin/update_db/delimsubcampo' % CISIS_PATH)
     
     # Genera los invertidos correspondientes
     run('%s/mx bases/common/country "fst=1 0 v1" fullinv=bases/common/country' % CISIS_PATH)

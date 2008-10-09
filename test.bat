@@ -6,7 +6,7 @@
 :: begin config
 :: -----------------------------------
 
-:: directorio para el test
+:: Directorio para el test. Es eliminado con cada nuevo test.
 set TEST_DIR=G:\opacmarc-test
 
 :: directorio de los cisis 16/60
@@ -18,7 +18,9 @@ set WXIS=G:\svn\opacmarc\cgi-bin\wxis.exe
 :: agrep
 set AGREP=G:\svn\opacmarc\bin\agrep.exe
 
-:: archivo con la configuración de un virtual host para OpacMarc
+:: Archivo con la configuración de un virtual host para OpacMarc
+:: El método para que este archivo sea leído por Apache depende del
+:: sistema operativo y de la versión de Apache.  
 set APACHE_VHOST=G:\programas\Apache Software Foundation\Apache2.2\conf\extra\httpd-vhost-opacmarc-test-8081.conf
 
 :: -----------------------------------
@@ -44,8 +46,8 @@ python %TEST_DIR%\bin\install.py
 :: procesamos la base demo
 python %TEST_DIR%\bin\add_db.py demo
 %CISIS_DIR%\id2i %TEST_DIR%\bin\install\data\demo.id create=%TEST_DIR%\local-data\bases\demo\db\original\biblio
-copy %TEST_DIR%\bin\install\data\demo-img\* %TEST_DIR%\local-data\bases\demo\static\img\
-python %TEST_DIR%\bin\update-opac.py demo
+copy %TEST_DIR%\bin\install\data\demo-img\* %TEST_DIR%\local-data\bases\demo\htdocs\img\
+python %TEST_DIR%\bin\update_db.py demo
 
 :: pisamos configuración de apache
 copy "%TEST_DIR%\local-data\config\httpd-opacmarc.conf" "%APACHE_VHOST%"

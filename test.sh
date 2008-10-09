@@ -6,10 +6,10 @@
 # begin config
 # -----------------------------------
 
-# directorio para el test
-TEST_DIR=$HOME/test-opacmarc
+# Directorio para el test. Es eliminado con cada nuevo test.
+TEST_DIR=$HOME/opacmarc-test
 
-# directorio de los cisis 16/60
+# Directorio de los cisis 16/60
 CISIS_DIR=$HOME/bin/cisis1660
 
 # wxis 16/60
@@ -18,7 +18,9 @@ WXIS=$HOME/www/cgi-bin/wxis1660-7.1
 # agrep
 AGREP=`which agrep`
 
-# archivo con la configuración de un virtual host para OpacMarc
+# Archivo con la configuración de un virtual host para OpacMarc
+# El método para que este archivo sea leído por Apache depende del
+# sistema operativo y de la versión de Apache.  
 APACHE_VHOST=/etc/apache2/sites-available/opacmarc-test
 
 # usuario asociado al servidor apache
@@ -52,10 +54,10 @@ chmod g+w $TEST_DIR/local-data/logs
 # creación de base demo
 python $TEST_DIR/bin/add_db.py demo
 $CISIS_DIR/id2i $TEST_DIR/bin/install/data/demo.id create=$TEST_DIR/local-data/bases/demo/db/original/biblio
-cp $TEST_DIR/bin/install/data/demo-img/* $TEST_DIR/local-data/bases/demo/static/img/ 
+cp $TEST_DIR/bin/install/data/demo-img/* $TEST_DIR/local-data/bases/demo/htdocs/img/ 
 
 # actualización de base demo
-python $TEST_DIR/bin/update-opac.py demo
+python $TEST_DIR/bin/update_db.py demo
 
 # pisamos config para apache
 sudo cp $TEST_DIR/local-data/config/httpd-opacmarc.conf $APACHE_VHOST
@@ -72,7 +74,7 @@ ln -s $HOME/svn/opacmarc/local-data/bases/bibima/db/original/biblio.mst $TEST_DI
 ln -s $HOME/svn/opacmarc/local-data/bases/bibima/db/original/biblio.xrf $TEST_DIR/local-data/bases/bibima/db/original/
 
 # actualización de base bibima
-python $TEST_DIR/bin/update-opac.py bibima
+python $TEST_DIR/bin/update_db.py bibima
 
 # browser
 firefox "http://127.0.0.1:8081/cgi-bin/wxis?IsisScript=xis/opac.xis&db=bibima&showForm=simple" &

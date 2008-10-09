@@ -1,0 +1,36 @@
+'d001 d006 d007 d008 d010',
+'d905 d906 d907 d908 d917 d918 d919',
+
+/**
+    Sustitución de blancos en campos de datos.
+    
+    ATENCION al delimitador usado.
+*/
+
+'a001|',replace(v001,' ','#'),'|',
+
+if p(v006) then
+    ( 'a006@',replace(v006,' ','#'),'@', ),
+fi,
+
+if p(v007) then
+    ( 'a007@',replace(v007,' ','#'),'@', ),
+fi,
+
+'a008@',replace(v008,' ','#'),'@',
+
+if p(v010) then
+    'a010|',replace(v010,' ','#'),'|',
+fi,
+
+
+/* sustitución de blancos en datos de la cabecera */
+
+'a905|',replace(v905,' ','#'),'|',
+'a906|',replace(v906,' ','#'),'|',
+'a907|',replace(v907,' ','#'),'|',
+'a908|',replace(v908,' ','#'),'|',
+'a909|',replace(v909,' ','#'),'|',   /* ATENCION: viene vacío en registros de IsisMarc */
+'a917|',replace(v917,' ','#'),'|',
+'a918|',replace(v918,' ','#'),'|',
+'a919|',replace(v919,' ','#'),'|',
