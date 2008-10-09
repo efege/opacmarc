@@ -9,7 +9,7 @@
 
 # Bases
 COUNTRY.*=__OPACMARC_DIR__/util/country.*
-DICTGIZ.*=__OPACMARC_DIR__/bases/common/dictgiz.*
+DICTGIZ.*=__OPACMARC_DIR__/util/dictgiz.*
 
 # Otros
 AC-ANSI.TAB=__OPACMARC_DIR__/util/ac-ansi.tab

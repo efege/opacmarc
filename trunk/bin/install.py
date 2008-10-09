@@ -121,16 +121,16 @@ def create_aux_db():
     # En Linux hay problemas si usan '\r\n', pero en Windows pueden usar '\n'
     
     # Crea las bases isis auxiliares a partir de archivos de texto (.id)
-    run('%s/id2i bin/install/data/country.id create=bases/common/country' % CISIS_PATH)
-    run('%s/id2i bin/install/data/lang.id create=bases/common/lang' % CISIS_PATH)
-    run('%s/id2i bin/install/data/dictgiz.id create=bases/common/dictgiz' % CISIS_PATH)
+    run('%s/id2i bin/install/data/country.id create=util/country' % CISIS_PATH)
+    run('%s/id2i bin/install/data/lang.id create=util/lang' % CISIS_PATH)
+    run('%s/id2i bin/install/data/dictgiz.id create=util/dictgiz' % CISIS_PATH)
     
     run('%s/id2i bin/install/data/oem2ansi.id create=bin/update_db/oem2ansi' % CISIS_PATH)
     run('%s/id2i bin/install/data/delimsubcampo.id create=bin/update_db/delimsubcampo' % CISIS_PATH)
     
     # Genera los invertidos correspondientes
-    run('%s/mx bases/common/country "fst=1 0 v1" fullinv=bases/common/country' % CISIS_PATH)
-    run('%s/mx bases/common/lang "fst=1 0 v1" fullinv=bases/common/lang' % CISIS_PATH)
+    run('%s/mx util/country "fst=1 0 v1" fullinv=util/country' % CISIS_PATH)
+    run('%s/mx util/lang "fst=1 0 v1" fullinv=util/lang' % CISIS_PATH)
     
     print "Bases auxiliares creadas."
 
