@@ -21,8 +21,8 @@ NameVirtualHost *:8081
     </Directory>
     
     # Archivos estáticos (css, js, imágenes, etc.) locales, comunes a todas las bases
-    Alias /local/ "__OPACMARC_DIR__/local-data/htdocs/"
-    <Directory "__OPACMARC_DIR__/local-data/htdocs/">
+    Alias /local/ "__LOCAL_DATA_DIR__/htdocs/"
+    <Directory "__LOCAL_DATA_DIR__/htdocs/">
         Order allow,deny
         Allow from all
         Options -Indexes
@@ -30,8 +30,8 @@ NameVirtualHost *:8081
     
     # Archivos estáticos (css, js, imágenes, etc.) específicos de cada base
     # ATENCION: aparentemente el segundo grupo ($2) debe figurar explícitamente.
-    AliasMatch "^/local-base/([^/]+)/(.+)" "__OPACMARC_DIR__/local-data/bases/$1/htdocs/$2"
-    <DirectoryMatch "__OPACMARC_DIR__/local-data/bases/([^/]+)/htdocs/">
+    AliasMatch "^/local-base/([^/]+)/(.+)" "__LOCAL_DATA_DIR__/bases/$1/htdocs/$2"
+    <DirectoryMatch "__LOCAL_DATA_DIR__/bases/([^/]+)/htdocs/">
         Order allow,deny
         Allow from all
         Options -Indexes

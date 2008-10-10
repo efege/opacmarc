@@ -1,7 +1,7 @@
 # coding=latin-1
 
 # ------------------------------------------------------------------
-# CONFIGURACION para update-opac.py
+# CONFIGURACION para update_db.py
 # ------------------------------------------------------------------
 
 # Using module ConfigParser, a section header is mandatory
@@ -16,11 +16,11 @@ PATH_CISIS = __OPACMARC_DIR__/bin/cisis-1660
 
 # En este directorio están almacenadas las imágenes de las tapas (si las hay).
 # ATENCION: no incluir al final de la ruta el directorio con el nombre de la base.
-DIR_IMG = __OPACMARC_DIR__/local-data/bases/__DB__/htdocs/img/
+DIR_IMG = __LOCAL_DATA_DIR__/bases/__DB__/htdocs/img/
 
 # A este directorio van a parar los archivos generados (si se usa MOVE=1).
 # ATENCION: no incluir al final de la ruta el directorio con el nombre de la base.
-TARGET_DIR = __OPACMARC_DIR__/local-data/bases/__DB__/db/public/
+TARGET_DIR = __LOCAL_DATA_DIR__/bases/__DB__/db/public/
 
 # ------------------------------------------------------------------
 # Opciones

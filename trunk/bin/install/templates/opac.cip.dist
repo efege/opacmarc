@@ -73,7 +73,7 @@ WORK_HEADING.PFT=__OPACMARC_DIR__/cgi-bin/pft/wh.pft
 # -----------------------------------------------------------------
 # Directorio para archivos temporales
 # -----------------------------------------------------------------
-CI_TEMPDIR=__OPACMARC_DIR__/local-data/temp
+CI_TEMPDIR=__LOCAL_DATA_DIR__/temp
 
 
 # Todo lo que sigue depende de la consulta que está siendo procesada
@@ -82,28 +82,28 @@ CI_TEMPDIR=__OPACMARC_DIR__/local-data/temp
 # -----------------------------------------------------------------
 # BASES
 # -----------------------------------------------------------------
-BASES.PAR=__OPACMARC_DIR__/local-data/bases/__DB__/db/public/bases.txt
-BIB_CODES.TXT=__OPACMARC_DIR__/local-data/bases/__DB__/db/public/bibcode.txt
-BIBLIO.*=__OPACMARC_DIR__/local-data/bases/__DB__/db/public/biblio.*
-DATES.TXT=__OPACMARC_DIR__/local-data/bases/__DB__/db/public/dates.txt
-LANG_CODES.TXT=__OPACMARC_DIR__/local-data/bases/__DB__/db/public/langcode.txt
-LIT_CODES.TXT=__OPACMARC_DIR__/local-data/bases/__DB__/db/public/litcode.txt
-MAP_859b.*=__OPACMARC_DIR__/local-data/bases/__DB__/db/public/map_859b.*
-NAME.*=__OPACMARC_DIR__/local-data/bases/__DB__/db/public/name.*
-NOVEDADES.TXT=__OPACMARC_DIR__/local-data/bases/__DB__/db/public/novedades.txt
-SUBJ.*=__OPACMARC_DIR__/local-data/bases/__DB__/db/public/subj.*
-TITLE.*=__OPACMARC_DIR__/local-data/bases/__DB__/db/public/title.*
-UPDATED.TXT=__OPACMARC_DIR__/local-data/bases/__DB__/db/public/updated.txt
+BASES.PAR=__LOCAL_DATA_DIR__/bases/__DB__/db/public/bases.txt
+BIB_CODES.TXT=__LOCAL_DATA_DIR__/bases/__DB__/db/public/bibcode.txt
+BIBLIO.*=__LOCAL_DATA_DIR__/bases/__DB__/db/public/biblio.*
+DATES.TXT=__LOCAL_DATA_DIR__/bases/__DB__/db/public/dates.txt
+LANG_CODES.TXT=__LOCAL_DATA_DIR__/bases/__DB__/db/public/langcode.txt
+LIT_CODES.TXT=__LOCAL_DATA_DIR__/bases/__DB__/db/public/litcode.txt
+MAP_859b.*=__LOCAL_DATA_DIR__/bases/__DB__/db/public/map_859b.*
+NAME.*=__LOCAL_DATA_DIR__/bases/__DB__/db/public/name.*
+NOVEDADES.TXT=__LOCAL_DATA_DIR__/bases/__DB__/db/public/novedades.txt
+SUBJ.*=__LOCAL_DATA_DIR__/bases/__DB__/db/public/subj.*
+TITLE.*=__LOCAL_DATA_DIR__/bases/__DB__/db/public/title.*
+UPDATED.TXT=__LOCAL_DATA_DIR__/bases/__DB__/db/public/updated.txt
 
 # -----------------------------------------------------------------
 # HTMLPFT
 # -----------------------------------------------------------------
-ABOUT.HTM=__OPACMARC_DIR__/local-data/bases/__DB__/htmlpft/about.htm
-HOME.HTM=__OPACMARC_DIR__/local-data/bases/__DB__/htmlpft/home.htm
-OPAC-BANNER.HTM=__OPACMARC_DIR__/local-data/bases/__DB__/htmlpft/banner.htm
-PRESENTATION.HTM=__OPACMARC_DIR__/local-data/bases/__DB__/htmlpft/present.htm
+ABOUT.HTM=__LOCAL_DATA_DIR__/bases/__DB__/htmlpft/about.htm
+HOME.HTM=__LOCAL_DATA_DIR__/bases/__DB__/htmlpft/home.htm
+OPAC-BANNER.HTM=__LOCAL_DATA_DIR__/bases/__DB__/htmlpft/banner.htm
+PRESENTATION.HTM=__LOCAL_DATA_DIR__/bases/__DB__/htmlpft/present.htm
 
 # -----------------------------------------------------------------
 # Archivo de logs (uno por fecha)
 # -----------------------------------------------------------------
-LOGFILE.TXT=__OPACMARC_DIR__/local-data/logs/log-__DATE__.txt
+LOGFILE.TXT=__LOCAL_DATA_DIR__/logs/log-__DATE__.txt

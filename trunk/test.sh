@@ -63,7 +63,7 @@ cp $TEST_DIR/bin/install/data/demo-img/* $TEST_DIR/local-data/bases/demo/htdocs/
 python $TEST_DIR/bin/update_db.py demo
 
 # pisamos config para apache y lo reiniciamos
-sudo cp $TEST_DIR/local-data/config/httpd-opacmarc.conf $APACHE_VHOST
+sudo cp $TEST_DIR/config/httpd-opacmarc.conf $APACHE_VHOST
 sudo apache2ctl restart
 
 # browser

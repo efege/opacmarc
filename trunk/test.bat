@@ -50,7 +50,7 @@ copy %TEST_DIR%\bin\install\data\demo-img\* %TEST_DIR%\local-data\bases\demo\htd
 python %TEST_DIR%\bin\update_db.py demo
 
 :: pisamos configuración de apache
-copy "%TEST_DIR%\local-data\config\httpd-opacmarc.conf" "%APACHE_VHOST%"
+copy "%TEST_DIR%\config\httpd-opacmarc.conf" "%APACHE_VHOST%"
 
 :: reiniciamos Apache
 ::G:

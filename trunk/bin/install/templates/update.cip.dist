@@ -31,7 +31,7 @@ LANG.*=__OPACMARC_DIR__/bin/update_db/lang.*
 MSC.*=__OPACMARC_DIR__/bases/opac/msc2000/msc.*
 OEM2ANSI.*=__OPACMARC_DIR__/bin/update_db/oem2ansi.*
 
-LANG.TXT=__OPACMARC_DIR__/bin/update_db/lang.txt
+LANG.SEQ=__OPACMARC_DIR__/bin/update_db/lang.seq
 
 # FST
 HEADINGS.FST=__OPACMARC_DIR__/bin/update_db/headings.fst
