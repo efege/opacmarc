@@ -18,7 +18,7 @@ SELTITLE.PFT=__OPACMARC_DIR__/util/seltitle.pft
 ACTAB=__OPACMARC_DIR__/util/ac-ansi.tab
 UCTAB=__OPACMARC_DIR__/util/uc-ansi.tab
 
-MSC.*=__OPACMARC_DIR__/bases/opac/msc2000/msc.*
+MSC.*=__OPACMARC_DIR__/util/msc2000/msc2000.*
 
 # -----------------------------------------------------------------
 # HTMLPFT

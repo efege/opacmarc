@@ -661,6 +661,7 @@ def build_agrep_dictionaries():
     # Para bibima usamos la base MSC; para el resto, la base SUBJ
     # TO-DO: la base subj también sirve para bibima; usar cat & uniq
     # TO-DO: independizarse del nombre de la base (usar update.conf)
+    # TO-DO: como la base MSC es fija, no necesitamos volver a generar este listado cada vez.
     if DB_NAME == 'bibima':
         run('''mx dict=MSC "pft=v1^*/" k1=a k2=zz now > dictSUBJ.txt''')
     else:
@@ -839,16 +840,16 @@ def main():
 
     global CONFIG, DB_NAME, TELL, ENV
 
-    print '''
-    -----------------------------------------------------
-      %s - SCRIPT DE ACTUALIZACION DEL OPAC
-    -----------------------------------------------------
-    ''' % os.path.basename(sys.argv[0])
-    
     #Check mandatory argument
     if len(sys.argv) < 2:
         print_usage()
     
+    print '''
+-----------------------------------------------------
+  %s - SCRIPT DE ACTUALIZACION DEL OPAC
+-----------------------------------------------------
+    ''' % os.path.basename(sys.argv[0])
+
     # Read config file and define global variables
     DB_NAME = sys.argv[1]
     CONFIG = read_config()

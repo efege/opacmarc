@@ -49,6 +49,12 @@ def main():
     if len(sys.argv) < 2:
         print_usage()
     
+    print '''
+-----------------------------------------------------
+  %s - GENERACION DE UNA NUEVA BASE
+-----------------------------------------------------
+    ''' % os.path.basename(sys.argv[0])
+
     DB_NAME = sys.argv[1]
     DB_DIR = os.path.join(LOCAL_DATA_DIR, 'bases', DB_NAME)
     
@@ -106,30 +112,30 @@ def main():
     print "Se han creado los directorios y archivos necesarios para trabajar con la base '%s'." % DB_NAME
     print
     print '''A continuacion, debe copiar la base bibliografica original en la carpeta
+
+    %s/bases/%s/db/original/
     
-        %s/bases/%s/db/original/
-        
-    y luego ejecutar:
+y luego ejecutar:
+
+    bin/update-opac.py %s
     
-        bin/update-opac.py %s
-        
-    Además, si desea personalizar la presentacion del OPAC para esta base, puede
-    editar los siguientes archivos:
+Además, si desea personalizar la presentacion del OPAC para esta base, puede
+editar los siguientes archivos:
+
+    %s/bases/%s/htmlpft/about.htm
+    %s/bases/%s/htmlpft/banner.htm
+    %s/bases/%s/htmlpft/home.htm
+    %s/bases/%s/htdocs/css/styles.css
     
-        %s/bases/%s/htmlpft/about.htm
-        %s/bases/%s/htmlpft/banner.htm
-        %s/bases/%s/htmlpft/home.htm
-        %s/bases/%s/htdocs/css/styles.css
-        
-    Si necesita imágenes auxiliares (p.ej. un logo) deberá colocarlas en la carpeta
+Si necesita imágenes auxiliares (p.ej. un logo) deberá colocarlas en la carpeta
+
+    %s/bases/%s/htdocs/img/
     
-        %s/bases/%s/htdocs/img/
-        
-    Si necesita modificar algunos parámetros de configuración para el OPAC,
-    hágalo editando el archivo
-    
-        %s/bases/%s/config/options.conf
-    
+Si necesita modificar algunos parámetros de configuración para el OPAC,
+hágalo editando el archivo
+
+    %s/bases/%s/config/options.conf
+
     ''' % ((LOCAL_DATA_DIR, DB_NAME, DB_NAME) + (LOCAL_DATA_DIR, DB_NAME)*6)   # Requiere los paréntesis, de lo contrario TypeError
     sys.exit(0)
 

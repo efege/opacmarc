@@ -15,7 +15,7 @@
 
 <!-- TO-DO: considerar el * para truncamiento -->
 
-<!-- Limpiamos la expresión recibida; el resultado queda en v3001 -->
+<!-- Limpiamos la expresión recibida; el resultado queda en v3333 -->
 <call name="cleanQuery"><pft>
 	if a(v2109) then replace(v2001,'*','XXXTRUNCATEXXX'), fi
 </pft></call>
@@ -38,7 +38,7 @@
 		'',
 		
 	else         /* ordinary keyword search */
-		replace(replace(replace(s(mpu,v3001),  /* mpu porque cleanQuery no cambia el case */
+		replace(replace(replace(s(mpu,v3333),  /* mpu porque cleanQuery no cambia el case */
 			'XXXTRUNCATEXXX','$'),
 			' AND ',' '),
 			' ',' AND ')
