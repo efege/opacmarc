@@ -129,20 +129,28 @@ def make_local_dirs():
 def create_aux_db():
     """Crea bases ISIS auxiliares."""
     
-    # FIXME: ajustar saltos de línea de los .id (usar os.linesep?)
-    # En Linux hay problemas si usan '\r\n', pero en Windows pueden usar '\n'
+    # TO-DO: ajustar saltos de línea de los .id (usar os.linesep?)
+    # En Linux hay problemas si usan '\r\n', pero en Windows andan bien con sólo usar '\n'.
     
     # Crea las bases isis auxiliares a partir de archivos de texto (.id)
     run('%s/id2i bin/install/data/country.id create=util/country' % CISIS_PATH)
     run('%s/id2i bin/install/data/lang.id create=util/lang' % CISIS_PATH)
     run('%s/id2i bin/install/data/dictgiz.id create=util/dictgiz' % CISIS_PATH)
-    
+
     run('%s/id2i bin/install/data/oem2ansi.id create=bin/update_db/oem2ansi' % CISIS_PATH)
     run('%s/id2i bin/install/data/delimsubcampo.id create=bin/update_db/delimsubcampo' % CISIS_PATH)
     
     # Genera los invertidos correspondientes
     run('%s/mx util/country "fst=1 0 v1" fullinv=util/country' % CISIS_PATH)
     run('%s/mx util/lang "fst=1 0 v1" fullinv=util/lang' % CISIS_PATH)
+    
+    # Caso particular: base MSC 2000 (esquema de clasificación para Matemática, usado en el catálogo del INMABB)
+    # FIXME - Esto es sucio; por ahora funciona así: "python install.py msc"
+    # IMPORTANTE: las tablas .tab deben haberse creado *antes* de generar el invertido.
+    if len(sys.argv) > 1 and sys.argv[1] == 'msc':
+        os.mkdir(os.path.join('util', 'msc2000'))
+        run('%s/id2i bin/install/data/msc2000.id create=util/msc2000/msc2000' % CISIS_PATH)
+        run('%s/mx util/msc2000/msc2000 "fst=@bin/install/msc.fst" actab=util/ac-ansi.tab uctab=util/uc-ansi.tab stw=@util/biblio.stw fullinv=util/msc2000/msc2000' % CISIS_PATH)
     
     print "Bases auxiliares creadas."
 
@@ -165,13 +173,11 @@ def show_end_msg():
 -----------------------------------------------------
 '''
     print '''
-        - Configure permiso de escritura en temp y logs (mostrar ejemplo)
-        - Use %s/config/httpd-opacmarc.conf como base para configurar Apache
-        - Copie wxis (wxis.exe en Windows) en la carpeta cgi-bin
-        - Windows: copie agrep.exe en la carpeta bin; Linux: cree un link simbólico a agrep desde bin/
-        - Entre con un browser a http://...
-        - Realizar tests? E.g. búsquedas con acentos y con errores (agrep).
-    ''' % LOCAL_DATA_DIR
+    - Configure permiso de escritura en temp y logs (mostrar ejemplo)
+    - Use %s/config/httpd-opacmarc.conf como base para configurar Apache
+    - Entre con un browser a http://...
+    - Realizar tests? E.g. búsquedas con acentos y con errores (agrep).
+    ''' % OPACMARC_DIR
 
 
 def main():
@@ -188,9 +194,9 @@ def main():
     #set_version()
     make_local_dirs()
     build_config_files()
-    create_aux_db()
     create_table('actab')
     create_table('uctab')
+    create_aux_db()
     
     show_end_msg()
 

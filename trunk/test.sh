@@ -45,7 +45,7 @@ ln -s $CISIS_DIR $TEST_DIR/bin/cisis-1660
 ln -s $AGREP $TEST_DIR/bin/agrep
 
 # instalación
-python $TEST_DIR/bin/install.py
+python $TEST_DIR/bin/install.py msc
 
 # permisos de escritura
 for dir in logs temp
