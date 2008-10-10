@@ -20,14 +20,14 @@ import tablas
 # Archivos que crea o modifica el script de instalación.
 # TO-DO: agregar aquí los que usa create_db()
 FILES = {
-    'footer' : os.path.join(OPACMARC_DIR, 'cgi-bin', 'html', 'opac-footer.htm'),
-    'cipar-update' : os.path.join(LOCAL_DATA_DIR, 'config', 'opac.cip'),
-    'cipar-opac' : os.path.join(LOCAL_DATA_DIR, 'config', 'update.cip'),
-    'httpd' : os.path.join(LOCAL_DATA_DIR, 'config', 'httpd-opacmarc.conf'),
-    'local' : os.path.join(LOCAL_DATA_DIR, 'config', 'local.conf'),
-    'update' : os.path.join(LOCAL_DATA_DIR, 'config', 'update.conf'),
-    'actab' : os.path.join(OPACMARC_DIR, 'util', 'ac-ansi.tab'),
-    'uctab' : os.path.join(OPACMARC_DIR, 'util', 'uc-ansi.tab'),
+    'footer'       : os.path.join(OPACMARC_DIR, 'cgi-bin', 'html', 'opac-footer.htm'),
+    'cipar-opac'   : os.path.join(OPACMARC_DIR, 'config', 'update.cip'),
+    'cipar-update' : os.path.join(OPACMARC_DIR, 'config', 'opac.cip'),
+    'conf-local'   : os.path.join(LOCAL_DATA_DIR, 'config', 'local.conf'),
+    'conf-update'  : os.path.join(LOCAL_DATA_DIR, 'config', 'update.conf'),
+    'conf-httpd'   : os.path.join(OPACMARC_DIR, 'config', 'httpd-opacmarc.conf'),
+    'actab'        : os.path.join(OPACMARC_DIR, 'util', 'ac-ansi.tab'),
+    'uctab'        : os.path.join(OPACMARC_DIR, 'util', 'uc-ansi.tab'),
 }
 
 CISIS_PATH = os.path.join(OPACMARC_DIR, 'bin', 'cisis-1660')
@@ -52,6 +52,8 @@ def set_version():
     # extraer la información de SubWCRev.exe
     # FIXME - Esto solo funciona cuando install.py se ejecuta sobre una working copy,
     # pero no sobre código exportado.
+    #
+    # Al hacer un build se genera un identificador de versión (fecha)
     version = os.popen('svnversion').read().replace(os.linesep, '')
     footer_file = file(FILES['footer'])
     aux_file = file('footer.tmp', 'w')
@@ -63,43 +65,53 @@ def set_version():
     
     print "Identificador de version generado."
 
-def replace_config_path(config_file, force_forward=False):
-    """Crea un archivo de configuración a partir de una plantilla y del valor actual de OPACMARC_DIR."""
+def create_from_template(template, destination, substitutions, force_forward=False, allow_overwrite=False):
+    """Crea un archivo de configuración a partir de una plantilla."""
     
-    if os.path.isfile(config_file):
+    if os.path.isfile(destination) and not allow_overwrite:
         print
-        print "ATENCION: ya existe el archivo de configuracion %s." % os.path.abspath(config_file)
+        print "ATENCION: ya existe el archivo %s." % os.path.abspath(destination)
         print
     else:
-        config_template = os.path.join(OPACMARC_DIR, 'bin', 'install', 'templates', os.path.basename(config_file) + '.dist')
-        if force_forward:
-            replacement = OPACMARC_DIR.replace('\\', '/')
-        else:
-            replacement = OPACMARC_DIR
         try:
-            f1 = open(config_template, 'r')
-            f2 = open(config_file, 'w')
-            f2.write(
-                f1.read().replace('__OPACMARC_DIR__', replacement)
-            )
+            f1 = open(template, 'r')
+            f2 = open(destination, 'w')
+            content = f1.read()
+            for sub in substitutions:
+                if force_forward and os.sep == '\\':
+                    sub[1] = sub[1].replace('\\', '/')
+                content = content.replace(sub[0], sub[1])
+            f2.write(content)
             f1.close()
             f2.close()
-            print 'Generado el archivo %s.' % os.path.basename(config_file)
+            print 'Generado el archivo %s.' % os.path.basename(destination)
         except:
             print
-            print "ERROR: No se pudo generar el archivo %s." % os.path.basename(config_file)
+            print "ERROR: No se pudo generar el archivo %s." % os.path.basename(destination)
             print
 
 def build_config_files():
     """Crea archivos de configuración con los paths apropiados."""
+
+    # Find the platform-specific name for the wxis binary
+    import platform
+    if platform.system() == 'Windows':
+        WXIS = 'wxis.exe'
+    else:
+        WXIS = 'wxis' 
+
+    substitutions = (
+        ['__OPACMARC_DIR__', OPACMARC_DIR],
+        ['__LOCAL_DATA_DIR__', LOCAL_DATA_DIR],
+        ['__WXIS__', WXIS],
+    )
     
-    replace_config_path(FILES['httpd'], force_forward=True)   # modelo de config. para Apache (requiere barras hacia adelante, incluso en Windows)
-    replace_config_path(FILES['local'])   # config. local para opac.xis
-    replace_config_path(FILES['update'])  # config. para update-opac.py
-    replace_config_path(FILES['cipar-update']) # cipar para llamadas a mx desde update-opac.py
-    replace_config_path(FILES['cipar-opac'])   # cipar para opac.xis
+    for config_file in ('conf-httpd', 'conf-local', 'conf-update', 'cipar-opac', 'cipar-update'):
+        template = os.path.join(OPACMARC_DIR, 'bin', 'install', 'templates', os.path.basename(FILES[config_file]) + '.dist')
+        if config_file == 'conf-httpd':
+            force_forward=True  # Apache requiere barras hacia adelante, incluso en Windows
+        create_from_template(template, FILES[config_file], substitutions, force_forward=force_forward)
     
-    # TO-DO: local.conf -> SCRIPT_URL -> "wxis.exe" vs "wxis"
     # TO-DO: local.conf -> path agrep
 
 
@@ -165,15 +177,15 @@ def show_end_msg():
 def main():
 
     print '''
-    -----------------------------------------------------
-      %s - SCRIPT DE INSTALACION DE OPACMARC
-    -----------------------------------------------------
+-----------------------------------------------------
+  %s - SCRIPT DE INSTALACION DE OPACMARC
+-----------------------------------------------------
     ''' % os.path.basename(sys.argv[0])
 
     # Algunas rutas son relativas a OPACMARC_DIR
     os.chdir(OPACMARC_DIR)
 
-    set_version()
+    #set_version()
     make_local_dirs()
     build_config_files()
     create_aux_db()

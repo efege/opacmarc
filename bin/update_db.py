@@ -142,7 +142,7 @@ def build_env():
     
     # Este diccionario es pasado en las llamadas al sistema
     return {
-        'CIPAR':                os.path.join(LOCAL_DATA_DIR, 'config', 'update.cip'),  # Hay que usar el path *absoluto* para el cipar
+        'CIPAR':                os.path.join(OPACMARC_DIR, 'config', 'update.cip'),  # Hay que usar el path *absoluto* para el cipar
         # Las variables que siguen son definidas en update.conf
         'PATH':                 CONFIG.get('Global', 'PATH_CISIS') + os.pathsep + os.getenv('PATH'),
         'SUBJ_TAGS':            CONFIG.get('Global', 'SUBJ_TAGS'),
@@ -704,7 +704,7 @@ def build_aux_files():
     # -----------------------------------------------------
     print "Lista de codigos de idioma."
     # -----------------------------------------------------
-    run('''mx seq=LANG.TXT create=tmp/lang now -all''')
+    run('''mx seq=LANG.SEQ create=tmp/lang now -all''')
     run('''mx tmp/lang fst=@LANG.FST fullinv=tmp/lang''')
     run('''mx dict=biblio "k1=-LANG=A" "k2=-LANG=ZZZ" "pft=v1^**6.3,'|',v1^t/" now > tmp/langcode.txt''')
     run('''mx seq=tmp/langcode.txt create=tmp/langcode now -all''')

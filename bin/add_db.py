@@ -75,6 +75,7 @@ def main():
     
     # Creamos archivos a partir de templates
     # FIXME - los paths deben quedar con la barra correcta (os.sep)
+    # FIXME - corregir lo que se muestra en el mensaje "Generado el archivo"
     for tpl in template_dest:
         f1 = open(os.path.join(OPACMARC_DIR, 'bin', 'add_db', 'templates', tpl), 'r')
         f2 = open(os.path.join(DB_DIR, template_dest[tpl], tpl), 'w')
@@ -104,7 +105,7 @@ def main():
     print
     print "Se han creado los directorios y archivos necesarios para trabajar con la base '%s'." % DB_NAME
     print
-    print '''Ahora debe copiar la base bibliografica original en la carpeta
+    print '''A continuacion, debe copiar la base bibliografica original en la carpeta
     
         %s/bases/%s/db/original/
         
