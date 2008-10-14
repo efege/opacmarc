@@ -12,7 +12,7 @@
 # ------------------------------------------------------------------
 
 # Ubicación de mx y demás utilitarios
-PATH_CISIS = __OPACMARC_DIR__/bin/cisis-1660
+PATH_CISIS = __OPACMARC_DIR__/bin/cisis
 
 # En este directorio están almacenadas las imágenes de las tapas (si las hay).
 # ATENCION: no incluir al final de la ruta el directorio con el nombre de la base.
@@ -29,13 +29,13 @@ TARGET_DIR = __LOCAL_DATA_DIR__/bases/__DB__/db/public/
 # Procesar imágenes asociadas a registros bibliográficos
 IMAGES=1
 
-# Tomar registros bibliográficos de publicaciones seriadas de SeCS
+# Tomar registros bibliográficos de publicaciones seriadas de SeCS - OBSOLETO
 #SECS=0
 
 # Use MOVE=1 para mover los archivos generados al directorio destino (TARGET_DIR).
 MOVE=1
 
-# Use CLEAN=1 para eliminar archivos temporales creados durante la generación del OPAC.
+# Use CLEAN=1 para eliminar archivos temporales creados durante la actualización del OPAC.
 CLEAN=0
 
 

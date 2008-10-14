@@ -680,23 +680,20 @@ def build_agrep_dictionaries():
     
     print "   - any"
     # union de los diccionarios anteriores (eliminando términos duplicados)
-    # TO-DO: anda un poco lento, ver cómo apurarlo.
-    #cat dict*.txt | sort | uniq > dictANY.txt || error
-    # Con Python sería algo así?
-    #list(set(open())).sort()
-    file1 = open('tmp/alldict.txt', 'w')
-    for type in ['SUBJ', 'NAME', 'TITLE']:
-        file2 = open('dict%s.txt' % type, 'r')
-        file1.write(file2.read())
-        file2.close()
-    file1.close()
-    #all = [line for line in file('dictALL.txt')]
-    #uniq = list(set(all))
-    #uniq.sort()
-    run('''mx seq=tmp/alldict.txt create=tmp/alldict now -all''')
-    run('''msrt tmp/alldict 100 v1''')
-    run('''mx tmp/alldict "pft=if v1 <> ref(mfn-1, v1) then v1/ fi " now > dictANY.txt''')
-
+    # originalmente era así de simple: cat dict*.txt | sort | uniq > dictANY.txt
+    # 
+    # Para python, usamos una idea de aquí: http://mail.python.org/pipermail/python-list/2003-January/178712.html
+    # TO-DO: ¿será más rápido de otra manera, p.ej. con sets?
+    all_terms = []
+    for dict_type in ('SUBJ', 'NAME', 'TITLE'):
+        d = open('dict%s.txt' % dict_type, 'r')
+        all_terms.extend(d.readlines())
+    unique_lines = dict.fromkeys(all_terms).keys()
+    unique_lines.sort()
+    dictANY = open('dictANY.txt', 'w')
+    dictANY.writelines(unique_lines)
+    dictANY.close()
+    
 
 def build_aux_files():
     # ARCHIVOS AUXILIARES

@@ -1,19 +1,24 @@
 # Script para testear la instalación de opacmarc en Linux
 # Creado: FG, 2008-10-03
+#
+# TO-DO: enviar la config a un archivo aparte.
 
 
 # -----------------------------------
 # begin config
 # -----------------------------------
 
+# versión de utilitarios cisis + wxis
+CISIS_VERSION=5.2b-1030
+
 # Directorio para el test. Es eliminado con cada nuevo test.
 TEST_DIR=$HOME/opacmarc-test
 
-# Directorio de los cisis 16/60
-CISIS_DIR=$HOME/bin/cisis1660
+# Directorio de los cisis
+CISIS_DIR=$HOME/bin/cisis-$CISIS_VERSION
 
-# wxis 16/60
-WXIS=$HOME/www/cgi-bin/wxis1660-7.1
+# wxis
+WXIS=$HOME/www/cgi-bin/wxis-$CISIS_VERSION
 
 # agrep
 AGREP=`which agrep`
@@ -41,11 +46,11 @@ svn export $HOME/svn/opacmarc $TEST_DIR
 
 # links a binarios
 ln -s $WXIS $TEST_DIR/cgi-bin/wxis
-ln -s $CISIS_DIR $TEST_DIR/bin/cisis-1660
+ln -s $CISIS_DIR $TEST_DIR/bin/cisis
 ln -s $AGREP $TEST_DIR/bin/agrep
 
 # instalación
-python $TEST_DIR/bin/install.py
+python $TEST_DIR/bin/install.py msc
 
 # permisos de escritura
 for dir in logs temp
