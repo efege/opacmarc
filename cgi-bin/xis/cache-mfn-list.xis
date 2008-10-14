@@ -32,13 +32,13 @@
     </pft></display>
 	<file action="close" type="output"><pft>v2098</pft></file>
 	
-	<!-- Devolvemos el nombre del archivo temporal (sin el path) -->
-	<!-- TO-DO: mejorar esto -->
+	<!-- Guardamos el nombre del archivo temporal (sin el path) -->
+	<!-- TO-DO: mejorar esto? -->
 	<field action="replace" tag="2099"><pft>
-	    if v2098 : 'TMP' then
-		    mid(v2098, instr(v2098,'TMP'), size(v2098))
-		else
+	    if v2098 : '/tmp/' then                              /* Linux */
 		    mid(v2098, instr(v2098,'/tmp/')+5, size(v2098))
+		else                                                 /* Windows */
+		    mid(v2098, instr(v2098,'TMP'), size(v2098))
 		fi,
     </pft></field>
 
@@ -59,6 +59,7 @@
         fi
     </pft></display>
 
+	<!-- Devolvemos el nombre del archivo temporal -->
 	<return action="replace" tag="2099"><pft>v2099</pft></return>
 	
 </function>

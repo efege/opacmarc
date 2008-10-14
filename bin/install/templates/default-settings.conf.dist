@@ -9,7 +9,7 @@
 
 # DEBUG: '1' para generar información útil en la depuración de errores.
 # ATENCION: Para el OPAC en producción, siempre usar DEBUG=0.
-DEBUG=1
+DEBUG=0
 
 
 # -------------------------------------------------------
