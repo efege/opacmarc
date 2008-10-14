@@ -23,7 +23,8 @@ FILES = {
     'footer'       : os.path.join(OPACMARC_DIR, 'cgi-bin', 'html', 'opac-footer.htm'),
     'cipar-opac'   : os.path.join(OPACMARC_DIR, 'config', 'update.cip'),
     'cipar-update' : os.path.join(OPACMARC_DIR, 'config', 'opac.cip'),
-    'conf-local'   : os.path.join(LOCAL_DATA_DIR, 'config', 'local.conf'),
+    'conf-default' : os.path.join(OPACMARC_DIR, 'config', 'default-settings.conf'),
+    'conf-local'   : os.path.join(LOCAL_DATA_DIR, 'config', 'local-settings.conf'),
     'conf-update'  : os.path.join(LOCAL_DATA_DIR, 'config', 'update.conf'),
     'conf-httpd'   : os.path.join(OPACMARC_DIR, 'config', 'httpd-opacmarc.conf'),
     'actab'        : os.path.join(OPACMARC_DIR, 'util', 'ac-ansi.tab'),
@@ -88,27 +89,28 @@ def create_from_template(template, destination, substitutions, force_forward=Fal
 def build_config_files():
     """Crea archivos de configuración con los paths apropiados."""
 
-    # Find the platform-specific name for the wxis binary
+    # Platform-specific info
     import platform
     if platform.system() == 'Windows':
         WXIS = 'wxis.exe'
+        TEMP_DIR = os.path.join(LOCAL_DATA_DIR, 'temp')
     else:
-        WXIS = 'wxis' 
+        WXIS = 'wxis'
+        TEMP_DIR = '/tmp' 
 
     substitutions = (
         ['__OPACMARC_DIR__', OPACMARC_DIR],
         ['__LOCAL_DATA_DIR__', LOCAL_DATA_DIR],
         ['__WXIS__', WXIS],
+        ['__TEMP_DIR__', TEMP_DIR],
     )
     
-    for config_file in ('conf-httpd', 'conf-local', 'conf-update', 'cipar-opac', 'cipar-update'):
+    for config_file in ('conf-httpd', 'conf-default', 'conf-local', 'conf-update', 'cipar-opac', 'cipar-update'):
         template = os.path.join(OPACMARC_DIR, 'bin', 'install', 'templates', os.path.basename(FILES[config_file]) + '.dist')
         if config_file == 'conf-httpd':
             force_forward=True  # Apache requiere barras hacia adelante, incluso en Windows
         create_from_template(template, FILES[config_file], substitutions, force_forward=force_forward)
     
-    # TO-DO: local.conf -> path agrep
-
 
 def make_local_dirs():
     """Crea la estructura de directorios para los datos locales."""

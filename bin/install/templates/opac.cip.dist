@@ -71,9 +71,9 @@ URLENCODE.PFT=__OPACMARC_DIR__/cgi-bin/pft/urlencode.pft
 WORK_HEADING.PFT=__OPACMARC_DIR__/cgi-bin/pft/wh.pft
 
 # -----------------------------------------------------------------
-# Directorio para archivos temporales
+# Directorio para archivos temporales (ignorado en Linux!)
 # -----------------------------------------------------------------
-CI_TEMPDIR=__LOCAL_DATA_DIR__/temp
+CI_TEMPDIR=__TEMP_DIR__
 
 
 # Todo lo que sigue depende de la consulta que está siendo procesada

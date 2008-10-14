@@ -55,17 +55,17 @@
 
 <!-- Leemos el archivo de configuración asociado a la base actual -->
 <field action="replace" tag="6000" split="occ"><pft>
-	cat(getenv('PATH_WXIS'),'../local-data/bases/',v2104,'/config/db.conf')
+	cat(getenv('PATH_WXIS'),'../local-data/bases/',v2104,'/config/db-settings.conf')
 </pft></field>
 
 <!-- Leemos el archivo de configuración local -->
 <field action="add" tag="6000" split="occ"><pft>
-	cat(getenv('PATH_WXIS'),'../local-data/config/local.conf')
+	cat(getenv('PATH_WXIS'),'../local-data/config/local-settings.conf')
 </pft></field>
 
 <!-- Leemos la configuración predeterminada -->
 <field action="add" tag="6000" split="occ"><pft>
-	cat(getenv('PATH_WXIS'),'../config/default.conf')
+	cat(getenv('PATH_WXIS'),'../config/default-settings.conf')
 </pft></field>
 
 
@@ -89,7 +89,7 @@
 		,else if v6000 : 'SHOW_EXTERNAL_LINKS='   then '^l',mid(v6000,instr(v6000,'=')+1,size(v6000))
 		,else if v6000 : 'SHOW_245c='             then '^m',mid(v6000,instr(v6000,'=')+1,size(v6000))
 		,else if v6000 : 'EMAIL_RECORDS='         then '^n',mid(v6000,instr(v6000,'=')+1,size(v6000))
-        ,else if v6000 : 'GOOGLE_BOOK_PREVIEW='   then '^p',mid(v6000,instr(v6000,'=')+1,size(v6000))		
+        ,else if v6000 : 'GOOGLE_BOOK_PREVIEW='   then '^p',mid(v6000,instr(v6000,'=')+1,size(v6000))
 		,else if v6000 : 'BIB_RECORDS_PER_PAGE='  then '^r',mid(v6000,instr(v6000,'=')+1,size(v6000))
 		,else if v6000 : 'DISPLAY_LOCATION='      then '^s',mid(v6000,instr(v6000,'=')+1,size(v6000))
 		,else if v6000 : 'DISPLAY_DOC_TYPE='      then '^t',mid(v6000,instr(v6000,'=')+1,size(v6000))
@@ -99,9 +99,10 @@
 		,else if v6000 : 'AGREP_AUTO_SEARCH='     then '^x',mid(v6000,instr(v6000,'=')+1,size(v6000))
 		,else if v6000 : 'SHOW_SUGGESTIONS='      then '^y',mid(v6000,instr(v6000,'=')+1,size(v6000))
 		,else if v6000 : 'SHOW_SECTION='          then '^z',mid(v6000,instr(v6000,'=')+1,size(v6000))
+		,else if v6000 : 'DEBUG='                 then '^0',mid(v6000,instr(v6000,'=')+1,size(v6000))
 		,else if v6000 : 'MAIN_ENTRY_TOP='        then '^1',mid(v6000,instr(v6000,'=')+1,size(v6000))
 		,else if v6000 : 'ETIQ_773_MODE='         then '^7',mid(v6000,instr(v6000,'=')+1,size(v6000))
-		,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,
+		,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,fi,
 	),
 </pft></field>
 

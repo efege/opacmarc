@@ -26,6 +26,11 @@ body {
 	width: 99%;
 }
 
+.debug-info {
+    background-color: #FED;
+    border: 2px solid red;
+    padding: 0.3em 0.7em;
+}
 
 div#contentWrapper {
 	/*margin-left: 81px;   /* según el ancho del logo */

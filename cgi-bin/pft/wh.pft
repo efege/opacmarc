@@ -449,7 +449,7 @@ if not v6001^s = '0' then     /* v6001^s: DISPLAY_LOCATION */
         		  PENDIENTE: en qué parte del .xis leer el archivo con el mapeo:
         		  
                     <field action="replace" tag="6200" split="occ"><pft>
-                    	cat(getenv('PATH_WXIS'),'config/local.conf')
+                    	cat(getenv('PATH_WXIS'),'config/local-settings.conf')
                     </pft></field>
     		    */
     			/*select s(v859^b[1])

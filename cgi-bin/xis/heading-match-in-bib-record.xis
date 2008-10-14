@@ -291,7 +291,7 @@
 </do>
 
 <!-- Almacenamos los MFNs ordenados -->
-<call name="saveMfnList"><pft>
+<call name="cacheMfnList"><pft>
 	"^t"v2003,
 	'^q',replace(v2001,'^','~'),
 	"^r"v3004,

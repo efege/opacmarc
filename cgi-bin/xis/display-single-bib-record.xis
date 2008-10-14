@@ -88,8 +88,16 @@
 
 <!-- Si no se recibió un MFN, hay que usar el indentificador de consulta, para
 	tomar los datos del archivo temporal asociado a la búsqueda -->
-<!--display><pft>v6003^t,'/',v2099</pft></display-->
 <field action="replace" tag="6112" split="occ"><pft>cat(v6003^t,'/',v2099)</pft></field>
+
+<!-- DEBUG BLOCK -->
+<display><pft>
+    if v6001^0 = '1' then
+        '<div class="debug-info">',
+            'ARCHIVO TEMPORAL BUSCADO: ', v6003^t,'/',v2099,
+        '</div>'
+    fi
+</pft></display>
 
 <!-- Si el archivo no se encuentra o está vacío, mostramos un mensaje de error -->
 <flow action="jump"><pft>

@@ -31,8 +31,8 @@
 <!-- function urlencode [reemplazada por URLENCODE.PFT] -->
 <!--include>xis/urlencode.xis</include-->
 
-<!-- function saveMfnList -->
-<include>xis/save-mfn-list.xis</include>
+<!-- function cacheMfnList -->
+<include>xis/cache-mfn-list.xis</include>
 
 <include>xis/agrep.xis</include>
 
