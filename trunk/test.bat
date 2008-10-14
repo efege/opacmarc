@@ -2,31 +2,26 @@
 :: Script para testear opacmarc en Windows
 :: Creado: FG, 2008-10-06
 
-:: -----------------------------------
-:: begin config
-:: -----------------------------------
 
+:: Leemos parámetros locales de un archivo externo.
+:: Esta es la lista de parámetros esperados, con valores sólo a modo
+:: de ejemplo:
+::
 :: Directorio para el test. Es eliminado con cada nuevo test.
-set TEST_DIR=G:\opacmarc-test
-
+:: set TEST_DIR=G:\opacmarc-test
+::
 :: directorio de los cisis 16/60
-set CISIS_DIR=G:\programas\cisis\5.2\1660
-
+:: set CISIS_DIR=G:\programas\cisis\5.2\1660
+::
 :: wxis 16/60
-set WXIS=G:\svn\opacmarc\cgi-bin\wxis.exe
-
+:: set WXIS=G:\svn\opacmarc\cgi-bin\wxis.exe
+::
 :: agrep
-set AGREP=G:\svn\opacmarc\bin\agrep.exe
-
+:: set AGREP=G:\svn\opacmarc\bin\agrep.exe
+::
 :: Archivo con la configuración de un virtual host para OpacMarc
-:: El método para que este archivo sea leído por Apache depende del
-:: sistema operativo y de la versión de Apache.  
-set APACHE_VHOST=G:\programas\Apache Software Foundation\Apache2.2\conf\extra\httpd-vhost-opacmarc-test-8081.conf
-
-:: -----------------------------------
-:: end config
-:: -----------------------------------
-
+:: set APACHE_VHOST=G:\programas\Apache Software Foundation\Apache2.2\conf\extra\httpd-vhost-opacmarc-test-8081.conf
+call test-config.bat
 
 :: eliminamos el directorio si ya existe
 rmdir /s /q %TEST_DIR% 2>NUL
