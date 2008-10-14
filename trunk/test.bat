@@ -29,12 +29,14 @@ set APACHE_VHOST=G:\programas\Apache Software Foundation\Apache2.2\conf\extra\ht
 
 
 :: eliminamos el directorio si ya existe
-rmdir /s /q %TEST_DIR%
+rmdir /s /q %TEST_DIR% 2>NUL
 
 :: obtenemos una copia fresca del código
+echo.
 svn export G:\svn\opacmarc %TEST_DIR%
 
 :: colocamos los binarios en su lugar
+echo.
 mkdir %TEST_DIR%\bin\cisis-1660
 copy %CISIS_DIR%\*.* %TEST_DIR%\bin\cisis-1660\
 copy %WXIS% %TEST_DIR%\cgi-bin\wxis.exe
@@ -43,20 +45,20 @@ copy %AGREP% %TEST_DIR%\bin\agrep.exe
 :: ejecutamos script de inicialización
 python %TEST_DIR%\bin\install.py
 
-:: procesamos la base demo
-python %TEST_DIR%\bin\add_db.py demo
-%CISIS_DIR%\id2i %TEST_DIR%\bin\install\data\demo.id create=%TEST_DIR%\local-data\bases\demo\db\original\biblio
-copy %TEST_DIR%\bin\install\data\demo-img\* %TEST_DIR%\local-data\bases\demo\htdocs\img\
-python %TEST_DIR%\bin\update_db.py demo
-
-:: pisamos configuración de apache
+:: pisamos configuración de Apache
 copy "%TEST_DIR%\config\httpd-opacmarc.conf" "%APACHE_VHOST%"
+
+:: procesamos la base demo
+python %TEST_DIR%\bin\demo.py
 
 :: reiniciamos Apache
 ::G:
 ::cd \programas\Apache Software Foundation\Apache2.2\bin\
 ::httpd
 ::cd \
+
+::echo Reinicie Apache, y luego...
+::pause
 
 :: vemos qué onda
 start firefox "http://127.0.0.1:8081/cgi-bin/wxis.exe?IsisScript=xis/opac.xis&db=demo"

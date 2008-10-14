@@ -38,7 +38,7 @@
 	</pft></return>
 	
 	<!-- Alternativa basada en un identificador de consulta creado "a mano" -->
-	<!--file action="create" type="output"><pft>'opac/tmp/',v2099</pft></file>
+	<!--file action="create" type="output"><pft>'tmp/',v2099</pft></file>
 	<display><pft>/*getenv('QUERY_STRING'),/,*/(v6111/)</pft></display>
 	<file action="close" type="output"><pft>v2099</pft></file-->
 

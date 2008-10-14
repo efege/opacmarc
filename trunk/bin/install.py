@@ -13,7 +13,7 @@ import os
 import sys
 import shutil
 
-from opac_util import run_command, error, OPACMARC_DIR, LOCAL_DATA_DIR
+from opac_util import run_command, error, OPACMARC_DIR, LOCAL_DATA_DIR, CISIS_PATH, LOCAL_DATA
 import tablas
 
 
@@ -30,13 +30,6 @@ FILES = {
     'uctab'        : os.path.join(OPACMARC_DIR, 'util', 'uc-ansi.tab'),
 }
 
-CISIS_PATH = os.path.join(OPACMARC_DIR, 'bin', 'cisis-1660')
-if not os.path.isdir(CISIS_PATH):
-    print
-    print "No se encuentra el directorio con los utilitarios cisis:\n    %s" % CISIS_PATH
-    sys.exit()
-
-
 def run(command, msg = 'Error'):
     # FIXME! (see update-opac.py)
     #ENV = {'PATH': os.getenv('PATH') + os.pathsep + 'G:\\programas\\cisis\\5.2\\1660'}  # CONFIG.get('Global', 'PATH_CISIS')
@@ -45,6 +38,7 @@ def run(command, msg = 'Error'):
 
 def set_version():
     """Genera un identificador de la versión y lo inserta en el footer."""
+    
     # svnversion produce identificadores de la forma '322' o '322M'.
     # En el 2do caso, significa que se trata de la revisión 322 con
     # modificaciones locales.
@@ -54,6 +48,7 @@ def set_version():
     # pero no sobre código exportado.
     #
     # Al hacer un build se genera un identificador de versión (fecha)
+    
     version = os.popen('svnversion').read().replace(os.linesep, '')
     footer_file = file(FILES['footer'])
     aux_file = file('footer.tmp', 'w')
@@ -164,27 +159,34 @@ def create_table(table_type):
     f.close()
     print "Tabla %s creada." % table_type
 
+
+def upgrade(old_dir=None):
+    if old_dir is None:
+        old_dir = os.path.join(OPACMARC_DIR, '..')
+    
+    old_local_data = os.path.join(old_dir, LOCAL_DATA)
+    shutil.copystat(old_local_data, LOCAL_DATA_DIR)
+    
     
 def show_end_msg():    
-    # Mostrar mensajes útiles para el usuario (tips, tareas que debe realizar luego de instalar)
     print '''
 -----------------------------------------------------
   INSTALACION FINALIZADA
 -----------------------------------------------------
 '''
-    print '''
-    - Configure permiso de escritura en temp y logs (mostrar ejemplo)
-    - Use %s/config/httpd-opacmarc.conf como base para configurar Apache
-    - Entre con un browser a http://...
-    - Realizar tests? E.g. búsquedas con acentos y con errores (agrep).
-    ''' % OPACMARC_DIR
+    #print '''
+    #- Configure permiso de escritura en temp y logs (mostrar ejemplo)
+    #- Use %s/config/httpd-opacmarc.conf como base para configurar Apache
+    #- Entre con un browser a http://...
+    #- Realizar tests? E.g. búsquedas con acentos y con errores (agrep).
+    #''' % OPACMARC_DIR
 
 
 def main():
 
     print '''
 -----------------------------------------------------
-  %s - SCRIPT DE INSTALACION DE OPACMARC
+  %s - INSTALACION DE OPACMARC
 -----------------------------------------------------
     ''' % os.path.basename(sys.argv[0])
 
@@ -192,10 +194,14 @@ def main():
     os.chdir(OPACMARC_DIR)
 
     #set_version()
-    make_local_dirs()
+    
+    make_local_dirs()  # FIXME - si estamos haciendo un upgrade, sólo tenemos que copiar lo existente.
+    
     build_config_files()
+    
     create_table('actab')
     create_table('uctab')
+    
     create_aux_db()
     
     show_end_msg()

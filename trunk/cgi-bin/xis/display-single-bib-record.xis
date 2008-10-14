@@ -396,7 +396,7 @@
 		<!-- ~~~~~~~~~~~~~~~~~~~~~~~~ -->
 		<!-- Generamos el registro en XML y nos vamos -->
 		<display><pft>'<?xml version="1.0" encoding="ISO-8859-1"?>'/</pft></display>
-		<!--display><pft>'<?xml:stylesheet type="text/xsl" href="/opac/xmlverbatimwrapper.xsl" ?>'/</pft></display-->
+		<!--display><pft>'<?xml:stylesheet type="text/xsl" href="/xmlverbatimwrapper.xsl" ?>'/</pft></display-->
 		<proc>d2000d2008d6001d6002</proc>
 		<display><isisxml>*</isisxml></display>
 		<flow action="exit">Now</flow>

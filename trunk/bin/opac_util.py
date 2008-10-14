@@ -1,10 +1,13 @@
+# coding=windows-1252
+
+"""
+Define variables y funciones de uso general.
+"""
+
+
 # Python version notes
 # subprocess: new in Python 2.4
 # subprocess.check_call: new in Python 2.5
-
-
-# Utility functions
-
 
 import sys
 import os
@@ -17,17 +20,26 @@ try:
 except:
     import subprocess_for_23 as subprocess
 
+# El nombre de este directorio podría cambiar. Sólo aparece explícitamente
+# aquí y en read-param.xis.
+LOCAL_DATA = 'local-data'
 
 parent_dir = os.path.join(os.path.dirname(sys.argv[0]), '..') 
 OPACMARC_DIR = os.path.abspath(parent_dir)
-LOCAL_DATA_DIR = os.path.join(OPACMARC_DIR, 'local-data')
-    
+LOCAL_DATA_DIR = os.path.join(OPACMARC_DIR, LOCAL_DATA)
+
+CISIS_PATH = os.path.join(OPACMARC_DIR, 'bin', 'cisis-1660')
+if not os.path.isdir(CISIS_PATH):
+    print
+    print "No se encuentra el directorio con los utilitarios cisis:\n    %s" % CISIS_PATH
+    sys.exit()
     
 def error(msg = 'Error'):
     '''Displays an error message and exits.'''
     sys.exit(msg + '\n')
 
 
+# See also: http://www.python.org/doc/2.5.2/lib/module-commands.html (Unix only?)
 def run_command(command, msg='Error', env={}):
     '''Runs a system command and checks for an error.
     

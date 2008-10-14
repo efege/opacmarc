@@ -1,67 +1,54 @@
 #!/usr/bin/python
 # coding=windows-1252
 
-# Genera las carpetas y archivos asociados a una nueva base de datos para
-# consultar a través de OpacMarc.
-#
-# Fernando Gómez, 2008-09-20
-#
+"""
+    Genera las carpetas y archivos asociados a una nueva base de datos para
+    consultar a través de OpacMarc.
+
+    Uso:
+        python add_db.py <BASE>
+    
+    Ejemplo:
+        python add_db.py libros
+"""
+# Creado: Fernando Gómez, 2008-09-20
 # TO-DO: dividir en funciones sencillas
 
 import os
 import sys
-
+import shutil
 from opac_util import error, OPACMARC_DIR, LOCAL_DATA_DIR
 
-    
+# Plantillas para archivos
+template_dest = {
+    'about.htm' : 'htmlpft',
+    'banner.htm' : 'htmlpft',
+    'home.htm' : 'htmlpft',
+    'db.css' : 'htdocs/css',
+    'db.conf' : 'config',
+}
+
 def print_usage():
     # The name of this script
     SCRIPT_NAME = os.path.basename(sys.argv[0])
+    print __doc__
     
-    # A message to explain the script's usage
-    usage_msg = '''
-%s
 
-    Agrega una nueva base al OPAC
+# Ver: Python main() functions, by Guido van Rossum <http://www.artima.com/weblogs/viewpost.jsp?thread=4829>
+def main(DB_NAME):
 
-    Uso:
-        python newdb.py <BASE>
-    
-    Ejemplo:
-        python newdb.py libros
-''' % SCRIPT_NAME
-    print usage_msg
-    sys.exit()
+    print begin_msg % os.path.basename(sys.argv[0])  # FIXME - si es importado por demo.py imprime demo.py
 
-
-def main():
-    # Plantillas para archivost
-    template_dest = {
-        'about.htm' : 'htmlpft',
-        'banner.htm' : 'htmlpft',
-        'home.htm' : 'htmlpft',
-        'styles.css' : 'htdocs/css',
-        'options.conf' : 'config',
-    }
-    
-    
     # Check mandatory argument
-    if len(sys.argv) < 2:
-        print_usage()
+    #if len(argv) < 2:
+    #    print_usage()
+    #    sys.exit(0)
     
-    print '''
------------------------------------------------------
-  %s - GENERACION DE UNA NUEVA BASE
------------------------------------------------------
-    ''' % os.path.basename(sys.argv[0])
-
-    DB_NAME = sys.argv[1]
+    #DB_NAME = argv[1]
     DB_DIR = os.path.join(LOCAL_DATA_DIR, 'bases', DB_NAME)
     
     if os.path.isdir(DB_DIR):
         error("Ya existe un directorio con el nombre '%s'." % DB_NAME)
-    
-    #os.chdir(OPACMARC_DIR)
     
     # Creamos directorios
     try:
@@ -92,32 +79,32 @@ def main():
         f2.close()
         print 'Generado el archivo %s.' % os.path.basename(template_dest[tpl])
 
-    '''
-    for file_name in ('about', 'banner', 'home'):
-        f = open(os.path.join(DB_DIR, 'htmlpft', '%s.htm' % file_name), 'w')
-        f.write(templates[file_name] % DB_NAME)
-        f.close()
-        
-    f = open(os.path.join(DB_DIR, 'htdocs', 'css', 'styles.css'), 'w')
-    f.write(templates['css'] % DB_NAME)
-    f.close()
+    print end_msg1 % DB_NAME
     
-    f = open(os.path.join(DB_DIR, 'config', 'options.conf'), 'w')
-    f.write(templates['conf'] % DB_NAME)
-    f.close()
-    '''
-        
+    # Dummy logo image
+    logo_src = os.path.join(OPACMARC_DIR, 'bin', 'add_db', 'templates', 'logo.png')
+    logo_dst = os.path.join(DB_DIR, 'htdocs', 'img')
+    shutil.copy(logo_src, logo_dst)
+
+begin_msg = '''
+-----------------------------------------------------
+  %s - GENERACION DE UNA NUEVA BASE
+-----------------------------------------------------
+'''
     
-    print
-    print "Se han creado los directorios y archivos necesarios para trabajar con la base '%s'." % DB_NAME
-    print
-    print '''A continuacion, debe copiar la base bibliografica original en la carpeta
+end_msg1 = '''
+Se han creado los directorios y archivos necesarios para trabajar con
+la base '%s'.
+'''
+
+end_msg2 = '''
+A continuacion, debe copiar la base bibliográfica original en la carpeta
 
     %s/bases/%s/db/original/
     
 y luego ejecutar:
 
-    bin/update-opac.py %s
+    python bin/update_db.py %s
     
 Además, si desea personalizar la presentacion del OPAC para esta base, puede
 editar los siguientes archivos:
@@ -125,21 +112,21 @@ editar los siguientes archivos:
     %s/bases/%s/htmlpft/about.htm
     %s/bases/%s/htmlpft/banner.htm
     %s/bases/%s/htmlpft/home.htm
-    %s/bases/%s/htdocs/css/styles.css
+    %s/bases/%s/htdocs/css/db.css
     
-Si necesita imágenes auxiliares (p.ej. un logo) deberá colocarlas en la carpeta
+Si necesita imágenes para esta base (p.ej. un logo) debe colocarlas en
+la carpeta
 
     %s/bases/%s/htdocs/img/
     
-Si necesita modificar algunos parámetros de configuración para el OPAC,
-hágalo editando el archivo
+Si necesita modificar algunos parámetros de configuración específicamente
+para esta base, edite el archivo
 
-    %s/bases/%s/config/options.conf
-
-    ''' % ((LOCAL_DATA_DIR, DB_NAME, DB_NAME) + (LOCAL_DATA_DIR, DB_NAME)*6)   # Requiere los paréntesis, de lo contrario TypeError
-    sys.exit(0)
-
+    %s/bases/%s/config/db.conf
+'''
 
 if __name__ == "__main__":
-    main()
-
+    DB_NAME = sys.argv[1]
+    main(DB_NAME)
+    print end_msg2 % ((LOCAL_DATA_DIR, DB_NAME, DB_NAME) + (LOCAL_DATA_DIR, DB_NAME)*6)   # Requiere los paréntesis, de lo contrario TypeError
+    sys.exit(0)

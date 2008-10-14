@@ -37,7 +37,8 @@ proc(
 			if v1 : 'XX' then
 				if not v2101 = 'CLASS-BROWSE' or not v2109 = '3' or not size(v2001) = 2 then
 					'<a style="font-weight: bold;" title="Ver las subsecciones de ',v1.2,'" ',
-						'href="',v6001^u,
+						'href="',
+                        getenv('SCRIPT_NAME'),
 						'?IsisScript=',v2000,
 						'&amp;db=bibima',
 						'&amp;task=CLASS-BROWSE',
@@ -58,7 +59,7 @@ proc(
 				
 			else if v1 : 'xx' and v2109 <> '3' then
 				'<a style="font-weight: bold;" title="Ver todos los temas de la sección ',v1,'" ',
-					'href="',v6001^u,
+					'href="',getenv('SCRIPT_NAME'),
 					'?IsisScript=',v2000,
 					'&amp;task=CLASS-BROWSE',
 					'&amp;query=',v1.3,
@@ -167,7 +168,13 @@ else if v1 : 'xx' or v1*2.1 = '-' or p(v9) /* or '15A~41A~43A~44A~85A~86A' : v1.
 					'<a -href="aa1">',v9001,'</a>',
 				'</label>',
 			else if val(v7) > 0 then
-				'<a class="mscActiveCode" href="',v6001^u,'?IsisScript=',v2000,'&amp;db=',v2104,'&amp;index=SUBJ&amp;query=',if v1 : 'xx' then v1.3, else v1, fi,,'" title="Buscar registros con el código ',v1,' (total: ',v7,')">',
+				'<a class="mscActiveCode" href="',
+                        getenv('SCRIPT_NAME'),
+                        '?IsisScript=',v2000,
+                        '&amp;db=',v2104,
+                        '&amp;index=SUBJ',
+                        '&amp;query=',
+                        if v1 : 'xx' then v1.3, else v1, fi,,'" title="Buscar registros con el código ',v1,' (total: ',v7,')">',
 						v9001,
 				'</a>',
 			else
@@ -218,7 +225,13 @@ else
 		'<td class="borde-msc" style="text-align: right;">',
 			if val(v7) > 0 then
 				/* '<input class="btnMSCcode" name="query" type="submit" value="',v1,'">', */
-				'<a class="mscActiveCode" href="',v6001^u,'?IsisScript=',v2000,'&amp;db=',v2104,'&amp;task=BIB-CLASS-SEARCH&amp;index=SUBJ&amp;query=',v1,'" title="Buscar registros con el código ',v1,' (total: ',v7,')">',v1,'</a>'
+				'<a class="mscActiveCode" href="',
+                    getenv('SCRIPT_NAME'),
+                    '?IsisScript=',v2000,
+                    '&amp;db=',v2104,
+                    '&amp;task=BIB-CLASS-SEARCH',
+                    '&amp;index=SUBJ',
+                    '&amp;query=',v1,'" title="Buscar registros con el código ',v1,' (total: ',v7,')">',v1,'</a>'
 			else if v1^p > '' then
 				'<label for="MSC',v1,'">',v9001,'</label>',
 			else

@@ -106,4 +106,5 @@ al opac.xis, podemos usar un .conf para cgi-bin (el opac propiamente dicho), y u
 para bin (las tareas de admin).
 
 
-
+Los archivos .id en install/data corresponden a bases isis que irán en su mayoría a util/
+y por lo tanto podríamos tener esos .id en util/ desde el comienzo.

@@ -47,7 +47,8 @@ if s(v100,v110,v111,v130) > '' then
 	proc('d7100a7100¦',v7000[1],'¦'),
 
 	/* Construimos el link */
-	'<a style="font-weight: bold;" href="',v6001^u,
+	'<a style="font-weight: bold;" href="',
+    getenv('SCRIPT_NAME'),
 	'?IsisScript=',v2000,
 	'&amp;db=',v2104,
 	'&amp;index=NAME',
@@ -142,7 +143,7 @@ if s(v440,v490)>'' then ' &#8212;',
 			proc('d7400a7400¦',v7000[1],'¦'),
 			
 			/* Construimos el link */
-			' (', '<a href="',v6001^u[1],
+			' (', '<a href="',getenv('SCRIPT_NAME'),
 					'?IsisScript=',v2000[1],
 					'&amp;db=',v2104[1],
 					'&amp;index=COL',
@@ -337,7 +338,7 @@ if s(v600,v610,v630,v650,v651,v653) > '' then
 			proc('d7600a7600¦',v7000[1],'¦'),
 			
 			/* Construimos el link */
-			'<a href="',v6001^u[1],
+			'<a href="',getenv('SCRIPT_NAME'),
 				'?IsisScript=',v2000[1],
 				'&amp;db=',v2104[1],
 				'&amp;index=SUBJ',
@@ -505,7 +506,7 @@ if s(v700,v710,v711,v730) > '' then
 			proc('d7700a7700¦',v7000[1],'¦'),
 			
 			/* Construimos el link */
-			'<a href="',v6001^u[1],
+			'<a href="',getenv('SCRIPT_NAME'),
 				'?IsisScript=',v2000[1],
 				'&amp;db=',v2104[1],
 				'&amp;index=',v7702^i,

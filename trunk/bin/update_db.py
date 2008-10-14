@@ -278,7 +278,7 @@ def get_biblio_db():
         run('''mx tmp/marctmp "proc=@BLANCOS.PFT" copy=tmp/marctmp now -all''')
         
         # FIXME - falta sustitución de blancos en indicadores
-        # FIXME - cambiamos la codificación, si la original no es latin1
+        # FIXME - cambiar la codificación, si la original no es latin1
         
         run('''mx tmp/marctmp create=tmp/biblio now -all''')
     
@@ -675,8 +675,8 @@ def build_agrep_dictionaries():
     run('''ifkeys biblio +tags from=a to=zzzz > tmp/titlekeys.txt''')
     run('''mx seq=tmp/titlekeys.txt "pft=if '204~404' : right(v2,3) then v3/ fi" now > tmp/titlekeys2.txt''')
     #cat tmp/titlekeys2.txt | uniq > dictTITLE.txt || error
-    run('''mx seq=tmp/titlekeys2.txt "pft=if v1 <> ref(mfn-1, v1) then v1/ fi" now > dictTITLE.txt''')
-    # FIXME -- genera algunos términos repetidos
+    run('''mx seq=tmp/titlekeys2.txt create=tmp/titlekeys2 now -all''')
+    run('''mx tmp/titlekeys2 "pft=if v1 <> ref(mfn-1, v1) then v1/ fi" now > dictTITLE.txt''')
     
     print "   - any"
     # union de los diccionarios anteriores (eliminando términos duplicados)
@@ -825,33 +825,30 @@ def clean_cache():
     CACHE_DIR = os.path.join(LOCAL_DATA_DIR, 'temp')
     emptydir(CACHE_DIR)
 
-def end():
-    print '''
+begin_msg = '''
 -----------------------------------------------------
-  La actualizacion ha finalizado exitosamente.
+  %s - ACTUALIZACION DEL OPAC
 -----------------------------------------------------
 '''
-    sys.exit(0)
 
+end_msg = '''
+-----------------------------------------------------
+  Base %s actualizada exitosamente.
+-----------------------------------------------------
+'''
 
+def main(db_name):
 
+    print begin_msg % os.path.basename(sys.argv[0])  # FIXME - si es importado por demo.py imprime 'demo.py'
 
-def main():
-
-    global CONFIG, DB_NAME, TELL, ENV
+    global CONFIG, TELL, ENV, DB_NAME
 
     #Check mandatory argument
-    if len(sys.argv) < 2:
-        print_usage()
+    #if len(argv) < 2:
+    #    print_usage()
     
-    print '''
------------------------------------------------------
-  %s - SCRIPT DE ACTUALIZACION DEL OPAC
------------------------------------------------------
-    ''' % os.path.basename(sys.argv[0])
-
     # Read config file and define global variables
-    DB_NAME = sys.argv[1]
+    DB_NAME = db_name
     CONFIG = read_config()
     TELL = CONFIG.get('Global', 'TELL')  # used by many calls to cisis utilities
     ENV = build_env()
@@ -883,10 +880,11 @@ def main():
         move_files()
     
     clean_cache()
-        
-    # Say goodbye
-    end()
+
+    print end_msg % DB_NAME
 
 
 if __name__ == "__main__":
-    main()
+    db_name = sys.argv[1]
+    main(db_name)
+    sys.exit(0)
