@@ -78,7 +78,8 @@ if s(v100,v110,v111,v130) > '' then
 	"Autor"d100, "Entidad"d110, "Reunión"d111,
 	'</td>'/
 	'<td class="data">',
-	'<a href="',v6001^u,
+	'<a href="',
+        getenv('SCRIPT_NAME'),
 		'?IsisScript=',v2000,
 		'&amp;db=',v2104,
 		'&amp;index=NAME',
@@ -135,7 +136,8 @@ if s(v700,v710,v711,v730) > '' then
 		if iocc > nocc(v5555) then 
 			break,
 		else
-			'<a href="',v6001^u[1],
+			'<a href="',
+                getenv('SCRIPT_NAME'),
 				'?IsisScript=',v2000[1],
 				'&amp;db=',v2104[1],
 				'&amp;index=NAME',
@@ -258,7 +260,8 @@ if s(v440,v490) > '' then
 				proc('d7400a7400¦',v7000[1],'¦'),
 				
 				/* Construimos el link */
-				'<a href="',v6001^u[1],
+				'<a href="',
+                    getenv('SCRIPT_NAME'),
 					'?IsisScript=',v2000[1],
 					'&amp;db=',v2104[1],
 					'&amp;index=COL',
@@ -282,7 +285,8 @@ if s(v440,v490) > '' then
 					proc('d7400a7400¦',v7000[1],'¦'),
 					
 					/* Construimos el link */
-					'<!--a href="',v6001^u[1],
+					'<!--a href="',
+                        getenv('SCRIPT_NAME'),
 						'?IsisScript=',v2000[1],
 						'&amp;db=',v2104[1],
 						'&amp;index=COL',
@@ -500,7 +504,8 @@ fi,
 		/* ATENCION: tanto v50 como v50^a son repetibles */
 		if p(v050) then
 			'lcc: ',
-			'<a href="',v6001^u[1],
+			'<a href="',
+                getenv('SCRIPT_NAME'),
 				'?IsisScript=',v2000[1],
 				'&amp;query=-LCCLASS=',v050^a.2,
 				'&amp;db=CLASS" title="Buscar obras dentro de esta misma clase">',
@@ -603,7 +608,8 @@ if s(v600,v610,v630,v650,v651,v653) > '' then
 			/* Construimos el link (deshabilitado hasta resolver los problemas <= ¿Qué problemas? [2008-03-27]) */
 			'<li>'
                 if v7601[1] > '1' then
-    				'<a style="font-weight: normal;" href="',v6001^u[1],
+    				'<a style="font-weight: normal;" href="',
+                        getenv('SCRIPT_NAME'),
     					'?IsisScript=',v2000[1],
     					'&amp;db=',v2104[1],
     					'&amp;task=BIB-H-SEARCH',
@@ -685,7 +691,8 @@ if s(v100,v700) > '' then
                 
                 if v7101[1] > '1' then
     				/* Construimos el link */
-    				'<a style="font-weight: normal;" href="',v6001^u[1],
+    				'<a style="font-weight: normal;" href="',
+                        getenv('SCRIPT_NAME'),
     					'?IsisScript=',v2000[1],
     					'&amp;db=',v2104[1],
     					'&amp;task=BIB-H-SEARCH',
@@ -746,7 +753,8 @@ if s(v110,v710) > '' then
 				proc('d7110a7110¦',v7000[1],'¦'),
 				
 				/* Construimos el link */
-				'<a style="font-weight: normal;" href="',v6001^u[1],
+				'<a style="font-weight: normal;" href="',
+                    getenv('SCRIPT_NAME'),
 					'?IsisScript=',v2000[1],
 					'&amp;db=',v2104[1],
 					'&amp;task=BIB-H-SEARCH',
@@ -800,7 +808,8 @@ if s(v111,v711) > '' then
 				proc('d7111a7111¦',v7000[1],'¦'),
 				
 				/* Construimos el link */
-				'<a style="font-weight: normal;" href="',v6001^u[1],
+				'<a style="font-weight: normal;" href="',
+                    getenv('SCRIPT_NAME'),
 					'?IsisScript=',v2000[1],
 					'&amp;db=',v2104[1],
 					'&amp;task=BIB-H-SEARCH',
@@ -839,7 +848,8 @@ if p(v9084) and s(mpu,v084^2,mpl) : 'MSC' then
 	'<tr>',
 		'<td class="label">Códigos MSC</td>',
 		'<td class="data">',
-			'<!--a href="',v6001^u,
+			'<!--a href="',
+                getenv('SCRIPT_NAME'),
 				'?IsisScript=',v2000,
 				'&amp;db=',v2104,
 				'&amp;task=CLASS-KW-SEARCH',
@@ -852,7 +862,8 @@ if p(v9084) and s(mpu,v084^2,mpl) : 'MSC' then
 			'<ul class="noteList" style="padding-left: 3.5em; text-indent: -3.5em;">'
 			(,
 				'<li>'
-				'<a href="',v6001^u[1],
+				'<a href="',
+                    getenv('SCRIPT_NAME'),
 					'?IsisScript=',v2000[1],
 					'&amp;db=',v2104[1],
 					'&amp;task=CLASS-KW-SEARCH',

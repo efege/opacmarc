@@ -1,6 +1,8 @@
 /* ================================================================== 
  * HEADINGS.PFT
  * Visualización de términos de un índice (autores, temas)
+ *
+ * FIXME - Usar gizmo & => &amp;
  * ==================================================================
  */
 
@@ -77,8 +79,9 @@ fi,
  */
 if p(v4) then
 	v1501,
-	'<br>&nbsp;&nbsp;<img src="/opac/img/m_a2y.gif" alt=""> Vea: ',
-	'<a href="',v6001^u,
+	'<br>&nbsp;&nbsp;<img src="/img/m_a2y.gif" alt=""> Vea: ',
+	'<a href="',
+        getenv('SCRIPT_NAME'),
 		'?IsisScript=',v2000,
 		'&amp;db=',v2104,
 		'&amp;index=',v2003,
@@ -100,8 +103,9 @@ if p(v4) then
  */
 else if p(v5) then
 	v1501,
-	'<br>&nbsp;&nbsp;<img src="/opac/img/m_a2y.gif" alt=""> Vea también: ',
-	'<a href="',v6001^u,
+	'<br>&nbsp;&nbsp;<img src="/img/m_a2y.gif" alt=""> Vea también: ',
+	'<a href="',
+        getenv('SCRIPT_NAME'),
 		'?IsisScript=',v2000,
 		'&amp;db=',v2104,
 		'&amp;index=',v2003,
@@ -115,7 +119,7 @@ else if p(v5) then
  */
 else
 	'<a ', if val(v11) = 0 then 'href="' else 'href="' fi,
-		v6001^u,
+		getenv('SCRIPT_NAME'),
 		'?IsisScript=',v2000,
 		'&amp;db=',v2104,
 		'&amp;task=BIB-H-SEARCH',

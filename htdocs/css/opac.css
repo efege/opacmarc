@@ -109,6 +109,45 @@ div#browseIndexes td, div#search td {
 	text-align: right;
 }
 
+#busqAvanzada fieldset {
+    margin-top: 1em;
+}
+
+#busqAvanzada #pub_date_fieldset td.label {
+    text-align: left;
+}
+
+#busqAvanzada #otras_caract td {
+    padding-bottom: 0.2em;
+    padding-top: 0.2em;
+}
+
+#busqAvanzada #filterOp_cell {
+    padding-bottom: 0.4em;
+    padding-top: 0.4em;
+}
+
+#busqAvanzada .toggler {
+    background-repeat: no-repeat;
+    background-position: 4px 50%;
+    cursor: pointer;
+    padding-left: 20px;
+}
+#busqAvanzada  .hide {
+    display: none;
+}
+#busqAvanzada .show {
+    display: block;
+}
+#busqAvanzada .expand {
+    /*background-image: url(http://www.javascriptjunkie.com/stuff/expand.gif);*/
+    background-image: url(http://igene.invitrogen.com/iGene/media/icon_expand_red_border.gif);
+}
+#busqAvanzada .collapse {
+    /*background-image: url(http://www.javascriptjunkie.com/stuff/collapse.gif);*/
+    background-image: url(http://igene.invitrogen.com/iGene/media/icon_contract_red_border.gif);
+}
+
 
 fieldset {
 	margin: 0.3em 1em;
@@ -390,6 +429,7 @@ td.marctag {
 }
 
 td.marcindicators {
+    letter-spacing: 0.3em;
 	width: 1.8em;
 }
 

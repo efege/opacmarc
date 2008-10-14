@@ -36,7 +36,7 @@ IMAGES=1
 MOVE=1
 
 # Use CLEAN=1 para eliminar archivos temporales creados durante la generación del OPAC.
-CLEAN=1
+CLEAN=0
 
 
 # ------------------------------------------------------------------

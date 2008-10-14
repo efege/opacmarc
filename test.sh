@@ -45,7 +45,7 @@ ln -s $CISIS_DIR $TEST_DIR/bin/cisis-1660
 ln -s $AGREP $TEST_DIR/bin/agrep
 
 # instalación
-python $TEST_DIR/bin/install.py msc
+python $TEST_DIR/bin/install.py
 
 # permisos de escritura
 for dir in logs temp
@@ -54,13 +54,8 @@ do
     chmod g+w $TEST_DIR/local-data/$dir
 done
 
-# creación de base demo
-python $TEST_DIR/bin/add_db.py demo
-$CISIS_DIR/id2i $TEST_DIR/bin/install/data/demo.id create=$TEST_DIR/local-data/bases/demo/db/original/biblio
-cp $TEST_DIR/bin/install/data/demo-img/* $TEST_DIR/local-data/bases/demo/htdocs/img/ 
-
-# actualización de base demo
-python $TEST_DIR/bin/update_db.py demo
+# procesamos la base demo
+python $TEST_DIR/bin/demo.py
 
 # pisamos config para apache y lo reiniciamos
 sudo cp $TEST_DIR/config/httpd-opacmarc.conf $APACHE_VHOST

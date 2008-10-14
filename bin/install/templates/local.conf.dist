@@ -1,47 +1,42 @@
-# ================================================================
+# ===========================================================================
 # local.conf - Archivo de configuración local para OPACMARC
 # 
-# Use este archivo para:
-#     1. definir las URLs y DIRECTORIOS según su instalación de
-#        OPACMARC,
-#     2. sobreescribir parámetros de configuración que aparecen
-#        en opacmarc.conf.
+# Use este archivo para sobreescribir los parámetros de configuración
+# predeterminados que aparecen en default.conf.
 #
-# Mantenga este archivo pequeño. Sólo necesita incluir aquí un
-# parámetro si su valor difiere del que aparece en opacmarc.conf.
-# ================================================================
+# Mantenga este archivo pequeño. Sólo necesita incluir aquí un parámetro
+# si su valor difiere del que aparece en default.conf.
+#
+# Las opciones de configuración establecidas aquí se aplican a *todas* las
+# bases disponibles en el OPAC. Para modificar un parámetro en una base
+# particular, edite el correspondiente archivo db.conf.
+#
+# TO-DO: mover paths a default.conf
+# ===========================================================================
 
 
 # -------------------------------------------------------
-# URLs
+# Paths
 # -------------------------------------------------------
 
 # SCRIPT_URL: la URL de wxis (relativa a la raíz del servidor).
+# TO-DO: abandonar este parámetro y usar en cambio getenv('SCRIPT_NAME')
 SCRIPT_URL=/cgi-bin/__WXIS__
 
 # PATH_HTDOCS: prefijo para las URLs de imágenes, scripts, estilos.
 # Si instala OPACMARC en la raíz del servidor, el valor será "/" (sin las comillas).
 PATH_HTDOCS=/
   
-  
-# -------------------------------------------------------
-# DIRECTORIOS
-# No coloque una barra final en los caminos (paths).
-#
-# ATENCION -- es posible que ya no necesitemos especificar estos paths (2008-10-03)
-# -------------------------------------------------------
-  
 # PATH_TEMP: directorio para archivos temporales. Necesita permiso de escritura
-# para el usuario del servidor web.
+# para el usuario del servidor web (e.g. www-data en Ubuntu).
 # Esta variable se debe definir en Windows, pero no es necesaria en Linux.
 PATH_TEMP=__LOCAL_DATA_DIR__/temp
 
 # PATH_AGREP: ubicación del ejecutable agrep
-# Valores de referencia: PATH_AGREP=__OPACMARC_DIR__/bin/agrep.exe (Windows); PATH_AGREP=/usr/bin/agrep (Linux)
-#PATH_AGREP=__OPACMARC_DIR__/bin/agrep
+PATH_AGREP=__OPACMARC_DIR__/bin/agrep
 
 
 # -------------------------------------------------------
-# Otros parámetros (véase opacmarc.conf)
+# Otros parámetros (véase default.conf)
 # -------------------------------------------------------
 

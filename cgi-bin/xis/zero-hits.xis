@@ -72,7 +72,8 @@
 			(,
 				if iocc > val(v6001^b[1]) then break, fi,  /* v6001^b: AGREP_MAX_SUG */
 				
-				'<a href="',v6001^u[1],
+				'<a href="',
+                    getenv('SCRIPT_NAME'),
 					'?IsisScript=',v2000[1],
 					'&amp;db=',v2104[1],
 					'&amp;task=',v2101[1],
@@ -104,7 +105,8 @@
 		,@URLENCODE.PFT,
 		'<li>',
 			'Puede ver los ',
-			'<a href="',v6001^u,
+			'<a href="',
+                getenv('SCRIPT_NAME'),
 				'?IsisScript=',v2000,
 				'&amp;db=',v2104,
 				'&amp;task=H-BROWSE',
@@ -172,7 +174,7 @@
 
 		[pft]if val(v1) > 0 then[/pft]
 			<li>
-				<a href="[pft]v6001^u[/pft]?IsisScript=[pft]v2000[/pft]&amp;db=[pft]v2104[/pft]&amp;task=BIB-KW-SEARCH&amp;query=[pft]v2001[/pft]&amp;searchType=TITLE">
+				<a href="[pft]getenv('SCRIPT_NAME')[/pft]?IsisScript=[pft]v2000[/pft]&amp;db=[pft]v2104[/pft]&amp;task=BIB-KW-SEARCH&amp;query=[pft]v2001[/pft]&amp;searchType=TITLE">
 					búsqueda por <b>título</b></a>
 				([pft]v1[/pft])
 			</li>
@@ -180,7 +182,7 @@
 		
 		[pft]if val(v2) > 0 then[/pft]
 			<li>
-				<a href="[pft]v6001^u[/pft]?IsisScript=[pft]v2000[/pft]&amp;db=[pft]v2104[/pft]&amp;task=H-KW-SEARCH&amp;query=[pft]v2001[/pft]&amp;searchType=NAME">
+				<a href="[pft]getenv('SCRIPT_NAME')[/pft]?IsisScript=[pft]v2000[/pft]&amp;db=[pft]v2104[/pft]&amp;task=H-KW-SEARCH&amp;query=[pft]v2001[/pft]&amp;searchType=NAME">
 					búsqueda por <b>autor</b></a>
 				([pft]v2[/pft])
 			</li>
@@ -188,7 +190,7 @@
 		
 		[pft]if val(v3) > 0 then[/pft]
 			<li>
-				<a href="[pft]v6001^u[/pft]?IsisScript=[pft]v2000[/pft]&amp;db=[pft]v2104[/pft]&amp;task=H-KW-SEARCH&amp;query=[pft]v2001[/pft]&amp;searchType=SUBJ">
+				<a href="[pft]getenv('SCRIPT_NAME')[/pft]?IsisScript=[pft]v2000[/pft]&amp;db=[pft]v2104[/pft]&amp;task=H-KW-SEARCH&amp;query=[pft]v2001[/pft]&amp;searchType=SUBJ">
 					búsqueda por <b>tema</b></a>
 				([pft]v3[/pft])
 			</li>
@@ -196,7 +198,7 @@
 		
 		[pft]if val(v4) > 0 then[/pft]
 			<li>
-				<a href="[pft]v6001^u[/pft]?IsisScript=[pft]v2000[/pft]&amp;db=[pft]v2104[/pft]&amp;task=BIB-KW-SEARCH&amp;query=[pft]v2001[/pft]&amp;searchType=ANY">
+				<a href="[pft]getenv('SCRIPT_NAME')[/pft]?IsisScript=[pft]v2000[/pft]&amp;db=[pft]v2104[/pft]&amp;task=BIB-KW-SEARCH&amp;query=[pft]v2001[/pft]&amp;searchType=ANY">
 					búsqueda por <b>todos los campos</b></a>
 				([pft]v4[/pft])
 			</li>
@@ -244,7 +246,7 @@
 	[pft]if p(v2001) and not v2001 : '*' then[/pft]
 		<li>Si lo desea, puede buscar <b>[pft]v2001[/pft]</b> en la Web usando alguna de estas herramientas:<br>
 			<!--form action="http://www.google.com/search" method="GET" style="display: inline; margin-left: 2em">
-				<img src="[pft]v6003^h[/pft]opac/img/google-Logo_25wht.gif" alt="Google" align="top" border="0">
+				<img src="[pft]v6003^h[/pft]img/google-Logo_25wht.gif" alt="Google" align="top" border="0">
 				<input type="text" name="q" value="[pft]v2001[/pft]">
 				<input type="submit" value="Buscar" class="button"> 
 			</form-->

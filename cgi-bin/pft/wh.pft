@@ -58,7 +58,7 @@ fi,
  * Una fila especial, si hay un nuevo main heading
  * v6001^c: COMPACT_RESULT_LIST
  * TO-DO: mostrar los headings como enlaces:
- * wxis?IsisScript=opac/xis/opac.xis&db=bibima&task=BIB-H-SEARCH&index=NAME&query=^aCourant,+Richard,^d1888-1972.
+ * wxis?IsisScript=xis/opac.xis&db=bibima&task=BIB-H-SEARCH&index=NAME&query=^aCourant,+Richard,^d1888-1972.
  * ----------------------------------------------------------
  */
 proc('d1011a1011@',
@@ -75,7 +75,8 @@ if v1011 = 'TRUE' then
 	'</tr>',
 	'<tr>',
 		'<td colspan="5" class="newHeading">',
-			'<!--a href="',v6001^u,
+			'<!--a href="',
+                getenv('SCRIPT_NAME'),
 				'?IsisScript=',v2000,
 				'&amp;db=',v2104,
 				'&amp;task=BIB-H-SEARCH',
@@ -177,7 +178,8 @@ fi,
 		else
 			' class="whTitleLinkOPAC" ',
 		fi,
-		'href="',v6001^u,
+		'href="',
+            getenv('SCRIPT_NAME'),
 			'?IsisScript=',v2000,
 			'&amp;task=BIB-RECORD',
 			|&amp;db=|v2104,
@@ -447,7 +449,7 @@ if not v6001^s = '0' then     /* v6001^s: DISPLAY_LOCATION */
         		  PENDIENTE: en qué parte del .xis leer el archivo con el mapeo:
         		  
                     <field action="replace" tag="6200" split="occ"><pft>
-                    	cat(getenv('PATH_WXIS'),'opac/config/local.conf')
+                    	cat(getenv('PATH_WXIS'),'config/local.conf')
                     </pft></field>
     		    */
     			/*select s(v859^b[1])
@@ -513,7 +515,8 @@ if not v6001^s = '0' then     /* v6001^s: DISPLAY_LOCATION */
 					if nocc(v859) > 1 then   /* tenemos más de un ejemplar */
 						/* Y agregamos un link que indica la presencia de más signaturas top. */
 						/* (es una réplica del link asociado al v245) */
-						'&nbsp;&nbsp;<a href="',v6001^u,
+						'&nbsp;&nbsp;<a href="',
+                            getenv('SCRIPT_NAME'),
 							'?IsisScript=',v2000,
 							'&amp;db=',v2104,
 							'&amp;task=BIB-RECORD',
@@ -523,7 +526,7 @@ if not v6001^s = '0' then     /* v6001^s: DISPLAY_LOCATION */
 							'&amp;curr=',v1001,
 							'&amp;total=',v1002,
 							'" title="Hay más de un ejemplar; verifique sus ubicaciones.">',
-						'<img src="',v6003^h,'opac/img/sym_s_tree_plus.gif" style="border: none; /*vertical-align: top;*/"></a>'/ 
+						'<img src="',v6003^h,'img/sym_s_tree_plus.gif" style="border: none; /*vertical-align: top;*/"></a>'/ 
 					fi
 				'</div>'/
 			fi,
@@ -564,7 +567,8 @@ if not v6001^s = '0' then     /* v6001^s: DISPLAY_LOCATION */
 					/* Y agregamos un link que indica la presencia de más signaturas top. */
 					/* (es una réplica del link asociado al v245) */
 					'<span style="font-weight: normal;"> [',
-					'<a href="',v6001^u,
+					'<a href="',
+                        getenv('SCRIPT_NAME'),
 						'?IsisScript=',v2000,
 						'&amp;db=',v2104,
 						'&amp;task=BIB-RECORD',

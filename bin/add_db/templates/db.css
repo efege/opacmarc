@@ -47,6 +47,7 @@ table#banner td#menu {
 }
 
 table#banner td#menu a {
+    border-color: white;
 	color: white;
 }
 

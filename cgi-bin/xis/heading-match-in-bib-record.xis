@@ -498,7 +498,7 @@ para mostrar).
 		
 		<!--script type="text/javascript">
 			if ( document.getElementById ) {
-				document.getElementById("concom1").innerHTML = "<img src=/opac/img/right.gif alt=&gt;>";
+				document.getElementById("concom1").innerHTML = "<img src=/img/right.gif alt=&gt;>";
 				document.getElementById("concom2").innerHTML += "Vea también: ";
 				[pft]
 				(,

@@ -64,12 +64,13 @@ proc('d7000a7000|'
 '|'),
 
 proc('d7000a7000|'
-		replace(replace(replace(replace(replace(replace(replace(v7000[1],
+		replace(replace(replace(replace(replace(replace(replace(replace(v7000[1],
 			'ò','%F2'),
 			'ó','%F3'),
 			'ô','%F4'),
 			'õ','%F5'),
 			'ö','%F6'),
+            'Ö','%D6'),
 			'Ø','%D8'),
 			'ø','%F8')
 '|'),
@@ -86,10 +87,11 @@ proc('d7000a7000|'
 '|'),
 
 proc('d7000a7000|'
-		replace(replace(replace(v7000[1],
+		replace(replace(replace(replace(v7000[1],
 			'´','%B4'),
 			'ª','%AA'),
 			'º','%BA'),
+            '¯','%75')
 '|'),
 
 

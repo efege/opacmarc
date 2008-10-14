@@ -10,7 +10,7 @@
 				[pft]v6002^w[/pft]
 			</h4>
 			
-			<form id="simpleSearchForm" name="simpleSearchForm" action="[pft]v6001^u[/pft]" method="GET" onsubmit="checkQuery(this); return false;">
+			<form id="simpleSearchForm" name="simpleSearchForm" action="[pft]getenv('SCRIPT_NAME')[/pft]" method="GET" onsubmit="checkQuery(this); return false;">
 			
 				<input type="hidden" name="IsisScript" value="[pft]v2000[/pft]">
 				<input type="hidden" name="db" value="[pft]v2104[/pft]">
@@ -63,7 +63,7 @@
 			</h4>
 			
 			<!-- Formulario acceso a índices -->
-			<form id="BrowseIndexForm" name="BrowseIndexForm" action="[pft]v6001^u[/pft]" method="GET">
+			<form id="BrowseIndexForm" name="BrowseIndexForm" action="[pft]getenv('SCRIPT_NAME')[/pft]" method="GET">
 			
 				<input type="hidden" name="IsisScript" value="[pft]v2000[/pft]">
 				<input type="hidden" name="db" value="[pft]v2104[/pft]">
@@ -122,7 +122,7 @@
 				<div class="searchFormCell" style="width: 48.4%; float: right; padding: 0.2em 3px;">
 					<h4 class="searchFormHead" style="border: none;">
 					Búsquedas por tema:
-					<a class="newSearch" href="[pft]v6001^u[/pft]?IsisScript=[pft]v2000[/pft]&amp;task=CLASS-BROWSE&amp;msclevel=1&amp;db=[pft]v2104[/pft]&amp;searchType=SUBJ" title="Navegue por la MSC 2000, desde donde podrá hacer búsquedas por tema">
+					<a class="newSearch" href="[pft]getenv('SCRIPT_NAME')[/pft]?IsisScript=[pft]v2000[/pft]&amp;task=CLASS-BROWSE&amp;msclevel=1&amp;db=[pft]v2104[/pft]&amp;searchType=SUBJ" title="Navegue por la MSC 2000, desde donde podrá hacer búsquedas por tema">
 						explore la MSC&nbsp;2000
 					</a>
 					</h4>
@@ -131,7 +131,7 @@
 			
 		<!-- Enlaces laterales -->
 		<div style="clear: both;">
-			<!--a class="newSearch" href="[pft]v6001^u[/pft]?IsisScript=[pft]v2000[/pft]&amp;db=[pft]v2104[/pft]&amp;showForm=advanced">
+			<!--a class="newSearch" href="[pft]getenv('SCRIPT_NAME')[/pft]?IsisScript=[pft]v2000[/pft]&amp;db=[pft]v2104[/pft]&amp;showForm=advanced">
 				Más opciones de búsqueda</a>
 			<br>
 			<span>
@@ -140,13 +140,13 @@
 			
                 <!-- 2008-03-28, Museo Mitre -->
 				<div class="searchFormCell" style="padding: 0.5em 1em;">
-					<a class="newSearch" href="[pft]v6001^u[/pft]?IsisScript=[pft]v2000[/pft]&amp;db=[pft]v2104[/pft]&amp;showForm=advanced">
+					<a class="newSearch" href="[pft]getenv('SCRIPT_NAME')[/pft]?IsisScript=[pft]v2000[/pft]&amp;db=[pft]v2104[/pft]&amp;showForm=advanced">
 						Búsqueda avanzada</a>
 				</div>
                 
 			[pft]if v6001^w = '1' and v2104 <> 'bibima' then[/pft]
 				<div class="searchFormCell" style="padding: 0.5em 1em;">
-					<a class="newSearch" href="[pft]v6001^u[/pft]?IsisScript=[pft]v2000[/pft]&amp;db=[pft]v2104[/pft]&amp;task=BROWSE-CATALOG&amp;browseMfn=1">
+					<a class="newSearch" href="[pft]getenv('SCRIPT_NAME')[/pft]?IsisScript=[pft]v2000[/pft]&amp;db=[pft]v2104[/pft]&amp;task=BROWSE-CATALOG&amp;browseMfn=1">
 						Recorrer el catálogo completo</a>
 					(por orden de ubicación del material)
 					<!--span style="font-size: 90%; font-style: italic;">Experimental. Es posible que el orden no sea el correcto.</span-->
