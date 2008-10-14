@@ -7,14 +7,17 @@
 :: Esta es la lista de parámetros esperados, con valores sólo a modo
 :: de ejemplo:
 ::
+:: versión de utilitarios cisis + wxis
+:: set CISIS_VERSION=5.2b-1030
+::
 :: Directorio para el test. Es eliminado con cada nuevo test.
 :: set TEST_DIR=G:\opacmarc-test
 ::
-:: directorio de los cisis 16/60
-:: set CISIS_DIR=G:\programas\cisis\5.2\1660
+:: directorio de los cisis
+:: set CISIS_DIR=G:\programas\cisis-%CISIS_VERSION%
 ::
-:: wxis 16/60
-:: set WXIS=G:\svn\opacmarc\cgi-bin\wxis.exe
+:: wxis
+:: set WXIS=G:\svn\opacmarc\cgi-bin\wxis-%CISIS_VERSION%.exe
 ::
 :: agrep
 :: set AGREP=G:\svn\opacmarc\bin\agrep.exe
@@ -32,8 +35,8 @@ svn export G:\svn\opacmarc %TEST_DIR%
 
 :: colocamos los binarios en su lugar
 echo.
-mkdir %TEST_DIR%\bin\cisis-1660
-copy %CISIS_DIR%\*.* %TEST_DIR%\bin\cisis-1660\
+mkdir %TEST_DIR%\bin\cisis
+copy %CISIS_DIR%\*.* %TEST_DIR%\bin\cisis\
 copy %WXIS% %TEST_DIR%\cgi-bin\wxis.exe
 copy %AGREP% %TEST_DIR%\bin\agrep.exe
 

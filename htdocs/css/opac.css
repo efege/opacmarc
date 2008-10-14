@@ -634,10 +634,10 @@ ul.navigation li {
  
 
 div#about {
-	/*background: #ECFBEC;*/
+	background: #FFF;
 	margin-top: 0;
-	margin-left: 82px;
-	padding: 1.5em 0;
+	/*margin-left: 82px;*/
+	padding: 1.5em 3em;
 }
 div#about h2 {
 	font-size: 1.3em;

@@ -108,3 +108,32 @@ para bin (las tareas de admin).
 
 Los archivos .id en install/data corresponden a bases isis que irán en su mayoría a util/
 y por lo tanto podríamos tener esos .id en util/ desde el comienzo.
+
+
+
+---------------------------------------------------------------
+Archivos temporales en OpacMarc
+
+
+Cuándo crea wxis archivos temporales:
+
+    - al hacer una búsqueda (seguro siempre?)
+    - cada vez que usamos <file action="create" type="tempfile">
+    
+El parámetro CI_TEMPDIR se especifica en el cipar, y le indica a wxis en qué directorio
+crear los temporales.
+
+Sin embargo, parece que en Linux ignora ese parámetro, y siempre los crea en /tmp.
+
+Por lo tanto, la solución más simple es que en Linux usemos un prefijo PATH_TEMP vacío, o bien
+con valor "/tmp".
+
+Para ver en qué partes de la aplicación aparecen archivos temporales, buscamos estas cadenas:
+
+    - tempfile
+    - PATH_TEMP
+    - v6003^t
+    - CI_TEMPDIR
+    - 2099
+    
+---------------------------------------------------------------

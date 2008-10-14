@@ -32,8 +32,8 @@ FILES = {
 }
 
 def run(command, msg = 'Error'):
-    # FIXME! (see update-opac.py)
-    #ENV = {'PATH': os.getenv('PATH') + os.pathsep + 'G:\\programas\\cisis\\5.2\\1660'}  # CONFIG.get('Global', 'PATH_CISIS')
+    # FIXME! (see update-db.py) -- Sirve esto para algo?
+    #ENV = {'PATH': os.getenv('PATH') + os.pathsep + '...cisis...'}  # CONFIG.get('Global', 'PATH_CISIS')
     ENV = {}
     return run_command(command, msg = msg, env = ENV)
 
@@ -123,8 +123,19 @@ def make_local_dirs():
     for dir_name in ('css', 'img', 'js'):
         os.mkdir(os.path.join(LOCAL_DATA_DIR, 'htdocs', dir_name))
 
+def setup_msc():
+    # ATENCION! Rutas relativas a OPACMARC_DIR
+    # IMPORTANTE: las tablas .tab deben haberse creado *antes* de generar el invertido.
+    os.mkdir(os.path.join('util', 'msc2000'))
+    run('%s/id2i bin/install/data/msc2000.id create=util/msc2000/msc2000' % CISIS_PATH)
+    run('%s/mx util/msc2000/msc2000 "fst=@bin/install/msc.fst" actab=util/ac-ansi.tab uctab=util/uc-ansi.tab stw=@util/biblio.stw fullinv=util/msc2000/msc2000' % CISIS_PATH)
+
+
 def create_aux_db():
     """Crea bases ISIS auxiliares."""
+    
+    # Algunas rutas son relativas a OPACMARC_DIR
+    os.chdir(OPACMARC_DIR)
     
     # TO-DO: ajustar saltos de línea de los .id (usar os.linesep?)
     # En Linux hay problemas si usan '\r\n', pero en Windows andan bien con sólo usar '\n'.
@@ -142,12 +153,10 @@ def create_aux_db():
     run('%s/mx util/lang "fst=1 0 v1" fullinv=util/lang' % CISIS_PATH)
     
     # Caso particular: base MSC 2000 (esquema de clasificación para Matemática, usado en el catálogo del INMABB)
-    # FIXME - Esto es sucio; por ahora funciona así: "python install.py msc"
-    # IMPORTANTE: las tablas .tab deben haberse creado *antes* de generar el invertido.
+    # FIXME - Esto es sucio; por ahora funciona así: "python install.py msc", pero ¿y si decidimos usar msc
+    #         después de haber ejecutado install.py? Quizás mejor usar otro script, e.g. setup_msc.py?
     if len(sys.argv) > 1 and sys.argv[1] == 'msc':
-        os.mkdir(os.path.join('util', 'msc2000'))
-        run('%s/id2i bin/install/data/msc2000.id create=util/msc2000/msc2000' % CISIS_PATH)
-        run('%s/mx util/msc2000/msc2000 "fst=@bin/install/msc.fst" actab=util/ac-ansi.tab uctab=util/uc-ansi.tab stw=@util/biblio.stw fullinv=util/msc2000/msc2000' % CISIS_PATH)
+        setup_msc()
     
     print "Bases auxiliares creadas."
 
@@ -191,9 +200,6 @@ def main():
   %s - INSTALACION DE OPACMARC
 -----------------------------------------------------
     ''' % os.path.basename(sys.argv[0])
-
-    # Algunas rutas son relativas a OPACMARC_DIR
-    os.chdir(OPACMARC_DIR)
 
     #set_version()
     

@@ -28,7 +28,7 @@ parent_dir = os.path.join(os.path.dirname(sys.argv[0]), '..')
 OPACMARC_DIR = os.path.abspath(parent_dir)
 LOCAL_DATA_DIR = os.path.join(OPACMARC_DIR, LOCAL_DATA)
 
-CISIS_PATH = os.path.join(OPACMARC_DIR, 'bin', 'cisis-1660')
+CISIS_PATH = os.path.join(OPACMARC_DIR, 'bin', 'cisis')
 if not os.path.isdir(CISIS_PATH):
     print
     print "No se encuentra el directorio con los utilitarios cisis:\n    %s" % CISIS_PATH
