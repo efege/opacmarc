@@ -400,9 +400,9 @@
 <!--display><pft>ALL</pft></display-->
 
 
-<!-- Almacenamos los MFNs ordenados -->
+<!-- Almacenamos en cache los MFNs ordenados -->
 <!-- Pasamos la lista de parámetros que nos permitan recrear esta búsqueda -->
-<call name="saveMfnList"><pft>
+<call name="cacheMfnList"><pft>
     "^t"v2002, "^tBIB-KW-SEARCH"n2002,
     "^q"v2001,  /* query */
     "^r"v2001,  /* ? */

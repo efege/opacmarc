@@ -1,5 +1,5 @@
 <!-- =========================================================
-	saveMfnList
+	cacheMfnList
 	
 	ATENCION: ¿es esto más eficiente que volver a
 	realizar la búsqueda? ¿En qué casos?
@@ -8,7 +8,7 @@
 	========================================================= -->
 
 
-<function name="saveMfnList" action="replace" tag="1">
+<function name="cacheMfnList" action="replace" tag="1">
 
 	<!-- Generamos la lista ordenada de MFNs -->
 	<do task="list">
@@ -22,8 +22,9 @@
 	</do>
 	
 	<!-- Almacenamos la lista en un archivo temporal -->
+	<!-- En Linux, usa siempre /tmp e ignora el parámetro CI_TEMPDIR -->
 	<file action="create" type="tempfile">2098</file>
-	<!--display><pft>'Archivo temporal con los datos de la búsqueda: ',v2098,'<br>CI_TEMPDIR=',v6003^t</pft></display-->
+	
 	<file action="append" type="output"><pft>v2098</pft></file>
 	<display><pft>
         v1/,      /* los parámetros pasados a la función */
@@ -32,14 +33,32 @@
 	<file action="close" type="output"><pft>v2098</pft></file>
 	
 	<!-- Devolvemos el nombre del archivo temporal (sin el path) -->
-	<!-- ATENCION: en Linux el sistema de nombres es diferente -->
-	<return action="replace" tag="2099"><pft>
-		mid(v2098,instr(v2098,'TMP'),size(v2098))
-	</pft></return>
-	
+	<!-- TO-DO: mejorar esto -->
+	<field action="replace" tag="2099"><pft>
+	    if v2098 : 'TMP' then
+		    mid(v2098, instr(v2098,'TMP'), size(v2098))
+		else
+		    mid(v2098, instr(v2098,'/tmp/')+5, size(v2098))
+		fi,
+    </pft></field>
+
 	<!-- Alternativa basada en un identificador de consulta creado "a mano" -->
 	<!--file action="create" type="output"><pft>'tmp/',v2099</pft></file>
 	<display><pft>/*getenv('QUERY_STRING'),/,*/(v6111/)</pft></display>
 	<file action="close" type="output"><pft>v2099</pft></file-->
+	
+	<!-- DEBUG BLOCK -->
+    <field action="import" tag="list">6001,6003</field>
+    <display><pft>
+        if v6001^0 = '1' then
+            '<div class="debug-info">',
+                'ARCHIVO TEMPORAL CON LOS DATOS DE LA BÚSQUEDA: ',v2098,
+                '<br>PATH_TEMP=',v6003^t,
+                '<br>cid=',v2099,
+            '</div>'
+        fi
+    </pft></display>
 
+	<return action="replace" tag="2099"><pft>v2099</pft></return>
+	
 </function>

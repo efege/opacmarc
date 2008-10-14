@@ -107,7 +107,7 @@
 
 <!-- Almacenamos los MFNs ordenados -->
 <!-- ATENCION: v2070 puede contener '^' -->
-<call name="saveMfnList"><pft>
+<call name="cacheMfnList"><pft>
 	'^tCOND', '^q',replace(v2070,'^','\^'), '^r',replace(v2070,'^','\^'), "^n"v1002
 </pft></call>
 

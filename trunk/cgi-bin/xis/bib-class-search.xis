@@ -52,7 +52,7 @@
 
 
 <!-- Almacenamos los MFNs ordenados -->
-<call name="saveMfnList"><pft>
+<call name="cacheMfnList"><pft>
 	"^t"v2003,
 	'^q',replace(v2001,'^','~'),
 	'^r'v2001,' - ',ref(['MSC']l(['MSC']if size(v2001) = 5 then v2001 else v2001'xx' fi),v2), /* mostrar aquí el nodo buscado, y sus ancestros */

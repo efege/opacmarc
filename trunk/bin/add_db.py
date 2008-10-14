@@ -25,7 +25,7 @@ template_dest = {
     'banner.htm' : 'htmlpft',
     'home.htm' : 'htmlpft',
     'db.css' : 'htdocs/css',
-    'db.conf' : 'config',
+    'db-settings.conf' : 'config',
 }
 
 def print_usage():
@@ -122,7 +122,7 @@ la carpeta
 Si necesita modificar algunos parámetros de configuración específicamente
 para esta base, edite el archivo
 
-    %s/bases/%s/config/db.conf
+    %s/bases/%s/config/db-settings.conf
 '''
 
 if __name__ == "__main__":
