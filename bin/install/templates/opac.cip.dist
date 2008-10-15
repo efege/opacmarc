@@ -76,8 +76,8 @@ WORK_HEADING.PFT=__OPACMARC_DIR__/cgi-bin/pft/wh.pft
 CI_TEMPDIR=__TEMP_DIR__
 
 
+
 # Todo lo que sigue depende de la consulta que está siendo procesada
-# (a través de los parámetros __DB__ y __DATE__)
 
 # -----------------------------------------------------------------
 # BASES

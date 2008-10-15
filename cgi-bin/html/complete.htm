@@ -459,8 +459,15 @@
 								también sale negrita */
 								
 							/* TO-DO: ¿ubicar el ISSN a continuación del título? */
+							/* FIXME - si no hay v773^w no se debe generar el link */
 							if v1000.1 = 't' then
-								'<a href="',v6003^u,'?IsisScript=',v2000,'&amp;task=BIB-RECORD&amp;db=',v2104,'&amp;cn=',v773^w,'"><span class="title773">',v1000*1,'</span></a>', /* $t: título */
+								'<a href="',
+								    v6003^u,
+								    '?IsisScript=',v2000,
+								    '&amp;task=BIB-RECORD',
+								    '&amp;db=',v2104,
+								    '&amp;cn=',v773^w,
+								'"><span class="title773">',v1000*1,'</span></a>', /* $t: título */
 							else if v1000.1 = 'k' then
 								'(',v1000*1,')',      /* $k: serie */
 							else if v1000.1 = 'x' then
@@ -479,7 +486,7 @@
 					'IN: ',''),
 					'--','&mdash;'),
 			fi,
-		fi,
+		fi,      /* 773 */
 		[/pft]
 
 		
