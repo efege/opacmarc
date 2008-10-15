@@ -7,6 +7,9 @@ NameVirtualHost *:8081
 
     ServerName 127.0.0.1
     
+    ErrorLog __LOCAL_DATA_DIR__/logs/apache-error-log
+    TransferLog __LOCAL_DATA_DIR__/logs/apache-access-log
+    
     DocumentRoot "__OPACMARC_DIR__/htdocs/"
     <Directory "__OPACMARC_DIR__/htdocs/">
         Order allow,deny

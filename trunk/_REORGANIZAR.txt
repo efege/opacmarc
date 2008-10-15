@@ -49,7 +49,7 @@ config
     Pero antes tenemos que verificar que desde wxis podemos leer este dir, e.g.:
         cat(getenv('PATH_WXIS'),'../config/opacmarc.conf')
         
---------------------
+---------------------------------------------------------------
 
 2008-10-08
 
@@ -107,7 +107,40 @@ para bin (las tareas de admin).
 
 
 Los archivos .id en install/data corresponden a bases isis que irán en su mayoría a util/
-y por lo tanto podríamos tener esos .id en util/ desde el comienzo.
+y por lo tanto podríamos tener esos .id en util/ desde el comienzo. Los otros van a
+bin/update_db/.
+
+2008-10-15.
+Luego de unos días trabajando con esta disposición de archivos, creo que:
+
+- En los casos de add_db y update_db, parece bien que los archivos asociados queden
+  dentro de bin (no parece haber otro lugar más apropiado); sin embargo en el caso de install
+  (que contiene data y templates), creo que será mejor dejar los .id en el lugar donde irán
+  las bases isis asociadas, y los templates de config en la carpeta config.
+  
+- En cuanto a los archivos compartidos por bin/update_db y cgi-bin:
+      - country
+      - dictgiz
+      - actab
+      - uctab
+      - biblio.fst
+      - biblio.stw
+      - headsort.pft
+  creo que sería bueno ubicarlos en bin/update_db, y que desde el cgi-bin se haga referencia a
+  ellos, como para dejar en claro que en estos aspectos el funcionamiento del OPAC está
+  atado a la manera en que se generaron las bases durante la actualización. (Sí, es una
+  justificación extraña, pero por ahora me sirve.)
+  
+  De esta manera, podríamos deshacernos de la carpeta util.
+  
+  Dentro de bin/update_db podemos organizar mejor así?
+      - pft
+      - auxdb
+      - tab, fst, stw
+  
+  Sin embargo, me sigue pareciendo que archivos de uso claramente general, como las tablas
+  (actab, uctab), biblio.fst, tal vez deberían ubicarse en un nivel bien general dentro de
+  la estructura de carpetas, por si más adelante las queremos usar desde otro script.
 
 
 
@@ -137,3 +170,62 @@ Para ver en qué partes de la aplicación aparecen archivos temporales, buscamos
     - 2099
     
 ---------------------------------------------------------------
+2008-10-15
+
+En local-data tenemos una carpeta bases, con una subcarpeta por cada base
+alojada en el OPAC. Hay una pequeña incomodidad en el hecho de que el nombre
+'bases' puede hacer pensar que allí sólo encontraremos bases de datos, cuando
+en realidad hay archivos diversos (conf, css, html, además de las bases en
+sí). Las bases propiamente dichas viven dentro de la subcarpeta db.
+
+Tal vez sería más claro si en lugar de 'bases' usáramos el nombre 'catalogs'.
+De hecho, en una instalación de OpacMarc, cada base bibliográfica da lugar a
+un catálogo aparte, y por el momento no hay conexión entre ellos (salvo por
+un link como en el caso de los dos catálogos de ABR).
+
+Así que podríamos tener esto:
+
+    local-data/
+        bin/
+        catalogs/
+            demo/
+                cgi-bin/
+                    htmlpft/
+                    pft/
+                config/
+                    db-settings o catalog-settings?
+                db/ o bases/
+                htdocs/
+            bibima/
+                cgi-bin/
+                    htmlpft/
+                    pft/
+                config/
+                db/ o bases/
+                htdocs/
+        config/
+        htdocs/
+        logs/
+        temp/
+
+Nótese que hemos agregado también, por consistencia, una carpeta cgi-bin para
+cada catálogo.
+
+Aun habría que pensar en posibles mecanismos para usar elementos locales de
+cgi-bin: un xis, un pft, o un htmlpft (además de los htmlpft ya previstos),
+ya sea de nivel local general, o específico para un catálogo.
+
+----------------------------------------------
+2008-10-15
+
+Si se usa un virtual host de Apache, podemos enviar los logs de Apache
+(asociados a este virtual host) a la carpeta local-data/logs.
+Ver http://httpd.apache.org/docs/2.2/logs.html
+    http://httpd.apache.org/docs/2.2/mod/mod_log_config.html
+Tener en cuenta diferentes versiones de Apache.
+Directivas: ErrorLog, TransferLog, CustomLog, LogFormat
+
+---------------------
+
+Renombrar cgi-bin/html => cgi-bin/htmlpft? Para mantener consistencia con local-data.
+

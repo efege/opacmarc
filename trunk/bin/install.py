@@ -141,10 +141,15 @@ def create_aux_db():
     # En Linux hay problemas si usan '\r\n', pero en Windows andan bien con sólo usar '\n'.
     
     # Crea las bases isis auxiliares a partir de archivos de texto (.id)
+    
+    # para util
+    # TO-DO: los .id es mejor que estén directamente en util/ 
     run('%s/id2i bin/install/data/country.id create=util/country' % CISIS_PATH)
     run('%s/id2i bin/install/data/lang.id create=util/lang' % CISIS_PATH)
     run('%s/id2i bin/install/data/dictgiz.id create=util/dictgiz' % CISIS_PATH)
 
+    # para update_db
+    # TO-DO: los .id es mejor que estén directamente en bin/update_db/
     run('%s/id2i bin/install/data/oem2ansi.id create=bin/update_db/oem2ansi' % CISIS_PATH)
     run('%s/id2i bin/install/data/delimsubcampo.id create=bin/update_db/delimsubcampo' % CISIS_PATH)
     

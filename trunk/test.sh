@@ -2,6 +2,16 @@
 # Creado: FG, 2008-10-03
 #
 # TO-DO: enviar la config a un archivo aparte.
+#
+# TO-DO: considerar dos tipos de test:
+#            - new install (crea local-data)
+#            - upgrade (usa local-data existente)
+#        Podemos llamar al script de dos maneras:
+#            - test install
+#            - test upgrade
+#        o bien:
+#            - test i
+#            - test u
 
 
 # -----------------------------------
@@ -59,14 +69,15 @@ do
     chmod g+w $TEST_DIR/local-data/$dir
 done
 
-# procesamos la base demo
+# Procesamos la base demo
 python $TEST_DIR/bin/demo.py
 
-# pisamos config para apache y lo reiniciamos
+# Pisamos config para apache y lo reiniciamos.
+# Esto sólo se requiere si hay alguna modificación al template httpd-opacmarc.conf.
 sudo cp $TEST_DIR/config/httpd-opacmarc.conf $APACHE_VHOST
 sudo apache2ctl restart
 
-# browser
+# Accedemos al OPAC con un browser.
 firefox "http://127.0.0.1:8081/cgi-bin/wxis?IsisScript=xis/opac.xis&db=demo&showForm=simple" &
 
 exit
