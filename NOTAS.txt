@@ -222,10 +222,74 @@ Si se usa un virtual host de Apache, podemos enviar los logs de Apache
 (asociados a este virtual host) a la carpeta local-data/logs.
 Ver http://httpd.apache.org/docs/2.2/logs.html
     http://httpd.apache.org/docs/2.2/mod/mod_log_config.html
-Tener en cuenta diferentes versiones de Apache.
+Tener en cuenta cómo manejan los logs las diferentes versiones de Apache.
 Directivas: ErrorLog, TransferLog, CustomLog, LogFormat
 
 ---------------------
 
 Renombrar cgi-bin/html => cgi-bin/htmlpft? Para mantener consistencia con local-data.
 
+---------------------
+
+Ideas generales sobre el uso de archivos locales.
+
+Tenemos dos problemas diferentes, aunque relacionados:
+
+    1) agregar/extend: crear archivos locales para añadir funcionalidad a la aplicación.
+    
+    2) sobreescribir/override: sustituir localmente archivos de la aplicación, para 
+      modificar la funcionalidad predeterminada.
+
+1) Por una parte, queremos que se puedan usar archivos puramente locales, es decir,
+archivos que la aplicación no requiere para funcionar correctamente, pero que en
+forma opcional los usuarios de la aplicación pueden definir y usar. Ejemplos:
+
+   -------------------------------------------------------------------------------------------------------
+    Tipo     Nombre a nivel local  Nombre a nivel base   Mecanismo de uso
+   -------------------------------------------------------------------------------------------------------
+   
+    --- CONFIG ---
+    conf     local-settings.conf   db-settings.conf      leídos desde read-param.xis
+    cipar    local-cipar.par       db-cipar.par          leídos desde read-param.xis
+    
+    --- HTDOCS ---
+    css      local-styles.css      db-styles.css         llamados desde opac-head.htm; pueden incluir otros .css con @import
+    js       local-scripts.js      db-scripts.js         llamados desde opac-head.htm
+    img      cualquiera            cualquiera            link desde archivos locales (htmpft, pft, xis, css)
+    docs     cualquiera            cualquiera            link desde archivos locales (htmpft, pft, xis)
+    
+    --- CGI-BIN ---
+    pft      cualquiera            cualquiera            llamados desde xis, pft o htmlpft, vía cipar local      
+    htmlpft  cualquiera            cualquiera            llamados desde xis, vía cipar local
+    xis      cualquiera            cualquiera            llamados desde opac.xis, vía local.xis         
+    
+    --- BIN ---
+    bin      cualquiera            cualquiera            ejecución desde línea de comandos   
+   -------------------------------------------------------------------------------------------------------
+
+
+2) Por otra parte, queremos que (muchos de) los archivos *necesarios* para la aplicación
+puedan ser "pisados" (overriden) localmente, siempre respetando el principio de no alterar
+código de la aplicación, para simplificar las actualizaciones. En este caso, nos interesan
+principalmente los archivos de cgi-bin: pft, htmlpft, xis. Y quizás también las imágenes
+predeterminadas.
+
+   -------------------------------------------------------------------------------------------------------
+    Tipo     Nombre a nivel local  Nombre a nivel base   Mecanismo de uso
+   -------------------------------------------------------------------------------------------------------
+    
+    --- HTDOCS ---
+    img      cualquiera            cualquiera            link desde archivos locales (htmpft, pft, xis, css)
+    
+    --- CGI-BIN ---
+    pft      cualquiera            cualquiera            llamados desde xis, pft o htmlpft, vía cipar local      
+    htmlpft  cualquiera            cualquiera            llamados desde xis, vía cipar local
+    xis      cualquiera            cualquiera            llamados desde opac.xis, vía local.xis         
+   -------------------------------------------------------------------------------------------------------
+
+¿Y qué hay de CSS y JS? ¿Vale la pena permitir que se use p.ej. local-aacr.css en lugar de aacr.css,
+siendo que ya se ofrece el mecanismo para aplicar CSS local? Y lo mismo para JS...
+
+Falta considerar:
+    FST, STW
+    Tablas actab, uctab

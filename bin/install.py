@@ -23,14 +23,21 @@ import tablas
 # TO-DO: agregar aquí los que usa create_db()?
 FILES = {
     'footer'       : os.path.join(OPACMARC_DIR, 'cgi-bin', 'html', 'opac-footer.htm'),
-    'cipar-opac'   : os.path.join(OPACMARC_DIR, 'config', 'update.cip'),
-    'cipar-update' : os.path.join(OPACMARC_DIR, 'config', 'opac.cip'),
+    'cipar-opac'   : os.path.join(OPACMARC_DIR, 'config', 'default-cipar.par'),
+    'cipar-update' : os.path.join(OPACMARC_DIR, 'config', 'update.par'),
     'conf-default' : os.path.join(OPACMARC_DIR, 'config', 'default-settings.conf'),
     'conf-local'   : os.path.join(LOCAL_DATA_DIR, 'config', 'local-settings.conf'),
     'conf-update'  : os.path.join(LOCAL_DATA_DIR, 'config', 'update.conf'),
     'conf-httpd'   : os.path.join(OPACMARC_DIR, 'config', 'httpd-opacmarc.conf'),
     'actab'        : os.path.join(OPACMARC_DIR, 'util', 'ac-ansi.tab'),
     'uctab'        : os.path.join(OPACMARC_DIR, 'util', 'uc-ansi.tab'),
+}
+
+# Plantillas para archivos (tomado de add_db.py -- TO-DO: unificar mecanismos)
+template_dest = {
+    'local-styles.css' : 'htdocs/css',
+    #'local-settings.conf' : 'config',
+    'local-cipar.par' : 'config',
 }
 
 def run(command, msg = 'Error'):
@@ -119,11 +126,37 @@ def make_local_dirs():
     
     # TO-DO: agregar archivos (templates) en algunos de estos directorios?
     
+    local_data_tree = {
+        'bases'   : [],
+        'bin'     : [],
+        'cgi-bin' : ['html', 'pft', 'xis'],
+        'config'  : [],
+        'htdocs'  : ['css', 'docs', 'img', 'js'],
+        'logs'    : [],
+        'temp'    : [],
+    }
+    
+    # TO-DO: definir una función recursiva en opac_util.py
     os.mkdir(LOCAL_DATA_DIR)
-    for dir_name in ('bases', 'bin', 'config', 'htdocs', 'logs', 'temp'):
+    for dir_name in local_data_tree:
         os.mkdir(os.path.join(LOCAL_DATA_DIR, dir_name))
-    for dir_name in ('css', 'img', 'js'):
-        os.mkdir(os.path.join(LOCAL_DATA_DIR, 'htdocs', dir_name))
+        for subdir_name in local_data_tree[dir_name]:
+            os.mkdir(os.path.join(LOCAL_DATA_DIR, dir_name, subdir_name))
+
+def create_files():            
+    # Creamos archivos a partir de templates.
+    # FIXME - los paths deben quedar con la barra correcta (os.sep)
+    # FIXME - corregir el nombre de archivo que se muestra en el mensaje "Generado el archivo"
+    for tpl in template_dest:
+        f1 = open(os.path.join(OPACMARC_DIR, 'bin', 'install', tpl), 'r')
+        f2 = open(os.path.join(LOCAL_DATA_DIR, template_dest[tpl], tpl), 'w')
+        f2.write(
+            f1.read().replace('__LOCAL_DATA_DIR__', LOCAL_DATA_DIR)
+        )
+        f1.close()
+        f2.close()
+        print 'Generado el archivo %s.' % os.path.basename(template_dest[tpl])
+
 
 def setup_msc():
     # ATENCION! Rutas relativas a OPACMARC_DIR
@@ -211,6 +244,8 @@ def main():
     #set_version()
     
     make_local_dirs()  # FIXME - si estamos haciendo un upgrade, sólo tenemos que copiar lo existente.
+    
+    create_files()
     
     build_config_files()
     

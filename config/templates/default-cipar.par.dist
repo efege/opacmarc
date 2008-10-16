@@ -98,10 +98,10 @@ UPDATED.TXT=__LOCAL_DATA_DIR__/bases/__DB__/db/public/updated.txt
 # -----------------------------------------------------------------
 # HTMLPFT
 # -----------------------------------------------------------------
-ABOUT.HTM=__LOCAL_DATA_DIR__/bases/__DB__/htmlpft/about.htm
-HOME.HTM=__LOCAL_DATA_DIR__/bases/__DB__/htmlpft/home.htm
-OPAC-BANNER.HTM=__LOCAL_DATA_DIR__/bases/__DB__/htmlpft/banner.htm
-PRESENTATION.HTM=__LOCAL_DATA_DIR__/bases/__DB__/htmlpft/present.htm
+ABOUT.HTM=__LOCAL_DATA_DIR__/bases/__DB__/cgi-bin/html/about.htm
+HOME.HTM=__LOCAL_DATA_DIR__/bases/__DB__/cgi-bin/html/home.htm
+OPAC-BANNER.HTM=__LOCAL_DATA_DIR__/bases/__DB__/cgi-bin/html/banner.htm
+PRESENTATION.HTM=__LOCAL_DATA_DIR__/bases/__DB__/cgi-bin/html/present.htm
 
 # -----------------------------------------------------------------
 # Archivo de logs (uno por fecha)
