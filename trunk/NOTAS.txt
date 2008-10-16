@@ -181,7 +181,9 @@ sí). Las bases propiamente dichas viven dentro de la subcarpeta db.
 Tal vez sería más claro si en lugar de 'bases' usáramos el nombre 'catalogs'.
 De hecho, en una instalación de OpacMarc, cada base bibliográfica da lugar a
 un catálogo aparte, y por el momento no hay conexión entre ellos (salvo por
-un link como en el caso de los dos catálogos de ABR).
+un link como en el caso de los dos catálogos de ABR). Excepción: en el IAR
+se usa una base separada para analíticas, y desde ésta se generan links hacia
+la otra base; es decir, ambos "catálogos" están acoplados.  
 
 Así que podríamos tener esto:
 
@@ -227,7 +229,7 @@ Directivas: ErrorLog, TransferLog, CustomLog, LogFormat
 
 ---------------------
 
-Renombrar cgi-bin/html => cgi-bin/htmlpft? Para mantener consistencia con local-data.
+¿Deberíamos renombrar los "cgi-bin/html" como "cgi-bin/htmlpft"?
 
 ---------------------
 
@@ -284,7 +286,7 @@ predeterminadas.
     --- CGI-BIN ---
     pft      cualquiera            cualquiera            llamados desde xis, pft o htmlpft, vía cipar local      
     htmlpft  cualquiera            cualquiera            llamados desde xis, vía cipar local
-    xis      cualquiera            cualquiera            llamados desde opac.xis, vía local.xis         
+    xis      cualquiera            cualquiera            ??         
    -------------------------------------------------------------------------------------------------------
 
 ¿Y qué hay de CSS y JS? ¿Vale la pena permitir que se use p.ej. local-aacr.css en lugar de aacr.css,
@@ -293,3 +295,16 @@ siendo que ya se ofrece el mecanismo para aplicar CSS local? Y lo mismo para JS.
 Falta considerar:
     FST, STW
     Tablas actab, uctab
+
+
+Para dejar todo esto bien en claro, tenemos que armar una buena tabla donde queden respondidas
+estas preguntas para cada tipo de archivo T, y para cada nivel loca (general, base):
+
+    - ¿cómo hago para agregar un archivo de tipo T?
+    - ¿cómo hago para alterar/reemplazar un archivo de tipo T?
+    
+El "cómo hago" involucra: qué archivo creo o modifico, donde lo almaceno, y dónde/cómo registro
+el cambio para que entre en efecto.
+
+
+ 
