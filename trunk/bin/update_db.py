@@ -142,7 +142,7 @@ def build_env():
     
     # Este diccionario es pasado en las llamadas al sistema
     return {
-        'CIPAR':                os.path.join(OPACMARC_DIR, 'config', 'update.cip'),  # Hay que usar el path *absoluto* para el cipar
+        'CIPAR':                os.path.join(OPACMARC_DIR, 'config', 'update.par'),  # Hay que usar el path *absoluto* para el cipar
         # Las variables que siguen son definidas en update.conf
         'PATH':                 CONFIG.get('Global', 'PATH_CISIS') + os.pathsep + os.getenv('PATH'),
         'SUBJ_TAGS':            CONFIG.get('Global', 'SUBJ_TAGS'),

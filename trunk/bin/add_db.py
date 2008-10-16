@@ -12,7 +12,7 @@
         python add_db.py libros
 """
 # Creado: Fernando Gómez, 2008-09-20
-# TO-DO: dividir en funciones sencillas
+# TO-DO: dividir en funciones bien simples.
 
 import os
 import sys
@@ -21,11 +21,12 @@ from opac_util import error, OPACMARC_DIR, LOCAL_DATA_DIR
 
 # Plantillas para archivos
 template_dest = {
-    'about.htm' : 'htmlpft',
-    'banner.htm' : 'htmlpft',
-    'home.htm' : 'htmlpft',
+    'about.htm' : 'cgi-bin/html',
+    'banner.htm' : 'cgi-bin/html',
+    'home.htm' : 'cgi-bin/html',
     'db-styles.css' : 'htdocs/css',
     'db-settings.conf' : 'config',
+    'db-cipar.par' : 'config',
 }
 
 def print_usage():
@@ -51,24 +52,24 @@ def main(DB_NAME):
         error("Ya existe un directorio con el nombre '%s'." % DB_NAME)
     
     # Creamos directorios
-    try:
-        os.mkdir(DB_DIR)
-        
-        for dir_name in ('config', 'db', 'htmlpft', 'pft', 'htdocs'):
-            os.mkdir(os.path.join(DB_DIR, dir_name))
     
-        for dir_name in ('original', 'public', 'update'):
-            os.mkdir(os.path.join(DB_DIR, 'db', dir_name))
+    db_tree = {
+        'cgi-bin' : ['html', 'pft', 'xis'],
+        'config'  : [],
+        'db'      : ['original', 'public', 'update'],
+        'htdocs'  : ['css', 'docs', 'img', 'js'],
+    }
     
-        for dir_name in ('css', 'img', 'js'):
-            os.mkdir(os.path.join(DB_DIR, 'htdocs', dir_name))
-            
-    except:
-        raise
+    # TO-DO: definir una función recursiva en opac_util.py
+    os.mkdir(DB_DIR)
+    for dir_name in db_tree:
+        os.mkdir(os.path.join(DB_DIR, dir_name))
+        for subdir_name in db_tree[dir_name]:
+            os.mkdir(os.path.join(DB_DIR, dir_name, subdir_name))
     
-    # Creamos archivos a partir de templates
+    # Creamos archivos a partir de templates.
     # FIXME - los paths deben quedar con la barra correcta (os.sep)
-    # FIXME - corregir lo que se muestra en el mensaje "Generado el archivo"
+    # FIXME - corregir el nombre de archivo que se muestra en el mensaje "Generado el archivo"
     for tpl in template_dest:
         f1 = open(os.path.join(OPACMARC_DIR, 'bin', 'add_db', 'templates', tpl), 'r')
         f2 = open(os.path.join(DB_DIR, template_dest[tpl], tpl), 'w')
@@ -126,6 +127,7 @@ para esta base, edite el archivo
 '''
 
 if __name__ == "__main__":
+    # FIXME - si se llama sin argumentos
     DB_NAME = sys.argv[1]
     main(DB_NAME)
     print end_msg2 % ((LOCAL_DATA_DIR, DB_NAME, DB_NAME) + (LOCAL_DATA_DIR, DB_NAME)*6)   # Requiere los paréntesis, de lo contrario TypeError

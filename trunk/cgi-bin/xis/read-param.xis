@@ -7,15 +7,6 @@
 -->
 
 <!--
-    TO-DO: considerar si la inclusión de archivos cipar
-           definidos localmente, que contendrían los alias de
-           archivos usados desde pft, htmlpft o xis locales.
-           Tener en cuenta que, al igual que sucede con los settings,
-           el primero gana, de modo que se deben leer primero los cipar
-           locales y finalmente el cipar default.
--->
-
-<!--
     Read the cipar template file, and substitute the following variables:
     __DB__             : the name of the current database
     __DATE__           : the current date
@@ -23,9 +14,20 @@
     This version assumes that __OPACMARC_DIR__ and __LOCAL_DATA_DIR__ have already been set by
     an installation script.
 -->
+
+<!-- IMPORTANTE! Los archivos cipar se leen en este orden: base > local > default -->
 <parm name="cipar"><pft>
+    /* cipar local para una base particular */
+    s(cat(getenv('PATH_WXIS'),'../local-data/bases/',v2104,'/config/db-cipar.par')),
+    
+    /#,
+    /* cipar local común a todas las bases */
+    s(cat(getenv('PATH_WXIS'),'../local-data/config/local-cipar.par')),
+    
+    /#,
+    /* cipar default */
     replace(replace(
-        s(cat(getenv('PATH_WXIS'),'../config/opac.cip')),
+        s(cat(getenv('PATH_WXIS'),'../config/default-cipar.par')),
         '__DB__', v2104),
         '__DATE__', s(date).8)
 </pft></parm>
