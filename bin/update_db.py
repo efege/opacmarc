@@ -683,7 +683,8 @@ def build_agrep_dictionaries():
     # originalmente era así de simple: cat dict*.txt | sort | uniq > dictANY.txt
     # 
     # Para python, usamos una idea de aquí: http://mail.python.org/pipermail/python-list/2003-January/178712.html
-    # TO-DO: ¿será más rápido de otra manera, p.ej. con sets?
+    # dict.fromkeys está disponible desde Python 2.3. 
+    # TO-DO: ¿será más rápido de otra manera, p.ej. con sets? Ver http://www.python.org/doc/2.5.2/lib/types-set.html
     all_terms = []
     for dict_type in ('SUBJ', 'NAME', 'TITLE'):
         d = open('dict%s.txt' % dict_type, 'r')

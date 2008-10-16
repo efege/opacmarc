@@ -7,6 +7,15 @@
 -->
 
 <!--
+    TO-DO: considerar si la inclusión de archivos cipar
+           definidos localmente, que contendrían los alias de
+           archivos usados desde pft, htmlpft o xis locales.
+           Tener en cuenta que, al igual que sucede con los settings,
+           el primero gana, de modo que se deben leer primero los cipar
+           locales y finalmente el cipar default.
+-->
+
+<!--
     Read the cipar template file, and substitute the following variables:
     __DB__             : the name of the current database
     __DATE__           : the current date
