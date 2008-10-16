@@ -24,7 +24,7 @@ template_dest = {
     'about.htm' : 'htmlpft',
     'banner.htm' : 'htmlpft',
     'home.htm' : 'htmlpft',
-    'db.css' : 'htdocs/css',
+    'db-styles.css' : 'htdocs/css',
     'db-settings.conf' : 'config',
 }
 
@@ -112,7 +112,7 @@ editar los siguientes archivos:
     %s/bases/%s/htmlpft/about.htm
     %s/bases/%s/htmlpft/banner.htm
     %s/bases/%s/htmlpft/home.htm
-    %s/bases/%s/htdocs/css/db.css
+    %s/bases/%s/htdocs/css/db-styles.css
     
 Si necesita imágenes para esta base (p.ej. un logo) debe colocarlas en
 la carpeta

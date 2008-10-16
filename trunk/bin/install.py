@@ -7,6 +7,8 @@ Issue 10: http://code.google.com/p/opacmarc/issues/detail?id=10
 
 TO-DO: Considerar también la situación en que ya existe una instalación
 y se desea preservar los datos locales.
+
+TO-DO: crear archivo vacío htdocs/css/local-styles.css (a partir de un template?)
 """
 
 import os
@@ -18,7 +20,7 @@ import tablas
 
 
 # Archivos que crea o modifica el script de instalación.
-# TO-DO: agregar aquí los que usa create_db()
+# TO-DO: agregar aquí los que usa create_db()?
 FILES = {
     'footer'       : os.path.join(OPACMARC_DIR, 'cgi-bin', 'html', 'opac-footer.htm'),
     'cipar-opac'   : os.path.join(OPACMARC_DIR, 'config', 'update.cip'),
@@ -106,7 +108,7 @@ def build_config_files():
     )
     
     for config_file in ('conf-httpd', 'conf-default', 'conf-local', 'conf-update', 'cipar-opac', 'cipar-update'):
-        template = os.path.join(OPACMARC_DIR, 'bin', 'install', 'templates', os.path.basename(FILES[config_file]) + '.dist')
+        template = os.path.join(OPACMARC_DIR, 'config', 'templates', os.path.basename(FILES[config_file]) + '.dist')
         if config_file == 'conf-httpd':
             force_forward=True  # Apache requiere barras hacia adelante, incluso en Windows
         create_from_template(template, FILES[config_file], substitutions, force_forward=force_forward)
