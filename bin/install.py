@@ -38,6 +38,7 @@ template_dest = {
     'local-styles.css' : 'htdocs/css',
     #'local-settings.conf' : 'config',
     'local-cipar.par' : 'config',
+    'local.xis' : 'cgi-bin/xis',
 }
 
 def run(command, msg = 'Error'):

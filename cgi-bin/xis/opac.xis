@@ -264,6 +264,7 @@ Parámetros CGI
     '~SHOW_FORM'             /* presentar el formulario */
     '~SHOW_NEW_MATERIAL'     /* muestra las novedades del catálogo */
     '~TEST_CONDITION'        /* encontrar registros que cumplan una condición */
+    '~LOCAL'                 /* tarea definida localmente */
 </pft></field>
 
 <!-- Ejecutamos la tarea, si es alguna de las de arriba -->
@@ -447,10 +448,10 @@ Parámetros CGI
 
 
 <!-- ================================================== -->
-<label>LOCAL_XIS</label>
+<label>LOCAL</label>
 <!-- ================================================== -->
-<!--include>../local-data/cgi-bin/xis/local.xis</include>
-<flow action="jump">FIN</flow-->
+<include>../local-data/cgi-bin/xis/local.xis</include>
+<flow action="jump">FIN</flow>
 
 
 <!-- ================================================== -->

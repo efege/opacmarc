@@ -1,0 +1,9 @@
+<!--
+Por cada script local que desee usar, agregue a este archivo una línea como la siguiente:
+
+    <include>../local-data/cgi-bin/xis/some_local_task.xis</include>
+    
+reemplazando "some_local_task" por el nombre del script.
+
+Todos los scripts locales deben estar en la carpeta local-data/cgi-bin/xis/
+-->
