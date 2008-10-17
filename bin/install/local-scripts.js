@@ -1,1 +1,1 @@
-// Local JavaScript
+// JavaScript local, común a todas las bases.

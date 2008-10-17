@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # coding=windows-1252
 #
 # coding is explained here: http://www.python.org/dev/peps/pep-0263/
@@ -114,10 +114,13 @@ import shutil        # shell utils (copy, move, rmtree...)
 import re            # regular expressions
 import zipfile       # for reading .zip files
 import subprocess    # for running system commands (mx, i2id, etc)
-import ConfigParser  # for reading config file 
+import ConfigParser  # for reading config file
 
-from opac_util import run_command, error, emptydir, OPACMARC_DIR, LOCAL_DATA_DIR
+from opac_util import run_command, error, emptydir, OPACMARC_DIR, LOCAL_DATA_DIR, setup_logger
 
+# A global logger object
+log_file = os.path.join(LOCAL_DATA_DIR, 'logs', 'update_db.log')
+logger = setup_logger(log_file)
 
 def run(command, msg = 'Error'):
     return run_command(command, msg = msg, env = ENV)
@@ -131,7 +134,7 @@ def read_config():
     config.optionxform = str  # make option names case sensitive
     try:
         config.readfp(open(config_file))
-        print "Archivo de configuracion leido: %s" % os.path.abspath(config_file)
+        logger.info("Archivo de configuracion leido: %s" % os.path.abspath(config_file))
         return config
     except:
         error("No se ha podido leer el archivo de configuracion %s." % os.path.abspath(config_file))
@@ -181,10 +184,9 @@ def goto_work_dir():
         error("No se ha encontrado el directorio de trabajo para la base %s:\n     %s" % (DB_NAME, WORK_DIR))
     
     # Nos ubicamos en el directorio de trabajo
-    print
     try:
         os.chdir(WORK_DIR)
-        print "Directorio de trabajo: %s" % os.path.abspath(WORK_DIR)
+        logger.info("Directorio de trabajo: %s" % os.path.abspath(WORK_DIR))
     except:
         error("No se puede ingresar al directorio de trabajo, %s." % os.path.abspath(WORK_DIR))
     
@@ -194,7 +196,7 @@ def goto_work_dir():
     if not os.path.isdir('tmp'):
         try:
             os.mkdir('tmp')
-            print "Directorio tmp creado."
+            logger.info("Directorio tmp creado.")
         except:
             error("No se pudo crear el directorio tmp.")
     # Y si ya existe, lo vaciamos
@@ -233,28 +235,25 @@ def get_biblio_db():
     #sep = os.path.sep  # not available in Python 2.3
     sep = os.sep
     
-    print
-
     # ARCHIVOS ZIP
     if os.path.isfile(SOURCE_DIR + '/' + DB_NAME + '.zip'):
         #unzip -oq $SOURCE_DIR/$DB_NAME.zip -d tmp || error
         zipfile.ZipFile(SOURCE_DIR + '/' + DB_NAME + '.zip', 'r')  # ???  Ver http://www.thescripts.com/forum/thread25297.html
-        print "Usando como base original: %s%s%s.zip" % (os.path.abspath(SOURCE_DIR), sep, DB_NAME)
+        logger.info("Usando como base original: %s%s%s.zip" % (os.path.abspath(SOURCE_DIR), sep, DB_NAME))
     
     elif os.path.isfile(SOURCE_DIR + '/biblio.zip'):
         #unzip -oq $SOURCE_DIR/biblio.zip -d tmp || error
-        print "Usando como base original: %s%sbiblio.zip" % (os.path.abspath(SOURCE_DIR), sep)
+        logger.info("Usando como base original: %s%sbiblio.zip" % (os.path.abspath(SOURCE_DIR), sep))
     
     # ARCHIVOS MST/XRF
     elif os.path.isfile('%s/biblio.mst' % SOURCE_DIR) and os.path.isfile('%s/biblio.xrf' % SOURCE_DIR):
         shutil.copy('%s/biblio.mst' % SOURCE_DIR, 'tmp')
         shutil.copy('%s/biblio.xrf' % SOURCE_DIR, 'tmp')
-        print "Usando como base original: %s%sbiblio.{mst,xrf}" % (os.path.abspath(SOURCE_DIR), sep)
+        logger.info("Usando como base original: %s%sbiblio.{mst,xrf}" % (os.path.abspath(SOURCE_DIR), sep))
     
     # ARCHIVOS MARC
     elif os.path.isfile('%s/%s.mrc' % (SOURCE_DIR, DB_NAME)):
-        print
-        print "Importando archivo %s%s%s.mrc..." % (SOURCE_DIR, sep, DB_NAME)
+        logger.info("Importando archivo %s%s%s.mrc..." % (SOURCE_DIR, sep, DB_NAME))
         
         # basado en im2c.sh (código escrito en la 1ra reunión de CaMPI en Bariloche, julio 2007)
         # FIXME - a esto aún le falta depurar algunos detalles. Ver im2c.sh.
@@ -285,20 +284,20 @@ def get_biblio_db():
     # ARCHIVOS ISO
     elif os.path.isfile(SOURCE_DIR + '/' + DB_NAME + '.iso'):
         run('mx iso=%s/%s.iso create=tmp/biblio now -all' % (SOURCE_DIR, DB_NAME))
-        print "Usando como base original: %s" + sep + "%s.iso" % (SOURCE_DIR, DB_NAME)
+        logger.info("Usando como base original: %s" + sep + "%s.iso" % (SOURCE_DIR, DB_NAME))
     
     elif os.path.isfile(SOURCE_DIR + '/biblio.iso'):
         run('mx iso=%s/biblio.iso create=tmp/biblio now -all' % SOURCE_DIR)
-        print "Usando como base original: %s" + sep + "biblio.iso" % SOURCE_DIR
+        logger.info("Usando como base original: %s" + sep + "biblio.iso" % SOURCE_DIR)
     
     # ARCHIVOS ID
     elif os.path.isfile(SOURCE_DIR + '/' + DB_NAME + '.id'):
         run('id2i %s/%s.id create=tmp/biblio' % (SOURCE_DIR, DB_NAME))
-        print "Usando como base original: %s" + sep + "%s.id" % (SOURCE_DIR, DB_NAME)
+        logger.info("Usando como base original: %s" + sep + "%s.id" % (SOURCE_DIR, DB_NAME))
     
     elif os.path.isfile(SOURCE_DIR + '/biblio.id'):
         run('id2i %s/biblio.id create=tmp/biblio' % SOURCE_DIR)
-        print "Usando como base original: %s" + sep + "biblio.id" % SOURCE_DIR
+        logger.info("Usando como base original: %s" + sep + "biblio.id" % SOURCE_DIR)
     
     else:
         error("No se encuentra la base de datos original.")
@@ -311,7 +310,7 @@ def get_biblio_db():
     else:
         count = ""
     
-    print "Creando copia temporal de la base..."
+    logger.info("Creando copia temporal de la base...")
     run('mx tmp/biblio %s create=tmp/bibliotmp now -all' % count)
     try:
         shutil.move('tmp/bibliotmp.mst', 'tmp/biblio.mst')
@@ -337,8 +336,7 @@ def get_secs_db():
     pass
     
     if os.path.isfile(SOURCE_DIR + '/' + DB_NAME + '-secstitle.mst'):   # testeamos si existe la base secstitle asociada
-        print
-        print "Procesando base SECSTITLE..."
+        logger.info("Procesando base SECSTITLE...")
     
         # TO-DO: usar mxcp para eliminar espacios en la base title
         # TO-DO: usar dos2unix para el listado de existencias que proviene de DOS
@@ -367,11 +365,10 @@ def get_secs_db():
 def process_images():
     # Si hay imágenes de tapa, creamos un campo 985
     DIR_IMG = CONFIG.get('Global', 'DIR_IMG').replace('__DB__', DB_NAME)
-    print
     if not os.path.isdir(DIR_IMG):
-        print "No se encuentra el directorio de imágenes: %s" % DIR_IMG
+        logger.info("No se encuentra el directorio de imágenes: %s" % DIR_IMG)
     else:
-        print "Procesando imagenes..."
+        logger.info("Procesando imagenes...")
         file = open('tmp/lista_img.txt', 'w')
         #pattern = re.compile(r'00[0-9]{4}\.[a-z]{3}$')
         pattern = re.compile(r'.\.(gif|jpeg|jpg|png)$', re.IGNORECASE)
@@ -403,16 +400,14 @@ def process_biblio_db():
     # BASE BIBLIO (1ra pasada)
     # ------------------------------------------------------------------
     
-    print
-    print "Creamos una copia (texto) de la base bibliografica..."
+    logger.info("Creamos una copia (texto) de la base bibliografica...")
     # BUG en i2id: aun sin haber errores, el exit status es diferente de cero (e.g. 17, 19). Se testea con 'echo $?'
     # A causa de ese bug, aquí usamos subprocess.call en lugar de subprocess.check_call 
     subprocess.call('i2id tmp/biblio tell=%s > tmp/biblio1.id' % TELL, env=ENV, shell=True)
      
-    print
-    print "Intentamos normalizar la puntuacion final, filtramos encabezamientos"
-    print "tematicos, y asignamos un numero (provisorio) a cada campo"
-    print "de encabezamientos en el subcampo ^9..."
+    logger.info("Intentamos normalizar la puntuacion final, filtramos encabezamientos")
+    logger.info("   tematicos, y asignamos un numero (provisorio) a cada campo")
+    logger.info("   de encabezamientos en el subcampo ^9...")
     # FIXED -- mx "seq=tmp/biblio1.id\n" molesta en Windows, cambiar por  mx "seq=tmp/biblio1.id\\n" (aparece en varios comandos)
     run('''mx "seq=tmp/biblio1.id\\n" lw=3000 "pft=@HEAD.PFT" now tell=%s > tmp/biblio2.id''' % TELL)
  
@@ -422,40 +417,32 @@ def build_subj_db():
     # BASE SUBJ
     # ------------------------------------------------------------------
      
-    print
-    print "-----------------------------------------------------"
-    print " Base de encabezamientos tematicos"
-    print "-----------------------------------------------------"
+    logger.info("-----------------------------------------------------")
+    logger.info(" Base de encabezamientos tematicos")
+    logger.info("-----------------------------------------------------")
      
-    print "Creamos el listado de encabezamientos tematicos..."
+    logger.info("Creamos el listado de encabezamientos tematicos...")
     run('''mx "seq=tmp/biblio2.id\\n" lw=1000 "pft=if getenv('SUBJ_TAGS') : v1*1.4 then @SUBJ.PFT fi" now tell=%s > tmp/subj1.id''' % TELL)
      
-    print
-    print "Convertimos el listado en una base (desordenada y con duplicados)..."
+    logger.info("Convertimos el listado en una base (desordenada y con duplicados)...")
     run('''id2i tmp/subj1.id create/app=tmp/subj1 tell=%s''' % TELL)
      
-    print
-    print "Regularizamos la puntuacion final de los encabezamientos generados..."
+    logger.info("Regularizamos la puntuacion final de los encabezamientos generados...")
     run('''mx tmp/subj1 "proc='d2a2¦',v1,'¦'" "proc='d1a1¦',@REGPUNT.PFT,'¦'" "proc='d2'" copy=tmp/subj1 now -all tell=%s''' % TELL)
      
-    print
-    print "Almacenamos en un campo auxiliar la clave de ordenacion..."
+    logger.info("Almacenamos en un campo auxiliar la clave de ordenacion...")
     run('''mx tmp/subj1 uctab=UC-ANSI.TAB "proc='d99a99¦',@HEADSORT.PFT,'¦'" copy=tmp/subj1 now -all tell=%s''' % TELL)
      
-    print
-    print "Ordenamos la base de encabezamientos tematicos..."
+    logger.info("Ordenamos la base de encabezamientos tematicos...")
     run('''msrt tmp/subj1 100 v99 tell=%s''' % TELL)
      
-    print
-    print "Generamos la tabla para mapear los numeros de encabezamientos..."
+    logger.info("Generamos la tabla para mapear los numeros de encabezamientos...")
     run('''mx tmp/subj1 "pft=if s(v1) <> ref(mfn-1,v1) then putenv('HEADING_CODE='v9) fi, v9,'|',getenv('HEADING_CODE')/" now -all tell=%s > tmp/subjcode.seq''' % TELL)
      
-    print
-    print "Eliminamos los encabezamientos duplicados..."
+    logger.info("Eliminamos los encabezamientos duplicados...")
     run('''mx tmp/subj1 lw=1000 "pft=@ELIMDUP2.PFT" now tell=%s > tmp/subj.id''' % TELL)
      
-    print
-    print "Creamos la base de encabezamientos tematicos (ordenada y sin duplicados)..."
+    logger.info("Creamos la base de encabezamientos tematicos (ordenada y sin duplicados)...")
     run('''id2i tmp/subj.id create/app=subj tell=%s''' % TELL)
 
 
@@ -465,48 +452,39 @@ def build_name_db():
     # BASE NAME
     # ------------------------------------------------------------------
      
-    print
-    print "-----------------------------------------------------"
-    print " Base de encabezamientos de nombres"
-    print "-----------------------------------------------------"
+    logger.info("-----------------------------------------------------")
+    logger.info(" Base de encabezamientos de nombres")
+    logger.info("-----------------------------------------------------")
      
-    print "Creamos el listado de encabezamientos de nombres..."
+    logger.info("Creamos el listado de encabezamientos de nombres...")
     run('''mx "seq=tmp/biblio2.id\\n" lw=1000 "pft=if getenv('NAME_TAGS') : v1*1.4 then @NAME.PFT fi" now tell=%s > tmp/name1.id''' % TELL)
      
-    print
-    print "Convertimos el listado en una base (desordenada y con duplicados)..."
+    logger.info("Convertimos el listado en una base (desordenada y con duplicados)...")
     run('id2i tmp/name1.id create/app=tmp/name1 tell=%s' % TELL)
      
-    print
-    print "Regularizamos la puntuacion final de los encabezamientos generados..."
+    logger.info("Regularizamos la puntuacion final de los encabezamientos generados...")
     run('''mx tmp/name1 "proc='d2a2¦',v1,'¦'" "proc='d1a1¦',@REGPUNT.PFT,'¦'" "proc='d2'" copy=tmp/name1 now -all tell=%s''' % TELL)
      
-    print
-    print "Almacenamos en un campo auxiliar la clave de ordenacion..."
+    logger.info("Almacenamos en un campo auxiliar la clave de ordenacion...")
     run('''mx tmp/name1 uctab=UC-ANSI.TAB "proc='d99a99¦',@HEADSORT.PFT,'¦'" copy=tmp/name1 now -all tell=%s''' % TELL)
      
-    print
-    print "Ordenamos la base de encabezamientos de nombres..."
+    logger.info("Ordenamos la base de encabezamientos de nombres...")
     run('''msrt tmp/name1 100 v99 tell=%s''' % TELL)
      
-    print
-    print "Generamos la tabla para mapear los numeros de encabezamientos..."
+    logger.info("Generamos la tabla para mapear los numeros de encabezamientos...")
     run('''mx tmp/name1 "pft=if s(v1) <> ref(mfn-1,v1) then putenv('HEADING_CODE='v9) fi, v9,'|',getenv('HEADING_CODE')/" now -all tell=%s > tmp/namecode.seq''' % TELL)
      
-    print
-    print "Eliminamos los encabezamientos duplicados..."
+    logger.info("Eliminamos los encabezamientos duplicados...")
     run('''mx tmp/name1 lw=1000 "pft=@ELIMDUP2.PFT" now tell=%s > tmp/name.id''' % TELL)
      
-    print
-    print "Creamos base de encabezamientos de nombres (ordenada y sin duplicados)..."
+    logger.info("Creamos base de encabezamientos de nombres (ordenada y sin duplicados)...")
     run('''id2i tmp/name.id create/app=name tell=%s''' % TELL)
  
 
 def recode_headings():
-    print
     # -----------------------------------------------------------------
-    print "Reasignamos numeros a los encabezamientos en los registros"
-    print "bibliograficos (subcampo 9)..."
+    logger.info("Reasignamos numeros a los encabezamientos en los registros")
+    logger.info("   bibliograficos (subcampo 9)...")
     # -----------------------------------------------------------------
     run('''mx seq=tmp/subjcode.seq create=tmp/subjcode now -all''')
     run('''mx tmp/subjcode "fst=1 0 v1" fullinv=tmp/subjcode''')
@@ -521,32 +499,26 @@ def build_title_db():
     # BASE TITLE
     # ------------------------------------------------------------------
      
-    print
-    print "-----------------------------------------------------"
-    print " Base de titulos"
-    print "-----------------------------------------------------"
+    logger.info("-----------------------------------------------------")
+    logger.info(" Base de titulos")
+    logger.info("-----------------------------------------------------")
      
-    print "Creamos listado de titulos..."
+    logger.info("Creamos listado de titulos...")
     run('''mx "seq=tmp/biblio3.id\\n" lw=1000 "pft=if getenv('TITLE_TAGS') : v1*1.4 then ,@TITLE.PFT, fi" now tell=%s > tmp/title1.id''' % TELL)
      
-    print
-    print "Convertimos el listado en una base (desordenada y con duplicados)..."
+    logger.info("Convertimos el listado en una base (desordenada y con duplicados)...")
     run('''id2i tmp/title1.id create/app=tmp/title1 tell=%s''' % TELL)
      
-    print
-    print "Almacenamos en un campo auxiliar (99) la clave de ordenacion de titulos."
+    logger.info("Almacenamos en un campo auxiliar (99) la clave de ordenacion de titulos.")
     run('''mx tmp/title1 uctab=UC-ANSI.TAB "proc='d99a99¦',@HEADSORT.PFT,'¦'" copy=tmp/title1 now -all tell=%s''' % TELL)
      
-    print
-    print "Ordenamos la base de titulos."
+    logger.info("Ordenamos la base de titulos.")
     run('''msrt tmp/title1 100 v99 tell=%s''' % TELL)
      
-    print
-    print "Eliminamos los titulos duplicados."
+    logger.info("Eliminamos los titulos duplicados.")
     run('''mx tmp/title1 lw=1000 "pft=@ELIMDUP2.PFT" now tell=%s > tmp/title.id''' % TELL)
      
-    print
-    print "Creamos la base de titulos (ordenada y sin duplicados)."
+    logger.info("Creamos la base de titulos (ordenada y sin duplicados).")
     run('''id2i tmp/title.id create/app=title tell=%s''' % TELL)
  
 
@@ -555,16 +527,14 @@ def process_biblio_db_2():
     # BASE BIBLIO (2da pasada)
     # ------------------------------------------------------------------
      
-    print
-    print "-----------------------------------------------------"
-    print "Base bibliografica"
-    print "-----------------------------------------------------"
+    logger.info("-----------------------------------------------------")
+    logger.info("Base bibliografica")
+    logger.info("-----------------------------------------------------")
      
-    print "Recreamos la base bibliografica."
+    logger.info("Recreamos la base bibliografica.")
     run('''id2i tmp/biblio3.id create=biblio tell=%s''' % TELL)
      
-    print
-    print "Ordenamos la base bibliografica."
+    logger.info("Ordenamos la base bibliografica.")
     run('''msrt biblio 100 @LOCATION_SORT.PFT tell=%s''' % TELL)
  
 
@@ -578,20 +548,16 @@ def fullinv():
     # ATENCION: AC-ANSI.TAB envia los numeros al diccionario.
     # -------------------------------------------------------------------
      
-    print
-    print " Archivo invertido - Base de temas..."
+    logger.info(" Archivo invertido - Base de temas...")
     run('''mx subj fst=@HEADINGS.FST actab=AC-ANSI.TAB uctab=UC-ANSI.TAB fullinv=subj tell=%s''' % TELL)
      
-    print
-    print " Archivo invertido - Base de nombres..."
+    logger.info(" Archivo invertido - Base de nombres...")
     run('''mx name fst=@HEADINGS.FST actab=AC-ANSI.TAB uctab=UC-ANSI.TAB fullinv=name tell=%s''' % TELL)
      
-    print
-    print " Archivo invertido - Base de titulos..."
+    logger.info(" Archivo invertido - Base de titulos...")
     run('''mx title "fst=2 0 '~',@HEADSORT.PFT" actab=AC-ANSI.TAB uctab=UC-ANSI.TAB fullinv=title tell=%s''' % TELL)
      
-    print
-    print " Archivo invertido - Base bibliografica..."
+    logger.info(" Archivo invertido - Base bibliografica...")
     # Antes de la FST, aplicamos un gizmo a los campos que generan puntos de acceso
     run('''mx biblio gizmo=DICTGIZ,100,110,111,130,700,710,711,730,800,810,811,830 gizmo=DICTGIZ,240,245,246,440,740,600,610,611,630,650,651,653,655,656 fst=@BIBLIO.FST actab=AC-ANSI.TAB uctab=UC-ANSI.TAB stw=@BIBLIO.STW fullinv=biblio tell=%s''' % TELL)
 
@@ -601,8 +567,7 @@ def process_analytics():
     # REGISTROS ANALÍTICOS
     # ------------------------------------------------------------------
      
-    print
-    print "Detectando registros analiticos..."
+    logger.info("Detectando registros analiticos...")
     # Para los registros analíticos, creamos un 773$9 donde guardar el MFN
     # del registro asociado, y así ahorrar futuros lookups en el diccionario
     # ATENCION: esto debe hacerse *después* de aplicado el msrt y generado el diccionario
@@ -612,8 +577,7 @@ def process_analytics():
 
 def compact_db():
     # Compactamos la base bibliografica
-    print
-    print "Compactando la base bibliografica..."
+    logger.info("Compactando la base bibliografica...")
     run('mx biblio create=bibliotmp now -all tell=%s' % TELL)
     try:
         shutil.move('bibliotmp.mst', 'biblio.mst')
@@ -630,16 +594,10 @@ def compact_db():
 def compute_postings():
     # POSTINGS
      
-    print
-    # --------------------------------------------------------
-    print "Asignamos postings a los terminos del indice de temas."
-    # --------------------------------------------------------
+    logger.info("Asignamos postings a los terminos del indice de temas.")
     run('''mx subj "proc='d11a11#',f(npost(['biblio']'_SUBJ_'v9),1,0),'#'" copy=subj now -all tell=%s''' % TELL)
      
-    print
-    # ----------------------------------------------------------
-    print "Asignamos postings a los terminos del indice de nombres."
-    # ----------------------------------------------------------
+    logger.info("Asignamos postings a los terminos del indice de nombres.")
     run('''mx name "proc='d11a11#',f(npost(['biblio']'_NAME_'v9),1,0),'#'" copy=name now -all tell=%s''' % TELL)
      
     # TO-DO: necesitamos postings para los títulos controlados (series, títulos uniformes).
@@ -649,15 +607,12 @@ def compute_postings():
 def build_agrep_dictionaries():
     # DICCIONARIOS PARA AGREP
      
-    print
-    # -----------------------------------------------------
-    print "Generamos diccionarios para AGREP."
+    logger.info("Generamos diccionarios para AGREP.")
     # Solo nos interesan claves asociadas a ciertos tags.
     # /100 restringe la cantidad de postings (de lo contrario, da error).
     # ATENCION: los sufijos NAME, SUBJ, TITLE van en mayusculas o minusculas
     # en base a los valores que tome el parámetro CGI correspondiente.
-    # -----------------------------------------------------
-    print "   - subj"
+    logger.info("   - subj")
     # Para bibima usamos la base MSC; para el resto, la base SUBJ
     # TO-DO: la base subj también sirve para bibima; usar cat & uniq
     # TO-DO: independizarse del nombre de la base (usar update.conf)
@@ -667,10 +622,10 @@ def build_agrep_dictionaries():
     else:
         run('''mx dict=subj "pft=v1^*/" k1=a k2=zz now > dictSUBJ.txt''')
     
-    print "   - name"
+    logger.info("   - name")
     run('''mx dict=name "pft=v1^*/" k1=a k2=zz now > dictNAME.txt''')
     
-    print "   - title (incluye series)"
+    logger.info("   - title (incluye series)")
     #mx dict=biblio,1,2/100  "pft=if v2^t : '204' then v1^*/ fi" k1=a now > dicttitle.txt
     run('''ifkeys biblio +tags from=a to=zzzz > tmp/titlekeys.txt''')
     run('''mx seq=tmp/titlekeys.txt "pft=if '204~404' : right(v2,3) then v3/ fi" now > tmp/titlekeys2.txt''')
@@ -678,19 +633,27 @@ def build_agrep_dictionaries():
     run('''mx seq=tmp/titlekeys2.txt create=tmp/titlekeys2 now -all''')
     run('''mx tmp/titlekeys2 "pft=if v1 <> ref(mfn-1, v1) then v1/ fi" now > dictTITLE.txt''')
     
-    print "   - any"
-    # union de los diccionarios anteriores (eliminando términos duplicados)
-    # originalmente era así de simple: cat dict*.txt | sort | uniq > dictANY.txt
-    # 
-    # Para python, usamos una idea de aquí: http://mail.python.org/pipermail/python-list/2003-January/178712.html
-    # dict.fromkeys está disponible desde Python 2.3. 
-    # TO-DO: ¿será más rápido de otra manera, p.ej. con sets? Ver http://www.python.org/doc/2.5.2/lib/types-set.html
+    logger.info("   - any")
+    # Unión de los diccionarios anteriores (eliminando términos duplicados)
+    # Originalmente en Bash era así de simple: cat dict*.txt | sort | uniq > dictANY.txt
+ 
     all_terms = []
     for dict_type in ('SUBJ', 'NAME', 'TITLE'):
         d = open('dict%s.txt' % dict_type, 'r')
         all_terms.extend(d.readlines())
+
+    # Necesitamos eliminar duplicados y ordenar (o al revés, pero entonces el método de eliminación
+    # de duplicados debe preservar el orden).
+    # Usamos por ahora una método que usa dict.fromkeys, tomado de:
+    #      sorted unique elements from a list; using 2.3 features
+    #      <http://mail.python.org/pipermail/python-list/2003-January/178712.html>
+    # NOTA: dict.fromkeys está disponible desde Python 2.3. 
+    # TO-DO: ¿será más rápido de otra manera, p.ej. con sets?
+    # Ver: Fastest way to uniqify a list in Python <http://www.peterbe.com/plog/uniqifiers-benchmark>
+    #      Recipe 52560: Remove duplicates from a sequence <http://code.activestate.com/recipes/52560/>
     unique_lines = dict.fromkeys(all_terms).keys()
     unique_lines.sort()
+    
     dictANY = open('dictANY.txt', 'w')
     dictANY.writelines(unique_lines)
     dictANY.close()
@@ -699,54 +662,34 @@ def build_agrep_dictionaries():
 def build_aux_files():
     # ARCHIVOS AUXILIARES
      
-    print
-    # -----------------------------------------------------
-    print "Lista de codigos de idioma."
-    # -----------------------------------------------------
+    logger.info("Lista de codigos de idioma.")
     run('''mx seq=LANG.SEQ create=tmp/lang now -all''')
     run('''mx tmp/lang fst=@LANG.FST fullinv=tmp/lang''')
     run('''mx dict=biblio "k1=-LANG=A" "k2=-LANG=ZZZ" "pft=v1^**6.3,'|',v1^t/" now > tmp/langcode.txt''')
     run('''mx seq=tmp/langcode.txt create=tmp/langcode now -all''')
     run('''msrt tmp/langcode 30 "ref(['tmp/lang']l(['tmp/lang']v1.3),s(mpu,v3))"''')
     run('''mx tmp/langcode "pft=v1,'^p',v2,'^',/" now -all > langcode.txt''')
-    
 
     # TO-DO: independizarse del nombre de la base (usar update.conf)
     if DB_NAME == "bibima":
-        print
-        # -----------------------------------------------------
-        print "Actualizamos los postings para cada código MSC"
-        # -----------------------------------------------------
+        logger.info("Actualizamos los postings para cada código MSC")
         run('''mx MSC "proc=if l(['biblio']'-MSC='v1) > 0 then 'd7a7@',f(npost(['biblio']'-MSC='v1),1,0),'@' fi" copy=MSC now -all tell=%s''' % TELL)
         # TO-DO: compactar la base MSC
     
-    
-    print
-    # -----------------------------------------------------
-    print "Lista de codigos de bibliotecas."
-    # -----------------------------------------------------
+    logger.info("Lista de codigos de bibliotecas.")
     run('''mx dict=biblio "k1=-BIB=A" "k2=-BIB=ZZZ" "pft=v1^**5,'^p',v1^t/" now > bibcode.txt''')
     
-     
-    print
-    # -----------------------------------------------------
-    print "Fechas extremas."
-    # -----------------------------------------------------
+    logger.info("Fechas extremas.")
     run('''mx dict=biblio "k1=-F=1" "k2=-F=2999" "pft=v1^**3/" now > tmp/dates1.txt''')
     run('''mx tmp to=1 "proc='a1~',replace(s(cat('tmp/dates1.txt')),s(#),'&'),'~'" "pft=v1.4,'-',s(right(v1,5)).4" > dates.txt''')
     
-    # -----------------------------------------------------
-    print "Total de registros disponibles."
-    # -----------------------------------------------------
+    logger.info("Total de registros disponibles.")
     run('''mx biblio count=1 "pft=proc('a5001~',f(maxmfn-1,1,0),'~'),'BIBLIOGRAPHIC_TOTAL=',left(v5001,size(v5001)-3),if size(v5001) > 3 then '.' fi,right(v5001,3)/" > bases.txt''')
     run('''mx name count=1 "pft=proc('a5001~',f(maxmfn-1,1,0),'~'),'NAME_TOTAL=',left(v5001,size(v5001)-3),if size(v5001) > 3 then '.' fi,right(v5001,3)/" >> bases.txt''')
     run('''mx subj count=1 "pft=proc('a5001~',f(maxmfn-1,1,0),'~'),'SUBJ_TOTAL=',left(v5001,size(v5001)-3),if size(v5001) > 3 then '.' fi,right(v5001,3)/" >> bases.txt''')
     run('''mx title count=1 "pft=proc('a5001~',f(maxmfn-1,1,0),'~'),'TITLE_TOTAL=',left(v5001,size(v5001)-3),if size(v5001) > 3 then '.' fi,right(v5001,3)/" >> bases.txt''')
     
-    # -----------------------------------------------------
-    print "Total de ejemplares disponibles."
-    # -----------------------------------------------------
-    
+    logger.info("Total de ejemplares disponibles.")
     # ATENCION: necesitamos una buena definición de "ejemplares" (los "items" de FRBR)
     # Por ahora, vamos a contar los nros. de inventario, 859$p
     # En lugar de wc, usar archivo temporal y count = len(open(thefilepath, 'rU').readlines( )) -- ver Recipe 2.5. Counting Lines in a File
@@ -769,30 +712,23 @@ def build_aux_files():
     # Mostramos bases.txt
     #cat bases.txt
     
-    print
-    # -----------------------------------------------------
-    print "Listado de novedades."
-    # -----------------------------------------------------
+    logger.info("Listado de novedades.")
     # TO-DO: generalizar para cualquier año y/o mes, y para otros criterios (e.g. en ABCI por inventario)
     # FIXME (sort para Windows)
     run('''mx biblio "pft=if '~2006~2007~2008~2009~2010~' : s('~',v859^y[1]*6.4,'~') then v1/ fi" now | sort > novedades.txt''')
     
-    print
-    # -----------------------------------------------------
-    print "Fecha de esta actualizacion."
-    # -----------------------------------------------------
+    logger.info("Fecha de esta actualizacion.")
     run('''mx tmp "pft=s(date)*6.2,'/',s(date)*4.2,'/',s(date).4,' a las ',s(date)*9.2,':',s(date)*11.2" to=1 > updated.txt''')
 
 
 def remove_tmp_files():
     # Eliminamos archivos temporales generados por este script
     
-    print
-    print "Eliminando archivos temporales..."
+    logger.info("Eliminando archivos temporales...")
     try:
         shutil.rmtree('tmp')
     except:
-        print "ERROR: No se puede eliminar el directorio tmp"
+        logger.info("ERROR: No se puede eliminar el directorio tmp")
     
     #rm -rf *.ln* 2>/dev/null
     #rm -rf *.lk* 2>/dev/null
@@ -807,8 +743,7 @@ def move_files():
     # TO-DO: sacamos de servicio el OPAC mientras se están pisando los archivos viejos?
     #        Otra opción: cambiar un link simbólico que apunte a la carpeta con los nuevos archivos
     #        (ver la idea en http://athleticsnyc.com/blog/entry/on-using-subversion-for-web-projects)
-    print
-    print "Moviendo los archivos generados..."
+    logger.info("Moviendo los archivos generados...")
     TARGET_DIR = CONFIG.get('Global', 'TARGET_DIR').replace('__DB__', DB_NAME)
     emptydir(TARGET_DIR)
     try:
@@ -823,33 +758,30 @@ def clean_cache():
     CACHE_DIR = os.path.join(LOCAL_DATA_DIR, 'temp')
     emptydir(CACHE_DIR)
 
-begin_msg = '''
------------------------------------------------------
-  %s - ACTUALIZACION DEL OPAC
------------------------------------------------------
-'''
+begin_msg = "Actualización de la base %s."
 
-end_msg = '''
------------------------------------------------------
-  Base %s actualizada exitosamente.
------------------------------------------------------
-'''
+end_msg = "Base %s actualizada exitosamente."
 
 def main(db_name):
 
-    print begin_msg % os.path.basename(sys.argv[0])  # FIXME - si es importado por demo.py imprime 'demo.py'
-
     global CONFIG, TELL, ENV, DB_NAME
+
+    script_name = os.path.basename(sys.argv[0])
 
     #Check mandatory argument
     #if len(argv) < 2:
     #    print_usage()
     
-    # Read config file and define global variables
     DB_NAME = db_name
+    logger.warning(begin_msg % DB_NAME)  # FIXME - si es importado por demo.py imprime 'demo.py'
+    
+    # Read config file
     CONFIG = read_config()
+    
+    # define global variables
     TELL = CONFIG.get('Global', 'TELL')  # used by many calls to cisis utilities
     ENV = build_env()
+    
     
     # Prepare the input data
     goto_work_dir()
@@ -879,7 +811,7 @@ def main(db_name):
     
     clean_cache()
 
-    print end_msg % DB_NAME
+    logger.warning(end_msg % DB_NAME)
 
 
 if __name__ == "__main__":

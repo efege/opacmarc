@@ -298,13 +298,42 @@ Falta considerar:
 
 
 Para dejar todo esto bien en claro, tenemos que armar una buena tabla donde queden respondidas
-estas preguntas para cada tipo de archivo T, y para cada nivel loca (general, base):
+estas preguntas para cada tipo de archivo T, y para cada nivel local (general, base):
 
     - ¿cómo hago para agregar un archivo de tipo T?
-    - ¿cómo hago para alterar/reemplazar un archivo de tipo T?
+    - ¿cómo hago para alterar/reemplazar un archivo de tipo T que viene predeterminado en la aplicación?
     
 El "cómo hago" involucra: qué archivo creo o modifico, donde lo almaceno, y dónde/cómo registro
 el cambio para que entre en efecto.
 
+------------------------------------------------------------
 
- 
+Los links a imágenes:
+
+./bin/add_db/templates/db-header.htm:    <img src="[pft]v6003^h[/pft]local-base/[pft]v2104[/pft]/img/db-logo.png" alt="Logo">
+./cgi-bin/html/novedad.htm:			     <img src="[pft]v6003^h[/pft]local-base/[pft]v2104[/pft]/img/[pft]v001,'.',v985^a[/pft]" alt="Imagen de la tapa">
+./cgi-bin/html/complete.htm:		     <img src="[pft]v6003^h[/pft]local-base/[pft]v2104[/pft]/img/[pft]v001,'.',v985^a[/pft]" alt="Imagen de la tapa">
+./cgi-bin/html/complete.htm:		     <img src="[pft]v6003^h[/pft]local-base/[pft]v2104[/pft]/img/[pft]v001,'.',v985[/pft]"></p>
+./cgi-bin/html/complete.htm:		     <img src="[pft]v6003^h[/pft]local-base/[pft]v2104[/pft]/img/[pft]v001,'.',v985[/pft]">
+
+./cgi-bin/html/mail.htm:		         <img src="[pft]v6003^h[/pft]img/envelope-icon.gif" alt="" align="middle">
+./cgi-bin/html/mail.htm:	             <img src="[pft]v6003^h[/pft]img/envelope-icon.gif" alt="" align="middle">
+./cgi-bin/xis/zero-hits.xis:			 <img src="[pft]v6003^h[/pft]img/google-Logo_25wht.gif" alt="Google" align="top" border="0">
+./cgi-bin/html/complete.htm:			 <img src="[pft]v6003^h[1][/pft]img/pdf_icon.gif" border="0">
+./cgi-bin/pft/wh.pft:					'<img src="',v6003^h,'img/sym_s_tree_plus.gif" style="border: none; /*vertical-align: top;*/"></a>'/ 
+
+Sería conveniente definir 3 parámetros, uno por cada nivel, para facilitar la creación de links a imágenes u otros tipos de
+archivos estáticos:
+
+     v6005^h := default_htdocs = /
+     <img src="[pft]v6005^h[/pft]img/something.png">
+     
+     v6005^l := local_htdocs = /local/
+     <img src="[pft]v6005^l[/pft]img/otherthing.png">
+     
+     v6005^d := db_htdocs = /local-db/__DB__/
+     <img src="[pft]v6005^d[/pft]img/db-logo.png">
+
+pero aun no sé en qué lugar/momento definirlos.
+
+------------------------------------------------------------

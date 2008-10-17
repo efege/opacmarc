@@ -11,6 +11,8 @@ Define variables y funciones de uso general.
 
 import sys
 import os
+import logging       # logs messages to console & file
+#import logging.handlers   # for SMTPHandler 
 
 # The subprocess module appeared with Python 2.4. If using an older version,
 # import a copy of subprocess.py borrowed from Python 2.5.
@@ -19,6 +21,7 @@ try:
     import subprocess
 except:
     import subprocess_for_23 as subprocess
+
 
 # El nombre de este directorio podría cambiar. Sólo aparece explícitamente
 # aquí y en read-param.xis.
@@ -83,3 +86,34 @@ def emptydir(dir):
         error("Error al vaciar el directorio %s" % dir)
         raise
         
+
+# TO-DO: usando un SMTPHandler podemos enviar email al admin en caso de errores.
+# Ver: http://www.python.org/doc/2.5.2/lib/node418.html
+# Testeado en la UNS sin éxito (2008-10-17)
+def setup_logger(log_file):
+    # basado en http://www.onlamp.com/lpt/a/5914
+    #create logger
+    logger = logging.getLogger()
+    logger.setLevel(logging.DEBUG)
+    
+    #create console handler and set level
+    ch = logging.StreamHandler()
+    ch.setLevel(logging.DEBUG)
+    
+    #create file handler and set level
+    fh = logging.FileHandler(log_file)
+    fh.setLevel(logging.WARNING)
+    
+    #create formatter
+    c_formatter = logging.Formatter("%(message)s")
+    f_formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
+    
+    #add formatter to ch and fh
+    ch.setFormatter(c_formatter)
+    fh.setFormatter(f_formatter)
+    
+    #add ch and fh to logger
+    logger.addHandler(ch)
+    logger.addHandler(fh)
+    
+    return logger

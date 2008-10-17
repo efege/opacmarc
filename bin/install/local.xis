@@ -1,9 +1,24 @@
-<!--
-Por cada script local que desee usar, agregue a este archivo una línea como la siguiente:
+<field action="cgi" tag="8000">local_task</field>
+<flow action="jump"><pft>v8000</pft></flow>
 
-    <include>../local-data/cgi-bin/xis/some_local_task.xis</include>
+
+<!--
+Por cada script local que desee usar, agregue a este archivo un par de
+líneas como las siguientes:
+
+    <label>TAREA_LOCAL</label>
+    <include>../local-data/cgi-bin/xis/some_local_script.xis</include>
     
-reemplazando "some_local_task" por el nombre del script.
+reemplazando "TAREA_LOCAL" por el nombre de la tarea (valor del parámetro
+CGI local_task), y "some_local_task" por el nombre del script.
 
 Todos los scripts locales deben estar en la carpeta local-data/cgi-bin/xis/
+
+La URL usada para invocar un script local asociado a la tarea XYZ debe incluir
+estos parámetros:
+
+    &task=LOCAL&local_task=XYZ
+
+Los tags 8000-8099 están libres para uso local.
 -->
+

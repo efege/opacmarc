@@ -238,8 +238,8 @@ Parámetros CGI
 <display><pft>ALL</pft></display-->
 
 <!-- Comienzo de la salida HTML -->
-<display><htmlpft><pft>,cat('OPAC-HEAD.HTM'),</pft></htmlpft></display>
-<display><htmlpft><pft>,cat('OPAC-BANNER.HTM'),</pft></htmlpft></display>
+<display><htmlpft><pft>,cat('PAGE-BEGIN.HTM'),</pft></htmlpft></display>
+<display><htmlpft><pft>,cat('DB-HEADER.HTM'),</pft></htmlpft></display>
 
 
 <!-- ----------------------------------------------------------------- -->
@@ -418,7 +418,7 @@ Parámetros CGI
 <label>SHOW_ABOUT</label>
 <!-- ================================================== -->
 <display><htmlpft><pft>
-    ,cat('ABOUT.HTM'),
+    ,cat('DB-ABOUT.HTM'),
 </pft></htmlpft></display>
 <flow action="jump">FIN</flow>
 
@@ -463,21 +463,22 @@ Parámetros CGI
 <display><htmlpft><pft>
     if a(v2011) and not '~SHOW_FEEDBACK_FORM~' : v2101 then
         ,cat('FORM-SIMPLE.HTM'),  /* TO-DO: Quitar para Museo Mitre */
-        ,cat('HOME.HTM'),         /* Idem Mitre */ /* ATENCION: error en la visualización si el archivo home.htm no existe */
-        ,cat('OPAC-FOOTER.HTM'),
+        ,cat('DB-EXTRA.HTM'),         /* Idem Mitre */ /* ATENCION: error en la visualización si el archivo db-extra.htm no existe */
+        ,cat('DB-FOOTER.HTM'),
+        ,cat('PAGE-END.HTM'),
     fi
     if p(v2011) then
           /* A pedido de Raúl, esto sólo debe aparecer en las páginas de los formularios */
-        ,cat('OPAC-FOOTER.HTM'),
+        ,cat('PAGE-END.HTM'),
     fi,
 
     /*Cuándo mostrar cada pieza:
     
         ,cat('FORM-SIMPLE.HTM'),
         
-        ,cat('HOME.HTM'),*/  /* ATENCION: error en la visualización si el archivo home.htm no existe */
+        ,cat('DB-EXTRA.HTM'),*/  /* ATENCION: error en la visualización si el archivo db-extra.htm no existe */
         
-        /*,cat('OPAC-FOOTER.HTM'),*/
+        /*,cat('PAGE-END.HTM'),*/
     
 </pft></htmlpft></display>
 

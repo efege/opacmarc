@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # coding=windows-1252
 
 """
@@ -17,16 +17,18 @@
 import os
 import sys
 import shutil
-from opac_util import error, OPACMARC_DIR, LOCAL_DATA_DIR
+from opac_util import error, OPACMARC_DIR, LOCAL_DATA_DIR, LOCAL_DATA
 
 # Plantillas para archivos
 template_dest = {
-    'about.htm' : 'cgi-bin/html',
-    'banner.htm' : 'cgi-bin/html',
-    'home.htm' : 'cgi-bin/html',
-    'db-styles.css' : 'htdocs/css',
+    'db-about.htm'     : 'cgi-bin/html',
+    'db-footer.htm'    : 'cgi-bin/html',
+    'db-header.htm'    : 'cgi-bin/html',
+    'db-extra.htm'     : 'cgi-bin/html',
+    'db-styles.css'    : 'htdocs/css',
+    'db-scripts.js'    : 'htdocs/js',
     'db-settings.conf' : 'config',
-    'db-cipar.par' : 'config',
+    'db-cipar.par'     : 'config',
 }
 
 def print_usage():
@@ -74,7 +76,7 @@ def main(DB_NAME):
         f1 = open(os.path.join(OPACMARC_DIR, 'bin', 'add_db', 'templates', tpl), 'r')
         f2 = open(os.path.join(DB_DIR, template_dest[tpl], tpl), 'w')
         f2.write(
-            f1.read().replace('__LOCAL_DATA_DIR__', LOCAL_DATA_DIR).replace('__DB__', DB_NAME)
+            f1.read().replace('__LOCAL_DATA__', LOCAL_DATA).replace('__DB__', DB_NAME)
         )
         f1.close()
         f2.close()
@@ -83,7 +85,7 @@ def main(DB_NAME):
     print end_msg1 % DB_NAME
     
     # Dummy logo image
-    logo_src = os.path.join(OPACMARC_DIR, 'bin', 'add_db', 'templates', 'logo.png')
+    logo_src = os.path.join(OPACMARC_DIR, 'bin', 'add_db', 'templates', 'db-logo.png')
     logo_dst = os.path.join(DB_DIR, 'htdocs', 'img')
     shutil.copy(logo_src, logo_dst)
 
@@ -110,9 +112,10 @@ y luego ejecutar:
 Además, si desea personalizar la presentacion del OPAC para esta base, puede
 editar los siguientes archivos:
 
-    %s/bases/%s/htmlpft/about.htm
-    %s/bases/%s/htmlpft/banner.htm
-    %s/bases/%s/htmlpft/home.htm
+    %s/bases/%s/html/db-about.htm
+    %s/bases/%s/html/db-header.htm
+    %s/bases/%s/html/db-footer.htm
+    %s/bases/%s/html/db-extra.htm
     %s/bases/%s/htdocs/css/db-styles.css
     
 Si necesita imágenes para esta base (p.ej. un logo) debe colocarlas en

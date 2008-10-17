@@ -16,7 +16,7 @@
 		page-break-inside: avoid; /* IE6 y Mozilla 1.x lo ignoran, pero igual, dejémoslo para el futuro... */
 	}
 
-	div#searchFormWrapper, div#systemInfo, table#banner td#menu, ul.navigation, div#home {
+	div#searchFormWrapper, div#systemInfo, table#header td#menu, ul.navigation, div#extra {
 		display: none;	
 	}
 
