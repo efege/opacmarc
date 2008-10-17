@@ -43,8 +43,8 @@ H-SEARCH-TOP-1.HTM=__OPACMARC_DIR__/cgi-bin/html/h-search-top-1.htm
 H-SEARCH-TOP-2.HTM=__OPACMARC_DIR__/cgi-bin/html/h-search-top-2.htm
 MAIL-RESULTS.HTM=__OPACMARC_DIR__/cgi-bin/html/mail.htm
 NOVEDAD.HTM=__OPACMARC_DIR__/cgi-bin/html/novedad.htm
-OPAC-FOOTER.HTM=__OPACMARC_DIR__/cgi-bin/html/opac-footer.htm
-OPAC-HEAD.HTM=__OPACMARC_DIR__/cgi-bin/html/opac-head.htm
+PAGE-END.HTM=__OPACMARC_DIR__/cgi-bin/html/page-end.htm
+PAGE-BEGIN.HTM=__OPACMARC_DIR__/cgi-bin/html/page-begin.htm
 SAMPLE-RECORD.TXT=__OPACMARC_DIR__/cgi-bin/sample-record.txt
 SORTED-BY.HTM=__OPACMARC_DIR__/cgi-bin/html/sorted-by.htm
 ABOUT-MSC.HTM=__OPACMARC_DIR__/cgi-bin/html/about-msc.htm
@@ -98,12 +98,13 @@ UPDATED.TXT=__LOCAL_DATA_DIR__/bases/__DB__/db/public/updated.txt
 # -----------------------------------------------------------------
 # HTMLPFT
 # -----------------------------------------------------------------
-ABOUT.HTM=__LOCAL_DATA_DIR__/bases/__DB__/cgi-bin/html/about.htm
-HOME.HTM=__LOCAL_DATA_DIR__/bases/__DB__/cgi-bin/html/home.htm
-OPAC-BANNER.HTM=__LOCAL_DATA_DIR__/bases/__DB__/cgi-bin/html/banner.htm
-PRESENTATION.HTM=__LOCAL_DATA_DIR__/bases/__DB__/cgi-bin/html/present.htm
+DB-ABOUT.HTM=__LOCAL_DATA_DIR__/bases/__DB__/cgi-bin/html/db-about.htm
+DB-EXTRA.HTM=__LOCAL_DATA_DIR__/bases/__DB__/cgi-bin/html/db-extra.htm
+DB-FOOTER.HTM=__LOCAL_DATA_DIR__/bases/__DB__/cgi-bin/html/db-footer.htm
+DB-HEADER.HTM=__LOCAL_DATA_DIR__/bases/__DB__/cgi-bin/html/db-header.htm
+#DB-PRESENTATION.HTM=__LOCAL_DATA_DIR__/bases/__DB__/cgi-bin/html/db-present.htm
 
 # -----------------------------------------------------------------
-# Archivo de logs (uno por fecha)
+# Archivo de logs, uno por fecha
 # -----------------------------------------------------------------
 LOGFILE.TXT=__LOCAL_DATA_DIR__/logs/log-__DATE__.txt

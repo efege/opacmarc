@@ -1,0 +1,1 @@
+// JavaScript local, para la base __DB__

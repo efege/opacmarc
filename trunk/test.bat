@@ -2,10 +2,13 @@
 :: Script para testear opacmarc en Windows
 :: Creado: FG, 2008-10-06
 
+:: Este script me resulta útil para testear la aplicación a partir de una
+:: working copy local. Para usarlo en otro contexto, habría que ajustar
+:: los parámetros de configuración y tal vez algún otro detalle.
 
-:: Leemos parámetros locales de un archivo externo.
-:: Esta es la lista de parámetros esperados, con valores sólo a modo
-:: de ejemplo:
+:: Leemos parámetros locales de un archivo externo (test-config.bat).
+:: Esta es la lista de parámetros esperados; los valores mostrados son
+:: sólo ejemplos:
 ::
 :: versión de utilitarios cisis + wxis
 :: set CISIS_VERSION=5.2b-1030

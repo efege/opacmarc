@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # coding=windows-1252
 
 """
@@ -8,21 +8,25 @@ Issue 10: http://code.google.com/p/opacmarc/issues/detail?id=10
 TO-DO: Considerar también la situación en que ya existe una instalación
 y se desea preservar los datos locales.
 
-TO-DO: crear archivo vacío htdocs/css/local-styles.css (a partir de un template?)
+TO-DO: hacer read-only los directorios y archivos de la aplicación? import stat ; os.chmod(myFile, stat.S_IREAD)
 """
 
 import os
 import sys
 import shutil
 
-from opac_util import run_command, error, OPACMARC_DIR, LOCAL_DATA_DIR, CISIS_PATH, LOCAL_DATA
+from opac_util import run_command, error, OPACMARC_DIR, LOCAL_DATA_DIR, CISIS_PATH, LOCAL_DATA, setup_logger
 import tablas
+
+# A global logger object
+log_file = os.path.join(OPACMARC_DIR, 'install.log')
+logger = setup_logger(log_file)
 
 
 # Archivos que crea o modifica el script de instalación.
 # TO-DO: agregar aquí los que usa create_db()?
 FILES = {
-    'footer'       : os.path.join(OPACMARC_DIR, 'cgi-bin', 'html', 'opac-footer.htm'),
+    'footer'       : os.path.join(OPACMARC_DIR, 'cgi-bin', 'html', 'page-end.htm'),
     'cipar-opac'   : os.path.join(OPACMARC_DIR, 'config', 'default-cipar.par'),
     'cipar-update' : os.path.join(OPACMARC_DIR, 'config', 'update.par'),
     'conf-default' : os.path.join(OPACMARC_DIR, 'config', 'default-settings.conf'),
@@ -36,6 +40,7 @@ FILES = {
 # Plantillas para archivos (tomado de add_db.py -- TO-DO: unificar mecanismos)
 template_dest = {
     'local-styles.css' : 'htdocs/css',
+    'local-scripts.js' : 'htdocs/js',
     #'local-settings.conf' : 'config',
     'local-cipar.par' : 'config',
     'local.xis' : 'cgi-bin/xis',
@@ -69,15 +74,13 @@ def set_version():
     aux_file.close()
     shutil.move('footer.tmp', FILES['footer'])
     
-    print "Identificador de version generado."
+    logger.info("Identificador de version generado.")
 
 def create_from_template(template, destination, substitutions, force_forward=False, allow_overwrite=False):
     """Crea un archivo de configuración a partir de una plantilla."""
     
     if os.path.isfile(destination) and not allow_overwrite:
-        print
-        print "ATENCION: ya existe el archivo %s." % os.path.abspath(destination)
-        print
+        logger.warning("ATENCION: ya existe el archivo %s." % os.path.abspath(destination))
     else:
         try:
             f1 = open(template, 'r')
@@ -90,11 +93,9 @@ def create_from_template(template, destination, substitutions, force_forward=Fal
             f2.write(content)
             f1.close()
             f2.close()
-            print 'Generado el archivo %s.' % os.path.basename(destination)
+            logger.info('Generado el archivo %s.' % os.path.basename(destination))
         except:
-            print
-            print "ERROR: No se pudo generar el archivo %s." % os.path.basename(destination)
-            print
+            logger.error("ERROR: No se pudo generar el archivo %s." % os.path.basename(destination))
 
 def build_config_files():
     """Crea archivos de configuración con los paths apropiados."""
@@ -116,7 +117,7 @@ def build_config_files():
     )
     
     for config_file in ('conf-httpd', 'conf-default', 'conf-local', 'conf-update', 'cipar-opac', 'cipar-update'):
-        template = os.path.join(OPACMARC_DIR, 'config', 'templates', os.path.basename(FILES[config_file]) + '.dist')
+        template = os.path.join(OPACMARC_DIR, 'config', 'templates', os.path.basename(FILES[config_file]) + '.tpl')
         if config_file == 'conf-httpd':
             force_forward=True  # Apache requiere barras hacia adelante, incluso en Windows
         create_from_template(template, FILES[config_file], substitutions, force_forward=force_forward)
@@ -156,7 +157,7 @@ def create_files():
         )
         f1.close()
         f2.close()
-        print 'Generado el archivo %s.' % os.path.basename(template_dest[tpl])
+        logger.info('Generado el archivo %s.' % os.path.basename(template_dest[tpl]))
 
 
 def setup_msc():
@@ -199,7 +200,7 @@ def create_aux_db():
     if len(sys.argv) > 1 and sys.argv[1] == 'msc':
         setup_msc()
     
-    print "Bases auxiliares creadas."
+    logger.info("Bases auxiliares creadas.")
 
 def create_table(table_type):
     """Crea una tabla con códigos de caracteres (actab , uctab)."""
@@ -209,7 +210,7 @@ def create_table(table_type):
         f.write(' '.join(values[:32]) + '\n')  # CURIOSO: usando os.linesep en vez de '\n' no se puede leer la tabla en Windows
         values = values[32:]
     f.close()
-    print "Tabla %s creada." % table_type
+    logger.info("Tabla %s creada." % table_type)
 
 
 def upgrade(old_dir=None):
@@ -218,6 +219,13 @@ def upgrade(old_dir=None):
     
     old_local_data = os.path.join(old_dir, LOCAL_DATA)
     shutil.copystat(old_local_data, LOCAL_DATA_DIR)
+    
+def make_app_readonly():
+    """Configura permiso de sólo lectura para todos los archivos excepto en LOCAL_DATA_DIR."""
+    # FIXME
+    import stat
+    for file_name in os.listdir('.'):
+        os.chmod(file_name, stat.S_IREAD)
     
     
 def show_end_msg():    
@@ -254,6 +262,10 @@ def main():
     create_table('uctab')
     
     create_aux_db()
+    
+    #make_app_readonly()
+    
+    logger.warning('Instalación finalizada.')
     
     show_end_msg()
 

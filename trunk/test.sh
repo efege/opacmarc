@@ -1,6 +1,10 @@
 # Script para testear la instalación de opacmarc en Linux
 # Creado: FG, 2008-10-03
 #
+# Este script me resulta útil para testear la aplicación a partir de una
+# working copy local. Para usarlo en otro contexto, habría que ajustar
+# los parámetros de configuración y tal vez algún otro detalle.
+#
 # TO-DO: enviar la config a un archivo aparte.
 #
 # TO-DO: considerar dos tipos de test:

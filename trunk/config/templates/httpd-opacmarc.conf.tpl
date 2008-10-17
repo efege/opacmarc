@@ -33,7 +33,7 @@ NameVirtualHost *:8081
     
     # Archivos estáticos (css, js, imágenes, etc.) específicos de cada base
     # ATENCION: aparentemente el segundo grupo ($2) debe figurar explícitamente.
-    AliasMatch "^/local-base/([^/]+)/(.+)" "__LOCAL_DATA_DIR__/bases/$1/htdocs/$2"
+    AliasMatch "^/local-db/([^/]+)/(.+)" "__LOCAL_DATA_DIR__/bases/$1/htdocs/$2"
     <DirectoryMatch "__LOCAL_DATA_DIR__/bases/([^/]+)/htdocs/">
         Order allow,deny
         Allow from all

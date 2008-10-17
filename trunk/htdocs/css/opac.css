@@ -748,30 +748,30 @@ ul#webSearches li:first-child {
 
 
 /* --------------------------------
- * HOME
+ * EXTRA
  *
  * FIXME -- Estos estilos son para la base bibima, y por lo tanto deben ser movidos a un archivo local.
  * --------------------------------
  */
 
-div#home {
+div#extra {
 	border-top: 1px dotted #999;
 	padding-top: 1em;
 }
 
-div#home h4 {
+div#extra h4 {
 	font-size: 1em;
 }
 
-div#home a:visited {
+div#extra a:visited {
 	color: #00C;
 }
 
-div#home a:active, div#home a:focus {
+div#extra a:active, div#extra a:focus {
 	color: #FFF;
 }
 
-div#home div {
+div#extra div {
 	background: #FFF8DC; /*#FAFAD2; /*#FFC; /*#E0ECFF; /*#C3D9FF;*/
 	border: 1px solid #CCC;
 	padding: 0.3em 1% 0.5em;
@@ -779,22 +779,22 @@ div#home div {
 	-moz-border-radius: 8px;
 }
 
-div#home div#otros-recursos, div#home div#de-nuevo {
+div#extra div#otros-recursos, div#extra div#de-nuevo {
 	float: left;
 	margin-top: 0.5em;
 	width: 97.8%;
 }
-div#home div#de-nuevo, div#home div#textos {
+div#extra div#de-nuevo, div#extra div#textos {
 	/*float: left;*/
 }
-div#home div#de-nuevo a {
+div#extra div#de-nuevo a {
 	font-weight: bold;
 }
-div#home div#otros-recursos ul, div#home div#de-nuevo ul {
+div#extra div#otros-recursos ul, div#extra div#de-nuevo ul {
 	line-height: 1.5;
 	margin-left: 1em;
 }
-div#home ul li {
+div#extra ul li {
 	/*background: url(http://www.stylegala.com/img/_bullets/0199_small%20old%20simple%20arrow.png) no-repeat 0 0.4em;*/
 	/*float: left;*/
 	list-style: none;
@@ -802,7 +802,7 @@ div#home ul li {
 	padding: 0em 0.2em;
 	white-space: nowrap;
 }
-div#home div#otros-recursos li {
+div#extra div#otros-recursos li {
 	/*float: left;*/
 }
 

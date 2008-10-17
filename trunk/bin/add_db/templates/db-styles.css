@@ -1,16 +1,16 @@
 /*
-    Hoja de estilo de muestra. ModifÃ­quela a su gusto para adaptarla a la base __DB__.
+    Hoja de estilo de muestra. Modifíquela a su gusto para adaptarla a la base __DB__.
 */
 
 
-/* *********************** BANNER ********************* */
+/* *********************** HEADER ********************* */
 
-table#banner {
+table#header {
 	margin-bottom: 0.2em;
 	width: 100%;
 }
 
-table#banner td#logo {
+table#header td#logo {
 	background: #FFF;
 	/*border: 2px solid #FFCC99;*/
 	/*border-right: 1px solid #C9C7BA;*/
@@ -18,13 +18,13 @@ table#banner td#logo {
 	width: 80px;
 }
 
-table#banner td#logo img {
+table#header td#logo img {
 	border-width: 0px;
 	display: block;
 	text-align: center;
 }
 
-table#banner td#ident {
+table#header td#ident {
 	background-color: #666;
 	/*background-image: url(../../../img/gradient-120a.jpg);*/
 	/*background-position: 0 100%;*/
@@ -37,7 +37,7 @@ table#banner td#ident {
 	vertical-align: middle;
 }
 
-table#banner td#menu {
+table#header td#menu {
 	background: #999;
 	border-top: 1px solid #FFF;
 	border-left: none;
@@ -46,12 +46,12 @@ table#banner td#menu {
 	vertical-align: middle;
 }
 
-table#banner td#menu a {
+table#header td#menu a {
     border-color: white;
 	color: white;
 }
 
-div#bannerMessage {
+div#headerMessage {
 	background-image: url(../../../img/icon_caution.gif);
 	background-repeat: no-repeat;
 	background-position: 0 50%;
@@ -61,7 +61,7 @@ div#bannerMessage {
 	padding-left: 30px;
 }
 
-div#home {
+div#extra {
     background-color: #BBB;
     padding: 0.5em 1em 0.3em;
 }
