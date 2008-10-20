@@ -1,9 +1,18 @@
-##########################################
-#  ATENCION - NO MODIFIQUE ESTE ARCHIVO  #
-##########################################
+#############################################################################
+#
+# Archivo cipar predeterminado.
+#
+# ATENCION - NO MODIFIQUE ESTE ARCHIVO
+#
+# Si necesita sobrescribir alguno de estos parámetros, o agregar nuevos,
+# hágalo desde estos archivos:
+#     - local-cipar.par: para cambios que afecten a todas las bases
+#     - db-cipar.par: para cambios que sólo afecten a una base
+#
+#############################################################################
 
 # -----------------------------------------------------------------
-# BASES (common)
+# BASES
 # -----------------------------------------------------------------
 BIBLIO.FST=__APP_DIR__/util/biblio.fst
 BIBLIO.STW=__APP_DIR__/util/biblio.stw
@@ -15,8 +24,8 @@ SELSUBJ.PFT=__APP_DIR__/util/selsubj.pft
 SELNAME.PFT=__APP_DIR__/util/selname.pft
 SELTITLE.PFT=__APP_DIR__/util/seltitle.pft
 
-ACTAB=__APP_DIR__/util/ac-ansi.tab
-UCTAB=__APP_DIR__/util/uc-ansi.tab
+AC-ANSI.TAB=__APP_DIR__/util/ac-ansi.tab
+UC-ANSI.TAB=__APP_DIR__/util/uc-ansi.tab
 
 MSC.*=__APP_DIR__/util/msc2000/msc2000.*
 
@@ -61,9 +70,6 @@ HEADINGS.PFT=__APP_DIR__/cgi-bin/pft/headings.pft
 MAIL.PFT=__APP_DIR__/cgi-bin/pft/mail.pft
 MSC.PFT=__APP_DIR__/cgi-bin/pft/msc.pft
 
-# -----------------------------------------------------------------
-# PFT (compartidos con Catalis)
-# -----------------------------------------------------------------
 BIB_SORT_KEY.PFT=__APP_DIR__/cgi-bin/pft/bib-sort-key.pft
 DOCUMENT-TYPE.PFT=__APP_DIR__/cgi-bin/pft/doc-type.pft
 ETIQUETADO.PFT=__APP_DIR__/cgi-bin/pft/etiquetado.pft
@@ -77,7 +83,8 @@ CI_TEMPDIR=__TEMP_DIR__
 
 
 
-# Todo lo que sigue depende de la consulta que está siendo procesada
+# Todo lo que sigue depende de la petición que está siendo procesada por
+# el servidor.
 
 # -----------------------------------------------------------------
 # BASES
@@ -102,7 +109,6 @@ DB-ABOUT.HTM=__LOCAL_DATA_DIR__/bases/__DB__/cgi-bin/html/db-about.htm
 DB-EXTRA.HTM=__LOCAL_DATA_DIR__/bases/__DB__/cgi-bin/html/db-extra.htm
 DB-FOOTER.HTM=__LOCAL_DATA_DIR__/bases/__DB__/cgi-bin/html/db-footer.htm
 DB-HEADER.HTM=__LOCAL_DATA_DIR__/bases/__DB__/cgi-bin/html/db-header.htm
-#DB-PRESENTATION.HTM=__LOCAL_DATA_DIR__/bases/__DB__/cgi-bin/html/db-present.htm
 
 # -----------------------------------------------------------------
 # Archivo de logs, uno por fecha

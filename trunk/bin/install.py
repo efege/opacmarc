@@ -71,6 +71,7 @@ def create_from_template(template, destination, substitutions, force_forward=Fal
             logger.info('Generado el archivo %s.' % os.path.basename(destination))
         except:
             logger.error("ERROR: No se pudo generar el archivo %s." % os.path.basename(destination))
+            raise
 
 def build_config_files():
     """Crea archivos de configuración con los paths apropiados."""
@@ -91,11 +92,21 @@ def build_config_files():
         ['__TEMP_DIR__', TEMP_DIR],
     )
     
-    for config_file in ('conf-httpd', 'conf-default', 'conf-local', 'conf-update', 'cipar-opac', 'cipar-update'):
+    # TO-DO: no necesitamos listar explícitamente los archivos
+    for config_file in ('conf-httpd', 'conf-default', 'conf-local', 'conf-update', 'cipar-default', 'cipar-local', 'cipar-update'):
         template = os.path.join(APP_DIR, 'config', 'templates', os.path.basename(FILES[config_file]) + '.tpl')
         if config_file == 'conf-httpd':
             force_forward=True  # Apache requiere barras hacia adelante, incluso en Windows
         create_from_template(template, FILES[config_file], substitutions, force_forward=force_forward)
+        
+    # Concatenamos archivos cipar
+    cipar1 = open(FILES['cipar-default'], 'r')
+    cipar2 = open(FILES['cipar-update'], 'a')
+    cipar2.write('\n')
+    for line in cipar1:
+        cipar2.write(line)
+    cipar1.close()
+    cipar2.close()
     
 def make_local_dirs():
     """Crea la estructura de directorios para los datos locales."""
@@ -108,7 +119,7 @@ def make_local_dirs():
         'cgi-bin' : ['html', 'pft', 'xis'],
         'config'  : [],
         'htdocs'  : ['css', 'docs', 'img', 'js'],
-        'logs'    : ['web-server', 'python', 'opac'],
+        'logs'    : ['opac'],
         'temp'    : [],
     }
     
@@ -177,9 +188,10 @@ def create_aux_db():
     logger.info("Bases auxiliares creadas.")
 
 def create_table(table_type):
-    """Crea una tabla con códigos de caracteres (actab , uctab)."""
+    """Crea una tabla con códigos de caracteres (actab , uctab).
+    """
     f = open(FILES[table_type], 'w')
-    values = list(getattr(tablas, table_type))
+    values = list(getattr(char_tables, table_type))
     while values:
         f.write(' '.join(values[:32]) + '\n')  # CURIOSO: usando os.linesep en vez de '\n' no se puede leer la tabla en Windows
         values = values[32:]
@@ -195,11 +207,12 @@ def upgrade(old_dir=None):
     shutil.copystat(old_local_data, LOCAL_DATA_DIR)
     
 def make_app_readonly():
-    """Configura permiso de sólo lectura para todos los archivos excepto en LOCAL_DATA_DIR."""
+    """Configura permiso de sólo lectura para todos los archivos excepto en LOCAL_DATA_DIR.
+    """
     # FIXME
-    import stat
-    for file_name in os.listdir('.'):
-        os.chmod(file_name, stat.S_IREAD)
+    #import stat
+    #for file_name in os.listdir('.'):
+    #    os.chmod(file_name, stat.S_IREAD)
     
     
 def show_end_msg():    
@@ -218,7 +231,7 @@ def show_end_msg():
 
 def main():
 
-    logger.warning('*** Instalación iniciada. ***')
+    logger.info('*** Instalación iniciada. ***')
 
     print '''
 -----------------------------------------------------
@@ -243,7 +256,7 @@ def main():
     
     #make_app_readonly()
     
-    logger.warning('*** Instalación finalizada. ***')
+    logger.info('*** Instalación finalizada. ***')
     
     show_end_msg()
 
@@ -259,12 +272,13 @@ logger = setup_logger(log_file)
 # TO-DO: agregar aquí los que usa create_db()?
 FILES = {
     'footer'       : os.path.join(APP_DIR, 'cgi-bin', 'html', 'page-end.htm'),
-    'cipar-opac'   : os.path.join(APP_DIR, 'config', 'default-cipar.par'),
-    'cipar-update' : os.path.join(APP_DIR, 'config', 'update.par'),
     'conf-default' : os.path.join(APP_DIR, 'config', 'default-settings.conf'),
-    'conf-local'   : os.path.join(LOCAL_DATA_DIR, 'config', 'local-settings.conf'),
-    'conf-update'  : os.path.join(LOCAL_DATA_DIR, 'config', 'update.conf'),
+    'cipar-default': os.path.join(APP_DIR, 'config', 'default-cipar.par'),
+    'cipar-update' : os.path.join(APP_DIR, 'config', 'update_db.par'),
     'conf-httpd'   : os.path.join(APP_DIR, 'config', 'httpd-opacmarc.conf'),
+    'conf-local'   : os.path.join(LOCAL_DATA_DIR, 'config', 'local-settings.conf'),
+    'cipar-local'  : os.path.join(LOCAL_DATA_DIR, 'config', 'local-cipar.par'),
+    'conf-update'  : os.path.join(LOCAL_DATA_DIR, 'config', 'update.conf'),
     'actab'        : os.path.join(APP_DIR, 'util', 'ac-ansi.tab'),
     'uctab'        : os.path.join(APP_DIR, 'util', 'uc-ansi.tab'),
 }
@@ -274,7 +288,7 @@ template_dest = {
     'local-styles.css' : 'htdocs/css',
     'local-scripts.js' : 'htdocs/js',
     #'local-settings.conf' : 'config',
-    'local-cipar.par' : 'config',
+    #'local-cipar.par' : 'config',
     'local.xis' : 'cgi-bin/xis',
 }
 

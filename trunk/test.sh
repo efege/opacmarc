@@ -52,7 +52,8 @@ APACHE_USER=www-data
 APP_DIR=$TEST_DIR/app
 LOCAL_DATA_DIR=$TEST_DIR/local-data
 
-rm -rf $TEST_DIR
+sudo rm -rf $TEST_DIR
+mkdir $TEST_DIR
 
 # bajamos el código del repositorio
 #svn checkout http://opacmarc.googlecode.com/svn/trunk/ $APP_DIR
@@ -71,8 +72,8 @@ python $APP_DIR/bin/install.py msc
 # permisos de escritura
 for dir in logs temp
 do
-    sudo chgrp $APACHE_USER $LOCAL_DATA_DIR/$dir
-    chmod g+w $LOCAL_DATA_DIR/$dir
+    sudo chgrp -R $APACHE_USER $LOCAL_DATA_DIR/$dir
+    chmod -R g+w $LOCAL_DATA_DIR/$dir
 done
 
 # Procesamos la base demo
@@ -83,18 +84,18 @@ python $APP_DIR/bin/demo.py
 sudo cp $APP_DIR/config/httpd-opacmarc.conf $APACHE_VHOST
 sudo apache2ctl restart
 
-# Accedemos al OPAC con un browser.
+# Visitamos el opac
 firefox "http://127.0.0.1:8081/cgi-bin/wxis?IsisScript=xis/opac.xis&db=demo&showForm=simple" &
 
 exit
 
-# nueva base: bibima
+# Nueva base: bibima
 python $APP_DIR/bin/add_db.py bibima
 ln -s $HOME/svn/opacmarc/local-data/bases/bibima/db/original/biblio.mst $LOCAL_DATA_DIR/bases/bibima/db/original/
 ln -s $HOME/svn/opacmarc/local-data/bases/bibima/db/original/biblio.xrf $LOCAL_DATA_DIR/bases/bibima/db/original/
 
-# actualización de base bibima
+# Actualización de base bibima
 python $APP_DIR/bin/update_db.py bibima
 
-# visitamos el opac
+# Visitamos el opac
 firefox "http://127.0.0.1:8081/cgi-bin/wxis?IsisScript=xis/opac.xis&db=bibima&showForm=simple" &

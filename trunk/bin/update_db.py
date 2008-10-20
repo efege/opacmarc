@@ -101,10 +101,6 @@
 # (sin agregar registros de seriadas). Resta revisar algunas secciones, y probar en
 # Windows.
 #
-# TO-DO: generar log a un archivo. Ver http://docs.python.org/lib/module-logging.html
-# Logging to multiple destinations: http://docs.python.org/lib/multiple-destinations.html
-# Python Standard Logging: http://www.onlamp.com/lpt/a/5914
-#
 
 
 # Import modules
@@ -113,10 +109,10 @@ import sys           # argv for processing script arguments
 import shutil        # shell utils (copy, move, rmtree...)
 import re            # regular expressions
 import zipfile       # for reading .zip files
-import subprocess    # for running system commands (mx, i2id, etc)
+#import subprocess    # for running system commands (mx, i2id, etc)
 import ConfigParser  # for reading config file
 
-from opac_util import run_command, error, emptydir, APP_DIR, LOCAL_DATA_DIR, setup_logger, unique_sort_files
+from opac_util import run_command, error, emptydir, APP_DIR, LOCAL_DATA_DIR, setup_logger, unique_sort_files, subprocess
 
 
 def run(command, msg = 'Error'):
@@ -138,11 +134,12 @@ def read_config():
 
 
 def build_env():
-    '''Builds the environment dictionary, used for calling cisis commands.'''
+    """Builds the environment dictionary, used for calling cisis commands.
+    """
     
     # Este diccionario es pasado en las llamadas al sistema
     return {
-        'CIPAR':                os.path.join(APP_DIR, 'config', 'update.par'),  # Hay que usar el path *absoluto* para el cipar
+        'CIPAR':                os.path.join(APP_DIR, 'config', 'update_db.par'),  # Hay que usar el path *absoluto* para el cipar
         # Las variables que siguen son definidas en update.conf
         'PATH':                 CONFIG.get('Global', 'PATH_CISIS') + os.pathsep + os.getenv('PATH'),
         'SUBJ_TAGS':            CONFIG.get('Global', 'SUBJ_TAGS'),
@@ -761,7 +758,7 @@ def main(db_name):
     #    print_usage()
     
     DB_NAME = db_name
-    logger.warning(begin_msg % DB_NAME)  # FIXME - si es importado por demo.py imprime 'demo.py'
+    logger.info(begin_msg % DB_NAME)  # FIXME - si es importado por demo.py imprime 'demo.py'
     
     # Read config file
     CONFIG = read_config()
@@ -799,15 +796,14 @@ def main(db_name):
     
     clean_cache()
 
-    logger.warning(end_msg % DB_NAME)
+    logger.info(end_msg % DB_NAME)
 
 
+# Define a global logger object
+log_file = os.path.join(LOCAL_DATA_DIR, 'logs', 'python.log')
+logger = setup_logger(log_file)
 
 if __name__ == "__main__":
-    # Define a global logger object
-    log_file = os.path.join(LOCAL_DATA_DIR, 'logs', 'python', 'update_db.log')
-    logger = setup_logger(log_file)
-    
     db_name = sys.argv[1]
     main(db_name)
     sys.exit(0)

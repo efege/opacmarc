@@ -184,8 +184,8 @@ Parámetros CGI
 <parm name="buffersize">375000</parm>
 
 <!-- Las tablas de caracteres alfabéticos y de conversión a mayúsculas, para la codificación Latin-1 -->
-<parm name="actab"><pft>cat('ACTAB')</pft></parm>
-<parm name="uctab"><pft>cat('UCTAB')</pft></parm>
+<parm name="actab"><pft>cat('AC-ANSI.TAB')</pft></parm>
+<parm name="uctab"><pft>cat('UC-ANSI.TAB')</pft></parm>
 
 
 <!-- Lee parámetros de la aplicación -->

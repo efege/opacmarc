@@ -146,7 +146,7 @@
 	),
 </pft></field>
 
-<!-- Ciertos parámetros pueden sobreescribirse con valores recibidos vía CGI -->
+<!-- Ciertos parámetros pueden sobrescribirse con valores recibidos vía CGI -->
 <field action="replace" tag="6001"><pft>
 	if p(v2090) then replace(v6001,s('^c'v6001^c),s('^c'v2090)) fi,
 </pft></field>

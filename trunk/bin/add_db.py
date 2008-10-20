@@ -80,6 +80,8 @@ def main(DB_NAME):
 
 
 # Plantillas para archivos, y su directorio destino.
+# NOTA: Podríamos evitar tener que especificar esto aquí si en bin/add_db/templates/
+# organizásemos los archivos dentro de carpetas. 
 template_dest = {
     'db-about.htm'     : 'cgi-bin/html',
     'db-footer.htm'    : 'cgi-bin/html',
@@ -98,13 +100,11 @@ begin_msg = '''
 -----------------------------------------------------
 '''
     
-end_msg1 = '''
-Se han creado los directorios y archivos necesarios para trabajar con
+end_msg1 = '''Se han creado los directorios y archivos necesarios para trabajar con
 la base %s.
 '''
 
-end_msg2 = '''
-A continuacion, debe copiar la base bibliográfica original en la carpeta
+end_msg2 = '''A continuacion, debe copiar la base bibliográfica original en la carpeta
 
     %s/bases/%s/db/original/
     
@@ -115,11 +115,14 @@ y luego ejecutar:
 Además, si desea personalizar la presentacion del OPAC para esta base, puede
 editar los siguientes archivos:
 
-    %s/bases/%s/html/db-about.htm
-    %s/bases/%s/html/db-header.htm
-    %s/bases/%s/html/db-footer.htm
-    %s/bases/%s/html/db-extra.htm
-    %s/bases/%s/htdocs/css/db-styles.css
+    - en %s/bases/%s/cgi-bin/html:
+
+        - db-about.htm
+        - db-header.htm
+        - db-footer.htm
+        - db-extra.htm
+        
+    - %s/bases/%s/htdocs/css/db-styles.css
     
 Si necesita imágenes para esta base (p.ej. un logo) debe colocarlas en
 la carpeta
@@ -132,13 +135,14 @@ para esta base, edite el archivo
     %s/bases/%s/config/db-settings.conf
 '''
 
+# Define a global logger object
+log_file = os.path.join(LOCAL_DATA_DIR, 'logs', 'python.log')
+logger = setup_logger(log_file)
+
+
 if __name__ == "__main__":
-    # Define a global logger object
-    log_file = os.path.join(LOCAL_DATA_DIR, 'logs', 'python', 'add_db.log')
-    logger = setup_logger(log_file)
-    
     # FIXME - si se llama sin argumentos
     DB_NAME = sys.argv[1]
     main(DB_NAME)
-    print end_msg2 % ((LOCAL_DATA_DIR, DB_NAME, DB_NAME) + (LOCAL_DATA_DIR, DB_NAME)*7)   # Requiere los paréntesis, de lo contrario TypeError
+    print end_msg2 % ((LOCAL_DATA_DIR, DB_NAME) + (DB_NAME,) + (LOCAL_DATA_DIR, DB_NAME)*4)   # Requiere los paréntesis, de lo contrario TypeError
     sys.exit(0)
