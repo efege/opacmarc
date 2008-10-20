@@ -7,18 +7,18 @@ NameVirtualHost *:8081
 
     ServerName 127.0.0.1
     
-    ErrorLog __LOCAL_DATA_DIR__/logs/apache-error-log
-    TransferLog __LOCAL_DATA_DIR__/logs/apache-access-log
+    ErrorLog __LOCAL_DATA_DIR__/logs/web-server/apache-error-log
+    TransferLog __LOCAL_DATA_DIR__/logs/web-server/apache-access-log
     
-    DocumentRoot "__OPACMARC_DIR__/htdocs/"
-    <Directory "__OPACMARC_DIR__/htdocs/">
+    DocumentRoot "__APP_DIR__/htdocs/"
+    <Directory "__APP_DIR__/htdocs/">
         Order allow,deny
         Allow from all
         Options -Indexes
     </Directory>
 
-    ScriptAlias /cgi-bin/ "__OPACMARC_DIR__/cgi-bin/"
-    <Directory "__OPACMARC_DIR__/cgi-bin/">
+    ScriptAlias /cgi-bin/ "__APP_DIR__/cgi-bin/"
+    <Directory "__APP_DIR__/cgi-bin/">
         Order allow,deny
         Allow from all
     </Directory>

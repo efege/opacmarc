@@ -32,27 +32,31 @@ call test-config.bat
 :: eliminamos el directorio si ya existe
 rmdir /s /q %TEST_DIR% 2>NUL
 
+mkdir %TEST_DIR%
+
+set APP_DIR=%TEST_DIR%\app
+
 :: obtenemos una copia fresca del código
 echo.
-svn export G:\svn\opacmarc %TEST_DIR%
+svn export G:\svn\opacmarc %APP_DIR%
 
 :: colocamos los binarios en su lugar
 echo.
-mkdir %TEST_DIR%\bin\cisis
-copy %CISIS_DIR%\*.* %TEST_DIR%\bin\cisis\
-copy %WXIS% %TEST_DIR%\cgi-bin\wxis.exe
-copy %AGREP% %TEST_DIR%\bin\agrep.exe
+mkdir %APP_DIR%\bin\cisis
+copy %CISIS_DIR%\*.* %APP_DIR%\bin\cisis\
+copy %WXIS%          %APP_DIR%\cgi-bin\wxis.exe
+copy %AGREP%         %APP_DIR%\bin\agrep.exe
 
 :: ejecutamos script de inicialización
-python %TEST_DIR%\bin\install.py
+python %APP_DIR%\bin\install.py
 
 :: pisamos configuración de Apache
-copy "%TEST_DIR%\config\httpd-opacmarc.conf" "%APACHE_VHOST%"
+copy "%APP_DIR%\config\httpd-opacmarc.conf" "%APACHE_VHOST%"
 
 :: procesamos la base demo
-python %TEST_DIR%\bin\demo.py
+python %APP_DIR%\bin\demo.py
 
-:: reiniciamos Apache
+:: reiniciamos Apache (no me funciona)
 ::G:
 ::cd \programas\Apache Software Foundation\Apache2.2\bin\
 ::httpd
@@ -61,5 +65,5 @@ python %TEST_DIR%\bin\demo.py
 ::echo Reinicie Apache, y luego...
 ::pause
 
-:: vemos qué onda
+:: visitamos el opac
 start firefox "http://127.0.0.1:8081/cgi-bin/wxis.exe?IsisScript=xis/opac.xis&db=demo"

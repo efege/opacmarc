@@ -5,46 +5,21 @@
 Script de instalación para OpacMarc
 Issue 10: http://code.google.com/p/opacmarc/issues/detail?id=10
 
-TO-DO: Considerar también la situación en que ya existe una instalación
-y se desea preservar los datos locales.
+TO-DO: Considerar la situación en que ya existe una instalación previa.
 
-TO-DO: hacer read-only los directorios y archivos de la aplicación? import stat ; os.chmod(myFile, stat.S_IREAD)
+TO-DO: hacer read-only los directorios y archivos de la aplicación, para
+       mayor protección.
+       import stat; os.chmod(myFile, stat.S_IREAD)
+       http://techarttiki.blogspot.com/2008/08/read-only-windows-files-with-python.html
 """
 
 import os
 import sys
 import shutil
 
-from opac_util import run_command, error, OPACMARC_DIR, LOCAL_DATA_DIR, CISIS_PATH, LOCAL_DATA, setup_logger
-import tablas
+from opac_util import run_command, error, APP_DIR, LOCAL_DATA_DIR, CISIS_PATH, LOCAL_DATA, setup_logger
+import char_tables
 
-# A global logger object
-log_file = os.path.join(OPACMARC_DIR, 'install.log')
-logger = setup_logger(log_file)
-
-
-# Archivos que crea o modifica el script de instalación.
-# TO-DO: agregar aquí los que usa create_db()?
-FILES = {
-    'footer'       : os.path.join(OPACMARC_DIR, 'cgi-bin', 'html', 'page-end.htm'),
-    'cipar-opac'   : os.path.join(OPACMARC_DIR, 'config', 'default-cipar.par'),
-    'cipar-update' : os.path.join(OPACMARC_DIR, 'config', 'update.par'),
-    'conf-default' : os.path.join(OPACMARC_DIR, 'config', 'default-settings.conf'),
-    'conf-local'   : os.path.join(LOCAL_DATA_DIR, 'config', 'local-settings.conf'),
-    'conf-update'  : os.path.join(LOCAL_DATA_DIR, 'config', 'update.conf'),
-    'conf-httpd'   : os.path.join(OPACMARC_DIR, 'config', 'httpd-opacmarc.conf'),
-    'actab'        : os.path.join(OPACMARC_DIR, 'util', 'ac-ansi.tab'),
-    'uctab'        : os.path.join(OPACMARC_DIR, 'util', 'uc-ansi.tab'),
-}
-
-# Plantillas para archivos (tomado de add_db.py -- TO-DO: unificar mecanismos)
-template_dest = {
-    'local-styles.css' : 'htdocs/css',
-    'local-scripts.js' : 'htdocs/js',
-    #'local-settings.conf' : 'config',
-    'local-cipar.par' : 'config',
-    'local.xis' : 'cgi-bin/xis',
-}
 
 def run(command, msg = 'Error'):
     # FIXME! (see update-db.py) -- Sirve esto para algo?
@@ -110,19 +85,18 @@ def build_config_files():
         TEMP_DIR = '/tmp' 
 
     substitutions = (
-        ['__OPACMARC_DIR__', OPACMARC_DIR],
+        ['__APP_DIR__', APP_DIR],
         ['__LOCAL_DATA_DIR__', LOCAL_DATA_DIR],
         ['__WXIS__', WXIS],
         ['__TEMP_DIR__', TEMP_DIR],
     )
     
     for config_file in ('conf-httpd', 'conf-default', 'conf-local', 'conf-update', 'cipar-opac', 'cipar-update'):
-        template = os.path.join(OPACMARC_DIR, 'config', 'templates', os.path.basename(FILES[config_file]) + '.tpl')
+        template = os.path.join(APP_DIR, 'config', 'templates', os.path.basename(FILES[config_file]) + '.tpl')
         if config_file == 'conf-httpd':
             force_forward=True  # Apache requiere barras hacia adelante, incluso en Windows
         create_from_template(template, FILES[config_file], substitutions, force_forward=force_forward)
     
-
 def make_local_dirs():
     """Crea la estructura de directorios para los datos locales."""
     
@@ -134,7 +108,7 @@ def make_local_dirs():
         'cgi-bin' : ['html', 'pft', 'xis'],
         'config'  : [],
         'htdocs'  : ['css', 'docs', 'img', 'js'],
-        'logs'    : [],
+        'logs'    : ['web-server', 'python', 'opac'],
         'temp'    : [],
     }
     
@@ -150,7 +124,7 @@ def create_files():
     # FIXME - los paths deben quedar con la barra correcta (os.sep)
     # FIXME - corregir el nombre de archivo que se muestra en el mensaje "Generado el archivo"
     for tpl in template_dest:
-        f1 = open(os.path.join(OPACMARC_DIR, 'bin', 'install', tpl), 'r')
+        f1 = open(os.path.join(APP_DIR, 'bin', 'install', tpl), 'r')
         f2 = open(os.path.join(LOCAL_DATA_DIR, template_dest[tpl], tpl), 'w')
         f2.write(
             f1.read().replace('__LOCAL_DATA_DIR__', LOCAL_DATA_DIR)
@@ -161,7 +135,7 @@ def create_files():
 
 
 def setup_msc():
-    # ATENCION! Rutas relativas a OPACMARC_DIR
+    # ATENCION! Rutas relativas a APP_DIR
     # IMPORTANTE: las tablas .tab deben haberse creado *antes* de generar el invertido.
     os.mkdir(os.path.join('util', 'msc2000'))
     run('%s/id2i bin/install/data/msc2000.id create=util/msc2000/msc2000' % CISIS_PATH)
@@ -171,8 +145,8 @@ def setup_msc():
 def create_aux_db():
     """Crea bases ISIS auxiliares."""
     
-    # Algunas rutas son relativas a OPACMARC_DIR
-    os.chdir(OPACMARC_DIR)
+    # Algunas rutas son relativas a APP_DIR
+    os.chdir(APP_DIR)
     
     # TO-DO: ajustar saltos de línea de los .id (usar os.linesep?)
     # En Linux hay problemas si usan '\r\n', pero en Windows andan bien con sólo usar '\n'.
@@ -215,7 +189,7 @@ def create_table(table_type):
 
 def upgrade(old_dir=None):
     if old_dir is None:
-        old_dir = os.path.join(OPACMARC_DIR, '..')
+        old_dir = os.path.join(APP_DIR, '..')
     
     old_local_data = os.path.join(old_dir, LOCAL_DATA)
     shutil.copystat(old_local_data, LOCAL_DATA_DIR)
@@ -239,10 +213,12 @@ def show_end_msg():
     #- Use %s/config/httpd-opacmarc.conf como base para configurar Apache
     #- Entre con un browser a http://...
     #- Realizar tests? E.g. búsquedas con acentos y con errores (agrep).
-    #''' % OPACMARC_DIR
+    #''' % APP_DIR
 
 
 def main():
+
+    logger.warning('*** Instalación iniciada. ***')
 
     print '''
 -----------------------------------------------------
@@ -251,6 +227,8 @@ def main():
     ''' % os.path.basename(sys.argv[0])
 
     #set_version()
+    
+    #make_app_dir()
     
     make_local_dirs()  # FIXME - si estamos haciendo un upgrade, sólo tenemos que copiar lo existente.
     
@@ -265,9 +243,40 @@ def main():
     
     #make_app_readonly()
     
-    logger.warning('Instalación finalizada.')
+    logger.warning('*** Instalación finalizada. ***')
     
     show_end_msg()
+
+
+
+# A global logger object
+# log_file no puede estar en LOCAL_DATA_DIR pues inicialmente el directorio no existe
+log_file = os.path.join(APP_DIR, '..', 'install.log')
+logger = setup_logger(log_file)
+
+
+# Archivos que crea o modifica el script de instalación.
+# TO-DO: agregar aquí los que usa create_db()?
+FILES = {
+    'footer'       : os.path.join(APP_DIR, 'cgi-bin', 'html', 'page-end.htm'),
+    'cipar-opac'   : os.path.join(APP_DIR, 'config', 'default-cipar.par'),
+    'cipar-update' : os.path.join(APP_DIR, 'config', 'update.par'),
+    'conf-default' : os.path.join(APP_DIR, 'config', 'default-settings.conf'),
+    'conf-local'   : os.path.join(LOCAL_DATA_DIR, 'config', 'local-settings.conf'),
+    'conf-update'  : os.path.join(LOCAL_DATA_DIR, 'config', 'update.conf'),
+    'conf-httpd'   : os.path.join(APP_DIR, 'config', 'httpd-opacmarc.conf'),
+    'actab'        : os.path.join(APP_DIR, 'util', 'ac-ansi.tab'),
+    'uctab'        : os.path.join(APP_DIR, 'util', 'uc-ansi.tab'),
+}
+
+# Plantillas para archivos (tomado de add_db.py -- TO-DO: unificar mecanismos)
+template_dest = {
+    'local-styles.css' : 'htdocs/css',
+    'local-scripts.js' : 'htdocs/js',
+    #'local-settings.conf' : 'config',
+    'local-cipar.par' : 'config',
+    'local.xis' : 'cgi-bin/xis',
+}
 
 
 if __name__ == "__main__":

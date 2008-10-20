@@ -17,19 +17,8 @@
 import os
 import sys
 import shutil
-from opac_util import error, OPACMARC_DIR, LOCAL_DATA_DIR, LOCAL_DATA
+from opac_util import error, APP_DIR, LOCAL_DATA_DIR, LOCAL_DATA, setup_logger
 
-# Plantillas para archivos
-template_dest = {
-    'db-about.htm'     : 'cgi-bin/html',
-    'db-footer.htm'    : 'cgi-bin/html',
-    'db-header.htm'    : 'cgi-bin/html',
-    'db-extra.htm'     : 'cgi-bin/html',
-    'db-styles.css'    : 'htdocs/css',
-    'db-scripts.js'    : 'htdocs/js',
-    'db-settings.conf' : 'config',
-    'db-cipar.par'     : 'config',
-}
 
 def print_usage():
     # The name of this script
@@ -40,7 +29,7 @@ def print_usage():
 # Ver: Python main() functions, by Guido van Rossum <http://www.artima.com/weblogs/viewpost.jsp?thread=4829>
 def main(DB_NAME):
 
-    print begin_msg % os.path.basename(sys.argv[0])  # FIXME - si es importado por demo.py imprime demo.py
+    logger.info(begin_msg % os.path.basename(sys.argv[0]))  # FIXME - si es importado por demo.py imprime demo.py
 
     # Check mandatory argument
     #if len(argv) < 2:
@@ -73,21 +62,35 @@ def main(DB_NAME):
     # FIXME - los paths deben quedar con la barra correcta (os.sep)
     # FIXME - corregir el nombre de archivo que se muestra en el mensaje "Generado el archivo"
     for tpl in template_dest:
-        f1 = open(os.path.join(OPACMARC_DIR, 'bin', 'add_db', 'templates', tpl), 'r')
+        f1 = open(os.path.join(APP_DIR, 'bin', 'add_db', 'templates', tpl), 'r')
         f2 = open(os.path.join(DB_DIR, template_dest[tpl], tpl), 'w')
         f2.write(
             f1.read().replace('__LOCAL_DATA__', LOCAL_DATA).replace('__DB__', DB_NAME)
         )
         f1.close()
         f2.close()
-        print 'Generado el archivo %s.' % os.path.basename(template_dest[tpl])
+        logger.info('Generado el archivo %s.' % os.path.basename(template_dest[tpl]))
 
-    print end_msg1 % DB_NAME
+    logger.info(end_msg1 % DB_NAME)
     
     # Dummy logo image
-    logo_src = os.path.join(OPACMARC_DIR, 'bin', 'add_db', 'templates', 'db-logo.png')
+    logo_src = os.path.join(APP_DIR, 'bin', 'add_db', 'templates', 'db-logo.png')
     logo_dst = os.path.join(DB_DIR, 'htdocs', 'img')
     shutil.copy(logo_src, logo_dst)
+
+
+# Plantillas para archivos, y su directorio destino.
+template_dest = {
+    'db-about.htm'     : 'cgi-bin/html',
+    'db-footer.htm'    : 'cgi-bin/html',
+    'db-header.htm'    : 'cgi-bin/html',
+    'db-extra.htm'     : 'cgi-bin/html',
+    'db-styles.css'    : 'htdocs/css',
+    'db-scripts.js'    : 'htdocs/js',
+    'db-settings.conf' : 'config',
+    'db-cipar.par'     : 'config',
+}
+
 
 begin_msg = '''
 -----------------------------------------------------
@@ -97,7 +100,7 @@ begin_msg = '''
     
 end_msg1 = '''
 Se han creado los directorios y archivos necesarios para trabajar con
-la base '%s'.
+la base %s.
 '''
 
 end_msg2 = '''
@@ -130,8 +133,12 @@ para esta base, edite el archivo
 '''
 
 if __name__ == "__main__":
+    # Define a global logger object
+    log_file = os.path.join(LOCAL_DATA_DIR, 'logs', 'python', 'add_db.log')
+    logger = setup_logger(log_file)
+    
     # FIXME - si se llama sin argumentos
     DB_NAME = sys.argv[1]
     main(DB_NAME)
-    print end_msg2 % ((LOCAL_DATA_DIR, DB_NAME, DB_NAME) + (LOCAL_DATA_DIR, DB_NAME)*6)   # Requiere los paréntesis, de lo contrario TypeError
+    print end_msg2 % ((LOCAL_DATA_DIR, DB_NAME, DB_NAME) + (LOCAL_DATA_DIR, DB_NAME)*7)   # Requiere los paréntesis, de lo contrario TypeError
     sys.exit(0)

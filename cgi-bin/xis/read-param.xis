@@ -11,18 +11,18 @@
     __DB__             : the name of the current database
     __DATE__           : the current date
     
-    This version assumes that __OPACMARC_DIR__ and __LOCAL_DATA_DIR__ have already been set by
+    This version assumes that __APP_DIR__ and __LOCAL_DATA_DIR__ have already been set by
     an installation script.
 -->
 
 <!-- IMPORTANTE! Los archivos cipar se leen en este orden: base > local > default -->
 <parm name="cipar"><pft>
     /* cipar local para una base particular */
-    s(cat(getenv('PATH_WXIS'),'../local-data/bases/',v2104,'/config/db-cipar.par')),
+    s(cat(getenv('PATH_WXIS'),'../../local-data/bases/',v2104,'/config/db-cipar.par')),
     
     /#,
     /* cipar local común a todas las bases */
-    s(cat(getenv('PATH_WXIS'),'../local-data/config/local-cipar.par')),
+    s(cat(getenv('PATH_WXIS'),'../../local-data/config/local-cipar.par')),
     
     /#,
     /* cipar default */
@@ -36,12 +36,12 @@
     Read the cipar template file, and substitute the following variables:
     __DB__             : the name of the current database
     __DATE__           : the current date
-    __OPACMARC_DIR__   : the path to OpacMarc's main directory
+    __APP_DIR__        : the path to OpacMarc's main directory
     __LOCAL_DATA_DIR__ : the path to OpacMarc's local data directory
 
     This version assumes a "virgin template", i.e., no installation script has provided any local
     path information, so wxis must find out the paths by itself.
-    It requires that cipar templates be kept in __OPACMARC_DIR__/config
+    It requires that cipar templates be kept in __APP_DIR__/config
     Advantage: we don't need to re-run an install script every time the app is upgraded.
     Disadvantage: wxis must do the same trivial replacements *every* time it is called.
 -->
@@ -52,7 +52,7 @@
         s(cat(v6010, '/config/opac.cip.tpl')),
         '__DB__', v2104),
         '__DATE__', s(date).8),
-        '__OPACMARC_DIR__', v6010),
+        '__APP_DIR__', v6010),
         '__LOCAL_DATA_DIR__', v6011)
 </pft></parm-->
 
@@ -66,12 +66,12 @@
 
 <!-- Leemos el archivo de configuración asociado a la base actual -->
 <field action="replace" tag="6000" split="occ"><pft>
-	cat(getenv('PATH_WXIS'),'../local-data/bases/',v2104,'/config/db-settings.conf')
+	cat(getenv('PATH_WXIS'),'../../local-data/bases/',v2104,'/config/db-settings.conf')
 </pft></field>
 
 <!-- Leemos el archivo de configuración local -->
 <field action="add" tag="6000" split="occ"><pft>
-	cat(getenv('PATH_WXIS'),'../local-data/config/local-settings.conf')
+	cat(getenv('PATH_WXIS'),'../../local-data/config/local-settings.conf')
 </pft></field>
 
 <!-- Leemos la configuración predeterminada -->

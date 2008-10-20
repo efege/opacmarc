@@ -29,7 +29,7 @@ PATH_HTDOCS=/
 PATH_TEMP=__TEMP_DIR__
 
 # PATH_AGREP: ubicación del ejecutable agrep
-PATH_AGREP=__OPACMARC_DIR__/bin/agrep
+PATH_AGREP=__APP_DIR__/bin/agrep
 
  
 # -------------------------------------------------------

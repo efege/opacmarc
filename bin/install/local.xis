@@ -7,7 +7,7 @@ Por cada script local que desee usar, agregue a este archivo un par de
 líneas como las siguientes:
 
     <label>TAREA_LOCAL</label>
-    <include>../local-data/cgi-bin/xis/some_local_script.xis</include>
+    <include>../../local-data/cgi-bin/xis/some_local_script.xis</include>
     
 reemplazando "TAREA_LOCAL" por el nombre de la tarea (valor del parámetro
 CGI local_task), y "some_local_task" por el nombre del script.
