@@ -5,10 +5,6 @@ Define variables y funciones de uso general.
 """
 
 
-# Python version notes
-# subprocess: new in Python 2.4
-# subprocess.check_call: new in Python 2.5
-
 import sys
 import os
 import logging       # logs messages to console & file
@@ -17,10 +13,11 @@ import logging       # logs messages to console & file
 # The subprocess module appeared with Python 2.4. If using an older version,
 # import a copy of subprocess.py borrowed from Python 2.5.
 # Based on http://coding.derkeiler.com/Archive/Python/comp.lang.python/2007-03/msg02717.html
+# FIXME - subprocess.check_call: new in Python 2.5
 try:
     import subprocess
-except:
-    import subprocess_for_23 as subprocess
+except ImportError:
+    import subprocess_ as subprocess
 
 
 def error(msg = 'Error'):
@@ -73,7 +70,10 @@ def emptydir(dir):
         error("Error al vaciar el directorio %s" % dir)
         raise
         
-
+# FIXME - para evitar duplicación de logs, tal vez sea mejor que setup_logger se ejecute en este
+#         mismo módulo, y no en los que lo importen. El problema que queda por resolver es el
+#         archivo a usar para el log de install.py (local-data no existe al iniciarse install.py,
+#         a menos que ya venga incluida en el build). 
 def setup_logger(log_file):
     # basado en http://www.onlamp.com/lpt/a/5914
     #create logger
@@ -89,7 +89,7 @@ def setup_logger(log_file):
     
     # file handler
     fh = logging.FileHandler(log_file)
-    fh.setLevel(logging.WARNING)
+    fh.setLevel(logging.DEBUG)
     f_formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
     fh.setFormatter(f_formatter)
     logger.addHandler(fh)
@@ -137,10 +137,11 @@ def unique_sort_files(input_files, output_file=None):
     else:
         return unique_lines
     
+
+APP = 'app'
 # El nombre de este directorio sólo debería aparecer explícitamente aquí
 # y en algunos archivos .xis (e.g. read-param.xis).
 LOCAL_DATA = 'local-data'
-APP = 'app'
 
 parent_dir = os.path.join(os.path.dirname(sys.argv[0]), '..', '..') 
 ROOT_DIR = os.path.abspath(parent_dir)

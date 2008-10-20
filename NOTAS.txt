@@ -239,7 +239,7 @@ Tenemos dos problemas diferentes, aunque relacionados:
 
     1) agregar/extend: crear archivos locales para añadir funcionalidad a la aplicación.
     
-    2) sobreescribir/override: sustituir localmente archivos de la aplicación, para 
+    2) sobrescribir/override: sustituir localmente archivos de la aplicación, para 
       modificar la funcionalidad predeterminada.
 
 1) Por una parte, queremos que se puedan usar archivos puramente locales, es decir,
@@ -335,5 +335,16 @@ archivos estáticos:
      <img src="[pft]v6005^d[/pft]img/db-logo.png">
 
 pero aun no sé en qué lugar/momento definirlos.
+
+------------------------------------------------------------
+
+FAVICON
+
+Podemos poner un favicon genérico de OpacMarc en app/htdocs/img
+Opcionalmente, se podrán usar un favicon local ubicado en
+    - local-data/htdocs/img
+    - local-data/bases/<base>/htdocs/img
+
+Para saber qué URL usar en la cabecera de las páginas, habrá que usar algún parámetro de configuración.
 
 ------------------------------------------------------------

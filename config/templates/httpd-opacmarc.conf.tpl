@@ -1,5 +1,5 @@
-# A sample Apache virtual host configuration for OpacMarc.
-# Modify as needed.
+# This is a sample Apache virtual host configuration for OpacMarc.
+# Modify port number and ServerName as needed.
 
 Listen 8081
 NameVirtualHost *:8081
@@ -7,8 +7,8 @@ NameVirtualHost *:8081
 
     ServerName 127.0.0.1
     
-    ErrorLog __LOCAL_DATA_DIR__/logs/web-server/apache-error-log
-    TransferLog __LOCAL_DATA_DIR__/logs/web-server/apache-access-log
+    ErrorLog __LOCAL_DATA_DIR__/logs/apache-error.log
+    TransferLog __LOCAL_DATA_DIR__/logs/apache-access.log
     
     DocumentRoot "__APP_DIR__/htdocs/"
     <Directory "__APP_DIR__/htdocs/">
@@ -32,7 +32,7 @@ NameVirtualHost *:8081
     </Directory>
     
     # Archivos estáticos (css, js, imágenes, etc.) específicos de cada base
-    # ATENCION: aparentemente el segundo grupo ($2) debe figurar explícitamente.
+    # ATENCION: parece que el segundo grupo ($2) debe figurar explícitamente.
     AliasMatch "^/local-db/([^/]+)/(.+)" "__LOCAL_DATA_DIR__/bases/$1/htdocs/$2"
     <DirectoryMatch "__LOCAL_DATA_DIR__/bases/([^/]+)/htdocs/">
         Order allow,deny

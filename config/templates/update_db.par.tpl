@@ -1,34 +1,23 @@
-##########################################
-#  ATENCION - NO MODIFIQUE ESTE ARCHIVO  #
-##########################################
+#############################################################################
+#
+# Archivo cipar para update_db.py.
+#
+# Este archivo es concatenado con default-cipar.par para que update_db.py
+# tenga acceso a otros parámetros de uso común. 
+#
+# ATENCION - NO MODIFIQUE ESTE ARCHIVO
+#
+#############################################################################
 
 
-# --------------------------------------------------------------------------
-# Archivos utilizados en la actualización del OPAC y en Catalis
-# --------------------------------------------------------------------------
-
-# Bases
-COUNTRY.*=__APP_DIR__/util/country.*
-DICTGIZ.*=__APP_DIR__/util/dictgiz.*
-
-# Otros
-AC-ANSI.TAB=__APP_DIR__/util/ac-ansi.tab
-BIBLIO.FST=__APP_DIR__/util/biblio.fst
-BIBLIO.STW=__APP_DIR__/util/biblio.stw
-HEADSORT.PFT=__APP_DIR__/util/headsort.pft
-UC-ANSI.TAB=__APP_DIR__/util/uc-ansi.tab
-
-
-
-# --------------------------------------------------------------------------
-# Archivos utilizados solamente en la actualización del OPAC
-# Nota: OEM2ANSI sólo se requiere si la base a procesar proviene de MS-DOS.
-# --------------------------------------------------------------------------
-
-# Bases
+# BASES
 DELIMSUBCAMPO.*=__APP_DIR__/bin/update_db/delimsubcampo.*
 LANG.*=__APP_DIR__/bin/update_db/lang.*
 MSC.*=__APP_DIR__/util/msc2000/msc2000.*
+
+# --------------------------------------------------------------------------
+# Nota: OEM2ANSI sólo se requiere si la base a procesar proviene de MS-DOS.
+# --------------------------------------------------------------------------
 OEM2ANSI.*=__APP_DIR__/bin/update_db/oem2ansi.*
 
 LANG.SEQ=__APP_DIR__/bin/update_db/lang.seq

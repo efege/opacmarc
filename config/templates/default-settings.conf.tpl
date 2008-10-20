@@ -1,14 +1,21 @@
-# ===========================================================================
-# default-settings.conf - Parámetros de configuración predeterminados.
+#############################################################################
 #
-# ATENCION: Para facilitar futuras actualizaciones de OPACMARC,
-# no modifique este archivo. Si desea cambiar esta configuración
-# predeterminada, utilice el archivo local-settings.conf.
-# ===========================================================================
+# Parámetros de configuración predeterminados.
+#
+# ATENCION: NO MODIFIQUE ESTE ARCHIVO.
+#
+# Si desea alterar localmente los valores que aparecen en la configuración
+# predeterminada, utilice alguno de estos archivos:
+#
+#     - local-settings.conf: para cambios que afecten a todas las bases
+#     - db-settings.conf: para cambios que sólo afecten a una base
+#
+#############################################################################
 
 
-# DEBUG: '1' para generar información útil en la depuración de errores.
-# ATENCION: Para el OPAC en producción, siempre usar DEBUG=0.
+# DEBUG: use 'DEBUG=1' para generar información de utilidad para la depuración
+# de errores.
+# ATENCION: Para el OPAC en producción, use siempre 'DEBUG=0'.
 DEBUG=0
 
 
