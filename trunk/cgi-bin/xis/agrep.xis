@@ -56,7 +56,7 @@
 		/* agrep (exe) */ ,'a5550¦', v6003^a,                                        '¦',
 		/* parámetros */  ,'a5551¦', '-V0 -i -1 -D1 -I1 -S1 -w',                     '¦',
 		/* expresión */   ,'a5552¦', '"',v4101,'"',                                  '¦',  /* '"^',v4101,'$"' */
-		/* diccionario */ ,'a5553¦', getenv('PATH_WXIS'),'../local-data/bases/',v2104,'/db/public/dict',v2002,'.txt','¦',
+		/* diccionario */ ,'a5553¦', getenv('PATH_WXIS'),'../../local-data/bases/',v2104,'/db/public/dict',v2002,'.txt','¦',
 		/* salida */      ,'a5554¦', '>',v2098,                                      '¦',
 	</pft></proc>
 	

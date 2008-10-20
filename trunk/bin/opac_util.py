@@ -23,22 +23,9 @@ except:
     import subprocess_for_23 as subprocess
 
 
-# El nombre de este directorio podría cambiar. Sólo aparece explícitamente
-# aquí y en read-param.xis.
-LOCAL_DATA = 'local-data'
-
-parent_dir = os.path.join(os.path.dirname(sys.argv[0]), '..') 
-OPACMARC_DIR = os.path.abspath(parent_dir)
-LOCAL_DATA_DIR = os.path.join(OPACMARC_DIR, LOCAL_DATA)
-
-CISIS_PATH = os.path.join(OPACMARC_DIR, 'bin', 'cisis')
-if not os.path.isdir(CISIS_PATH):
-    print
-    print "No se encuentra el directorio con los utilitarios cisis:\n    %s" % CISIS_PATH
-    sys.exit()
-    
 def error(msg = 'Error'):
     '''Displays an error message and exits.'''
+    # FIXME - usar logger.error 
     sys.exit(msg + '\n')
 
 
@@ -87,33 +74,81 @@ def emptydir(dir):
         raise
         
 
-# TO-DO: usando un SMTPHandler podemos enviar email al admin en caso de errores.
-# Ver: http://www.python.org/doc/2.5.2/lib/node418.html
-# Testeado en la UNS sin éxito (2008-10-17)
 def setup_logger(log_file):
     # basado en http://www.onlamp.com/lpt/a/5914
     #create logger
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
     
-    #create console handler and set level
+    # console handler
     ch = logging.StreamHandler()
     ch.setLevel(logging.DEBUG)
+    c_formatter = logging.Formatter("%(message)s")
+    ch.setFormatter(c_formatter)
+    logger.addHandler(ch)
     
-    #create file handler and set level
+    # file handler
     fh = logging.FileHandler(log_file)
     fh.setLevel(logging.WARNING)
-    
-    #create formatter
-    c_formatter = logging.Formatter("%(message)s")
     f_formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
-    
-    #add formatter to ch and fh
-    ch.setFormatter(c_formatter)
     fh.setFormatter(f_formatter)
-    
-    #add ch and fh to logger
-    logger.addHandler(ch)
     logger.addHandler(fh)
     
+    # TO-DO: usando un SMTPHandler podemos enviar email al admin en caso de errores.
+    # Ver: http://www.python.org/doc/2.5.2/lib/node418.html
+    # Testeado en la UNS sin éxito, 2008-10-17
+    # Para usar smtp authentication, ver: http://markmail.org/message/elhjphn222c3kg2w
+    #mh = logging.handlers.SMTPHandler(mailhost, fromaddr, toaddrs, subject)
+    #mh.setLevel(logging.WARNING)
+    #mh.setFormatter(f_formatter)
+    #logger.addHandler(mh)
+    
     return logger
+
+
+def unique_sort_files(input_files, output_file=None):
+    '''Concatenates a list of files, removes duplicates, and sorts the
+       resulting list.
+       If an output file is specified, the result is written to it.
+    '''
+    # Necesitamos eliminar duplicados y ordenar (o al revés, pero entonces el
+    # método de eliminación de duplicados debe preservar el orden).
+    # Usamos por ahora una método que usa dict.fromkeys, tomado de:
+    #      sorted unique elements from a list; using 2.3 features
+    #      <http://mail.python.org/pipermail/python-list/2003-January/178712.html>
+    # NOTA: dict.fromkeys está disponible desde Python 2.3. 
+    # TO-DO: ¿será más rápido de otra manera, p.ej. con sets?
+    # Ver: Fastest way to uniqify a list in Python <http://www.peterbe.com/plog/uniqifiers-benchmark>
+    #      Recipe 52560: Remove duplicates from a sequence <http://code.activestate.com/recipes/52560/>
+
+    all_lines = []
+    for filename in input_files:
+        f = open(filename, 'r')
+        all_lines.extend(f.readlines())
+        f.close()
+        
+    unique_lines = dict.fromkeys(all_lines).keys()
+    unique_lines.sort()
+    
+    if not output_file is None:
+        o = open(output_file, 'w')
+        o.writelines(unique_lines)
+        o.close()
+    else:
+        return unique_lines
+    
+# El nombre de este directorio sólo debería aparecer explícitamente aquí
+# y en algunos archivos .xis (e.g. read-param.xis).
+LOCAL_DATA = 'local-data'
+APP = 'app'
+
+parent_dir = os.path.join(os.path.dirname(sys.argv[0]), '..', '..') 
+ROOT_DIR = os.path.abspath(parent_dir)
+LOCAL_DATA_DIR = os.path.join(ROOT_DIR, LOCAL_DATA)
+APP_DIR = os.path.join(ROOT_DIR, APP)
+
+CISIS_PATH = os.path.join(APP_DIR, 'bin', 'cisis')
+if not os.path.isdir(CISIS_PATH):
+    print
+    print "No se encuentra el directorio con los utilitarios cisis:\n    %s" % CISIS_PATH
+    sys.exit()

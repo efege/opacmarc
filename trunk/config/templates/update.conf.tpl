@@ -12,7 +12,7 @@
 # ------------------------------------------------------------------
 
 # Ubicación de mx y demás utilitarios
-PATH_CISIS = __OPACMARC_DIR__/bin/cisis
+PATH_CISIS = __APP_DIR__/bin/cisis
 
 # En este directorio están almacenadas las imágenes de las tapas (si las hay).
 # ATENCION: no incluir al final de la ruta el directorio con el nombre de la base.

@@ -5,70 +5,70 @@
 # -----------------------------------------------------------------
 # BASES (common)
 # -----------------------------------------------------------------
-BIBLIO.FST=__OPACMARC_DIR__/util/biblio.fst
-BIBLIO.STW=__OPACMARC_DIR__/util/biblio.stw
-COUNTRY.*=__OPACMARC_DIR__/util/country.*
-DICTGIZ.*=__OPACMARC_DIR__/util/dictgiz.*
-HEADSORT.PFT=__OPACMARC_DIR__/util/headsort.pft
-LANG.*=__OPACMARC_DIR__/util/lang.*
-SELSUBJ.PFT=__OPACMARC_DIR__/util/selsubj.pft
-SELNAME.PFT=__OPACMARC_DIR__/util/selname.pft
-SELTITLE.PFT=__OPACMARC_DIR__/util/seltitle.pft
+BIBLIO.FST=__APP_DIR__/util/biblio.fst
+BIBLIO.STW=__APP_DIR__/util/biblio.stw
+COUNTRY.*=__APP_DIR__/util/country.*
+DICTGIZ.*=__APP_DIR__/util/dictgiz.*
+HEADSORT.PFT=__APP_DIR__/util/headsort.pft
+LANG.*=__APP_DIR__/util/lang.*
+SELSUBJ.PFT=__APP_DIR__/util/selsubj.pft
+SELNAME.PFT=__APP_DIR__/util/selname.pft
+SELTITLE.PFT=__APP_DIR__/util/seltitle.pft
 
-ACTAB=__OPACMARC_DIR__/util/ac-ansi.tab
-UCTAB=__OPACMARC_DIR__/util/uc-ansi.tab
+ACTAB=__APP_DIR__/util/ac-ansi.tab
+UCTAB=__APP_DIR__/util/uc-ansi.tab
 
-MSC.*=__OPACMARC_DIR__/util/msc2000/msc2000.*
+MSC.*=__APP_DIR__/util/msc2000/msc2000.*
 
 # -----------------------------------------------------------------
 # HTMLPFT
 # -----------------------------------------------------------------
-BIB-LIST-HEAD.HTM=__OPACMARC_DIR__/cgi-bin/html/bib-list-head.htm
-BIB-NAV.HTM=__OPACMARC_DIR__/cgi-bin/html/bib-nav.htm
-BIB-RECORD-1.HTM=__OPACMARC_DIR__/cgi-bin/html/bib-record-1.htm
-BIB-RECORD-2.HTM=__OPACMARC_DIR__/cgi-bin/html/bib-record-2.htm
-BIB-RECORD-3.HTM=__OPACMARC_DIR__/cgi-bin/html/bib-record-3.htm
-BROWSE-CATALOG-NAV.HTM=__OPACMARC_DIR__/cgi-bin/html/browse-catalog-nav.htm
-COMPLETO.HTM=__OPACMARC_DIR__/cgi-bin/html/complete.htm
-CONTROL-FORM.HTM=__OPACMARC_DIR__/cgi-bin/control-form.htm
-FEEDBACK_REPLY.HTM=__OPACMARC_DIR__/cgi-bin/html/feedback-reply.htm
-FEEDBACK_FORM.HTM=__OPACMARC_DIR__/cgi-bin/html/feedback-form.htm
-FORM-SIMPLE.HTM=__OPACMARC_DIR__/cgi-bin/html/form-simple.htm
-FORM_ADVANCED.HTM=__OPACMARC_DIR__/cgi-bin/html/form-advanced.htm
-HEADING-BROWSE-MIDDLE.HTM=__OPACMARC_DIR__/cgi-bin/html/heading-browse-middle.htm
-HEADING-BROWSE-NAV.HTM=__OPACMARC_DIR__/cgi-bin/html/heading-browse-nav.htm
-HEADING-BROWSE-TOP.HTM=__OPACMARC_DIR__/cgi-bin/html/heading-browse-top.htm
-H-SEARCH-BOTTOM.HTM=__OPACMARC_DIR__/cgi-bin/html/h-search-bottom.htm
-H-SEARCH-TOP-1.HTM=__OPACMARC_DIR__/cgi-bin/html/h-search-top-1.htm
-H-SEARCH-TOP-2.HTM=__OPACMARC_DIR__/cgi-bin/html/h-search-top-2.htm
-MAIL-RESULTS.HTM=__OPACMARC_DIR__/cgi-bin/html/mail.htm
-NOVEDAD.HTM=__OPACMARC_DIR__/cgi-bin/html/novedad.htm
-PAGE-END.HTM=__OPACMARC_DIR__/cgi-bin/html/page-end.htm
-PAGE-BEGIN.HTM=__OPACMARC_DIR__/cgi-bin/html/page-begin.htm
-SAMPLE-RECORD.TXT=__OPACMARC_DIR__/cgi-bin/sample-record.txt
-SORTED-BY.HTM=__OPACMARC_DIR__/cgi-bin/html/sorted-by.htm
-ABOUT-MSC.HTM=__OPACMARC_DIR__/cgi-bin/html/about-msc.htm
+BIB-LIST-HEAD.HTM=__APP_DIR__/cgi-bin/html/bib-list-head.htm
+BIB-NAV.HTM=__APP_DIR__/cgi-bin/html/bib-nav.htm
+BIB-RECORD-1.HTM=__APP_DIR__/cgi-bin/html/bib-record-1.htm
+BIB-RECORD-2.HTM=__APP_DIR__/cgi-bin/html/bib-record-2.htm
+BIB-RECORD-3.HTM=__APP_DIR__/cgi-bin/html/bib-record-3.htm
+BROWSE-CATALOG-NAV.HTM=__APP_DIR__/cgi-bin/html/browse-catalog-nav.htm
+COMPLETO.HTM=__APP_DIR__/cgi-bin/html/complete.htm
+CONTROL-FORM.HTM=__APP_DIR__/cgi-bin/control-form.htm
+FEEDBACK_REPLY.HTM=__APP_DIR__/cgi-bin/html/feedback-reply.htm
+FEEDBACK_FORM.HTM=__APP_DIR__/cgi-bin/html/feedback-form.htm
+FORM-SIMPLE.HTM=__APP_DIR__/cgi-bin/html/form-simple.htm
+FORM_ADVANCED.HTM=__APP_DIR__/cgi-bin/html/form-advanced.htm
+HEADING-BROWSE-MIDDLE.HTM=__APP_DIR__/cgi-bin/html/heading-browse-middle.htm
+HEADING-BROWSE-NAV.HTM=__APP_DIR__/cgi-bin/html/heading-browse-nav.htm
+HEADING-BROWSE-TOP.HTM=__APP_DIR__/cgi-bin/html/heading-browse-top.htm
+H-SEARCH-BOTTOM.HTM=__APP_DIR__/cgi-bin/html/h-search-bottom.htm
+H-SEARCH-TOP-1.HTM=__APP_DIR__/cgi-bin/html/h-search-top-1.htm
+H-SEARCH-TOP-2.HTM=__APP_DIR__/cgi-bin/html/h-search-top-2.htm
+MAIL-RESULTS.HTM=__APP_DIR__/cgi-bin/html/mail.htm
+NOVEDAD.HTM=__APP_DIR__/cgi-bin/html/novedad.htm
+PAGE-END.HTM=__APP_DIR__/cgi-bin/html/page-end.htm
+PAGE-BEGIN.HTM=__APP_DIR__/cgi-bin/html/page-begin.htm
+SAMPLE-RECORD.TXT=__APP_DIR__/cgi-bin/sample-record.txt
+SORTED-BY.HTM=__APP_DIR__/cgi-bin/html/sorted-by.htm
+ABOUT-MSC.HTM=__APP_DIR__/cgi-bin/html/about-msc.htm
 
 # -----------------------------------------------------------------
 # PFT
 # -----------------------------------------------------------------
-AACR2.PFT=__OPACMARC_DIR__/cgi-bin/pft/aacr2.pft
-CITA.PFT=__OPACMARC_DIR__/cgi-bin/pft/cita.pft
-CLEAN-HEADING.PFT=__OPACMARC_DIR__/cgi-bin/pft/clean-heading.pft
-COMPACT-DATES.PFT=__OPACMARC_DIR__/cgi-bin/pft/compact-dates.pft
-DICTGIZ.PFT=__OPACMARC_DIR__/cgi-bin/pft/dictgiz.pft
-HEADINGS.PFT=__OPACMARC_DIR__/cgi-bin/pft/headings.pft
-MAIL.PFT=__OPACMARC_DIR__/cgi-bin/pft/mail.pft
-MSC.PFT=__OPACMARC_DIR__/cgi-bin/pft/msc.pft
+AACR2.PFT=__APP_DIR__/cgi-bin/pft/aacr2.pft
+CITA.PFT=__APP_DIR__/cgi-bin/pft/cita.pft
+CLEAN-HEADING.PFT=__APP_DIR__/cgi-bin/pft/clean-heading.pft
+COMPACT-DATES.PFT=__APP_DIR__/cgi-bin/pft/compact-dates.pft
+DICTGIZ.PFT=__APP_DIR__/cgi-bin/pft/dictgiz.pft
+HEADINGS.PFT=__APP_DIR__/cgi-bin/pft/headings.pft
+MAIL.PFT=__APP_DIR__/cgi-bin/pft/mail.pft
+MSC.PFT=__APP_DIR__/cgi-bin/pft/msc.pft
 
 # -----------------------------------------------------------------
 # PFT (compartidos con Catalis)
 # -----------------------------------------------------------------
-BIB_SORT_KEY.PFT=__OPACMARC_DIR__/cgi-bin/pft/bib-sort-key.pft
-DOCUMENT-TYPE.PFT=__OPACMARC_DIR__/cgi-bin/pft/doc-type.pft
-ETIQUETADO.PFT=__OPACMARC_DIR__/cgi-bin/pft/etiquetado.pft
-URLENCODE.PFT=__OPACMARC_DIR__/cgi-bin/pft/urlencode.pft
-WORK_HEADING.PFT=__OPACMARC_DIR__/cgi-bin/pft/wh.pft
+BIB_SORT_KEY.PFT=__APP_DIR__/cgi-bin/pft/bib-sort-key.pft
+DOCUMENT-TYPE.PFT=__APP_DIR__/cgi-bin/pft/doc-type.pft
+ETIQUETADO.PFT=__APP_DIR__/cgi-bin/pft/etiquetado.pft
+URLENCODE.PFT=__APP_DIR__/cgi-bin/pft/urlencode.pft
+WORK_HEADING.PFT=__APP_DIR__/cgi-bin/pft/wh.pft
 
 # -----------------------------------------------------------------
 # Directorio para archivos temporales (ignorado en Linux!)
@@ -107,4 +107,4 @@ DB-HEADER.HTM=__LOCAL_DATA_DIR__/bases/__DB__/cgi-bin/html/db-header.htm
 # -----------------------------------------------------------------
 # Archivo de logs, uno por fecha
 # -----------------------------------------------------------------
-LOGFILE.TXT=__LOCAL_DATA_DIR__/logs/log-__DATE__.txt
+LOGFILE.TXT=__LOCAL_DATA_DIR__/logs/opac/log-__DATE__.txt

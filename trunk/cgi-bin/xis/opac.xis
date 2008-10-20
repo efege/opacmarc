@@ -450,7 +450,7 @@ Parámetros CGI
 <!-- ================================================== -->
 <label>LOCAL</label>
 <!-- ================================================== -->
-<include>../local-data/cgi-bin/xis/local.xis</include>
+<include>../../local-data/cgi-bin/xis/local.xis</include>
 <flow action="jump">FIN</flow>
 
 

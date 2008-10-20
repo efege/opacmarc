@@ -58,7 +58,7 @@ Cómo organizar archivos usados para tareas de administración.
 Tenemos por el momento tres tareas definidas, y cada una de ellas requiere
 de un conjunto de archivos auxiliares, además del respectivo archivo .py:
 
-    - install / init
+    - install / init / setup
         archivos .id para generar bases isis auxiliares
         templates para config
         

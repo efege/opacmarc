@@ -116,11 +116,8 @@ import zipfile       # for reading .zip files
 import subprocess    # for running system commands (mx, i2id, etc)
 import ConfigParser  # for reading config file
 
-from opac_util import run_command, error, emptydir, OPACMARC_DIR, LOCAL_DATA_DIR, setup_logger
+from opac_util import run_command, error, emptydir, APP_DIR, LOCAL_DATA_DIR, setup_logger, unique_sort_files
 
-# A global logger object
-log_file = os.path.join(LOCAL_DATA_DIR, 'logs', 'update_db.log')
-logger = setup_logger(log_file)
 
 def run(command, msg = 'Error'):
     return run_command(command, msg = msg, env = ENV)
@@ -145,7 +142,7 @@ def build_env():
     
     # Este diccionario es pasado en las llamadas al sistema
     return {
-        'CIPAR':                os.path.join(OPACMARC_DIR, 'config', 'update.par'),  # Hay que usar el path *absoluto* para el cipar
+        'CIPAR':                os.path.join(APP_DIR, 'config', 'update.par'),  # Hay que usar el path *absoluto* para el cipar
         # Las variables que siguen son definidas en update.conf
         'PATH':                 CONFIG.get('Global', 'PATH_CISIS') + os.pathsep + os.getenv('PATH'),
         'SUBJ_TAGS':            CONFIG.get('Global', 'SUBJ_TAGS'),
@@ -237,12 +234,12 @@ def get_biblio_db():
     
     # ARCHIVOS ZIP
     if os.path.isfile(SOURCE_DIR + '/' + DB_NAME + '.zip'):
-        #unzip -oq $SOURCE_DIR/$DB_NAME.zip -d tmp || error
+        #unzip -oq $SOURCE_DIR/$DB_NAME.zip -d tmp
         zipfile.ZipFile(SOURCE_DIR + '/' + DB_NAME + '.zip', 'r')  # ???  Ver http://www.thescripts.com/forum/thread25297.html
         logger.info("Usando como base original: %s%s%s.zip" % (os.path.abspath(SOURCE_DIR), sep, DB_NAME))
     
     elif os.path.isfile(SOURCE_DIR + '/biblio.zip'):
-        #unzip -oq $SOURCE_DIR/biblio.zip -d tmp || error
+        #unzip -oq $SOURCE_DIR/biblio.zip -d tmp
         logger.info("Usando como base original: %s%sbiblio.zip" % (os.path.abspath(SOURCE_DIR), sep))
     
     # ARCHIVOS MST/XRF
@@ -605,58 +602,49 @@ def compute_postings():
 
 
 def build_agrep_dictionaries():
-    # DICCIONARIOS PARA AGREP
-     
     logger.info("Generamos diccionarios para AGREP.")
+    
     # Solo nos interesan claves asociadas a ciertos tags.
     # /100 restringe la cantidad de postings (de lo contrario, da error).
     # ATENCION: los sufijos NAME, SUBJ, TITLE van en mayusculas o minusculas
     # en base a los valores que tome el parámetro CGI correspondiente.
+    
+    # DUDA: ¿hay alguna ventaja en tener los listados ordenados?
+    
+    # ----------------------------------------
     logger.info("   - subj")
+    # ----------------------------------------
     # Para bibima usamos la base MSC; para el resto, la base SUBJ
     # TO-DO: la base subj también sirve para bibima; usar cat & uniq
-    # TO-DO: independizarse del nombre de la base (usar update.conf)
+    # TO-DO: independizarse del nombre de la base (usar config)
     # TO-DO: como la base MSC es fija, no necesitamos volver a generar este listado cada vez.
     if DB_NAME == 'bibima':
         run('''mx dict=MSC "pft=v1^*/" k1=a k2=zz now > dictSUBJ.txt''')
     else:
         run('''mx dict=subj "pft=v1^*/" k1=a k2=zz now > dictSUBJ.txt''')
     
+    # ----------------------------------------
     logger.info("   - name")
+    # ----------------------------------------
     run('''mx dict=name "pft=v1^*/" k1=a k2=zz now > dictNAME.txt''')
     
+    # ----------------------------------------
     logger.info("   - title (incluye series)")
+    # ----------------------------------------
     #mx dict=biblio,1,2/100  "pft=if v2^t : '204' then v1^*/ fi" k1=a now > dicttitle.txt
     run('''ifkeys biblio +tags from=a to=zzzz > tmp/titlekeys.txt''')
     run('''mx seq=tmp/titlekeys.txt "pft=if '204~404' : right(v2,3) then v3/ fi" now > tmp/titlekeys2.txt''')
-    #cat tmp/titlekeys2.txt | uniq > dictTITLE.txt || error
-    run('''mx seq=tmp/titlekeys2.txt create=tmp/titlekeys2 now -all''')
-    run('''mx tmp/titlekeys2 "pft=if v1 <> ref(mfn-1, v1) then v1/ fi" now > dictTITLE.txt''')
+    #cat tmp/titlekeys2.txt | uniq > dictTITLE.txt
+    #run('''mx seq=tmp/titlekeys2.txt create=tmp/titlekeys2 now -all''')
+    #run('''mx tmp/titlekeys2 "pft=if v1 <> ref(mfn-1, v1) then v1/ fi" now > dictTITLE.txt''')
+    unique_sort_files(['tmp/titlekeys2.txt'], output_file='dictTITLE.txt')
     
+    # ----------------------------------------
     logger.info("   - any")
+    # ----------------------------------------
     # Unión de los diccionarios anteriores (eliminando términos duplicados)
-    # Originalmente en Bash era así de simple: cat dict*.txt | sort | uniq > dictANY.txt
- 
-    all_terms = []
-    for dict_type in ('SUBJ', 'NAME', 'TITLE'):
-        d = open('dict%s.txt' % dict_type, 'r')
-        all_terms.extend(d.readlines())
-
-    # Necesitamos eliminar duplicados y ordenar (o al revés, pero entonces el método de eliminación
-    # de duplicados debe preservar el orden).
-    # Usamos por ahora una método que usa dict.fromkeys, tomado de:
-    #      sorted unique elements from a list; using 2.3 features
-    #      <http://mail.python.org/pipermail/python-list/2003-January/178712.html>
-    # NOTA: dict.fromkeys está disponible desde Python 2.3. 
-    # TO-DO: ¿será más rápido de otra manera, p.ej. con sets?
-    # Ver: Fastest way to uniqify a list in Python <http://www.peterbe.com/plog/uniqifiers-benchmark>
-    #      Recipe 52560: Remove duplicates from a sequence <http://code.activestate.com/recipes/52560/>
-    unique_lines = dict.fromkeys(all_terms).keys()
-    unique_lines.sort()
-    
-    dictANY = open('dictANY.txt', 'w')
-    dictANY.writelines(unique_lines)
-    dictANY.close()
+    # Originalmente en Bash era: cat dict*.txt | sort | uniq > dictANY.txt
+    unique_sort_files(['dict%s.txt' % t for t in ('SUBJ', 'NAME', 'TITLE')], output_file='dictANY.txt')
     
 
 def build_aux_files():
@@ -814,7 +802,12 @@ def main(db_name):
     logger.warning(end_msg % DB_NAME)
 
 
+
 if __name__ == "__main__":
+    # Define a global logger object
+    log_file = os.path.join(LOCAL_DATA_DIR, 'logs', 'python', 'update_db.log')
+    logger = setup_logger(log_file)
+    
     db_name = sys.argv[1]
     main(db_name)
     sys.exit(0)

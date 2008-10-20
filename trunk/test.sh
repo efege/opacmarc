@@ -49,36 +49,38 @@ APACHE_USER=www-data
 # end config
 # -----------------------------------
 
+APP_DIR=$TEST_DIR/app
+LOCAL_DATA_DIR=$TEST_DIR/local-data
 
 rm -rf $TEST_DIR
 
 # bajamos el código del repositorio
-#svn checkout http://opacmarc.googlecode.com/svn/trunk/ $TEST_DIR
+#svn checkout http://opacmarc.googlecode.com/svn/trunk/ $APP_DIR
 
 # o bien exportamos desde la working copy local
-svn export $HOME/svn/opacmarc $TEST_DIR
+svn export $HOME/svn/opacmarc $APP_DIR
 
 # links a binarios
-ln -s $WXIS $TEST_DIR/cgi-bin/wxis
-ln -s $CISIS_DIR $TEST_DIR/bin/cisis
-ln -s $AGREP $TEST_DIR/bin/agrep
+ln -s $WXIS      $APP_DIR/cgi-bin/wxis
+ln -s $CISIS_DIR $APP_DIR/bin/cisis
+ln -s $AGREP     $APP_DIR/bin/agrep
 
 # instalación
-python $TEST_DIR/bin/install.py msc
+python $APP_DIR/bin/install.py msc
 
 # permisos de escritura
 for dir in logs temp
 do
-    sudo chgrp $APACHE_USER $TEST_DIR/local-data/$dir
-    chmod g+w $TEST_DIR/local-data/$dir
+    sudo chgrp $APACHE_USER $LOCAL_DATA_DIR/$dir
+    chmod g+w $LOCAL_DATA_DIR/$dir
 done
 
 # Procesamos la base demo
-python $TEST_DIR/bin/demo.py
+python $APP_DIR/bin/demo.py
 
 # Pisamos config para apache y lo reiniciamos.
 # Esto sólo se requiere si hay alguna modificación al template httpd-opacmarc.conf.
-sudo cp $TEST_DIR/config/httpd-opacmarc.conf $APACHE_VHOST
+sudo cp $APP_DIR/config/httpd-opacmarc.conf $APACHE_VHOST
 sudo apache2ctl restart
 
 # Accedemos al OPAC con un browser.
@@ -87,12 +89,12 @@ firefox "http://127.0.0.1:8081/cgi-bin/wxis?IsisScript=xis/opac.xis&db=demo&show
 exit
 
 # nueva base: bibima
-python $TEST_DIR/bin/add_db.py bibima
-ln -s $HOME/svn/opacmarc/local-data/bases/bibima/db/original/biblio.mst $TEST_DIR/local-data/bases/bibima/db/original/
-ln -s $HOME/svn/opacmarc/local-data/bases/bibima/db/original/biblio.xrf $TEST_DIR/local-data/bases/bibima/db/original/
+python $APP_DIR/bin/add_db.py bibima
+ln -s $HOME/svn/opacmarc/local-data/bases/bibima/db/original/biblio.mst $LOCAL_DATA_DIR/bases/bibima/db/original/
+ln -s $HOME/svn/opacmarc/local-data/bases/bibima/db/original/biblio.xrf $LOCAL_DATA_DIR/bases/bibima/db/original/
 
 # actualización de base bibima
-python $TEST_DIR/bin/update_db.py bibima
+python $APP_DIR/bin/update_db.py bibima
 
-# browser
+# visitamos el opac
 firefox "http://127.0.0.1:8081/cgi-bin/wxis?IsisScript=xis/opac.xis&db=bibima&showForm=simple" &
