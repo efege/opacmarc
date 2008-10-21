@@ -664,11 +664,11 @@ h3#feedback_reply {
 
 
 /* --------------------------------
- * FOOTER
+ * PAGE FOOTER
  * --------------------------------
  */
 
-div#footer {
+div#page-footer {
 	background: #FFF;
 	/*border-width: 1px 0;
 	border-style: solid;
