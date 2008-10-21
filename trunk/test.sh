@@ -77,7 +77,10 @@ do
 done
 
 # Procesamos la base demo
-python $APP_DIR/bin/demo.py
+#python $APP_DIR/bin/demo.py
+python $APP_DIR/bin/add_db.py demo
+python $APP_DIR/bin/copy_demo_data.py
+python $APP_DIR/bin/update_db.py demo
 
 # Pisamos config para apache y lo reiniciamos.
 # Esto sólo se requiere si hay alguna modificación al template httpd-opacmarc.conf.
