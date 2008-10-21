@@ -122,6 +122,8 @@ def read_config():
     # TO-DO: see also
     #  - http://docs.python.org/lib/module-ConfigParser.html
     #  - http://cfgparse.sourceforge.net/
+    # FIXME - El archivo de configuración tiene que estar en app;
+    #         sólo hay que dejar en local-data las opciones locales.
     config_file = os.path.join(LOCAL_DATA_DIR, 'config', 'update.conf')
     config = ConfigParser.ConfigParser()
     config.optionxform = str  # make option names case sensitive
