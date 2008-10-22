@@ -215,33 +215,11 @@ def make_app_readonly():
     #    os.chmod(file_name, stat.S_IREAD)
     
     
-def show_end_msg():    
-    print '''
------------------------------------------------------
-  INSTALACION FINALIZADA
------------------------------------------------------
-'''
-    #print '''
-    #- Configure permiso de escritura en temp y logs (mostrar ejemplo)
-    #- Use %s/config/httpd-opacmarc.conf como base para configurar Apache
-    #- Entre con un browser a http://...
-    #- Realizar tests? E.g. búsquedas con acentos y con errores (agrep).
-    #''' % APP_DIR
-
-
 def main():
 
-    logger.info('*** Instalación iniciada. ***')
-
-    print '''
------------------------------------------------------
-  %s - INSTALACION DE OPACMARC
------------------------------------------------------
-    ''' % os.path.basename(sys.argv[0])
+    logger.info('\n*** Instalación iniciada. ***')
 
     #set_version()
-    
-    #make_app_dir()
     
     make_local_dirs()  # FIXME - si estamos haciendo un upgrade, sólo tenemos que copiar lo existente.
     
@@ -256,10 +234,7 @@ def main():
     
     #make_app_readonly()
     
-    logger.info('*** Instalación finalizada. ***')
-    
-    show_end_msg()
-
+    logger.info('*** Instalación finalizada. ***\n')
 
 
 # A global logger object

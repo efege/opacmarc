@@ -144,5 +144,5 @@ if __name__ == "__main__":
     # FIXME - si se llama sin argumentos
     DB_NAME = sys.argv[1]
     main(DB_NAME)
-    print end_msg2 % ((LOCAL_DATA_DIR, DB_NAME) + (DB_NAME,) + (LOCAL_DATA_DIR, DB_NAME)*4)   # Requiere los paréntesis, de lo contrario TypeError
+    print end_msg2 % ((LOCAL_DATA, DB_NAME) + (DB_NAME,) + (LOCAL_DATA, DB_NAME)*4)   # Requiere los paréntesis, de lo contrario TypeError
     sys.exit(0)
