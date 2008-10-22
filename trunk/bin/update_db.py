@@ -182,7 +182,7 @@ def goto_work_dir():
     # Nos ubicamos en el directorio de trabajo
     try:
         os.chdir(WORK_DIR)
-        logger.info("Directorio de trabajo: %s" % os.path.abspath(WORK_DIR))
+        logger.debug("Directorio de trabajo: %s" % os.path.abspath(WORK_DIR))
     except:
         error("No se puede ingresar al directorio de trabajo, %s." % os.path.abspath(WORK_DIR))
     
@@ -192,7 +192,7 @@ def goto_work_dir():
     if not os.path.isdir('tmp'):
         try:
             os.mkdir('tmp')
-            logger.info("Directorio tmp creado.")
+            logger.debug("Directorio tmp creado.")
         except:
             error("No se pudo crear el directorio tmp.")
     # Y si ya existe, lo vaciamos
@@ -544,16 +544,16 @@ def fullinv():
     # ATENCION: AC-ANSI.TAB envia los numeros al diccionario.
     # -------------------------------------------------------------------
      
-    logger.info(" Archivo invertido - Base de temas...")
+    logger.info("Archivo invertido - Base de temas...")
     run('''mx subj fst=@HEADINGS.FST actab=AC-ANSI.TAB uctab=UC-ANSI.TAB fullinv=subj tell=%s''' % TELL)
      
-    logger.info(" Archivo invertido - Base de nombres...")
+    logger.info("Archivo invertido - Base de nombres...")
     run('''mx name fst=@HEADINGS.FST actab=AC-ANSI.TAB uctab=UC-ANSI.TAB fullinv=name tell=%s''' % TELL)
      
-    logger.info(" Archivo invertido - Base de titulos...")
+    logger.info("Archivo invertido - Base de titulos...")
     run('''mx title "fst=2 0 '~',@HEADSORT.PFT" actab=AC-ANSI.TAB uctab=UC-ANSI.TAB fullinv=title tell=%s''' % TELL)
      
-    logger.info(" Archivo invertido - Base bibliografica...")
+    logger.info("Archivo invertido - Base bibliografica...")
     # Antes de la FST, aplicamos un gizmo a los campos que generan puntos de acceso
     run('''mx biblio gizmo=DICTGIZ,100,110,111,130,700,710,711,730,800,810,811,830 gizmo=DICTGIZ,240,245,246,440,740,600,610,611,630,650,651,653,655,656 fst=@BIBLIO.FST actab=AC-ANSI.TAB uctab=UC-ANSI.TAB stw=@BIBLIO.STW fullinv=biblio tell=%s''' % TELL)
 
@@ -745,9 +745,9 @@ def clean_cache():
     CACHE_DIR = os.path.join(LOCAL_DATA_DIR, 'temp')
     emptydir(CACHE_DIR)
 
-begin_msg = "Actualización de la base %s."
+begin_msg = "*** Actualización de la base %s. ***"
 
-end_msg = "Base %s actualizada exitosamente."
+end_msg = "*** Base %s actualizada exitosamente. ***\n"
 
 def main(db_name):
 

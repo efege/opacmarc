@@ -217,7 +217,7 @@ def make_app_readonly():
     
 def main():
 
-    logger.info('\n*** Instalación iniciada. ***')
+    logger.info('*** Instalación iniciada. ***')
 
     #set_version()
     
