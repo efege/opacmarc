@@ -22,17 +22,20 @@
 # begin config
 # -----------------------------------
 
+# working copy
+SVN_DIR=$HOME/opacmarc/svn
+
 # versión de utilitarios cisis + wxis
 CISIS_VERSION=5.2b-1030
 
 # Directorio para el test. Es eliminado con cada nuevo test.
-TEST_DIR=$HOME/opacmarc-test
+TEST_DIR=$HOME/opacmarc/test-install
 
 # Directorio de los cisis
-CISIS_DIR=$HOME/bin/cisis-$CISIS_VERSION
+CISIS_DIR=$HOME/opacmarc/binaries/linux/cisis-$CISIS_VERSION
 
 # wxis
-WXIS=$HOME/www/cgi-bin/wxis-$CISIS_VERSION
+WXIS=$HOME/opacmarc/binaries/linux/wxis-$CISIS_VERSION
 
 # agrep
 AGREP=`which agrep`
@@ -59,7 +62,7 @@ mkdir $TEST_DIR
 #svn checkout http://opacmarc.googlecode.com/svn/trunk/ $APP_DIR
 
 # o bien exportamos desde la working copy local
-svn export $HOME/svn/opacmarc $APP_DIR
+svn export $SVN_DIR $APP_DIR
 
 # links a binarios
 ln -s $WXIS      $APP_DIR/cgi-bin/wxis

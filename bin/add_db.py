@@ -29,7 +29,7 @@ def print_usage():
 # Ver: Python main() functions, by Guido van Rossum <http://www.artima.com/weblogs/viewpost.jsp?thread=4829>
 def main(DB_NAME):
 
-    logger.info(begin_msg % os.path.basename(sys.argv[0]))  # FIXME - si es importado por demo.py imprime demo.py
+    logger.info(begin_msg)
 
     # Check mandatory argument
     #if len(argv) < 2:
@@ -94,15 +94,9 @@ template_dest = {
 }
 
 
-begin_msg = '''
------------------------------------------------------
-  %s - GENERACION DE UNA NUEVA BASE
------------------------------------------------------
-'''
+begin_msg = '*** Generación de una nueva base ***'
     
-end_msg1 = '''Se han creado los directorios y archivos necesarios para trabajar con
-la base %s.
-'''
+end_msg1 = '*** Se han creado los directorios y archivos necesarios para trabajar con la base %s. ***\n'
 
 end_msg2 = '''A continuacion, debe copiar la base bibliográfica original en la carpeta
 

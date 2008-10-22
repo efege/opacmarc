@@ -79,6 +79,7 @@
 					'&amp;task=',v2101[1],
 					'&amp;searchType=',v2002[1],
 					'&amp;query=',replace(v5555^*,' ','+'),
+					'&amp;source=agrep',
 				'" title="Haga clic para buscar ',v5555^*,'">',
 					v5555^*,
 				'</a>',
