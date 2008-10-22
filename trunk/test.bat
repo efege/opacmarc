@@ -10,26 +10,31 @@
 :: Esta es la lista de parámetros esperados; los valores mostrados son
 :: sólo ejemplos:
 ::
-:: versión de utilitarios cisis + wxis
-:: set CISIS_VERSION=5.2b-1030
+:: Directorio que almacena la working copy de svn
+::set SVN_DIR=G:\opacmarc\svn
 ::
 :: Directorio para el test. Es eliminado con cada nuevo test.
-:: set TEST_DIR=G:\opacmarc-test
+::set TEST_DIR=G:\opacmarc\test
+::
+:: versión de cisis/wxis
+::set CISIS_VERSION=5.2b-1660
 ::
 :: directorio de los cisis
-:: set CISIS_DIR=G:\programas\cisis-%CISIS_VERSION%
+::set CISIS_DIR=G:\opacmarc\binaries\windows\cisis-%CISIS_VERSION%
 ::
 :: wxis
-:: set WXIS=G:\svn\opacmarc\cgi-bin\wxis-%CISIS_VERSION%.exe
+::set WXIS=G:\opacmarc\binaries\windows\wxis-%CISIS_VERSION%.exe
 ::
 :: agrep
-:: set AGREP=G:\svn\opacmarc\bin\agrep.exe
+::set AGREP=G:\opacmarc\binaries\windows\agrep.exe
 ::
 :: Archivo con la configuración de un virtual host para OpacMarc
-:: set APACHE_VHOST=G:\programas\Apache Software Foundation\Apache2.2\conf\extra\httpd-vhost-opacmarc-test-8081.conf
+:: El método para que este archivo sea leído por Apache depende del
+:: sistema operativo y de la versión de Apache.  
+::set APACHE_VHOST=G:\programas\Apache Software Foundation\Apache2.2\conf\extra\httpd-vhost-opacmarc-test-8081.conf
 call test-config.bat
 
-:: eliminamos el directorio si ya existe
+:: eliminamos el directorio de testeo si ya existe
 rmdir /s /q %TEST_DIR% 2>NUL
 
 mkdir %TEST_DIR%
@@ -38,9 +43,9 @@ set APP_DIR=%TEST_DIR%\app
 
 :: obtenemos una copia fresca del código
 echo.
-svn export G:\svn\opacmarc %APP_DIR%
+svn export %SVN_DIR% %APP_DIR%
 
-:: colocamos los binarios en su lugar
+:: copiamos los binarios
 echo.
 mkdir %APP_DIR%\bin\cisis
 copy %CISIS_DIR%\*.* %APP_DIR%\bin\cisis\
