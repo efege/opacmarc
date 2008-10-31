@@ -1,6 +1,6 @@
 <!-- Generación de mensajes y sugerencias para búsquedas sin resultados:
-     * usar agrep para sugerir palabras cercanas ("did you mean...?")
-	  * repetir la misma búsqueda en otros índices
+    * usar agrep para sugerir palabras cercanas ("did you mean...?")
+    * repetir la misma búsqueda en otros índices
 -->
 
 <!-- Omitimos el agrep si se da alguna de estas situaciones:
@@ -79,7 +79,7 @@
 					'&amp;task=',v2101[1],
 					'&amp;searchType=',v2002[1],
 					'&amp;query=',replace(v5555^*,' ','+'),
-					'&amp;source=agrep',
+					'&amp;agrep=1',
 				'" title="Haga clic para buscar ',v5555^*,'">',
 					v5555^*,
 				'</a>',

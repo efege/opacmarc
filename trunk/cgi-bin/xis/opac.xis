@@ -369,7 +369,7 @@ Parámetros CGI
 <!-- ================================================== -->
 <label>TEST_CONDITION</label>
 <!-- ================================================== -->
-<include>xis/bib-test-cond.xis</include>
+<include>xis/bib-test-condition.xis</include>
 <flow action="jump">FIN</flow>
 
 <!-- ================================================== -->
