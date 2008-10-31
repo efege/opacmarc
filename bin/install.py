@@ -247,13 +247,16 @@ logger = setup_logger(log_file)
 # TO-DO: agregar aquí los que usa create_db()?
 FILES = {
     'footer'       : os.path.join(APP_DIR, 'cgi-bin', 'html', 'page-end.htm'),
+    
+    'conf-httpd'   : os.path.join(APP_DIR, 'config', 'httpd-opacmarc.conf'),
     'conf-default' : os.path.join(APP_DIR, 'config', 'default-settings.conf'),
+    'conf-local'   : os.path.join(LOCAL_DATA_DIR, 'config', 'local-settings.conf'),
+    'conf-update'  : os.path.join(LOCAL_DATA_DIR, 'config', 'update.conf'),
+    
     'cipar-default': os.path.join(APP_DIR, 'config', 'default-cipar.par'),
     'cipar-update' : os.path.join(APP_DIR, 'config', 'update_db.par'),
-    'conf-httpd'   : os.path.join(APP_DIR, 'config', 'httpd-opacmarc.conf'),
-    'conf-local'   : os.path.join(LOCAL_DATA_DIR, 'config', 'local-settings.conf'),
     'cipar-local'  : os.path.join(LOCAL_DATA_DIR, 'config', 'local-cipar.par'),
-    'conf-update'  : os.path.join(LOCAL_DATA_DIR, 'config', 'update.conf'),
+    
     'actab'        : os.path.join(APP_DIR, 'util', 'ac-ansi.tab'),
     'uctab'        : os.path.join(APP_DIR, 'util', 'uc-ansi.tab'),
 }

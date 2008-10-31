@@ -8,6 +8,8 @@
 	=========================================================== -->
 
 
+<!-- FIXME - por seguridad rechazar pft que use 'system()' -->
+
 <!-- v2070: la condición booleana -->
 <field action="replace" tag="2070"><pft>replace(v2070,'\','')</pft></field>
 
@@ -15,21 +17,9 @@
 <field action="replace" tag="2072"><pft>v2072,"1000"n2072</pft></field>
 
 <display><htmlpft>
-	<table width="100%" cellspacing="0" border="0">
-		<tr>
-			<td>
-				Búsqueda por condición booleana:
-			</td>
-			<td align="right">
-				<a class="newSearch" href="[pft]v6001^u[/pft]?IsisScript=[pft]v2000[/pft]&amp;db=[pft]v2104[/pft]&amp;showForm=simple">
-					[pft]v6002^s[/pft]
-				</a>
-			</td>
-		</tr>
-	</table>
-
-	<div class="resultHeader">
-		[pft]v2070, " (grupo repetible)"d2071[/pft]
+    <div id="resultHeader">
+        Búsqueda por condición booleana:
+		<b>[pft]v2070, " (grupo repetible)"d2071[/pft]</b>
 	</div>
 </htmlpft></display>
 
@@ -92,7 +82,9 @@
 <!-- Si no hubo resultados... -->
 <display><pft>
 	if val(v1002) = 0 then
-		'No hay registros que cumplan con la condición.'
+    	'<div class="warning">
+    		No se encontraron registros que cumplan con la condición.
+    	</div>',
 	fi
 </pft></display>
 <flow action="jump"><pft>if val(v1002) = 0 then 'FIN' fi</pft></flow>
