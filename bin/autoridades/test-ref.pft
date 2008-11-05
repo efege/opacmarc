@@ -1,0 +1,118 @@
+/*
+   Formato para resolución de links desde los registros bibliográficos a registros de autoridad.
+
+   Esto es una prueba.
+
+*/
+
+/* TO-DO: puntuación cuando hay subcampo $e ?? */
+/* TO-DO: puntuación cuando hay subcampo $v en series ?? */
+
+/* TO-DO: replicar lo del 700 en los restantes campos */
+
+mfn/
+
+'245: ',v245/,
+
+if p(v100) then
+    '100: ',
+    ref(
+        ['output\auto']
+        l(['output\auto']'-CN='v100^0),
+        v100
+    ),
+    replace(v100*2,s('^0',v100^0),''),
+    /,
+
+else if p(v110) then
+    '110: ',
+    ref(
+        ['output\auto']
+        l(['output\auto']'-CN='v110^0),
+        v110
+    ),
+    replace(v110*2,s('^0',v110^0),''),
+    /,
+
+else if p(v111) then
+    '111: ',
+    ref(
+        ['output\auto']
+        l(['output\auto']'-CN='v111^0),
+        v111
+    ),
+    replace(v111*2,s('^0',v111^0),''),
+    /,
+
+else if p(v130) then
+    /* campo auxiliar para el encabezamiento tomado del R.A. */
+    proc('d1000a1000|',
+        ref(
+            ['output\auto']
+            l(['output\auto']'-CN='v130^0),
+            v130
+        ),
+    '|'),
+    
+    '130: ',
+    v1000[1]*1.1, /* 1er indicador en el R.B. es el 2do indicador en el R.A. */
+    v1000[1].1,       /*  */
+    v1000[1]*2, /* subcampos almacenados en el R.A. */
+    if not '.-)' : right(v1000[1],1) then '.' fi, /* puntuación final */
+    /* replace(v130*2,s('^0',v130^0),''), */
+    v130*2,     /* subcampos almacenados en el R.B. (incluyendo $0) */
+    /
+
+fi,fi,fi,fi,
+ 
+if p(v700) then
+    /* loop sobre el campo 700 */
+    (
+        /* campo auxiliar para el encabezamiento tomado del R.A. */
+        proc('d1000a1000|',
+            ref(
+                ['output\auto']
+                l(['output\auto']'-CN='v700^0),
+                v100
+            ),
+        '|'),
+        
+        '700: ',
+        v1000[1].1, /* 1er indicador, del R.A. */
+        v700*1.1,   /* 2do indicador, del R.B. */
+        v1000[1]*2, /* subcampos almacenados en el R.A. */
+        if not '.-)' : right(v1000[1],1) then '.' fi, /* puntuación final */
+        /* replace(v700*2,s('^0',v700^0),''), */
+        v700*2,     /* subcampos almacenados en el R.B. (incluyendo $0) */
+        /
+    )
+    
+else if p(v710) then
+    /* loop sobre el campo 710 */
+    (
+        '710: ',
+        ref(
+            ['output\auto']
+            l(['output\auto']'-CN='v710^0),
+            v110
+        ),
+        replace(v710*2,s('^0',v710^0),''),
+        /
+    )
+
+else if p(v711) then
+    /* loop sobre el campo 711 */
+    (
+        '711: ',
+        ref(
+            ['output\auto']
+            l(['output\auto']'-CN='v711^0),
+            v111
+        ),
+        replace(v711*2,s('^0',v711^0),''),
+        /
+    )
+
+fi,fi,fi,
+
+/#

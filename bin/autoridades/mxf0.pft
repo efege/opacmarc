@@ -1,0 +1,224 @@
+lw(1000)
+
+'<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"  "http://www.w3.org/TR/html4/loose.dtd">'/
+'<html>
+<head>
+<title>MXF0 - Análisis de la base</title>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">'/
+
+'<style type="text/css">
+    table {
+        border-bottom: 1px solid #999;
+        border-right: 1px solid #999;
+        margin-bottom: 1em;
+    }
+    td,th {
+        border-left: 1px solid #999;
+        border-top: 1px solid #999;
+        padding: 0.2em 0.4em;
+    }
+    td {
+        background: #f0f0f0;
+        text-align: right;
+    }
+    th {
+        background: #666;
+        color: #eee;
+    }
+    td.tag {
+        background: #999;
+        border-top: 1px solid #666;
+        color: #eee;
+        font-weight: bold;
+    }
+    #tabla1 th {
+        text-align: right;
+    }
+    #tabla1 td {
+        text-align: left;
+    }
+    tr.control td {
+        background: #FFC;
+    }
+    td.char {
+        font-weight: bold;
+    }
+</style>'/
+'</head>
+
+<body>'/
+
+'<h1>Análisis de la base de datos</h1>'/
+
+/* ------------------------ ESTADO DE LA BASE ------------------------ */
+'<table id="tabla1" cellspacing="0">
+    <tr>
+        <th>base</th> <td>',v1001,'</td>
+    </tr>
+    <tr>
+        <th>fecha y hora</th> <td>',v1003,'</td>
+    </tr>
+    <tr>
+        <th>registros procesados</th> <td>',v1009,'</td>
+    </tr>
+    <tr>
+        <th>registros activos</th> <td>',v1010,'</td>
+    </tr>
+    <tr>
+        <th>registros borrados lógicamente</th> <td>',v1011,'</td>
+    </tr>
+    <tr>
+        <th>registros borrados físicamente</th> <td>',v1012,'</td>
+    </tr>
+    <tr>
+        <th>siguiente MFN</th> <td>',v1013,'</td>
+    </tr>
+</table>'/
+
+
+/* ------------------------ CAMPOS PRESENTES ------------------------ */
+'<table cellspacing="0">
+    <tr>
+    <th>tag</th>
+    <th>registros</th>
+    <th>occ</th>
+    <th>mín</th>
+    <th>máx</th>
+    <th>bytes</th>
+    <!-- Para bases en MARC, podemos agregar una columna con el nombre del campo -->
+    </tr>'/
+
+proc('d3a3|',f(nocc(v1020),1,0),'|'),
+    
+/* loop sobre v1020 */
+(
+    '<tr>'
+    '<td class="tag">',v1020^t,'</td>',
+    '<td>',v1020^d,'</td>',
+    '<td>',v1020^o,'</td>',
+    '<td>',v1020^l,'</td>',
+    '<td>',v1020^u,'</td>',
+    '<td>',v1020^n,'</td>',
+    '</tr>'/
+)
+'</table>'/
+
+
+/* ------------------------ CARACTERES PRESENTES ------------------------ */
+'<table cellspacing="0" style="float: left;">
+    <tr>
+    <th>hex</th>
+    <th>dec</th>
+    <th>char</th>
+    <th>descripción</th>
+    <th>#</th>
+    </tr>'/
+
+/* loop sobre v1030 */
+(
+    /* 1,2,3: campos auxiliares para obtener el código en decimal */
+    proc('d1a1|',
+        select v1030^x.1
+            case 'a' : '10',
+            case 'b' : '11',
+            case 'c' : '12',
+            case 'd' : '13',
+            case 'e' : '14',
+            case 'f' : '15',
+            elsecase v1030^x.1,
+        endsel
+    '|')
+    proc('d2a2|',
+        select v1030^x*1.1
+            case 'a' : '10',
+            case 'b' : '11',
+            case 'c' : '12',
+            case 'd' : '13',
+            case 'e' : '14',
+            case 'f' : '15',
+            elsecase v1030^x*1.1,
+        endsel
+    '|')
+    proc('d3a3|',f(16*val(v1[1]) + val(v2[1]),1,0),'|'),
+    
+    /* a partir del código 128 usamos una nueva tabla */
+    if val(v3[1]) > 127 and v11[1] = '' then
+        proc('d11a11|*|'),
+        '</table>'/
+        '<table cellspacing="0" style="float: left; margin-left: 1em;">
+            <tr>
+            <th>hex</th>
+            <th>dec</th>
+            <th>char</th>
+            <th>descripción</th>
+            <th>#</th>
+            </tr>'/
+    fi,
+    
+    '<tr class="',if v11[1] = '' then 'ascii' fi, if val(v3[1]) < 32 or val(v3[1])=127 then ' control' fi,'">'
+    '<td>',mpu,v1030^x,mpl'</td>',
+    '<td>',v3[1]'</td>',
+    '<td class="char">&#',v3[1],';</td>',  /* sólo sirve para ISO-8859-1 */
+    '<td>',
+        select v1030^x
+            case '08' : 'BACKSPACE',
+            case '20' : 'espacio',
+            case '27' : 'apóstrofe', /* comilla simple */
+            case '5f' : 'guión bajo',
+            case '60' : 'acento grave',
+            case '7e' : 'tilde',
+            case '7f' : 'DELETE',
+            /* =========================================== */
+            case '80' : 'euro',
+            case '85' : 'elipsis',
+            case '88' : 'circunflejo',
+            /* ------------------------- */
+            case '99' : 'trademark',
+            /* ------------------------- */
+            case 'a0' : 'espacio de "no ruptura"',
+            case 'a1' : 'signo de exclamación abierta',
+            case 'a2' : 'centavo',
+            case 'a3' : 'libra esterlina',
+            case 'a4' : 'signo monetario',
+            case 'a6' : 'barra vertical partida',
+            case 'a7' : 'signo de sección',
+            case 'a8' : 'diéresis',
+            case 'a9' : 'copyright'
+            case 'aa' : 'ordinal femenino',
+            case 'ab' : 'comillas francesas de apertura',
+            case 'ac' : 'signo de negación',
+            case 'ad' : 'guión separador de sílabas',
+            case 'af' : 'macrón',
+            /* ------------------------- */
+            case 'b0' : 'grado',
+            case 'b1' : 'más-menos',
+            case 'b2' : 'superíndice 2',
+            case 'b3' : 'superíndice 3',
+            case 'b4' : 'acento agudo',
+            case 'b5' : 'micro',
+            case 'b7' : 'punto centrado',
+            case 'b8' : 'cedilla',
+            case 'b9' : 'superíndice 1',
+            case 'ba' : 'ordinal masculino',
+            case 'bb' : 'comillas francesas de cierre',
+            case 'bc' : 'fracción un cuarto'
+            case 'bf' : 'signo de interrogación abierta',
+            /* ------------------------- */
+            case 'd0' : 'eth mayúscula',
+            case 'd7' : 'signo de multiplicación',
+            case 'de' : 'thorn mayúscula',
+            case 'df' : 's aguda alemana',
+            /* ------------------------- */
+            case 'f0' : 'eth minúscula',
+            case 'f7' : 'signo de división',
+            case 'fe' : 'thorn minúscula',
+            elsecase '&#160;',  /* default: espacio */
+        endsel,
+    '</td>',
+    '<td>',v1030^n,'</td>',
+    '</tr>'/
+)
+'</table>
+
+</body>
+</html>',

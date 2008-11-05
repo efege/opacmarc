@@ -1,0 +1,13 @@
+/* usado en cleanauto.bat y en resuelve-referencias.bat */
+
+putenv('TARGET=',ref([getenv('_AUTO')]l([getenv('_AUTO')] '-CN=', v1^0), v999)),
+
+if getenv('TARGET') <> '0' then
+    'd1a1|',
+        replace(
+            v1,
+            s('^0',v1^0),
+            s('^0', getenv('TARGET'))
+        ),
+    '|',
+fi

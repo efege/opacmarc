@@ -1,0 +1,13 @@
+/*
+    Reemplaza el valor original del subcampo $0 en los encabezamientos controlados, por el valor correcto.
+*/
+
+if getenv('CONTROLLED_TAGS') : v1*1.4 then  /* los mismos campos que fueron procesados en extract-headings.pft */
+    'd1a1~',
+        replace(
+            v1,
+            s('^0',v1^0),
+            s('^0',ref(['work\map']l(['work\map']getenv('PREFIX'),mfn),v2))
+        ),
+    '~',
+fi

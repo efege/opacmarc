@@ -1,0 +1,55 @@
+/* Creación de un subcampo $0 en los campos controlados */
+
+/* Acerca de la elección del identificador 0 para este subcampo, véase http://www.loc.gov/marc/marbi/2007/2007-06.html */
+
+/* TO-DO: marcar los indicadores que son definidos en el registro de autoridad (consultar fix-tags-indicators.pft) */
+
+/* El valor '_' en un indicador significa que el correspondiente valor proviene del registro de autoridad. */
+
+
+if getenv('CONTROLLED_TAGS') : v1*1.4 then /* los mismos campos que fueron procesados en extract-headings.pft */
+    'd1a1|',
+    
+        /* Primeros 6 caracteres, e.g. '!v100!' */
+        v1.6,
+        
+        /* 1er indicador */
+        if '100~700~110~710~111~711~130~730~630' : v1*2.3 then
+            '_',     /* se define en el registro de autoridad */
+        else
+            v1*6.1,  /* se define en el registro bibliográfico */
+        fi,
+        
+        /* 2do indicador */
+        if '700~710~711' : v1*2.3 then
+            v1*7.1,  /* se define en el registro bibliográfico */
+        else
+            '_',     /* se define en el registro de autoridad */
+        fi,
+        
+        /* Split en subcampos (campo auxiliar 1000) */
+        proc('d1000a1000|', replace(v1*9,'^','|a1000|'), '|'),
+
+        /* Los subcampos a conservar dependen del tag; creamos un campo auxiliar 1001 (ver extract-headings.pft). */
+        proc('d1001a1001|'
+            select v1*2.3 /* tag */
+                case '440' : 'v68',
+                case '830' : 'v68',
+                elsecase     'e4568',
+            endsel,
+        '|'),
+
+        /* Recorremos los subcampos y nos quedamos sólo con los que nos interesa conservar. */
+        (,
+            if v1001[1] : v1000.1 then
+                '^',v1000,
+            fi,
+        ),
+        
+        /* Colocamos en último lugar el subcampo $0. Su valor será modificado más tarde. */
+        '^0',getenv('PREFIX'),mfn,
+        
+        proc('d1000d1001'),
+        
+    '|',
+fi
