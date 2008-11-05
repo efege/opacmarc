@@ -1,0 +1,86 @@
+/*
+    Extracción de encabezamientos de un registro bibliográfico, para construir una base
+    de autoridades.
+*/
+
+/*
+   ENCABEZAMIENTOS DE NOMBRE-TITULO:
+   En el caso de nombres seguidos de $t, tenemos que extraer también el nombre aislado,
+   pero... ¿a qué registro bibliográfico queda vinculado?
+   Se puede hacer sobre la base de autoridades, una vez que se han eliminado los
+   duplicados, pero antes del retag
+   
+   mx auto "pft=if p(v1^t) then left(v1,instr(v1,'^t')-1)/ fi" now >names-without-titles.seq
+   
+   Algunos de los nombres obtenidos por este método pueden ya estar presentes en la base
+   de autoridades, en cuyo caso no necesitamos agregarlos. Para los restantes, conservamos
+   el nombre, junto con el tag original; tales registros quedarán como semi-huérfanos, en el
+   sentido de que no hay registros bibliográficos apuntando hacia ellos (sólo están vinculados,
+   aunque no explícitamente por el momento, a registros de autoridad de nombre/título).
+   
+   TO-DO: excluir $x, $v, $y, $z en subject headings
+*/
+
+if getenv('CONTROLLED_TAGS') : v1*1.4 then   /* v1*1.4 es p.ej. 'v100' */
+
+    /* split en subcampos */
+    proc('d1000a1000|', replace(v1*9,'^','|a1000|'), '|'),
+    
+    /* los subcampos a ignorar dependen del tag; creamos un campo auxiliar 1001 */
+    proc('d1001a1001|'
+        select v1*2.3 /* tag */
+            case '440' : 'v68',
+            case '830' : 'v68',
+            elsecase     'e4568',
+        endsel,
+    '|'),
+    
+    /* los subcampos que queremos preservar quedan en un campo auxiliar 1002 */
+    proc('d1002a1002|',
+        /* loop sobre subcampos */
+        (
+            if not v1001[1] : v1000.1 then  /* excluimos subcampos */
+                '^',v1000,
+            fi
+        )
+    '|'),
+    
+    /* los indicadores */
+    /* ATENCION: tal vez podemos normalizar aquí el 2do indicador en los campos x00, x10, x11 (ahora se hace sobre la base auto) */
+    v1*6.2,
+    
+    /* el encabezamiento, sin puntuación final */
+    /* ATENCION: usar una tabla ad hoc para conversión a mayúsculas, donde p.ej. "Ñ" => "Ñ" y no "N" */
+    /* ATENCION: el criterio de mayúsculas vs. minúsculas falla en estos casos:
+           - cuando el encabezamiento termina con una abreviatura, p.ej. "Inc.", "Cía.", "Co." (el punto debe quedar)
+           - cuando el encabezamiento termina con una palabra en mayúsculas, p.ej. "MATLAB." (el punto debe quitarse)
+    */
+    if right(v1002,1) = '.'                                            /* si termina en punto... */
+        and (
+                s(right(v1002,2)).1 <> s(right(s(mpu,v1002,mpl),2)).1  /* ...y está precedido por una minúscula... */
+                or
+                '0.1.2.3.4.5.6.7.8.9.' : right(v1002,2)                /* ...o por un dígito... */
+            ) then
+        mid(v1002,1,size(v1002)-1),                                    /* ...quitamos ese punto final */
+        
+    else if right(v1002,1) = ',' then                                  /* si termina en coma, */
+        mid(v1002,1,size(v1002)-1),                                    /* quitamos esa coma final */
+        
+    else if right(v1002,2) = ' ;' then                                 /* si termina en espacio + punto y coma, */
+        mid(v1002,1,size(v1002)-2),                                    /* quitamos los 2 caracteres finales */
+        
+    else                                                               /* en otro caso, */
+        v1002,                                                         /* lo dejamos como está */
+    fi,fi,fi,
+    
+    /* el mfn del encabezamiento en la base biblio-campos; actúa como ID del encabezamiento */
+    '|',
+    getenv('PREFIX'),  /* le anteponemos un prefijo */
+    mfn,
+    
+    /* el tag del encabezamiento */
+    '|',v1*2.3,
+    
+    /* newline */
+    /,
+fi

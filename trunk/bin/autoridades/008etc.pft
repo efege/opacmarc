@@ -1,0 +1,97 @@
+/* Datos del leader. Sólo hay 4 posiciones a definir. */
+/* 05 - Record status */
+'a905~n~', /* n - New */
+/* 06 - Type of record */
+'a906~z~', /* z - Authority data */
+/* 09 - Character coding scheme */
+'a909~#~', /* # - MARC-8 */
+/* 17 - Encoding level */
+'a917~o~', /* o - Incomplete authority record */
+
+/* Campo 005 */
+'a005~',
+    s(date).8,s(date)*9.6,'.0',
+'~',
+
+/* Campo 999 donde se almacenará el ID del eventual registro target. Inicialmente tiene un '0'. */
+'a999~0~',
+
+
+/*
+    Construcción del campo 008 para registros de autoridad.
+    
+    Ver http://www.loc.gov/marc/authority/ecadcntr.html#mrca008
+*/
+
+'a008~',
+
+    /* 00-05 fecha de creación del registro */
+    s(date)*2.6,
+    
+    /* 06 - Direct or indirect geographic subdivision */
+    '|',
+    
+    /* 07 - Romanization scheme */
+    '|',
+    
+    /* 08 - Language of catalog */
+    '|',
+    
+    /* 09 - Kind of record */
+    'a', /* a: Encabezamiento establecido */
+    
+    /* 10  Reglas de catalogación descriptiva */
+    'c',  /* c: AACR2 */
+    
+    /* 11 - Subject heading system/thesaurus */
+    '|',
+    
+    /* 12 - Type of series */
+    '|',
+    
+    /* 13 - Numbered or unnumbered series */
+    '|',
+    
+    /* 14 - Heading use--main or added entry */
+    'a',
+    
+    /* 15 - Heading use--subject added entry */
+    'a',
+    
+    /* 16 - Heading use--series added entry */
+    'a',
+    
+    /* 17 - Type of subject subdivision */
+    'n', /* n - Not applicable */
+    
+    /* 18-27 - Undefined character positions */
+    '##########',
+    
+    /* 28 - Type of government agency */
+    '|',
+    
+    /* 29 - Reference evaluation */
+    'n',
+    
+    /* 30 - Undefined character position */
+    '#',
+    
+    /* 31 - Record update in process */
+    '|',
+    
+    /* 32 - Undifferentiated personal name */
+    '|',
+    
+    /* 33 - Level of establishment */
+    '|',
+    
+    /* 34-37 - Undefined character positions */
+    '####',
+    
+    /* 38 - Modified record */
+    '|',
+    
+    /* 39 - Cataloging source */
+    '|',
+
+'~',
