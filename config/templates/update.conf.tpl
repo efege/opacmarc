@@ -38,6 +38,8 @@ MOVE=1
 # Use CLEAN=1 para eliminar archivos temporales creados durante la actualización del OPAC.
 CLEAN=0
 
+# Use SUBCATS=1 para procesar subcatálogos
+SUBCATS=1
 
 # ------------------------------------------------------------------
 # En la mayoría de las situaciones, las opciones que siguen

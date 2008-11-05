@@ -23,3 +23,8 @@
 
 0 0 /* Campo 9: numero de identificacion del heading */
 9 0 |_HEAD_|v9
+
+
+0 0 /* Campo 8: lista de subcatalogos donde aparece el heading */
+8 0 (|_SC_|v8/)
+

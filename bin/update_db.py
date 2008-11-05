@@ -477,13 +477,14 @@ def build_name_db():
     run('''id2i tmp/name.id create/app=name tell=%s''' % TELL)
  
 
-def recode_headings():
+def recode_headings_in_biblio():
     # -----------------------------------------------------------------
     logger.info("Reasignamos numeros a los encabezamientos en los registros")
     logger.info("   bibliograficos (subcampo 9)...")
     # -----------------------------------------------------------------
     run('''mx seq=tmp/subjcode.seq create=tmp/subjcode now -all''')
     run('''mx tmp/subjcode "fst=1 0 v1" fullinv=tmp/subjcode''')
+    
     run('''mx seq=tmp/namecode.seq create=tmp/namecode now -all''')
     run('''mx tmp/namecode "fst=1 0 v1" fullinv=tmp/namecode''')
      
@@ -524,7 +525,7 @@ def process_biblio_db_2():
     # ------------------------------------------------------------------
      
     logger.info("-----------------------------------------------------")
-    logger.info("Base bibliografica")
+    logger.info(" Base bibliografica")
     logger.info("-----------------------------------------------------")
      
     logger.info("Recreamos la base bibliografica.")
@@ -532,7 +533,59 @@ def process_biblio_db_2():
      
     logger.info("Ordenamos la base bibliografica.")
     run('''msrt biblio 100 @LOCATION_SORT.PFT tell=%s''' % TELL)
- 
+
+
+# EXPERIMENTAL
+def process_subcatalogs():
+    # HS = short mnemonic for "headings/subcatalogs"
+
+    logger.info("-----------------------------------------------------")
+    logger.info(" Sub-catalogos")
+    logger.info("-----------------------------------------------------")
+    
+    # Creamos un archivo de texto biblio-hs.txt, donde cada línea contiene la
+    # lista de heading-ids y la lista de subcatálogos asociados a un registro
+    # de la base bibliográfica. Las listas se separan con '|', y los ítems
+    # dentro de cada lista con ','. Un ejemplo simplificado:
+    #     H1,H2|S1
+    #     H3|S2
+    #     H4,H1|S1,S2
+    run('''mx biblio "proc=@LIST-HEADING-IDS.PFT" "proc=@LIST-SUBCATS.PFT" "pft=if p(v5000) then v5000+|,|, '|', v5001+|,|, / fi" now -all lw=1000 > tmp/biblio-hs.txt''')
+
+    # HS es un diccionario que mapea cada heading-id al conjunto de sus subcatálogos asociados.
+    # Cada HS[hid] es a su vez un diccionario cuyas keys son los subcatálogos.
+    HS = {}
+    for B in open('tmp/biblio-hs.txt'):
+        parts = B.rstrip('\n').split('|')
+        H = parts[0].split(',')
+        S = parts[1].split(',')
+        for hid in H:
+            if not hid in HS:
+                HS[hid] = {}
+            HS[hid].update(dict.fromkeys(S))
+            
+    # Enviamos los datos de HS a un archivo .id
+    id_file = open('tmp/hs.id', 'w')
+    for hid in HS:
+        id_file.write('!ID 0\n')
+        id_file.write('!v1!%s\n' % hid)
+        for subcat in HS[hid].keys(): 
+            id_file.write('!v2!%s\n' % subcat)
+    id_file.close()
+
+    # Creamos una base isis con id2i
+    run('''id2i tmp/hs.id create=tmp/hs''')
+    
+    # Generamos invertido sobre el campo 1 (heading-id)
+    run('''mx tmp/hs "fst=1 0 v1" fullinv=tmp/hs''')
+    
+    # Agregamos a las bases de headings un nuevo campo repetible (tag=8) con la lista de subcatálogos
+    # ATENCION: bug en mx? si en lugar de tag=8 usamos tag=30, nos encontramos con este problema:
+    # no podemos mandar el campo 30 al diccionario usando headings.fst. Parece que la FST no ve el
+    # campo, aun cuando el campo está en el registro. Verificado con mx 5.2b-1030 en Linux, 2008-11-03.
+    run('''mx name "proc='a8#', ref(['tmp/hs']l(['tmp/hs']v9), v2+|#a8#|) ,'#'" copy=name now -all''') 
+    run('''mx subj "proc='a8#', ref(['tmp/hs']l(['tmp/hs']v9), v2+|#a8#|) ,'#'" copy=subj now -all''')
+    
 
 def fullinv(): 
     # ------------------------------------------------------------------
@@ -545,14 +598,16 @@ def fullinv():
     # -------------------------------------------------------------------
      
     logger.info("Archivo invertido - Base de temas...")
+    #run('''mx subj to=1 now > zzzzz.txt''')  # DEBUG
+    #run('''mx subj to=1 fst=@HEADINGS.FST now >> zzzzz.txt''')  # DEBUG
     run('''mx subj fst=@HEADINGS.FST actab=AC-ANSI.TAB uctab=UC-ANSI.TAB fullinv=subj tell=%s''' % TELL)
-     
+    
     logger.info("Archivo invertido - Base de nombres...")
     run('''mx name fst=@HEADINGS.FST actab=AC-ANSI.TAB uctab=UC-ANSI.TAB fullinv=name tell=%s''' % TELL)
-     
+    
     logger.info("Archivo invertido - Base de titulos...")
     run('''mx title "fst=2 0 '~',@HEADSORT.PFT" actab=AC-ANSI.TAB uctab=UC-ANSI.TAB fullinv=title tell=%s''' % TELL)
-     
+    
     logger.info("Archivo invertido - Base bibliografica...")
     # Antes de la FST, aplicamos un gizmo a los campos que generan puntos de acceso
     run('''mx biblio gizmo=DICTGIZ,100,110,111,130,700,710,711,730,800,810,811,830 gizmo=DICTGIZ,240,245,246,440,740,600,610,611,630,650,651,653,655,656 fst=@BIBLIO.FST actab=AC-ANSI.TAB uctab=UC-ANSI.TAB stw=@BIBLIO.STW fullinv=biblio tell=%s''' % TELL)
@@ -562,17 +617,18 @@ def process_analytics():
     # ------------------------------------------------------------------
     # REGISTROS ANALÍTICOS
     # ------------------------------------------------------------------
-     
+    
     logger.info("Detectando registros analiticos...")
     # Para los registros analíticos, creamos un 773$9 donde guardar el MFN
     # del registro asociado, y así ahorrar futuros lookups en el diccionario
     # ATENCION: esto debe hacerse *después* de aplicado el msrt y generado el diccionario
-     
+    
     run('''mx biblio "proc=if p(v773^w) then 'd773a773¦',v773,'^9',f(l('-NC=',v773^w),1,0),'¦', fi" copy=biblio now -all tell=%s''' % TELL)
 
 
 def compact_db():
     # Compactamos la base bibliografica
+    # TO-DO: compactar bases de headings
     logger.info("Compactando la base bibliografica...")
     run('mx biblio create=bibliotmp now -all tell=%s' % TELL)
     try:
@@ -587,8 +643,9 @@ def compact_db():
 #mx biblio "-BIBLEVEL=S" "pft=replace(v245*2,'^','~')" now -all > title_serial.txt
 
 
-def compute_postings():
+def compute_heading_postings():
     # POSTINGS
+    # Requiere: diccionario de la base biblio.
      
     logger.info("Asignamos postings a los terminos del indice de temas.")
     run('''mx subj "proc='d11a11#',f(npost(['biblio']'_SUBJ_'v9),1,0),'#'" copy=subj now -all tell=%s''' % TELL)
@@ -780,13 +837,15 @@ def main(db_name):
     process_biblio_db()
     build_subj_db()
     build_name_db()
-    recode_headings()
+    recode_headings_in_biblio()
     build_title_db()
     process_biblio_db_2()
+    if CONFIG.get('Global', 'SUBCATS') == '1':
+        process_subcatalogs()
     fullinv()
     process_analytics()
     compact_db()
-    compute_postings()
+    compute_heading_postings()
     build_agrep_dictionaries()
     build_aux_files()
     
