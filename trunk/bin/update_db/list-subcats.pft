@@ -1,0 +1,12 @@
+/*
+Genera un campo 5001 con una occ por cada subcatálogo asociado al reg.
+bibliográfico.
+caso 1: usamos un campo repetible para almacenar la lista de subcatálogos
+        asociados al registro bibliográfico.
+caso 2: usamos criterios que, en base a los datos presentes en el registro,
+        determinan la pertenencia del registro a uno o más subcatálogos.
+*/
+
+/*'a5001~', v930|~a5001~|, '~'*/
+
+'a5001~', v907, '~'

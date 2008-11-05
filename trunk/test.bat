@@ -65,10 +65,10 @@ python %APP_DIR%\bin\copy_demo_data.py
 python %APP_DIR%\bin\update_db.py demo
 
 
-:: reiniciamos Apache (no me funciona)
+:: reiniciamos Apache -- volver a probar --
 ::G:
 ::cd \programas\Apache Software Foundation\Apache2.2\bin\
-::httpd
+::httpd -k restart
 ::cd \
 
 ::echo Reinicie Apache, y luego...
