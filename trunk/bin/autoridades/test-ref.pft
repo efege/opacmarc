@@ -17,8 +17,8 @@ mfn/
 if p(v100) then
     '100: ',
     ref(
-        ['output\auto']
-        l(['output\auto']'-CN='v100^0),
+        ['output/auto']
+        l(['output/auto']'-CN='v100^0),
         v100
     ),
     replace(v100*2,s('^0',v100^0),''),
@@ -27,8 +27,8 @@ if p(v100) then
 else if p(v110) then
     '110: ',
     ref(
-        ['output\auto']
-        l(['output\auto']'-CN='v110^0),
+        ['output/auto']
+        l(['output/auto']'-CN='v110^0),
         v110
     ),
     replace(v110*2,s('^0',v110^0),''),
@@ -37,8 +37,8 @@ else if p(v110) then
 else if p(v111) then
     '111: ',
     ref(
-        ['output\auto']
-        l(['output\auto']'-CN='v111^0),
+        ['output/auto']
+        l(['output/auto']'-CN='v111^0),
         v111
     ),
     replace(v111*2,s('^0',v111^0),''),
@@ -48,8 +48,8 @@ else if p(v130) then
     /* campo auxiliar para el encabezamiento tomado del R.A. */
     proc('d1000a1000|',
         ref(
-            ['output\auto']
-            l(['output\auto']'-CN='v130^0),
+            ['output/auto']
+            l(['output/auto']'-CN='v130^0),
             v130
         ),
     '|'),
@@ -71,8 +71,8 @@ if p(v700) then
         /* campo auxiliar para el encabezamiento tomado del R.A. */
         proc('d1000a1000|',
             ref(
-                ['output\auto']
-                l(['output\auto']'-CN='v700^0),
+                ['output/auto']
+                l(['output/auto']'-CN='v700^0),
                 v100
             ),
         '|'),
@@ -92,8 +92,8 @@ else if p(v710) then
     (
         '710: ',
         ref(
-            ['output\auto']
-            l(['output\auto']'-CN='v710^0),
+            ['output/auto']
+            l(['output/auto']'-CN='v710^0),
             v110
         ),
         replace(v710*2,s('^0',v710^0),''),
@@ -105,8 +105,8 @@ else if p(v711) then
     (
         '711: ',
         ref(
-            ['output\auto']
-            l(['output\auto']'-CN='v711^0),
+            ['output/auto']
+            l(['output/auto']'-CN='v711^0),
             v111
         ),
         replace(v711*2,s('^0',v711^0),''),

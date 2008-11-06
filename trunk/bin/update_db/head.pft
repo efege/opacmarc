@@ -21,7 +21,7 @@
  *
  * mfn corresponde a la base que se crea con
  *
- * 	  mx seq=biblio1.id
+ *       mx seq=biblio1.id
  *
  * donde cada campo de cada registro la base bibliografica original
  * pasa a ser un *registro*.
@@ -30,21 +30,21 @@
 
 
 if v1.7 = '!v1106!' then  /* excluimos campos 1106 (bloqueo) */
-	,,
+    ,,
 else if getenv('NAME_TAGS') : v1*1.4 then
-	proc('d2a2¦',v1,'¦'),
-	,@REGPUNT.PFT,
-	'^9',mfn, /
-	
+    proc('d2a2¦',v1,'¦'),
+    ,@REGPUNT.PFT,
+    '^9',mfn, /
+    
 else if getenv('SUBJ_TAGS') : v1*1.4 then
-	if getenv('IGNORE_SUBJ_HEADINGS') : v1*7.1 and v1*1.4 <> 'v653' then
-		,,
-	else
-		proc('d2a2¦',v1,'¦'),
-		,@REGPUNT.PFT,
-		'^9',mfn, /
-	fi,
-	
+    if getenv('IGNORE_SUBJ_HEADINGS') : v1*7.1 and v1*1.4 <> 'v653' then
+        ,,
+    else
+        proc('d2a2¦',v1,'¦'),
+        ,@REGPUNT.PFT,
+        '^9',mfn, /
+    fi,
+    
 else
-	v1,/
+    v1,/
 fi,fi,fi,
