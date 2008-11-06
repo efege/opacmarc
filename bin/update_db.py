@@ -408,80 +408,48 @@ def process_biblio_db():
     run('''mx "seq=tmp/biblio1.id\\n" lw=3000 "pft=@HEAD.PFT" now tell=%s > tmp/biblio2.id''' % TELL)
  
 
-def build_subj_db(): 
-    # ------------------------------------------------------------------
-    # BASE SUBJ
-    # ------------------------------------------------------------------
+def build_headings_db(htype):
+    # Las bases name y subj se crean con un procesamiento común.  
+    # htype = 'subj' o 'name'
+    
+    type_verbose = {
+        'subj': 'temáticos',
+        'name' : 'de nombres',
+    }
      
     logger.info("-----------------------------------------------------")
-    logger.info(" Base de encabezamientos tematicos")
+    logger.info(" Base de encabezamientos %s" % type_verbose[htype])
     logger.info("-----------------------------------------------------")
      
-    logger.info("Creamos el listado de encabezamientos tematicos...")
-    run('''mx "seq=tmp/biblio2.id\\n" lw=1000 "pft=if getenv('SUBJ_TAGS') : v1*1.4 then @SUBJ.PFT fi" now tell=%s > tmp/subj1.id''' % TELL)
+    logger.info("Creamos el listado de encabezamientos %s..." % type_verbose[htype])
+    run('''mx "seq=tmp/biblio2.id\\n" lw=1000 "pft=if getenv('%s_TAGS') : v1*1.4 then @%s.PFT fi" now tell=%s > tmp/%s1.id''' % (htype.upper(), htype.upper(), TELL, htype))
      
     logger.info("Convertimos el listado en una base (desordenada y con duplicados)...")
-    run('''id2i tmp/subj1.id create/app=tmp/subj1 tell=%s''' % TELL)
+    run('''id2i tmp/%s1.id create/app=tmp/%s1 tell=%s''' % (htype, htype, TELL))
      
     logger.info("Regularizamos la puntuacion final de los encabezamientos generados...")
-    run('''mx tmp/subj1 "proc='d2a2¦',v1,'¦'" "proc='d1a1¦',@REGPUNT.PFT,'¦'" "proc='d2'" copy=tmp/subj1 now -all tell=%s''' % TELL)
+    run('''mx tmp/%s1 "proc='d2a2¦',v1,'¦'" "proc='d1a1¦',@REGPUNT.PFT,'¦'" "proc='d2'" copy=tmp/%s1 now -all tell=%s''' % (htype, htype, TELL))
      
     logger.info("Almacenamos en un campo auxiliar la clave de ordenacion...")
-    run('''mx tmp/subj1 uctab=UC-ANSI.TAB "proc='d99a99¦',@HEADSORT.PFT,'¦'" copy=tmp/subj1 now -all tell=%s''' % TELL)
+    run('''mx tmp/%s1 uctab=UC-ANSI.TAB "proc='d99a99¦',@HEADSORT.PFT,'¦'" copy=tmp/%s1 now -all tell=%s''' % (htype, htype, TELL))
      
-    logger.info("Ordenamos la base de encabezamientos tematicos...")
-    run('''msrt tmp/subj1 100 v99 tell=%s''' % TELL)
-     
-    logger.info("Generamos la tabla para mapear los numeros de encabezamientos...")
-    run('''mx tmp/subj1 "pft=if s(v1) <> ref(mfn-1,v1) then putenv('HEADING_CODE='v9) fi, v9,'|',getenv('HEADING_CODE')/" now -all tell=%s > tmp/subjcode.seq''' % TELL)
-     
-    logger.info("Eliminamos los encabezamientos duplicados...")
-    run('''mx tmp/subj1 lw=1000 "pft=@ELIMDUP2.PFT" now tell=%s > tmp/subj.id''' % TELL)
-     
-    logger.info("Creamos la base de encabezamientos tematicos (ordenada y sin duplicados)...")
-    run('''id2i tmp/subj.id create/app=subj tell=%s''' % TELL)
-
-
-def build_name_db():
-    # TO-DO: fusionar con subj_db()?
-    # ------------------------------------------------------------------
-    # BASE NAME
-    # ------------------------------------------------------------------
-     
-    logger.info("-----------------------------------------------------")
-    logger.info(" Base de encabezamientos de nombres")
-    logger.info("-----------------------------------------------------")
-     
-    logger.info("Creamos el listado de encabezamientos de nombres...")
-    run('''mx "seq=tmp/biblio2.id\\n" lw=1000 "pft=if getenv('NAME_TAGS') : v1*1.4 then @NAME.PFT fi" now tell=%s > tmp/name1.id''' % TELL)
-     
-    logger.info("Convertimos el listado en una base (desordenada y con duplicados)...")
-    run('id2i tmp/name1.id create/app=tmp/name1 tell=%s' % TELL)
-     
-    logger.info("Regularizamos la puntuacion final de los encabezamientos generados...")
-    run('''mx tmp/name1 "proc='d2a2¦',v1,'¦'" "proc='d1a1¦',@REGPUNT.PFT,'¦'" "proc='d2'" copy=tmp/name1 now -all tell=%s''' % TELL)
-     
-    logger.info("Almacenamos en un campo auxiliar la clave de ordenacion...")
-    run('''mx tmp/name1 uctab=UC-ANSI.TAB "proc='d99a99¦',@HEADSORT.PFT,'¦'" copy=tmp/name1 now -all tell=%s''' % TELL)
-     
-    logger.info("Ordenamos la base de encabezamientos de nombres...")
-    run('''msrt tmp/name1 100 v99 tell=%s''' % TELL)
+    logger.info("Ordenamos la base de encabezamientos %s..." % type_verbose[htype])
+    run('''msrt tmp/%s1 100 v99 tell=%s''' % (htype, TELL))
      
     logger.info("Generamos la tabla para mapear los numeros de encabezamientos...")
-    run('''mx tmp/name1 "pft=if s(v1) <> ref(mfn-1,v1) then putenv('HEADING_CODE='v9) fi, v9,'|',getenv('HEADING_CODE')/" now -all tell=%s > tmp/namecode.seq''' % TELL)
+    run('''mx tmp/%s1 "pft=if s(v1) <> ref(mfn-1,v1) then putenv('HEADING_CODE='v9) fi, v9,'|',getenv('HEADING_CODE')/" now -all tell=%s > tmp/%scode.seq''' % (htype, TELL, htype))
      
     logger.info("Eliminamos los encabezamientos duplicados...")
-    run('''mx tmp/name1 lw=1000 "pft=@ELIMDUP2.PFT" now tell=%s > tmp/name.id''' % TELL)
+    run('''mx tmp/%s1 lw=1000 "pft=@ELIMDUP2.PFT" now tell=%s > tmp/%s.id''' % (htype, TELL, htype))
      
-    logger.info("Creamos base de encabezamientos de nombres (ordenada y sin duplicados)...")
-    run('''id2i tmp/name.id create/app=name tell=%s''' % TELL)
+    logger.info("Creamos la base de encabezamientos %s (ordenada y sin duplicados)..." % type_verbose[htype])
+    run('''id2i tmp/%s.id create/app=%s tell=%s''' % (htype, htype, TELL))
  
 
 def recode_headings_in_biblio():
-    # -----------------------------------------------------------------
     logger.info("Reasignamos numeros a los encabezamientos en los registros")
     logger.info("   bibliograficos (subcampo 9)...")
-    # -----------------------------------------------------------------
+    
     run('''mx seq=tmp/subjcode.seq create=tmp/subjcode now -all''')
     run('''mx tmp/subjcode "fst=1 0 v1" fullinv=tmp/subjcode''')
     
@@ -643,15 +611,12 @@ def compact_db():
 #mx biblio "-BIBLEVEL=S" "pft=replace(v245*2,'^','~')" now -all > title_serial.txt
 
 
-def compute_heading_postings():
+def add_heading_postings(htype):
     # POSTINGS
-    # Requiere: diccionario de la base biblio.
+    # El diccionario de la base biblio debe haber sido generado previamente.
      
-    logger.info("Asignamos postings a los terminos del indice de temas.")
-    run('''mx subj "proc='d11a11#',f(npost(['biblio']'_SUBJ_'v9),1,0),'#'" copy=subj now -all tell=%s''' % TELL)
-     
-    logger.info("Asignamos postings a los terminos del indice de nombres.")
-    run('''mx name "proc='d11a11#',f(npost(['biblio']'_NAME_'v9),1,0),'#'" copy=name now -all tell=%s''' % TELL)
+    logger.info("Asignamos postings a los terminos de %s." % htype)
+    run('''mx %s "proc='d11a11#',f(npost(['biblio']'_%s_'v9),1,0),'#'" copy=%s now -all tell=%s''' % (htype, htype.upper(), htype, TELL))
      
     # TO-DO: necesitamos postings para los títulos controlados (series, títulos uniformes).
     # Para eso necesitamos un subcampo $9 en la base de títulos.
@@ -835,8 +800,8 @@ def main(db_name):
     
     # Do the hard work
     process_biblio_db()
-    build_subj_db()
-    build_name_db()
+    build_headings_db('name')
+    build_headings_db('subj')
     recode_headings_in_biblio()
     build_title_db()
     process_biblio_db_2()
@@ -845,7 +810,8 @@ def main(db_name):
     fullinv()
     process_analytics()
     compact_db()
-    compute_heading_postings()
+    add_heading_postings('name')
+    add_heading_postings('subj')
     build_agrep_dictionaries()
     build_aux_files()
     

@@ -34,7 +34,8 @@
  */
 
 
-/#,'!ID 0'/,
+/#,
+'!ID 0'/,
 '!v001!',
 
 
@@ -44,10 +45,10 @@
  */
  
 proc(
-		'd1000',
-		(,
-			'a1000¦',replace(v1*9,'^','¦a1000¦'),'¦a1000¦##¦',
-		),
+        'd1000',
+        (,
+            'a1000¦',replace(v1*9,'^','¦a1000¦'),'¦a1000¦##¦',
+        ),
 )
 
 
@@ -58,22 +59,22 @@ proc(
  */
 
 (,
-	if v1000 = '##' then
-		/,
-		'!v002!',
-		v1[1]*2.3,
-	else if v1000.1 = '9' then
-		/,
-		'!v009!',
-		v1000*1,
-	else
-		select v1[1]*2.3
-			case '611' :
-				/* el subcampo $e es "Relator term" excepto para el 611, donde significa "Subordinate unit" */
-				if not '234568' : v1000.1 then '~'v1000, fi,
-			elsecase
-				if not 'e234568' : v1000.1 then '~'v1000, fi,
-		endsel,
-	fi,fi,
+    if v1000 = '##' then
+        /,
+        '!v002!',
+        v1[1]*2.3,
+    else if v1000.1 = '9' then
+        /,
+        '!v009!',
+        v1000*1,
+    else
+        select v1[1]*2.3
+            case '611' :
+                /* el subcampo $e es "Relator term" excepto para el 611, donde significa "Subordinate unit" */
+                if not '234568' : v1000.1 then '~'v1000, fi,
+            elsecase
+                if not 'e234568' : v1000.1 then '~'v1000, fi,
+        endsel,
+    fi,fi,
 ),
 

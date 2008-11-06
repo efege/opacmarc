@@ -7,7 +7,7 @@ if getenv('CONTROLLED_TAGS') : v1*1.4 then  /* los mismos campos que fueron proc
         replace(
             v1,
             s('^0',v1^0),
-            s('^0',ref(['work\map']l(['work\map']getenv('PREFIX'),mfn),v2))
+            s('^0',ref(['work/map']l(['work/map']getenv('PREFIX'),mfn),v2))
         ),
     '~',
 fi

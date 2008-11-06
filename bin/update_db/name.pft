@@ -33,34 +33,35 @@
  */
 
 
-/#'!ID 0'/,
+/#,
+'!ID 0'/,
 '!v001!',
 
 /*  PASO 1: Dividimos el encabezamiento en subcampos */
 proc
 (
-	'd1000',
-	(,
-		'a1000|',replace(v1*9,'^','|a1000|'),'|a1000|##|',
-	),
+    'd1000',
+    (,
+        'a1000|',replace(v1*9,'^','|a1000|'),'|a1000|##|',
+    ),
 )
 
 
 /* PASO 2: Filtramos subcampos (loop sobre v1000) */
 (,
-	if v1000 = '##' then
-		/'!v002!',v1[1]*2.3,
-	else if v1000.1 = '9' then
-		/'!v009!',v1000*1,
-	else
-		select v1[1]*2.3
-			case '100' : if 'abcdq'  : v1000.1 then '~'v1000, fi,
-			case '700' : if 'abcdq'  : v1000.1 then '~'v1000, fi,
-			case '110' : if 'abcdnt' : v1000.1 then '~'v1000, fi,
-			case '710' : if 'abcdnt' : v1000.1 then '~'v1000, fi,
-			case '111' : if 'acdenq' : v1000.1 then '~'v1000, fi,
-			case '711' : if 'acdenq' : v1000.1 then '~'v1000, fi,
-		endsel,
-	fi,fi,
+    if v1000 = '##' then
+        /'!v002!',v1[1]*2.3,
+    else if v1000.1 = '9' then
+        /'!v009!',v1000*1,
+    else
+        select v1[1]*2.3
+            case '100' : if 'abcdq'  : v1000.1 then '~'v1000, fi,
+            case '700' : if 'abcdq'  : v1000.1 then '~'v1000, fi,
+            case '110' : if 'abcdnt' : v1000.1 then '~'v1000, fi,
+            case '710' : if 'abcdnt' : v1000.1 then '~'v1000, fi,
+            case '111' : if 'acdenq' : v1000.1 then '~'v1000, fi,
+            case '711' : if 'acdenq' : v1000.1 then '~'v1000, fi,
+        endsel,
+    fi,fi,
 ),
 
