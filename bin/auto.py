@@ -1,10 +1,8 @@
 #!/usr/bin/env python
 # coding=windows-1252
 
-# ATENCION - este archivo está en proceso de conversión desde un .bat a Python.
+# ATENCION - este archivo está en proceso de conversión desde .bat a .py
 #
-# PENDIENTE:
-
 
 
 # ===============================================================================
@@ -73,21 +71,30 @@ def run(command, msg = 'Error'):
 # La base bibliográfica de origen.
 BIBLIO = sys.argv[1]
 
-# Creamos directorios auxiliares.
-try:
-    os.mkdir('work')
-    os.mkdir('output')
-except:
-    pass
-emptydir('work')
-emptydir('output')
+def mkdirs():
+    # Creamos directorios auxiliares.
+    try:
+        os.mkdir('work')
+        os.mkdir('output')
+    except:
+        pass
+    emptydir('work')
+    emptydir('output')
 
-# cipar para mx
-cipar = open('work/cipar.txt', 'w')
-#echo map.*=autoridades/work/map.* >cipar.txt
-cipar.write('AC-ANSI.TAB=ac-ansi.tab\n')
-cipar.write('UC-ANSI.TAB=uc-ansi.tab\n')
-ENV = {'cipar' : 'work' + os.sep + 'cipar.txt'}
+def build_env():
+    # cipar para mx
+    cipar = open('work/cipar.txt', 'w')
+    #echo map.*=autoridades/work/map.* >cipar.txt
+    cipar.write('AC-ANSI.TAB=%s/ac-ansi.tab\n' % os.path.join(APP_DIR, 'util'))
+    cipar.write('UC-ANSI.TAB=%s/uc-ansi.tab\n' % os.path.join(APP_DIR, 'util'))
+    # FIXME - las tablas que usábamos en autoridades no son exactamente las mismas que las del opac. Revisar.
+    ENV = {
+        'CIPAR' : os.path.join(APP_DIR, 'bin/autoridades/work/cipar.txt'),
+        'PATH' : os.path.join(APP_DIR, 'bin/cisis') + os.pathsep + os.getenv('PATH'),
+        'CONTROLLED_TAGS' : CONTROLLED_TAGS,
+        'PREFIX' : PREFIX, 
+    }
+    return ENV
 
 
 def test_delimiter():
@@ -120,13 +127,14 @@ def build_auto():
     
     # Cada campo de la base bibliográfica pasa a ser un registro de la base biblio-campos.
     logger.info('Creando lista de campos...')
-    run('''i2id work/biblio >work/biblio.id''')
+    # Por bug en i2id usamos subprocess.call
+    subprocess.call('''i2id work/biblio >work/biblio.id''', env=ENV, shell=True)
     run('''mx "seq=work/biblio.id%s" lw=%s create=work/biblio-campos now -all tell=%s''' % (SEQ_DELIM, LW, TELL))
     
     # Eliminamos espacios en blanco en los extremos (¿a qué se deben esos espacios?)
     # TO-DO: ¿vale la pena hacer la limpieza sobre toda la base, si solo nos interesan los encabezamientos?
     logger.info('Eliminando espacios en blanco...')
-    run('''mxcp work/biblio-campos create=work/biblio-campos-clean clean log=output/mxcp-biblio-campos.txt >nul tell=%s''' % TELL)
+    run('''mxcp work/biblio-campos create=work/biblio-campos-clean clean log=output/mxcp-biblio-campos.log >nul tell=%s''' % TELL)
     
     # Extraemos los campos con encabezamientos controlados, y creamos una base con ellos.
     # ATENCION: para filtrar subcampos $e, $4, $5, podemos usar algo como name.pft del OPAC. (??)
@@ -182,11 +190,15 @@ def generate_reports():
     
     logger.info('echo mxf0...')
     # mxf0 para biblio.
-    run('''mxf0 %s create=work/biblio-mxf0''' % BIBLIO)
+    #run('''mxf0 %s create=work/biblio-mxf0''' % BIBLIO)
+    # Por bug en mxf0 usamos subprocess.call
+    subprocess.call('''mxf0 %s create=work/biblio-mxf0''' % BIBLIO, env=ENV, shell=True)
     run('''mx work/biblio-mxf0 "pft=@mxf0.pft" now >output/biblio-mxf0.html''')
     
     # mxf0 para auto.
-    run('''mxf0 work/auto create=work/auto-mxf0''')
+    #run('''mxf0 work/auto create=work/auto-mxf0''')
+    # Por bug en mxf0 usamos subprocess.call
+    subprocess.call('''mxf0 work/auto create=work/auto-mxf0''', env=ENV, shell=True)
     run('''mx work/auto-mxf0 "pft=@mxf0.pft" now >output/auto-mxf0.html''')
     
     # Frecuencia de los campos usados para generar encabezamientos.
@@ -213,10 +225,10 @@ def generate_reports():
     logger.info('Listado de encabezamientos de nombre-título...')
     run('''echo --------- 100 --------->output/auto-nombre-titulo.txt''')
     run('''mx work/auto lw=%s "pft=if p(v100^t) then v100/ fi" now >>output/auto-nombre-titulo.txt''' % LW)
-    run('''echo. >>output/auto-nombre-titulo.txt''')
+    run('''echo >>output/auto-nombre-titulo.txt''')
     run('''echo --------- 110 --------->>output/auto-nombre-titulo.txt''')
     run('''mx work/auto lw=%s "pft=if p(v110^t) then v110/ fi" now >>output/auto-nombre-titulo.txt''' % LW)
-    run('''echo. >>output/auto-nombre-titulo.txt''')
+    run('''echo >>output/auto-nombre-titulo.txt''')
     run('''echo --------- 111 --------->>output/auto-nombre-titulo.txt''')
     run('''mx work/auto lw=%s "pft=if p(v111^t) then v111/ fi" now >>output/auto-nombre-titulo.txt''' % LW)
     
@@ -268,16 +280,21 @@ def generate_links():
 
 
 def main(db_name):
+    global ENV
+    
     os.chdir('autoridades')
+    mkdirs()
+    ENV = build_env()
     test_delimiter()
     build_auto()
     generate_reports()
     generate_links()
     logger.info('--------------------------------------------------')
-    logger.info(' Y esto ha sido todo. Vea el directorio output.')
+    logger.info(' Esto ha sido todo. Vea el directorio output.')
     logger.info('--------------------------------------------------')
     if CLEAN:
         emptydir('work')
+
 
 
 # Define a global logger object

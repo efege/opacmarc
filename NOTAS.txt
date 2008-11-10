@@ -354,7 +354,9 @@ implementarse como subcomandos de un comando general, al estilo de manage.py en 
 svn. Para esto podría ser útil:
 
     cmd -- Support for line-oriented command interpreters <http://www.python.org/doc/2.5.2/lib/module-cmd.html>
+    
     cmdln.py -- an improved cmd.py <http://trentm.com/projects/cmdln/>, <http://code.google.com/p/cmdln/>
+    Incluye como ejemplo el uso de "sub-commands" al estilo svn. 
 
 -----------------------------------------------------------
 
@@ -371,3 +373,12 @@ build or installation standards. Building and installing is an entry point: it's
 to get harder after that, if they absolutely must, but it would be a shame for the user's or
 developer's very first interaction with the software to require unexpected steps."
 
+------
+
+Acá hay un ejemplo de script para build hecho en Python:
+
+    http://code.google.com/p/cmdln/source/browse/trunk/build.py
+
+--------------------
+
+Podemos incluir ejemplos de cronjobs para el OPAC? E.g. update_db.py. 
