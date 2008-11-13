@@ -61,11 +61,11 @@ fi,
  *  ---------------------------------------------------------------
  */
 /* ATENCION: no tienen sentido para las "see references" */
-if p(v11) then
+/*if p(v11) then*/
 	'<td class="lighter ',v2003,if v1001 = v2009 or val(v1001) = 1 then ' headingFirstRow' fi'" style="width: 3em; text-align: right; padding-right: 0;" valign="top">',
 		if p(v11) then '[',v11,']', fi,
 	'</td>'/
-fi,
+/*fi,*/
 
 /*  ---------------------------------------------------------------
  *  término del índice
@@ -78,15 +78,16 @@ fi,
  *  ---------------------------------------------------------------
  */
 if p(v4) then
-	v1501,
+	'<b>'v1501'</b>',
 	'<br>&nbsp;&nbsp;<img src="/img/m_a2y.gif" alt=""> Vea: ',
 	'<a href="',
         getenv('SCRIPT_NAME'),
 		'?IsisScript=',v2000,
 		'&amp;db=',v2104,
+		'&amp;task=BIB-H-SEARCH',
 		'&amp;index=',v2003,
-		'&amp;query=',replace(replace(v1502,'~','^'),'&','%26'),
-	'">',
+		'&amp;query=',replace(replace(v1502,'~','^'),'&','%26'), /* FIXME - name.id incluye 3 espacios extra al final de la referencia */
+	'" style="font-weight: bold">',
 	proc('d1880a1880¦a',replace(v4,'~','¦a1880¦'),'¦'),
 	(,
 		if 'xyzv' : v1880.1 then
