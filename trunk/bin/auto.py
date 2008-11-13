@@ -64,9 +64,6 @@ from opac_util import run_command, error, emptydir, APP_DIR, LOCAL_DATA_DIR, set
 def run(command, msg = 'Error'):
     return run_command(command, msg = msg, env = ENV)
 
-# Cambiamos la tabla de códigos a Windows-1252.
-#chcp 1252
-
 
 # La base bibliográfica de origen.
 BIBLIO = sys.argv[1]
@@ -98,7 +95,7 @@ def build_env():
 
 
 def test_delimiter():
-    # TO-DO: hacer esto bien en Python.
+    # TO-DO: hacer esto mejor en Python.
     # Verificamos que no haya problemas con el delimitador elegido.
     # TO-DO: sugerir el uso de mxf0 para determinar caracteres no usados.
     # ATENCION: esto no sería necesario si usáramos la sugerencia de E. Spinak.
@@ -120,7 +117,10 @@ def build_auto():
     # Si está presente el campo 240, creamos un campo auxiliar 1xx + $t (nombre/título)
     #mx %BIBLIO% proc=@v240.pft create=work/biblio-240 now -all
     
-    run('''echo %s>work/prefix''' % PREFIX)  # TO-DO: hacer esto bien en Python
+    #run('''echo %s>work/prefix''' % PREFIX)
+    f = open('work/prefix', 'w')
+    print >> f, PREFIX
+    f.close()
     
     # Eliminamos campo 1106 y creamos una copia de trabajo de la base bibliográfica.
     run('''mx %s "proc='d1106'" create=work/biblio now -all tell=%s''' % (BIBLIO, TELL))
@@ -188,15 +188,13 @@ def generate_reports():
     
     # Generamos algunos informes sobre las bases biblio y auto.
     
-    logger.info('echo mxf0...')
+    logger.info('mxf0...')
     # mxf0 para biblio.
-    #run('''mxf0 %s create=work/biblio-mxf0''' % BIBLIO)
     # Por bug en mxf0 usamos subprocess.call
     subprocess.call('''mxf0 %s create=work/biblio-mxf0''' % BIBLIO, env=ENV, shell=True)
     run('''mx work/biblio-mxf0 "pft=@mxf0.pft" now >output/biblio-mxf0.html''')
     
     # mxf0 para auto.
-    #run('''mxf0 work/auto create=work/auto-mxf0''')
     # Por bug en mxf0 usamos subprocess.call
     subprocess.call('''mxf0 work/auto create=work/auto-mxf0''', env=ENV, shell=True)
     run('''mx work/auto-mxf0 "pft=@mxf0.pft" now >output/auto-mxf0.html''')
@@ -209,10 +207,8 @@ def generate_reports():
     
     # Listados de encabezamientos por tipo.
     logger.info('Listados de encabezamientos por tipo...')
-    run('''mx work/auto lw=%s "pft=v100/" now >output/auto-100.txt''' % LW)
-    run('''mx work/auto lw=%s "pft=v110/" now >output/auto-110.txt''' % LW)
-    run('''mx work/auto lw=%s "pft=v111/" now >output/auto-111.txt''' % LW)
-    run('''mx work/auto lw=%s "pft=v130/" now >output/auto-130.txt''' % LW)
+    for tag in ('100', '110', '111', '130'):
+        run('''mx work/auto lw=%s "pft=v%s/" now >output/auto-%s.txt''' % (LW, tag, tag))
     
     # Algunos listados por valor de indicadores.
     logger.info('Listados por valor de indicadores...')
@@ -223,15 +219,14 @@ def generate_reports():
     
     # Listado de encabezamientos de nombre-título.
     logger.info('Listado de encabezamientos de nombre-título...')
-    run('''echo --------- 100 --------->output/auto-nombre-titulo.txt''')
-    run('''mx work/auto lw=%s "pft=if p(v100^t) then v100/ fi" now >>output/auto-nombre-titulo.txt''' % LW)
-    run('''echo >>output/auto-nombre-titulo.txt''')
-    run('''echo --------- 110 --------->>output/auto-nombre-titulo.txt''')
-    run('''mx work/auto lw=%s "pft=if p(v110^t) then v110/ fi" now >>output/auto-nombre-titulo.txt''' % LW)
-    run('''echo >>output/auto-nombre-titulo.txt''')
-    run('''echo --------- 111 --------->>output/auto-nombre-titulo.txt''')
-    run('''mx work/auto lw=%s "pft=if p(v111^t) then v111/ fi" now >>output/auto-nombre-titulo.txt''' % LW)
-    
+    out_file = 'output/auto-nombre-titulo.txt'
+    for tag in ('100', '110', '111'):
+        f = open(out_file, 'a')
+        print >> f, '\n--------- %s ---------' % tag
+        f.close()
+        run('''mx work/auto lw=%s "pft=if p(v%s^t) then v%s/ fi" now >>%s''' % (LW, tag, tag, out_file))
+
+   
     # Lista de posibles duplicados (requiere que el ejecutable PHP esté en el PATH).
     # TO-DO: considerar la aplicación de un criterio como el de NACO <http://www.loc.gov/catdir/pcc/naco/normrule.html>
     # TO-DO: incluir número de control en el listado
@@ -273,9 +268,11 @@ def generate_links():
     # TO-DO: ¿cómo indizamos los registros de la nueva base biblio?
     # La respuesta, como siempre, es: "depende". Depende de qué búsquedas queremos poder hacer.
     
-    # Para probar el funcionamiento de los links entre la base bibliográfica y la base
-    # de autoridades, se puede usar esto, que presenta los títulos (245) junto con
-    # los puntos de acceso 100 y 700 asociados (aunque sin añadir puntuación): mx output/biblio-ref "pft=@test-ref.pft"
+    # Para probar el funcionamiento de los links entre la base bibliográfica y
+    # la base de autoridades, se puede usar esto, que presenta los títulos (245)
+    # junto con los puntos de acceso 100 y 700 asociados (aunque sin añadir
+    # puntuación):
+    #     mx output/biblio-ref "pft=@test-ref.pft"
     
 
 
