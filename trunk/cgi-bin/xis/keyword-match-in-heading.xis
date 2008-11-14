@@ -70,7 +70,17 @@
 	<define>1005 Isis_Keys</define>
 	<loop>
 		<!-- set v1002 -->
-		<field action="replace" tag="9060"><pft>if val(v1002) = 1 then replace(v1,'~','^'), fi</pft></field>
+		
+		<!-- v9060: el encabezamiento que usaremos como query en caso de encontrar un único matching -->
+		<field action="replace" tag="9060"><pft>
+		    if val(v1002) = 1 then
+		        if p(v4) then
+		            replace(v4, '~', '^'),
+		        else
+		            replace(v1, '~', '^'),
+		        fi
+		    fi
+		 </pft></field>
 		<field action="export" tag="list">9060</field>
 	</loop>
 	
@@ -91,7 +101,10 @@
 		<hl>
 			<parm name="prefix"><span class="hl"></parm>
 			<parm name="suffix"></span></parm>
-			<parm name="keys"><pft>(v1005/), if v2001 : ' and ' then 'AND' fi</pft></parm>
+			<parm name="keys"><pft>
+			    (v1005/),
+			    if v2001 : ' and ' then 'AND' fi  /* para poder resaltar el término "and" (stop word) */
+			</pft></parm>
 			
 			<!-- v1: ^aGeopolitics^zBolivia. ==> para el link 
 			     v2: Geopolitics-Bolivia.    ==> para mostrar 
@@ -132,13 +145,18 @@
 		ejemplo de input esperado: (2101) task=BIB-H-SEARCH , (2003) index=NAME , (2001) query=^aGödel, Kurt,^d1906-1978.
 	*/
 	if val(v1002) = 1 then
-		proc('d2101a2101#BIB-H-SEARCH#'),
-		proc('d2003a2003#',v2002,'#'),
-		proc('d2001a2001#',v9060,'#'),
+		proc('d2101a2101#BIB-H-SEARCH#'),  /* task */
+		proc('d2003a2003#',v2002,'#'),     /* index */
+		proc('d2001a2001#',v9060,'#'),     /* query */
 		proc('d2002'),
 	fi,
 	/* Además, necesitamos un flag para saber que venimos de una búsqueda por palabras */
 	proc('d9060a9060#UNIQUE_KEYWORD_MATCH#'),
+	
+	/* FIXME - si el matching único se produjo en una referencia, tenemos que
+	   pasar esa info a heading-match-in-bib-records.xis para que muestre un mensaje
+	   como este: "Redirigido desde: [encabezamiento que hizo matching]"
+	   */
 </pft></display>
 
 
@@ -146,7 +164,7 @@
 <flow action="jump"><pft>
 	if val(v1002) = 0 then
 		'ZERO_HITS',
-	else if val(v1002) = 1 then
+	else if val(v1002) = 1 then  /* único resultado */
 		'BIB-H-SEARCH',
 	fi,fi,
 </pft></flow>
