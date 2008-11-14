@@ -424,18 +424,15 @@ def build_headings_db(hdg_type):
     logger.info("Creamos el listado de encabezamientos %s..." % type_verbose[hdg_type])
     run('''mx "seq=tmp/biblio2.id\\n" lw=1000 "pft=if getenv('%s_TAGS') : v1*1.4 then @%s.PFT fi" now tell=%s > tmp/%s1.id''' % (hdg_type.upper(), hdg_type.upper(), TELL, hdg_type))
     
-    # aqui tenemos que incorporar las referencias -- MUY MUY PROVISORIO
-    # leer esto de un archivo externo
+    # Incorporamos al listado algunas referencias de véase -- PROVISORIO
+    ref = open(os.path.join(APP_DIR, 'bin/install/data/demo-ref-name.id'))
     f = open('tmp/%s1.id' % hdg_type, 'a')
-    # este ejemplo podemos usarlo de estas maneras:
+    # usar el ejemplo de estas maneras:
     #   - buscar por "Sonja": 2 matchings
-    #   - buscar por "Aderinwal": único matching -- FIX
-    f.write('''
-!ID 0
-!v001!~aAderinwal, Sonja.
-!v004!~aAderinwale, Ayodele.
-''')  # IMPORTANTE: no dejar espacios al comienzo de esta línea
-    f.close()
+    #   - buscar por "Aderinwal": único matching -- FIXME
+    f.write('\n')
+    f.write(ref.read())
+    f.close(); ref.close()
      
     logger.info("Convertimos el listado en una base (desordenada y con duplicados)...")
     run('''id2i tmp/%s1.id create/app=tmp/%s1 tell=%s''' % (hdg_type, hdg_type, TELL))

@@ -55,7 +55,8 @@
 		7001  auxiliar para uso de URLENCODE.PFT
 
 		9001  main heading (para compactación de la lista de resultados)
-		9005  flag (NEW_MAIN_HEADING) 
+		9005  flag (NEW_MAIN_HEADING)
+		9060  flag ('UNIQUE_KEYWORD_MATCH')
  -->
 
 
