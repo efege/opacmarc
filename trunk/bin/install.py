@@ -169,6 +169,7 @@ def create_aux_db():
     run('%s/id2i bin/install/data/country.id create=util/country' % CISIS_PATH)
     run('%s/id2i bin/install/data/lang.id create=util/lang' % CISIS_PATH)
     run('%s/id2i bin/install/data/dictgiz.id create=util/dictgiz' % CISIS_PATH)
+    run('%s/id2i bin/install/data/gizmo-remove-chars.id create=util/gizmo-remove-chars' % CISIS_PATH)
 
     # para update_db
     # TO-DO: los .id es mejor que estén directamente en bin/update_db/

@@ -1,17 +1,21 @@
 /* ----------------------------------------------------------------
- *  Clave de ordenacion para los encabezamientos (nombres, temas).
+ *  Clave de ordenación para los encabezamientos (nombres, temas).
  *
- *  (c) 2003-2004 Fernando J. Gomez - CONICET - INMABB
+ *  (c) 2003-2004 Fernando J. Gómez - CONICET - INMABB
  * ----------------------------------------------------------------
  *
- *  Testear con: mx testsort pft=v1/,@headsort.pft,/#
+ *  Testear con:
+ *       mx seq=testsort.seq create=testsort now -all
+ *       mx testsort "proc='a9|',@headsort.pft,'|'" copy=testsort now -all
+ *       msrt testsort 100 v9
+ *       mx testsort "pft=v1/" now
  *
- *  ATENCION: Este PFT tambien es usado para ordenar la base de titulos,
- *  y para generar el archivo invertido de dicha base. Quizas convendria
- *  usar un PFT especifico para estos casos (una razon: la necesidad de
- *  usar los indicadores de ordenacion).
+ *  ATENCION: Este PFT también es usado para ordenar la base de títulos,
+ *  y para generar el archivo invertido de dicha base. Quizás convendría
+ *  usar un PFT específico para estos casos (una razón: la necesidad de
+ *  usar los indicadores de ordenación).
  *
- *  TO-DO: cómo ordenar la Ñ?
+ *  TO-DO: ¿cómo ordenar la Ñ?
  *
  *  TO-DO: mejorar el ordenamiento de subject headings. Por ejemplo,
  *  esta lista, que queda ordenada de manera puramente alfabética:
@@ -45,12 +49,12 @@
 
 /* ------------------------------------------------
  *  Caracteres auxiliares
- *  v111: flag seteado en h-browse.xis
+ *  v111: flag seteado en browse-headings.xis
  * ------------------------------------------------
  */
 
 if p(v111) then
-	proc('a29¦ ¦a30¦ ¦a31¦ ¦'),      /* llamado desde h-browse.xis */
+	proc('a29¦ ¦a30¦ ¦a31¦ ¦'),      /* llamado desde browse-headings.xis */
 else
 	proc('a29¦¦a30¦¦a31¦¦'),    /* llamado al generar el OPAC */
 fi,
@@ -60,21 +64,21 @@ proc('d1001a1001¦',v1,'¦'),
 
 
 /* ------------------------------------------------
- *  Quitamos la puntuacion final (es necesario?)
+ *  Quitamos la puntuación final (es necesario?)
  * ------------------------------------------------
  */
  
 if '.?!)' : right(v1001,1) then
 	proc(
 		'd1001a1001¦',
-			mid(v1001,1,size(v1001)-1),
+			mid(v1001, 1, size(v1001)-1),
 		'¦',
 	),
 fi,
 
 
 /* -------------------------------------------------------
- *  Usamos los indicadores de ordenacion para los titulos
+ *  Usamos los indicadores de ordenación para los títulos
  * -------------------------------------------------------
  */
  
@@ -83,7 +87,7 @@ if s(mpu,mstname,mpl) : 'TITLE' and v13 <> '0' then
 	proc(
 		'd1001a1001¦',
 			v1001.2,
-			mid(v1001*2,val(v13) + 1,size(v1001)),
+			mid(v1001*2, val(v13) + 1, size(v1001)),
 		'¦',
 	)
 fi,
@@ -96,7 +100,7 @@ fi,
  
 proc(
 	'a1000¦',
-		replace(v1001*1,'~','¦a1000¦'),
+		replace(v1001*1, '~', '¦a1000¦'),
 	'¦',
 ),
 
@@ -109,18 +113,19 @@ proc(
 	fi,fi,
 
 	replace(replace(replace(replace(
-	replace(replace(replace(s(mpu,v1000*1),
-		')',''),
-		'(',''),
-		':',''),
-		',',''),
-		'-',' '),
-		'"',''),
-		s("'"n9999),''),  /* quitamos apostrofes */
+	replace(replace(replace(replace(s(mpu,v1000*1),
+		')', ''),
+		'(', ''),
+		':', ''),
+		',', ''),
+		'-', ' '),
+		'"', ''),
+		'´', ''),
+		s("'"n9999), ''),  /* quitamos apóstrofes */
 ),
 
 v29,  /* terminador */
 
 
 /* Eliminamos campos auxiliares */
-proc('d29d30d31d1000d1001'),
+proc('d29','d30','d31','d1000','d1001'),

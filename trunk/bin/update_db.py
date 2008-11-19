@@ -574,14 +574,17 @@ def fullinv():
     # Generación de archivos invertidos.
     # ATENCION: AC-ANSI.TAB envia los numeros al diccionario.
     # -------------------------------------------------------------------
-     
+    
     logger.info("Archivo invertido - Base de temas...")
     #run('''mx subj to=1 now > zzzzz.txt''')  # DEBUG
     #run('''mx subj to=1 fst=@HEADINGS.FST now >> zzzzz.txt''')  # DEBUG
-    run('''mx subj fst=@HEADINGS.FST actab=AC-ANSI.TAB uctab=UC-ANSI.TAB fullinv=subj tell=%s''' % TELL)
+    run('''mx subj gizmo=REMOVE-CHARS,1 fst=@HEADINGS.FST actab=AC-ANSI.TAB uctab=UC-ANSI.TAB fullinv=subj tell=%s''' % TELL)
     
     logger.info("Archivo invertido - Base de nombres...")
-    run('''mx name fst=@HEADINGS.FST actab=AC-ANSI.TAB uctab=UC-ANSI.TAB fullinv=name tell=%s''' % TELL)
+    run('''mx name gizmo=REMOVE-CHARS,1 fst=@HEADINGS.FST actab=AC-ANSI.TAB uctab=UC-ANSI.TAB fullinv=name tell=%s''' % TELL)
+    
+    # TO-DO: ver cómo aplicar el gizmo remove-chars para los 2 invertidos que siguen, y la relación
+    # con cleanQuery
     
     logger.info("Archivo invertido - Base de titulos...")
     run('''mx title "fst=2 0 '~',@HEADSORT.PFT" actab=AC-ANSI.TAB uctab=UC-ANSI.TAB fullinv=title tell=%s''' % TELL)

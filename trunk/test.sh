@@ -93,12 +93,12 @@ sudo apache2ctl restart
 # Visitamos el opac
 firefox "http://127.0.0.1:8081/cgi-bin/wxis?IsisScript=xis/opac.xis&db=demo&showForm=simple" &
 
-exit
+#exit
 
 # Nueva base: bibima
 python $APP_DIR/bin/add_db.py bibima
-ln -s $HOME/svn/opacmarc/local-data/bases/bibima/db/original/biblio.mst $LOCAL_DATA_DIR/bases/bibima/db/original/
-ln -s $HOME/svn/opacmarc/local-data/bases/bibima/db/original/biblio.xrf $LOCAL_DATA_DIR/bases/bibima/db/original/
+ln -s $HOME/opacmarc/svn/local-data/bases/bibima/db/original/biblio.mst $LOCAL_DATA_DIR/bases/bibima/db/original/
+ln -s $HOME/opacmarc/svn/local-data/bases/bibima/db/original/biblio.xrf $LOCAL_DATA_DIR/bases/bibima/db/original/
 
 # Actualización de base bibima
 python $APP_DIR/bin/update_db.py bibima
