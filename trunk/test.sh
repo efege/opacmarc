@@ -93,7 +93,7 @@ sudo apache2ctl restart
 # Visitamos el opac
 firefox "http://127.0.0.1:8081/cgi-bin/wxis?IsisScript=xis/opac.xis&db=demo&showForm=simple" &
 
-#exit
+exit
 
 # Nueva base: bibima
 python $APP_DIR/bin/add_db.py bibima
