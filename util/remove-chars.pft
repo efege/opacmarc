@@ -1,0 +1,20 @@
+/*
+    Eliminación de caracteres (apóstrofes y similares), que se aplica como
+    paso previo a:
+    
+        - la FST que genera el invertido de las bases de encabezamientos
+          (update_db.py)
+        - la FST que limpia la consulta ingresada por un usuario
+          (opac.xis)
+    
+    "D'Amico" se convierte en "Damico"; "Arnol´d" en "Arnold".
+          
+    Más información: buscar "apóstrofes" en el wiki.
+    
+    NOTA: este archivo es OBSOLETO, fue reemplazado por un gizmo. 
+*/
+
+replace(replace(replace(v1,
+    '´', ''),
+    '`', ''),
+    s("'"n9999), ''),

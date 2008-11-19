@@ -18,6 +18,7 @@ BIBLIO.FST=__APP_DIR__/util/biblio.fst
 BIBLIO.STW=__APP_DIR__/util/biblio.stw
 COUNTRY.*=__APP_DIR__/util/country.*
 DICTGIZ.*=__APP_DIR__/util/dictgiz.*
+REMOVE-CHARS.*=__APP_DIR__/util/gizmo-remove-chars.*
 HEADSORT.PFT=__APP_DIR__/util/headsort.pft
 LANG.*=__APP_DIR__/util/lang.*
 SELSUBJ.PFT=__APP_DIR__/util/selsubj.pft

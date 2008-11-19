@@ -103,7 +103,10 @@
 
 <!-- v111 es un flag para que headsort.pft no use ASCII < 32 -->
 <field action="replace" tag="3007"><pft>
-	,proc('d1a1¦~a',v2007,'¦a111¦*¦'),
+	,proc(
+	    'd1a1¦~a',v2007,
+	    '¦a111¦*¦'
+	 ),
 	,@HEADSORT.PFT,
 	,proc('d1d111'),
 </pft></field>

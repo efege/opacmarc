@@ -9,22 +9,35 @@
 <IsisScript>
 
 <!-- ======================================================= -->
-<function name="cleanQuery" action="replace" tag="3001">
-<!-- Método alternativo (y elegante) para hacer la limpieza de la
-    expresión ingresada por el usuario -->
-<!-- Tablas AC y UC definidas globalmente para toda la aplicación -->
+<function name="cleanQuery" action="replace" tag="1">
+<!--
+    Este es un método alternativo (y elegante) para hacer la limpieza de la
+    expresión ingresada por el usuario.
+-->
 <!-- ======================================================= -->
-<do>
-    <parm name="count">1</parm>
-    <parm name="fst">1 4 v3001</parm> <!-- aplica la técnica 4 al contenido de v3001 y almacena el resultado en v1 -->
-    <parm name="stw">BIBLIO.STW</parm>
-    <loop>
-        <field action="import" tag="list">3001</field>
-        <extract>this</extract>
-        <field action="export" tag="list">1</field>
-    </loop>
-</do>
-<return action="replace" tag="3333"><pft>v1^*+| |</pft></return> <!-- devuelve las palabras generadas, separadas por un espacio -->
+
+    <!-- Las tablas de caracteres alfabéticos y de conversión a mayúsculas, para la codificación Latin-1 -->
+    <!-- TO-DO: ver si las tablas se pueden declarar una única vez y tener efecto global en toda la aplicación -->
+    <parm name="actab"><pft>cat('AC-ANSI.TAB')</pft></parm>
+    <parm name="uctab"><pft>cat('UC-ANSI.TAB')</pft></parm>
+    
+    <!-- Suprimimos apóstrofes y similares: "D'Amico" se convierte en "Damico"; "Arnol´d" en "Arnold" -->
+    <proc><pft>'G','REMOVE-CHARS,1'</pft></proc>
+    
+    <do>
+        <parm name="count">1</parm>
+        <!-- aplica la técnica 4 (split en palabras) al contenido de v1 y almacena el resultado en v10 -->
+        <parm name="fst">10 4 v1</parm>
+        <parm name="stw">BIBLIO.STW</parm>
+        <loop>
+            <field action="import" tag="list">1</field>
+            <extract>this</extract>
+            <field action="export" tag="list">10</field>
+        </loop>
+    </do>
+    
+    <!-- Devuelve las palabras generadas, separadas por un espacio -->
+    <return action="replace" tag="3333"><pft>v10^*+| |</pft></return>
 </function>
 <!-- ============================================================= -->
 
