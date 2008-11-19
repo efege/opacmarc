@@ -24,6 +24,11 @@ def main():
     db_src = '%s/bin/install/data/demo.id' % APP_DIR
     db_dst = '%s/bases/demo/db/original/biblio' % LOCAL_DATA_DIR
     run('%s/id2i %s create=%s' % (CISIS_PATH, db_src, db_dst))
+
+    # registros de autoridad (referencias)
+    db_src = '%s/bin/install/data/demo-ref-name.id' % APP_DIR
+    db_dst = '%s/bases/demo/db/original/name-references.id' % LOCAL_DATA_DIR
+    shutil.copy(db_src, db_dst)
     
     # imágenes
     img_src = '%s/bin/install/data/demo-img' % APP_DIR

@@ -381,4 +381,18 @@ Acá hay un ejemplo de script para build hecho en Python:
 
 --------------------
 
-Podemos incluir ejemplos de cronjobs para el OPAC? E.g. update_db.py. 
+Podemos incluir ejemplos de cronjobs para el OPAC? E.g. update_db.py.
+
+-----------------------
+
+Deberíamos incluir en la config del virtual host de apache un Redirect de este tipo:
+
+    Redirect /           http://127.0.0.1:8081/cgi-bin/wxis?IsisScript=xis/opac.xis&db=demo&showForm=simple
+    Redirect /index.html http://127.0.0.1:8081/cgi-bin/wxis?IsisScript=xis/opac.xis&db=demo&showForm=simple
+    
+¿Se podrá hacer así?    
+    
+    Redirect /           /cgi-bin/wxis?IsisScript=xis/opac.xis&db=demo&showForm=simple
+    Redirect /index.html /cgi-bin/wxis?IsisScript=xis/opac.xis&db=demo&showForm=simple
+
+-----------------------

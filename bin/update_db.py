@@ -408,6 +408,41 @@ def process_biblio_db():
     run('''mx "seq=tmp/biblio1.id\\n" lw=3000 "pft=@HEAD.PFT" now tell=%s > tmp/biblio2.id''' % TELL)
  
 
+def process_references(hdg_type):
+    # Incorporamos al listado algunas referencias de véase. -- EXPERIMENTAL
+    # 
+    # Las referencias se encuentran en archivos
+    # local-data/<db_name>/db/original/<hdg_type>-references.id, con una estructura
+    # básica de registro de autoridad: un campo 1xx y uno o más campos 4xx.
+
+    SOURCE_DIR = os.path.join('..', 'original')  # FIXME - esta definición aparece en más de un lugar del script
+    if os.path.isfile('%s/%s-references.id' % (SOURCE_DIR, hdg_type)):
+    
+        # Archivo pft para generar un registro por cada referencia.
+        f = open('tmp/one-record-per-reference.pft', 'w')
+        print >>f, '''
+        (
+            '!ID 0'/
+            '!v001!',replace(s(v400, v410, v411)*2, '^', '~')/            /* referencia */
+            '!v004!',replace(s(v100[1], v110[1], v111[1])*2, '^', '~')/   /* forma autorizada */
+        )
+        '''
+        f.close()
+        
+        run('''id2i %s/%s-references.id create=tmp/%s-references''' % (SOURCE_DIR, hdg_type, hdg_type))
+        run('''mx tmp/%s-references pft=@tmp/one-record-per-reference.pft now >tmp/%s-references.id''' % (hdg_type, hdg_type)) 
+    
+        # Agregamos las referencias al listado de encabezamientos  
+        ref = open('tmp/%s-references.id' % hdg_type)
+        f = open('tmp/%s1.id' % hdg_type, 'a')
+        # usar el ejemplo de estas maneras:
+        #   - buscar por "Sonja": 2 matchings
+        #   - buscar por "Aderinwal": único matching -- FIXME
+        f.write('\n')
+        f.write(ref.read())
+        f.close(); ref.close()
+
+
 def build_headings_db(hdg_type):
     # Las bases name y subj se crean con un procesamiento común.  
     # hdg_type = 'subj' o 'name'
@@ -423,17 +458,10 @@ def build_headings_db(hdg_type):
      
     logger.info("Creamos el listado de encabezamientos %s..." % type_verbose[hdg_type])
     run('''mx "seq=tmp/biblio2.id\\n" lw=1000 "pft=if getenv('%s_TAGS') : v1*1.4 then @%s.PFT fi" now tell=%s > tmp/%s1.id''' % (hdg_type.upper(), hdg_type.upper(), TELL, hdg_type))
+
+    # experimental
+    process_references(hdg_type)
     
-    # Incorporamos al listado algunas referencias de véase -- PROVISORIO
-    ref = open(os.path.join(APP_DIR, 'bin/install/data/demo-ref-name.id'))
-    f = open('tmp/%s1.id' % hdg_type, 'a')
-    # usar el ejemplo de estas maneras:
-    #   - buscar por "Sonja": 2 matchings
-    #   - buscar por "Aderinwal": único matching -- FIXME
-    f.write('\n')
-    f.write(ref.read())
-    f.close(); ref.close()
-     
     logger.info("Convertimos el listado en una base (desordenada y con duplicados)...")
     run('''id2i tmp/%s1.id create/app=tmp/%s1 tell=%s''' % (hdg_type, hdg_type, TELL))
      
