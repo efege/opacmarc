@@ -49,11 +49,13 @@ input:
                 - mostrar link (query: v1502, texto: v4)
                 TO-DO: mostrar postings junto al link?
     
-            if p(v5)
-                - 
-    
             else  (encabezamiento autorizado)
+            
                 - mostrar link (query: v1502, texto: v1501)
+                if p(v5)    ("see also" reference)
+                    - mostrar "véase además"
+                    - para cada v5:
+                        - mostrar link (query: v5, texto: v5)
         </td>
     </tr>
 */
@@ -156,25 +158,7 @@ if p(v4) then
     '</div>',
     
 /*  ---------------------------------------------------------------
- *  Caso 2: "see also" reference (REVISAR)
- *  ---------------------------------------------------------------
- */
-else if p(v5) then
-    '<div style="font-weight: bold;">'v1501'</div>',
-    '<div style="background: url(/img/right.gif) no-repeat; padding-left: 38px;">',
-        'Vea también: ',
-        '<a href="',
-            getenv('SCRIPT_NAME'),
-            '?IsisScript=',v2000,
-            '&amp;db=',v2104,
-            '&amp;index=',v2003,
-            '&amp;query=',replace(replace(v1502,'~','^'),'&','%26'),'">',
-            v1,
-        '</a>',
-    '</div>',
-    
-/*  ---------------------------------------------------------------
- *  Default: heading sin referencias
+ *  Caso 2: encabezamiento autorizado
  *  ---------------------------------------------------------------
  */
 else
@@ -223,7 +207,32 @@ else
         v1501,
         '</a>',
     fi,
-fi,fi,
+    
+    
+    /*  ---------------------------------------------------------------
+     *  Caso 2a: see also references
+     *  ---------------------------------------------------------------
+     */
+    if p(v5) then
+        /*'<div style="font-weight: bold;">'v1501'</div>',*/
+        '<div style="background: url(/img/right.gif) no-repeat; padding-left: 38px;">',
+            'Vea también: ',
+            (
+                '<a href="',
+                    getenv('SCRIPT_NAME'),
+                    '?IsisScript=',v2000[1],
+                    '&amp;db=',v2104[1],
+                    '&amp;task=BIB-H-SEARCH',
+                    '&amp;index=',v2003[1],
+                    '&amp;query=',replace(replace(v5,'~','^'),'&','%26'),
+                '" style="font-weight: bold">',
+                    v5,
+                '</a>',
+                '<br>',
+            )
+        '</div>',
+   fi, 
+fi,
 
 '</td>'/
 '</tr>'/

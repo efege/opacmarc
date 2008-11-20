@@ -1,8 +1,55 @@
 !ID 0
-!v100!1#^aAderinwale, Ayodele.
-!v400!1#^aAderinwal, Sonja.
+!v100!1#^aAderinwale, Ayodele
+!v400!1#^aAderinwal, Sonja
 
 !ID 0
-!v100!1#^aAgüero, Felipe.
-!v400!1#^aAgüerito, Felipe.
+!v100!1#^aAgüero, Felipe
+!v400!1#^aAgüerito, Felipe
 !v400!1#^aAgüero, F.
+!v500!1#^aEl Agüero
+
+!ID 0
+!v100!1#^aCarroll, Lewis,^d1832-1898
+!v400!1#^aKarol, Luis,^d1832-1898
+!v500!1#^aDodgson, Charles Lutwidge,^d1832-1898
+
+!ID 0
+!v100!1#^aDodgson, Charles Lutwidge,^d1832-1898
+!v400!1#^aDodgson, C. L.^q(Charles Lutwidge),^d1832-1898
+!v500!1#^aCarroll, Lewis,^d1832-1898
+
+!ID 0
+!v110!2#^aUnisys Corporation
+!v410!2#^aUnisys Corp.
+!v510!2#^wa^aBurroughs Corporation
+!v510!2#^wa^aSperry Corporation
+
+!ID 0
+!v110!20^aBurroughs Corporation
+!v410!20^aBurroughs (Firm)
+!v510!20^wa^aBurroughs Adding Machine Company
+!v510!20^wb^aUnisys Corporation
+
+!ID 0
+!v110!20^aSperry Corporation
+!v510!20^aSperry Rand Corporation
+!v510!20^aRemington Rand, Inc.
+!v510!20^wb^aUnisys Corporation
+
+!ID 0
+!v110!20^aRemington Rand, Inc.
+!v410!20^aRemington Rand (Firm)
+!v410!20^aSperry Rand Corporation.^bRemington Rand Div.
+!v410!20^aSperry Rand Corporation.^bRemington Rand
+!v510!20^aSperry Rand Corporation
+!v510!20^aSperry Corporation
+!v510!20^wb^aRemington Rand Systems
+
+!ID 0
+!v110!20^aSperry Rand Corporation
+!v510!20^aRemington Rand, Inc.
+!v510!20^aSperry Corporation
+
+!ID 0
+!v110!20^aBurroughs Adding Machine Company
+!v510!20^wb^aBurroughs Corporation

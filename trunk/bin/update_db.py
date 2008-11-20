@@ -175,7 +175,7 @@ def print_usage():
 def goto_work_dir():
 
     # Directorio de trabajo
-    WORK_DIR = os.path.join(LOCAL_DATA_DIR, 'bases', DB_NAME, 'db', 'update')
+    WORK_DIR = os.path.join(LOCAL_DATA_DIR, 'bases', DB_NAME, 'db/update')
     if not os.path.isdir(WORK_DIR):
         error("No se ha encontrado el directorio de trabajo para la base %s:\n     %s" % (DB_NAME, WORK_DIR))
     
@@ -198,6 +198,39 @@ def goto_work_dir():
     # Y si ya existe, lo vaciamos
     else:
         emptydir('tmp')
+
+
+def import_marc():
+    # basado en im2c.sh (código escrito en la 1ra reunión de CaMPI en Bariloche, julio 2007)
+    # FIXME - a esto aún le falta depurar algunos detalles. Ver im2c.sh.
+    
+    # TO-DO: usar parámetros para indicar el archivo de entrada, el archivo de salida, el directorio tmp.
+    # Si llevamos esto a un módulo, podremos usarlo para convertir archivos .mrc en bases isis o archivos .id
+    # desde cualquier parte. Ojo: necesita la función run(), y las variables de entorno adecuadas.
+    
+    LEADER_BASE_TAG_1 = '1000'
+    
+    # creamos una base isis a partir del registro MARC
+    # BUG: mx no almacena la posición 09 del leader!! (informar a Spinak/Bireme)
+    run('''mx iso=marc=%s/%s.mrc isotag1=%s create=tmp/marctmp now -all''' % (SOURCE_DIR, DB_NAME, LEADER_BASE_TAG_1))
+
+    # eliminamos del registro importado algunos campos locales que utiliza Catalis
+    # TO-DO: verificar que la lista sea completa. ¿Eliminamos todos los 9xx?
+    run('''mx tmp/marctmp "proc='d905 d906 d907 d908 d909 d917 d918 d919 d985'" copy=tmp/marctmp now -all''')
+    
+    # traemos los datos del leader a los campos 9xx usados por Catalis
+    run('''mx tmp/marctmp "proc='d1005d1006d1007d1008d1009d1017d1018d1019','a905|',v1005,'|a906|',v1006,'|a907|',v1007,'|a908|',v1008,'|a909|',v1009,'|a917|',v1017,'|a918|',v1018,'|a919|',v1019,'|'" copy=tmp/marctmp now -all''')
+    
+    # sustituimos delimitadores de subcampos: hex 1F => ^
+    run('''mx tmp/marctmp gizmo=DELIMSUBCAMPO copy=tmp/marctmp now -all''')
+    
+    # sustitución de blancos en campos de datos
+    run('''mx tmp/marctmp "proc=@BLANCOS.PFT" copy=tmp/marctmp now -all''')
+    
+    # FIXME - falta sustitución de blancos en indicadores
+    # FIXME - cambiar la codificación, si la original no es latin1. Usar un gizmo.
+    
+    run('''mx tmp/marctmp create=tmp/biblio now -all''')
 
 
 def get_biblio_db():
@@ -224,9 +257,6 @@ def get_biblio_db():
     
     # TO-DO: revisar completamente esta sección
     
-    # En este directorio se encuentra la base original 
-    SOURCE_DIR = os.path.join('..', 'original')
-    
     # The OS path separator, e.g. "/" on Linux, "\\" on Windows.
     #sep = os.path.sep  # not available in Python 2.3
     sep = os.sep
@@ -250,33 +280,8 @@ def get_biblio_db():
     # ARCHIVOS MARC
     elif os.path.isfile('%s/%s.mrc' % (SOURCE_DIR, DB_NAME)):
         logger.info("Importando archivo %s%s%s.mrc..." % (SOURCE_DIR, sep, DB_NAME))
+        import_marc()
         
-        # basado en im2c.sh (código escrito en la 1ra reunión de CaMPI en Bariloche, julio 2007)
-        # FIXME - a esto aún le falta depurar algunos detalles. Ver im2c.sh.
-        LEADER_BASE_TAG_1 = '1000'
-        
-        # creamos una base isis a partir del registro MARC
-        # BUG: mx no almacena la posición 09 del leader!! (informar a Spinak/Bireme)
-        run('''mx iso=marc=%s/%s.mrc isotag1=%s create=tmp/marctmp now -all''' % (SOURCE_DIR, DB_NAME, LEADER_BASE_TAG_1))
-
-        # eliminamos del registro importado algunos campos locales que utiliza Catalis
-        # TO-DO: verificar que la lista sea completa
-        run('''mx tmp/marctmp "proc='d905 d906 d907 d908 d909 d917 d918 d919 d985'" copy=tmp/marctmp now -all''')
-        
-        # traemos los datos del leader a los campos 9xx
-        run('''mx tmp/marctmp "proc='d1005d1006d1007d1008d1009d1017d1018d1019','a905|',v1005,'|a906|',v1006,'|a907|',v1007,'|a908|',v1008,'|a909|',v1009,'|a917|',v1017,'|a918|',v1018,'|a919|',v1019,'|'" copy=tmp/marctmp now -all''')
-        
-        # sustituimos delimitadores de subcampos: hex 1F => ^
-        run('''mx tmp/marctmp gizmo=DELIMSUBCAMPO copy=tmp/marctmp now -all''')
-        
-        # sustitución de blancos en campos de datos
-        run('''mx tmp/marctmp "proc=@BLANCOS.PFT" copy=tmp/marctmp now -all''')
-        
-        # FIXME - falta sustitución de blancos en indicadores
-        # FIXME - cambiar la codificación, si la original no es latin1
-        
-        run('''mx tmp/marctmp create=tmp/biblio now -all''')
-    
     # ARCHIVOS ISO
     elif os.path.isfile(SOURCE_DIR + '/' + DB_NAME + '.iso'):
         run('mx iso=%s/%s.iso create=tmp/biblio now -all' % (SOURCE_DIR, DB_NAME))
@@ -416,6 +421,7 @@ def process_references(hdg_type):
     # básica de registro de autoridad: un campo 1xx y uno o más campos 4xx.
 
     SOURCE_DIR = os.path.join('..', 'original')  # FIXME - esta definición aparece en más de un lugar del script
+    
     if os.path.isfile('%s/%s-references.id' % (SOURCE_DIR, hdg_type)):
     
         # Archivo pft para generar un registro por cada referencia.
@@ -423,9 +429,17 @@ def process_references(hdg_type):
         print >>f, '''
         (
             '!ID 0'/
-            '!v001!',replace(s(v400, v410, v411)*2, '^', '~')/            /* referencia */
+            '!v001!',replace(s(v400, v410, v411)*2, '^', '~')/            /* referencia de véase */
             '!v004!',replace(s(v100[1], v110[1], v111[1])*2, '^', '~')/   /* forma autorizada */
         )
+        
+        if s(v500,v510,v511) > '' then
+            '!ID 0'/
+            '!v001!',replace(s(v100[1], v110[1], v111[1])*2, '^', '~')/   /* forma autorizada */
+            (
+                '!v005!',replace(s(v500, v510, v511)*2, '^', '~')/            /* referencias de véase además */
+            )
+        fi
         '''
         f.close()
         
@@ -814,7 +828,7 @@ end_msg = "*** Base %s actualizada exitosamente. ***\n"
 
 def main(db_name):
 
-    global CONFIG, TELL, ENV, DB_NAME
+    global CONFIG, TELL, ENV, DB_NAME, SOURCE_DIR
 
     script_name = os.path.basename(sys.argv[0])
 
@@ -823,6 +837,10 @@ def main(db_name):
     #    print_usage()
     
     DB_NAME = db_name
+    
+    # En este directorio se encuentra la base original 
+    SOURCE_DIR = os.path.join(LOCAL_DATA_DIR, 'bases', DB_NAME, 'db/original')
+
     logger.info(begin_msg % DB_NAME)  # FIXME - si es importado por demo.py imprime 'demo.py'
     
     # Read config file

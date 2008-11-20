@@ -36,6 +36,8 @@ if s(v1) <> ref(mfn-1,v1) then
     
     "!v004!"v4/,        /* referencia de véase */
     
+    (|!v005!|v5/),      /* referencias de véase además */
+    
     /* --- Campos 13 y 14: sólo para títulos (???): Filing character --- */
     if mstname : 'title' then
         if p(v13) then
