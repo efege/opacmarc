@@ -4,7 +4,7 @@
 	
 	Estructura:
 		FASE 1: Construcción de la expresion de búsqueda
-		FASE 2: La búsqueda propiamente dicha
+		FASE 2: Ejecución de la búsqueda propiamente dicha
 		FASE 3: Generación de enlaces que ofrecen sugerencias asociadas a esta búsqueda
 		FASE 4: Display de los resultados
 		FASE 5: Ranking de subject headings
@@ -21,6 +21,7 @@
 	========================================================= -->
 
 <!-- Variables:
+
 		1000  auxiliar para subfield split
 		1002  Isis_Total (search & list)
 		1003  Isis_Total (search)
@@ -31,11 +32,11 @@
 		1901  auxiliar para heading split (SUBJ)
 
 		2000  IsisScript
-		2001  expresión recibida por el script
-		2003  index (NAME,SUBJ,TITLE,COL)
+		2001  encabezamiento a buscar (query)
+		2003  index (NAME, SUBJ, TITLE, COL)
 		2004  from (para paginación)
 		2016  sortBy
-		2028  rpp (count)
+		2028  rpp (count), records per page
 		2031  wa (works about)
 		2099  cid (identificador de una consulta previa)
 
@@ -73,13 +74,13 @@
 <!-- SUBCAMPO9: Anular esto -->
 <field action="replace" tag="3001" split="occ"><pft>
 	proc('d1000a1000¦',
-		,replace(mid(v2001*1,1,size(v2001*1)),'^','¦a1000¦'),
+		,replace(mid(v2001*1, 1, size(v2001*1)), '^', '¦a1000¦'),
 	'¦'),
 	(|~|v1000*1),
 </pft></field>
 
 <!-- Esta tabla de conversión debe estar sincronizada entre 
-     postings.xis, bib-h-search.xis y dictgiz.id -->
+     postings.xis, heading-match-in-bib-record.xis y dictgiz.id -->
 <!-- SUBCAMPO9: Anular esto -->
 <field action="replace" tag="3001" split="occ"><pft>@DICTGIZ.PFT</pft></field>
 
@@ -135,7 +136,7 @@
 		select v2003[1]
 			case 'NAME' : ,v3001,'/(9100)'/
 			case 'SUBJ' :
-				if a(v2031) then 
+				if a(v2031) then  /* 2031: works about */
 					v3001,'/(9600)'/   /* v3001.30 ?? */
 				else 
 					mid(v3001.29,1,size(v3001)-1),'$/(9600)'/
@@ -196,12 +197,15 @@
 		 comienzo del script -->
 	<parm name="count">1</parm>
 	<loop><!-- set v1002 --></loop>
-	<flow action="skip"><pft>if val(v1002) > val(v6001^d) or val(v1002) = 0 then 'Quit' fi</pft></flow>
+	<flow action="skip"><pft>
+	    /* v6001^d: MAX_HITS_BIB */
+	    if val(v1002) > val(v6001^d) or val(v1002) = 0 then 'Quit' fi
+	</pft></flow>
 
 	<!-- Cuando hay un único resultado, salimos del <do> (no parece necesario hacerlo desde aquí) -->
 	<!--flow action="skip"><pft>if val(v1002)=1 then 'Quit' fi</pft></flow-->
 
-	<parm name="count"><pft>v6001^d</pft></parm>  <!-- no superamos el límite -->
+	<parm name="count"><pft>v6001^d</pft></parm>  <!-- no superamos el límite, v6001^d: MAX_HITS_BIB -->
 	<loop>
 		<field action="import" tag="list">2001,2003,2016,2031</field>
 		<!--display><pft>'<p>'v650'<br>'replace(v2001,'~','^')</pft></display-->
@@ -231,10 +235,14 @@
 		<field action="delete" tag="3011">ALL</field>
 		<field action="replace" tag="3011"><pft>
 			if p(v2031) then  /* buscando "works about" Fulano (ignoramos lo que sigue al ^a) */
-				if s(mpu,v3010[1]) : replace(mid(s(mpu,v2001*2),1,size(v2001^a)-1),'\','') then 'MATCH' fi,
+				if s(mpu,v3010[1]) : replace(mid(s(mpu,v2001*2), 1, size(v2001^a)-1), '\', '') then
+				    'MATCH'
+				fi,
 			else
 				(,
-					if s(mpu,v3010[1]) : replace(mid(s(mpu,v2001*2),1,size(v2001)-1),'\','') then 'MATCH' fi,
+					if s(mpu,v3010[1]) : replace(mid(s(mpu,v2001*2), 1, size(v2001)-1), '\', '') then
+					    'MATCH'
+					fi,
 					/* (el '\' aparece cuando hay comillas simples en v2001) */
 					/* ATENCION: revisar las vueltas que da ese '\' */
 				),
