@@ -159,6 +159,16 @@
 	if p(v2092) then replace(v6001,s('^s'v6001^s),s('^s'v2092)) fi,
 </pft></field>
 
+<!-- SCRIPT_URL -->
+<field action="replace" tag="6001"><pft>
+	if p(v2118) then replace(v6001, s('^u',v6001^u), s('^u',v2118)) fi,
+</pft></field>
+<field action="replace" tag="6001"><pft>
+	if not v6001^u : '?' then
+	    replace(v6001, s('^u'v6001^u), s('^u',v6001^u,'?')),
+	fi,
+</pft></field>
+
 
 <!-- Borramos el campo auxiliar -->
 <proc>d6000</proc>

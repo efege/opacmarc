@@ -76,8 +76,8 @@ if v1011 = 'TRUE' then
 	'<tr>',
 		'<td colspan="5" class="newHeading">',
 			'<!--a href="',
-                getenv('SCRIPT_NAME'),
-				'?IsisScript=',v2000,
+                v6001^u,
+				'&amp;IsisScript=',v2000,
 				'&amp;db=',v2104,
 				'&amp;task=BIB-H-SEARCH',
 				'&amp;index=NAME',
@@ -179,8 +179,8 @@ fi,
 			' class="whTitleLinkOPAC" ',
 		fi,
 		'href="',
-            getenv('SCRIPT_NAME'),
-			'?IsisScript=',v2000,
+            v6001^u,
+			'&amp;IsisScript=',v2000,
 			'&amp;task=BIB-RECORD',
 			|&amp;db=|v2104,
 			/*'&amp;query=',mfn,*/
@@ -516,8 +516,8 @@ if not v6001^s = '0' then     /* v6001^s: DISPLAY_LOCATION */
 						/* Y agregamos un link que indica la presencia de más signaturas top. */
 						/* (es una réplica del link asociado al v245) */
 						'&nbsp;&nbsp;<a href="',
-                            getenv('SCRIPT_NAME'),
-							'?IsisScript=',v2000,
+                            v6001^u,
+							'&amp;IsisScript=',v2000,
 							'&amp;db=',v2104,
 							'&amp;task=BIB-RECORD',
 							/*'&amp;query=',mfn,*/
@@ -568,8 +568,8 @@ if not v6001^s = '0' then     /* v6001^s: DISPLAY_LOCATION */
 					/* (es una réplica del link asociado al v245) */
 					'<span style="font-weight: normal;"> [',
 					'<a href="',
-                        getenv('SCRIPT_NAME'),
-						'?IsisScript=',v2000,
+                        v6001^u,
+						'&amp;IsisScript=',v2000,
 						'&amp;db=',v2104,
 						'&amp;task=BIB-RECORD',
 						/*'&amp;query=',mfn,*/

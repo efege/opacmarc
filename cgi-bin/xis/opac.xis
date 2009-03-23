@@ -165,6 +165,9 @@ Parámetros CGI
     '2109 msclevel'/  /* nivel, al navegar por la MSC */
     
     '2110 status'/    /* status luego del envío de mensaje por mail */
+    
+    '2117 output'/      /* tipo de salida; 'embed' para encajar el opac dentro de otra aplicación */
+    '2118 script_url'/  /* url para links y forms; usada para encajar el opac dentro de otra aplicación */
 </pft></cgitable>
 
 
@@ -251,8 +254,9 @@ Parámetros CGI
 <display><pft>ALL</pft></display-->
 
 <!-- Comienzo de la salida HTML -->
-<display><htmlpft><pft>,cat('PAGE-BEGIN.HTM'),</pft></htmlpft></display>
-<display><htmlpft><pft>,cat('DB-HEADER.HTM'),</pft></htmlpft></display>
+<display><htmlpft><pft>if v2117 <> 'embed' then ,cat('PAGE-BEGIN.HTM'), fi</pft></htmlpft></display>
+<display><htmlpft><pft>if v2117 <> 'embed' then ,cat('DB-HEADER.HTM'), fi</pft></htmlpft></display>
+<display><div id="contentWrapper"> <!-- abre aquí y cierra en el footer --></display>
 
 
 <!-- ----------------------------------------------------------------- -->
@@ -495,6 +499,12 @@ Parámetros CGI
     
 </pft></htmlpft></display>
 
+<display><pft>
+    if v2117 <> 'embed' then
+        '</div>'/  /*  cierra "contentWrapper" */
+        '</body></html>',
+    fi,
+</pft></display>
 
 <!-- ================================================== -->
 <label>LOG</label>

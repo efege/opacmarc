@@ -117,10 +117,10 @@
 	<div id="resultHeader">
 		[pft]if a(v2109) then[/pft]
 			Búsqueda en la clasificación temática
-			<!--a href="[pft]v6001^u[/pft]?IsisScript=[pft]v2000[/pft]&amp;task=CLASS-BROWSE&amp;msclevel=1&amp;db=bibima&amp;searchType=SUBJ" title=""-->MSC 2000:<!--/a-->
+			<!--a href="[pft]v6001^u[/pft]&amp;IsisScript=[pft]v2000[/pft]&amp;task=CLASS-BROWSE&amp;msclevel=1&amp;db=bibima&amp;searchType=SUBJ" title=""-->MSC 2000:<!--/a-->
 		[pft]else if v2109 <> '1' then[/pft]
 			Navegando por la clasificación temática
-			<!--a href="[pft]v6001^u[/pft]?IsisScript=[pft]v2000[/pft]&amp;task=CLASS-BROWSE&amp;msclevel=1&amp;db=bibima&amp;searchType=SUBJ" title=""-->MSC 2000:<!--/a-->
+			<!--a href="[pft]v6001^u[/pft]&amp;IsisScript=[pft]v2000[/pft]&amp;task=CLASS-BROWSE&amp;msclevel=1&amp;db=bibima&amp;searchType=SUBJ" title=""-->MSC 2000:<!--/a-->
 		[pft]else[/pft]
 			Clasificación temática MSC 2000
 		[pft]fi,fi[/pft]
@@ -179,7 +179,7 @@
 						'No se encontraron resultados ',
 					fi,
 					/*
-					' para <strong>'v3001'</strong> en la <a href="',v6001^u,'?IsisScript=',v2000,'&amp;msclevel=1&amp;db=bibima&amp;searchType=SUBJ" title="Las 63 secciones de la MSC"><strong>clasificación temática (MSC 2000)</strong></A>'
+					' para <strong>'v3001'</strong> en la <a href="',v6001^u,'&amp;IsisScript=',v2000,'&amp;msclevel=1&amp;db=bibima&amp;searchType=SUBJ" title="Las 63 secciones de la MSC"><strong>clasificación temática (MSC 2000)</strong></A>'
 					*/
 				'</div>'
 			fi,
@@ -196,7 +196,7 @@
 	<input type="button" value="Buscar temas seleccionados" onClick="check(this.form)"-->
 	<!--input type="button" value="Seleccionar todos" onClick="selectAll()"-->
 	<!--/td>
-	<td align="right"><A href="[pft]v6001^u[/pft]?IsisScript=[pft]v2000[/pft]&amp;expr=NI:1" title="Las 63 secciones de la MSC"><strong>Listado temático principal</strong></a>
+	<td align="right"><A href="[pft]v6001^u[/pft]&amp;IsisScript=[pft]v2000[/pft]&amp;expr=NI:1" title="Las 63 secciones de la MSC"><strong>Listado temático principal</strong></a>
 	</td></tr>
 	</table-->
 	[pft]fi[/pft]
@@ -288,7 +288,7 @@
 						<input type="submit" value="Buscar temas marcados" class="submit" style="font-size:100%;">
 						<!--input type="button" value="Seleccionar todos" onClick="selectAll()"-->
 					<!--/td-->
-					<!--td align="right"><a href="',v6001^u,'?IsisScript=',v2000,'&amp;expr=NI:1" title="Las 63 secciones de la MSC"><strong>Clasificación temática</strong></a>
+					<!--td align="right"><a href="',v6001^u,'&amp;IsisScript=',v2000,'&amp;expr=NI:1" title="Las 63 secciones de la MSC"><strong>Clasificación temática</strong></a>
 					</td-->
 				<!--/tr>
 			</table-->

@@ -12,7 +12,7 @@
 <display><htmlpft>
 	<div id="resultHeader">
 		Búsqueda por código <!--temático--> de
-		<!--a href="[pft]getenv('SCRIPT_NAME')v6001^u[/pft]?IsisScript=[pft]v2000[/pft]&amp;task=CLASS-BROWSE&amp;msclevel=1&amp;db=bibima&amp;searchType=SUBJ"-->MSC 2000<!--/a-->:
+		<!--a href="[pft]getenv('SCRIPT_NAME')v6001^u[/pft]&amp;IsisScript=[pft]v2000[/pft]&amp;task=CLASS-BROWSE&amp;msclevel=1&amp;db=bibima&amp;searchType=SUBJ"-->MSC 2000<!--/a-->:
 		<br>&nbsp;&nbsp;&nbsp;
 		<b>
 		[pft]

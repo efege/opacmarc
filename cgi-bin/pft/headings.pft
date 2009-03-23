@@ -139,8 +139,8 @@ if p(v4) then
     '<div style="background: url(/img/right.gif) no-repeat; padding-left: 38px;">',
         'Vea: ',
         '<a href="',
-            getenv('SCRIPT_NAME'),
-            '?IsisScript=',v2000,
+            v6001^u,
+            '&amp;IsisScript=',v2000,
             '&amp;db=',v2104,
             '&amp;task=BIB-H-SEARCH',
             '&amp;index=',v2003,
@@ -163,8 +163,8 @@ if p(v4) then
  */
 else
     '<a ', if val(v11) = 0 then 'href="' else 'href="' fi,
-        getenv('SCRIPT_NAME'),
-        '?IsisScript=',v2000,
+        v6001^u,
+        '&amp;IsisScript=',v2000,
         '&amp;db=',v2104,
         '&amp;task=BIB-H-SEARCH',
         '&amp;index=',v2003,
@@ -219,8 +219,8 @@ else
             'Vea también: ',
             (
                 '<a href="',
-                    getenv('SCRIPT_NAME'),
-                    '?IsisScript=',v2000[1],
+                    v6001^u[1],
+                    '&amp;IsisScript=',v2000[1],
                     '&amp;db=',v2104[1],
                     '&amp;task=BIB-H-SEARCH',
                     '&amp;index=',v2003[1],
