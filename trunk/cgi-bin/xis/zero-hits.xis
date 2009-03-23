@@ -73,8 +73,8 @@
 				if iocc > val(v6001^b[1]) then break, fi,  /* v6001^b: AGREP_MAX_SUG */
 				
 				'<a href="',
-                    getenv('SCRIPT_NAME'),
-					'?IsisScript=',v2000[1],
+                    v6001^u[1],
+					'&amp;IsisScript=',v2000[1],
 					'&amp;db=',v2104[1],
 					'&amp;task=',v2101[1],
 					'&amp;searchType=',v2002[1],
@@ -107,8 +107,8 @@
 		'<li>',
 			'Puede ver los ',
 			'<a href="',
-                getenv('SCRIPT_NAME'),
-				'?IsisScript=',v2000,
+                v6001^u,
+				'&amp;IsisScript=',v2000,
 				'&amp;db=',v2104,
 				'&amp;task=H-BROWSE',
 				'&amp;browseTerm=',v7000,
@@ -175,7 +175,7 @@
 
 		[pft]if val(v1) > 0 then[/pft]
 			<li>
-				<a href="[pft]getenv('SCRIPT_NAME')[/pft]?IsisScript=[pft]v2000[/pft]&amp;db=[pft]v2104[/pft]&amp;task=BIB-KW-SEARCH&amp;query=[pft]v2001[/pft]&amp;searchType=TITLE">
+				<a href="[pft]v6001^u[/pft]&amp;IsisScript=[pft]v2000[/pft]&amp;db=[pft]v2104[/pft]&amp;task=BIB-KW-SEARCH&amp;query=[pft]v2001[/pft]&amp;searchType=TITLE">
 					búsqueda por <b>título</b></a>
 				([pft]v1[/pft])
 			</li>
@@ -183,7 +183,7 @@
 		
 		[pft]if val(v2) > 0 then[/pft]
 			<li>
-				<a href="[pft]getenv('SCRIPT_NAME')[/pft]?IsisScript=[pft]v2000[/pft]&amp;db=[pft]v2104[/pft]&amp;task=H-KW-SEARCH&amp;query=[pft]v2001[/pft]&amp;searchType=NAME">
+				<a href="[pft]v6001^u[/pft]&amp;IsisScript=[pft]v2000[/pft]&amp;db=[pft]v2104[/pft]&amp;task=H-KW-SEARCH&amp;query=[pft]v2001[/pft]&amp;searchType=NAME">
 					búsqueda por <b>autor</b></a>
 				([pft]v2[/pft])
 			</li>
@@ -191,7 +191,7 @@
 		
 		[pft]if val(v3) > 0 then[/pft]
 			<li>
-				<a href="[pft]getenv('SCRIPT_NAME')[/pft]?IsisScript=[pft]v2000[/pft]&amp;db=[pft]v2104[/pft]&amp;task=H-KW-SEARCH&amp;query=[pft]v2001[/pft]&amp;searchType=SUBJ">
+				<a href="[pft]v6001^u[/pft]&amp;IsisScript=[pft]v2000[/pft]&amp;db=[pft]v2104[/pft]&amp;task=H-KW-SEARCH&amp;query=[pft]v2001[/pft]&amp;searchType=SUBJ">
 					búsqueda por <b>tema</b></a>
 				([pft]v3[/pft])
 			</li>
@@ -199,7 +199,7 @@
 		
 		[pft]if val(v4) > 0 then[/pft]
 			<li>
-				<a href="[pft]getenv('SCRIPT_NAME')[/pft]?IsisScript=[pft]v2000[/pft]&amp;db=[pft]v2104[/pft]&amp;task=BIB-KW-SEARCH&amp;query=[pft]v2001[/pft]&amp;searchType=ANY">
+				<a href="[pft]v6001^u[/pft]&amp;IsisScript=[pft]v2000[/pft]&amp;db=[pft]v2104[/pft]&amp;task=BIB-KW-SEARCH&amp;query=[pft]v2001[/pft]&amp;searchType=ANY">
 					búsqueda por <b>todos los campos</b></a>
 				([pft]v4[/pft])
 			</li>

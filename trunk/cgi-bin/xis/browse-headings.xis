@@ -1,5 +1,5 @@
 <!-- ========================================================
-	H-BROWSE
+	BROWSE-HEADINGS
 
 	Browse en las bases de encabezamientos (nombres, títulos, temas)
 
@@ -18,7 +18,7 @@
 <field action="replace" tag="6018"><pft>
 	(,
 		if v6018 : s(v2003[1],'_TOTAL=') then
-			'^t',mid(v6018,instr(v6018,'=')+1,size(v6018)),
+			'^t',mid(v6018, instr(v6018,'=')+1, size(v6018)),
 		fi,
 	),
 </pft></field>
@@ -92,7 +92,7 @@
 
 <!-- Eliminamos el '\' que acompaña a las comillas simples -->
 <field action="replace" tag="2007"><pft>
-	replace(v2007,'\','')
+	replace(v2007, '\', '')
 </pft></field>
 
 <!-- v3007: una copia de v2007, pero sin delimitadores ni otra puntuación
@@ -104,11 +104,11 @@
 <!-- v111 es un flag para que headsort.pft no use ASCII < 32 -->
 <field action="replace" tag="3007"><pft>
 	,proc(
-	    'd1a1¦~a',v2007,
-	    '¦a111¦*¦'
+	    'd1','a1¦~a',v2007,'¦',
+	    'a111¦*¦'
 	 ),
 	,@HEADSORT.PFT,
-	,proc('d1d111'),
+	,proc('d1','d111'),
 </pft></field>
 
 <!--display><pft>ALL</pft></display-->
@@ -122,7 +122,7 @@
 		'~',
 		if ',. ' : right(v3007,1) then
 			/* puntos, comas al final: MOLESTAN. Idem el espacio, o lo que sea que agrega HEADSORT.PFT al final */
-			mid(v3007,1,size(v3007)-1),
+			mid(v3007, 1, size(v3007)-1),
 		else
 			v3007,
 		fi
@@ -134,7 +134,7 @@
 		<!--display><pft>'---'v1</pft></display-->
 		<field action="import" tag="list">2003</field>
 		<!-- v3009: el MFN del primer posting de la primera clave encontrada -->
-		<field action="replace" tag="3009"><pft>f(l([v2003]v1),1,0)</pft></field>
+		<field action="replace" tag="3009"><pft>f(l([v2003]v1), 1, 0)</pft></field>
 		<field action="export" tag="list">1,3009</field>
 	</loop>
 </do>

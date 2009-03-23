@@ -513,7 +513,7 @@ para mostrar).
 				(,
 					'document.getElementById("concom2").innerHTML += "<a href=',
 						v6001^u[1],
-						'?IsisScript=',v2000[1],
+						'&amp;IsisScript=',v2000[1],
 						'&amp;db=',v2104[1],
 						'&amp;index=SUBJ',
 						'&amp;query=',

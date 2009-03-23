@@ -456,7 +456,7 @@
 <!--display><htmlpft>
     [pft]if val(v1002) > val(v6001^d) then[/pft]
         [Para reducir la cantidad de resultados, puede usar el
-        <a href="[pft]v6001^u[/pft]?IsisScript=[pft]v2000[/pft]&amp;db=[pft]v2104[/pft]&amp;showForm=advanced&amp;query=[pft]v2001[/pft]&amp;searchType=[pft]v2002[/pft]&amp;oper=[pft]v2005[/pft]&amp;trunc=[pft]v2006[/pft]">
+        <a href="[pft]v6001^u[/pft]&amp;IsisScript=[pft]v2000[/pft]&amp;db=[pft]v2104[/pft]&amp;showForm=advanced&amp;query=[pft]v2001[/pft]&amp;searchType=[pft]v2002[/pft]&amp;oper=[pft]v2005[/pft]&amp;trunc=[pft]v2006[/pft]">
             formulario de búsqueda avanzada
         </a>]
     [pft]fi[/pft]

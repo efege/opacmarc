@@ -56,7 +56,7 @@
 							'<li>',
 							if v2008[1] <> v6017 then
 								'<a href="',v6001^u[1],
-									'?IsisScript=',v2000[1],
+									'&amp;IsisScript=',v2000[1],
 									'&amp;task=BIB-RECORD',
 									'&amp;db=',v2104[1],
 									'&amp;cid=',v2099[1],
@@ -115,7 +115,7 @@
 					[pft]
 						if val(v2017) > 1 then
 							'<a href="',v6001^u,
-								'?IsisScript=',v2000,
+								'&amp;IsisScript=',v2000,
 								'&amp;task=BIB-RECORD',
 								'&amp;db=',v2104,
 								'&amp;cid=',v2099,
@@ -144,7 +144,7 @@
 					
 					[pft]
 						'<a href="',v6001^u,
-							'?IsisScript=',v2000,
+							'&amp;IsisScript=',v2000,
 							'&amp;db=',v2104,
 							'&amp;task=',
                                 if p(v2017) and a(v2099) then
@@ -182,7 +182,7 @@
 					[pft]
 						if val(v2017) < val(v2027) then
 							'<a href="',v6001^u,
-								'?IsisScript=',v2000,
+								'&amp;IsisScript=',v2000,
 								'&amp;task=BIB-RECORD',
 								'&amp;db=',v2104,
 								'&amp;cid=',v2099,
