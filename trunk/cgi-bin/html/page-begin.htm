@@ -4,108 +4,77 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-
-
-<!-- ========== BEGIN HOJAS DE ESTILO ========== -->
-
-<link rel="stylesheet" type="text/css" href="[pft]v6003^h[/pft]css/opac.css" title="basic" />
-<link rel="stylesheet" type="text/css" href="[pft]v6003^h[/pft]css/aacr.css" />
-<link rel="stylesheet" type="text/css" href="[pft]v6003^h[/pft]css/wh.css" />
-<link rel="stylesheet" type="text/css" href="[pft]v6003^h[/pft]css/etiquetado.css" />
-<link rel="stylesheet" type="text/css" href="[pft]v6003^h[/pft]css/complete.css" />
-<link rel="stylesheet" type="text/css" href="[pft]v6003^h[/pft]css/novedades.css" />
-<link rel="stylesheet" type="text/css" href="[pft]v6003^h[/pft]css/msc.css" />
-<link rel="stylesheet" type="text/css" href="[pft]v6003^h[/pft]css/print.css" media="print" title="print" />
-
-<!-- Comentarios condicionales, para cargar hojas de estilo que sólo verá IE -->
-<!--[if IE]>
-	<link rel="stylesheet" type="text/css" href="[pft]v6003^h[/pft]css/ie.css" />
-<![endif]-->
-<!--[if lt IE 6]>
-	<link rel="stylesheet" type="text/css" href="[pft]v6003^h[/pft]css/ie5x.css" />
-<![endif]-->
-
-<!-- Hoja de estilo opcional con adaptaciones locales comunes a todas las bases de datos -->
-<link rel="stylesheet" type="text/css" href="[pft]v6003^h[/pft]local/css/local-styles.css" />
-
-<!-- Hoja de estilo opcional con adaptaciones locales específicas para una base de datos -->
-<link rel="stylesheet" type="text/css" href="[pft]v6003^h[/pft]local-db/[pft]v2104[/pft]/css/db-styles.css" />
-
-<!-- ========== END HOJAS DE ESTILO ========== -->
-
-
-<!-- Favicon -->
-<link rel="shortcut icon" href="[pft]v6003^h[/pft]img/favicon.ico"/>
-
-
-<!-- ========== BEGIN JAVASCRIPT ========== -->
-
-<script type="text/javascript" src="[pft]v6003^h[/pft]js/opac.js"></script>
-
-<!-- JS para generar el display AACR2 (ficha) -->  <!-- FIXME: para embed esto no debería estar aquí -->
-<script type="text/javascript">
-    var MAIN_ENTRY_TOP = [pft]v6001^1[/pft];  // (boolean)
-    var GHOST_MAIN_ENTRY = true;  // agregado para Museo Mitre, 2008-03-12
-</script>
-<script type="text/javascript" src="[pft]v6003^h[/pft]js/marc2aacr.js"></script>
-<script type="text/javascript" src="[pft]v6003^h[/pft]js/isbn-hyphen.js"></script>
-<script type="text/javascript" src="[pft]v6003^h[/pft]js/getMaterialType.js"></script>
-
-<!-- Efecto cebra en tablas (2008-03-04) -->
-<script type="text/javascript" src="[pft]v6003^h[/pft]js/zebra-table.js"></script>
-
-<!-- JavaScript opcional para uso local, común a todas las bases -->
-<script type="text/javascript" src="[pft]v6003^h[/pft]local/js/local-scripts.js"></script>
-
-<!-- JavaScript opcional para uso local, específico para una base -->
-<script type="text/javascript" src="[pft]v6003^h[/pft]local-db/[pft]v2104[/pft]/js/db-scripts.js"></script>
-
-<script type="text/javascript">  <!-- FIXME: para embed esto no debería estar aquí -->
-function init() {
-    if (document.getElementById("etiq")) {
-        stripe("etiq");
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    
+    <!-- ========== BEGIN HOJAS DE ESTILO ========== -->
+    
+    <link rel="stylesheet" type="text/css" href="[pft]v6003^h[/pft]css/base.css" />
+    <link rel="stylesheet" type="text/css" href="[pft]v6003^h[/pft]css/opac.css" title="basic" />
+    <link rel="stylesheet" type="text/css" href="[pft]v6003^h[/pft]css/aacr.css" />
+    <link rel="stylesheet" type="text/css" href="[pft]v6003^h[/pft]css/wh.css" />
+    <link rel="stylesheet" type="text/css" href="[pft]v6003^h[/pft]css/etiquetado.css" />
+    <link rel="stylesheet" type="text/css" href="[pft]v6003^h[/pft]css/complete.css" />
+    <link rel="stylesheet" type="text/css" href="[pft]v6003^h[/pft]css/novedades.css" />
+    <link rel="stylesheet" type="text/css" href="[pft]v6003^h[/pft]css/msc.css" />
+    <link rel="stylesheet" type="text/css" href="[pft]v6003^h[/pft]css/print.css" media="print" title="print" />
+    
+    <!-- Comentarios condicionales, para cargar hojas de estilo que sólo verá IE -->
+    <!--[if IE]>
+    	<link rel="stylesheet" type="text/css" href="[pft]v6003^h[/pft]css/ie.css" />
+    <![endif]-->
+    <!--[if lt IE 6]>
+    	<link rel="stylesheet" type="text/css" href="[pft]v6003^h[/pft]css/ie5x.css" />
+    <![endif]-->
+    
+    <!-- Hoja de estilo opcional con adaptaciones locales comunes a todas las bases de datos -->
+    <link rel="stylesheet" type="text/css" href="[pft]v6003^h[/pft]local/css/local-styles.css" />
+    
+    <!-- Hoja de estilo opcional con adaptaciones locales específicas para una base de datos -->
+    <link rel="stylesheet" type="text/css" href="[pft]v6003^h[/pft]local-db/[pft]v2104[/pft]/css/db-styles.css" />
+    
+    <!-- ========== END HOJAS DE ESTILO ========== -->
+    
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="[pft]v6003^h[/pft]img/favicon.ico"/>
+    
+    
+    <!-- ========== BEGIN JAVASCRIPT ========== -->
+    
+    <script type="text/javascript" src="[pft]v6003^h[/pft]js/opac.js"></script>
+    
+    <!-- JS para generar el display AACR2 (ficha) -->  <!-- FIXME: para embed esto no debería estar aquí -->
+    <script type="text/javascript">
+        var MAIN_ENTRY_TOP = [pft]v6001^1[/pft];  // (boolean)
+        var GHOST_MAIN_ENTRY = true;  // agregado para Museo Mitre, 2008-03-12
+    </script>
+    <script type="text/javascript" src="[pft]v6003^h[/pft]js/marc2aacr.js"></script>
+    <script type="text/javascript" src="[pft]v6003^h[/pft]js/isbn-hyphen.js"></script>
+    <script type="text/javascript" src="[pft]v6003^h[/pft]js/getMaterialType.js"></script>
+    
+    <!-- Efecto cebra en tablas (2008-03-04) -->
+    <script type="text/javascript" src="[pft]v6003^h[/pft]js/zebra-table.js"></script>
+    
+    <!-- JavaScript opcional para uso local, común a todas las bases -->
+    <script type="text/javascript" src="[pft]v6003^h[/pft]local/js/local-scripts.js"></script>
+    
+    <!-- JavaScript opcional para uso local, específico para una base -->
+    <script type="text/javascript" src="[pft]v6003^h[/pft]local-db/[pft]v2104[/pft]/js/db-scripts.js"></script>
+    
+    <script type="text/javascript">  <!-- FIXME: para embed esto no debería estar aquí -->
+    function init() {
+        if (document.getElementById("etiq")) {
+            stripe("etiq");
+        }
     }
-}
-
-window.onload = init
-</script>
-
-<!-- ========== END JAVASCRIPT ========== -->
-
-
-
-<!-- TO-DO: Ajustar el <title> para las diferentes situaciones -->
-<title>
-[pft]
-	'Catálogo',
-    ' ', v6002^t, /* nombre a mostrar: ver config. */
-	/*select v2104
-	    case 'bibima': ' INMABB',
-	    case 'abr': ' Biblioteca Rivadavia',
-	    case 'allbc': ' Biblioteca Central UNS'
-	endsel,*/
-	
-	if v2101 = 'BIB-CLASS-SEARCH' then
-		' - MSC 2000: ',v2001,
-	else if v2101 = 'CLASS-BROWSE' then
-		' - MSC 2000',      /* TO-DO: mostrar sección visitada */
-	else if p(v3004) then
-		' - ',v3004,        /* 3004: heading */
-	else if p(v2002) then  /* 2002: searchType */
-		' - ', v2001,       /* 2001: keyword query */
-	else if p(v2003) then  /* 2003: index */
-		' - Índice de ',
-		select v2003
-			case 'TITLE' : 'títulos',
-			case 'NAME'  : 'autores',
-			case 'SUBJ'  : 'temas',
-		endsel,
-	else if v2101 = 'BIB-RECORD' then
-		/* TO-DO: display v245 */
-	fi,fi,fi,fi,fi,fi,
-[/pft]
-</title>
+    
+    window.onload = init
+    </script>
+    
+    <!-- ========== END JAVASCRIPT ========== -->
+    
+    
+    <title>[pft],@PAGE-TITLE.PFT,[/pft]</title>
 
 </head>
 

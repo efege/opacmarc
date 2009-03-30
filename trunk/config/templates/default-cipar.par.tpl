@@ -70,6 +70,7 @@ DICTGIZ.PFT=__APP_DIR__/cgi-bin/pft/dictgiz.pft
 HEADINGS.PFT=__APP_DIR__/cgi-bin/pft/headings.pft
 MAIL.PFT=__APP_DIR__/cgi-bin/pft/mail.pft
 MSC.PFT=__APP_DIR__/cgi-bin/pft/msc.pft
+PAGE-TITLE.PFT=__APP_DIR__/cgi-bin/pft/page-title.pft
 
 BIB_SORT_KEY.PFT=__APP_DIR__/cgi-bin/pft/bib-sort-key.pft
 DOCUMENT-TYPE.PFT=__APP_DIR__/cgi-bin/pft/doc-type.pft

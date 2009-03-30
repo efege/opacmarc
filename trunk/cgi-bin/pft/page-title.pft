@@ -1,0 +1,32 @@
+/**
+ * Contenido del <title> para la página.
+ *
+ * TO-DO: Ajustar para las diferentes situaciones.
+ */
+
+'Catálogo',
+' ', v6002^t, /* nombre a mostrar: ver config. */
+/*select v2104
+    case 'bibima': ' INMABB',
+    case 'abr': ' Biblioteca Rivadavia',
+    case 'allbc': ' Biblioteca Central UNS'
+endsel,*/
+
+if v2101 = 'BIB-CLASS-SEARCH' then
+	' - MSC 2000: ',v2001,
+else if v2101 = 'CLASS-BROWSE' then
+	' - MSC 2000',      /* TO-DO: mostrar sección visitada */
+else if p(v3004) then
+	' - ',v3004,        /* 3004: heading */
+else if p(v2002) then  /* 2002: searchType */
+	' - ', v2001,       /* 2001: keyword query */
+else if p(v2003) then  /* 2003: index */
+	' - Índice de ',
+	select v2003
+		case 'TITLE' : 'títulos',
+		case 'NAME'  : 'autores',
+		case 'SUBJ'  : 'temas',
+	endsel,
+else if v2101 = 'BIB-RECORD' then
+	/* TO-DO: display v245 */
+fi,fi,fi,fi,fi,fi,
