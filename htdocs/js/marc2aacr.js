@@ -94,15 +94,15 @@ function printCallNumber(ejemplar)
 {
 	var callNumber = "";
 	if ( ejemplar["k"] ) {
-		callNumber += ejemplar["k"] + "<br>";
+		callNumber += ejemplar["k"] + "<br />";
 	}
 	if ( ejemplar["h"] ) {
-		callNumber += ejemplar["h"] + "<br>";
+		callNumber += ejemplar["h"] + "<br />";
 	}
 	if ( ejemplar["i"] ) {
-		callNumber += ejemplar["i"].replace(/\s+/g,"<br>") + "<br>";
+		callNumber += ejemplar["i"].replace(/\s+/g,"<br />") + "<br />";
 	}
-	callNumber += "<br style='line-height: 0.7em;'>";
+	callNumber += "<br style='line-height: 0.7em;' />";
 	return callNumber;
 }
 
@@ -1141,7 +1141,7 @@ function marc2aacr(materialType,f001,f005,f008,marcDatafields,ejemplares)
 	var aacrOutput = description + tracing + recordNumbers;
 
 	// Sustituciones finales
-	aacrOutput = aacrOutput.replace(/\r\n/g,"<br>").replace(REGEX_INDENT,"&nbsp;&nbsp;&nbsp;&nbsp;");
+	aacrOutput = aacrOutput.replace(/\r\n/g,"<br />").replace(REGEX_INDENT,"&nbsp;&nbsp;&nbsp;&nbsp;");
 
 
 	// -------------------------------------------------------------
@@ -1218,7 +1218,7 @@ function marc2aacr(materialType,f001,f005,f008,marcDatafields,ejemplares)
 			// Y pegamos todo
 			//documentLocation += fields_byTag["856"][i].substr(2).replace(linkText,theLink).replace("^u" + theURI,"").replace(/\^\w/g," ").replace(/Table of/,"Table&nbsp;of");
 			documentLocation += theLink;
-			documentLocation += "<br style='line-height: 0.7em;'><br style='line-height: 0.7em;'>";
+			documentLocation += "<br style='line-height: 0.7em;' /><br style='line-height: 0.7em;' />";
 		}
 	}
 	
@@ -1226,9 +1226,9 @@ function marc2aacr(materialType,f001,f005,f008,marcDatafields,ejemplares)
 	// al primero no se muestran.
 	if ( 0 == ejemplares.length && !fields_byTag["856"] && fields_byTag["050"] ) {
 		documentLocation = extractSubfield(fields_byTag["050"][0],"a");
-		documentLocation += "<br>";
-		documentLocation += extractSubfield(fields_byTag["050"][0],"b").replace(/ /g,"<br>");
-		//fields_byTag["050"][0].substr(4).replace(/\^\w/g,"<br>").replace(/ /g,"<br>");
+		documentLocation += "<br />";
+		documentLocation += extractSubfield(fields_byTag["050"][0],"b").replace(/ /g,"<br />");
+		//fields_byTag["050"][0].substr(4).replace(/\^\w/g,"<br/>").replace(/ /g,"<br />");
 	}
 
 	// Fin del DIV con font-size pequeño

@@ -21,7 +21,7 @@
 </pft></call>
 
 <!-- Construcción de la search expression -->
-<!--display><pft>'2001='v2001,'<br>3001='v3001,'<br>2109='v2109</pft></display-->
+<!--display><pft>'2001='v2001,'<br/>3001='v3001,'<br />2109='v2109</pft></display-->
 <field action="replace" tag="3002"><pft>
 	if p(v2109) then  /* browsing */
 		'-MSC:NI:',v2109,
@@ -45,7 +45,7 @@
 	fi,fi
 </pft></field>
 
-<!--display><pft>'<br>expr='v3002</pft></display-->
+<!--display><pft>'<br />expr='v3002</pft></display-->
 
 
 <!-- 
@@ -186,15 +186,15 @@
 		[/pft]
 	
 	[pft]if v2109 <> '1' then[/pft]
-	<!--form id="FormTemas" action="[pft]v6001^u[/pft]" method="GET" style="margin: 0;" -onsubmit="check(this);return false">
-	<input type="hidden" name="IsisScript" value="[pft]v2000[/pft]">
-	<input type="hidden" name="db" value="[pft]v2104[/pft]">
-	<input type="hidden" name="task" value="BIB-CLASS-SEARCH">
-	<input type="hidden" name="index" value="SUBJ"-->
+	<!--form id="FormTemas" action="[pft]v6001^u[/pft]" method="get" style="margin: 0;" -onsubmit="check(this);return false">
+	<input type="hidden" name="IsisScript" value="[pft]v2000[/pft]" />
+	<input type="hidden" name="db" value="[pft]v2104[/pft]" />
+	<input type="hidden" name="task" value="BIB-CLASS-SEARCH" />
+	<input type="hidden" name="index" value="SUBJ" /-->
 	
 	<!--table width="100%" style="font-size:smaller;"><tr><td>
-	<input type="button" value="Buscar temas seleccionados" onClick="check(this.form)"-->
-	<!--input type="button" value="Seleccionar todos" onClick="selectAll()"-->
+	<input type="button" value="Buscar temas seleccionados" onClick="check(this.form)" /-->
+	<!--input type="button" value="Seleccionar todos" onClick="selectAll()" /-->
 	<!--/td>
 	<td align="right"><A href="[pft]v6001^u[/pft]&amp;IsisScript=[pft]v2000[/pft]&amp;expr=NI:1" title="Las 63 secciones de la MSC"><strong>Listado temático principal</strong></a>
 	</td></tr>
@@ -203,8 +203,8 @@
 
 	<!--
 	<form action="/cgi-bin/wxis.exe" method="get">
-	<input type="hidden" name="IsisScript" value="[pft]v2000[/pft]">
-	<input type="submit" value="Buscar los temas marcados">
+	<input type="hidden" name="IsisScript" value="[pft]v2000[/pft]" />
+	<input type="submit" value="Buscar los temas marcados" />
 	-->
 
 	<table id="msctable" cellspacing="0" border="1" style="width: [pft]if v2109 = '1' then '55%' else '100%' fi[/pft];">
@@ -285,8 +285,8 @@
 			<table width="100%">
 				<tr>
 					<td>
-						<input type="submit" value="Buscar temas marcados" class="submit" style="font-size:100%;">
-						<!--input type="button" value="Seleccionar todos" onClick="selectAll()"-->
+						<input type="submit" value="Buscar temas marcados" class="submit" style="font-size:100%;" />
+						<!--input type="button" value="Seleccionar todos" onClick="selectAll()" /-->
 					<!--/td-->
 					<!--td align="right"><a href="',v6001^u,'&amp;IsisScript=',v2000,'&amp;expr=NI:1" title="Las 63 secciones de la MSC"><strong>Clasificación temática</strong></a>
 					</td-->

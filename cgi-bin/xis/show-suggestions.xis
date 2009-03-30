@@ -47,7 +47,7 @@
 				proc('d7001a7001|',v7000[1],'|'),
 				
 				/* Construimos el link */
-				'<a href="',getenv('SCRIPT_NAME'),'?IsisScript=',v2000[1],'&amp;db=',v2104[1],'&amp;searchType=SUBJ',
+				'<a href="',v6001^u,'&amp;IsisScript=',v2000,'&amp;db=',v2104,'&amp;searchType=SUBJ',
 				'&amp;query=',v7001,'">temas que incluyan el término <strong>',v1901,'</strong></a>',
 				
 			else,
@@ -59,7 +59,7 @@
 					proc('d7001a7001|',v7000[1],'|'),
 					
 					/* Construimos el link */
-					'<a href="',getenv('SCRIPT_NAME'),'?IsisScript=',v2000[1],'&amp;db=',v2104[1],'&amp;searchType=SUBJ',
+					'<a href="',v6001^u[1],'&amp;IsisScript=',v2000[1],'&amp;db=',v2104[1],'&amp;searchType=SUBJ',
 					'&amp;query=',v7001[1],'" title="Temas que incluyan &#39;',v1901,'&#39;"><strong>',v1901,'</strong></a>',
 					if iocc < nocc(v1901) then ' ; ', fi,
 				),
@@ -75,7 +75,7 @@
 			proc('d7001a7001|',v7000[1],'|'),
 			
 			/* Construimos el link */
-			'<td>Vea <a href="',getenv('SCRIPT_NAME'),'?IsisScript=',v2000[1],'&amp;db=',v2104[1],'&amp;index=SUBJ',
+			'<td>Vea <a href="',v6001^u,'&amp;IsisScript=',v2000,'&amp;db=',v2104,'&amp;index=SUBJ',
 			'&amp;browseTerm=',replace(v7001*2,'^','~'),'&amp;nearby=1">',
 			'términos del índice cercanos al buscado',
 			'<!--strong>',v3004,'</strong--></a>.'/
@@ -95,8 +95,7 @@
 			proc('d7001a7001|',v7000[1],'|'),
 			
 			/* Construimos el link */
-			'<a href="',
-				getenv('SCRIPT_NAME'),'?IsisScript=',v2000[1],'&amp;db=',v2104[1],'&amp;index=SUBJ&amp;wa=1&amp;query=',v7001,		
+			'<a href="',v6001^u,'&amp;IsisScript=',v2000,'&amp;db=',v2104,'&amp;index=SUBJ&amp;wa=1&amp;query=',v7001,		
 				,'">obras acerca de <strong>',v3004,'</strong></a> (',v1003,'&nbsp;resultado', if val(v1003)>1 then 's', fi,')',
 		'</div>'/
 		

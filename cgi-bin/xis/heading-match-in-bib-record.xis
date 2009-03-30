@@ -67,7 +67,7 @@
 
 <!-- ATENCION: v2001 puede tener más de una occ. -->
 
-<!--display><pft>'v2001:'v2001+|<br>|</pft></display-->
+<!--display><pft>'v2001:'v2001+|<br />|</pft></display-->
 
 
 <!-- Supresión de '^' y '\' -->
@@ -208,7 +208,7 @@
 	<parm name="count"><pft>v6001^d</pft></parm>  <!-- no superamos el límite, v6001^d: MAX_HITS_BIB -->
 	<loop>
 		<field action="import" tag="list">2001,2003,2016,2031</field>
-		<!--display><pft>'<p>'v650'<br>'replace(v2001,'~','^')</pft></display-->
+		<!--display><pft>'<p>'v650'<br />'replace(v2001,'~','^')</pft></display-->
 		
 		<!-- Acá es cuando necesitamos que se hayan preservado los 
 			delimitadores de subcampo, para poder chequear fácilmente un match -->
@@ -264,7 +264,7 @@
 			fi,
 		</pft></list>
 		
-		<!--display><pft>'<br>'mfn,x1,v1005.3</pft></display-->
+		<!--display><pft>'<br />'mfn,x1,v1005.3</pft></display-->
 	</loop>
 </do>   <!-- fin del do task="search" -->
 
@@ -334,7 +334,7 @@ para mostrar).
 
 <flow action="jump"><pft>if v2003 <> 'NAME' then 'SHOW_SUGGESTIONS' fi</pft></flow>
 
-<!--display><pft>v3002'<br>'replace(replace(v3002,'"',''),'/(9100)','$/(9600)')</pft></display-->
+<!--display><pft>v3002'<br />'replace(replace(v3002,'"',''),'/(9100)','$/(9600)')</pft></display-->
 
 <!-- ¿Tenemos "works about" para este autor? -->
 <!-- ATENCION: al recuperar por /(9600), debemos mirar solo el 600$a
@@ -415,7 +415,7 @@ para mostrar).
 					v110*2,
 					v111*2,
 				</pft></field>
-				<!--display><pft>'<hr>9001: 'v9001,' . 9004: 'v9004</pft></display-->
+				<!--display><pft>'<hr />9001: 'v9001,' . 9004: 'v9004</pft></display-->
 				<field action="replace" tag="9005"><pft>
 					if v9004 <> v9001 then
 						'NEW_MAIN_HEADING',
@@ -467,7 +467,7 @@ para mostrar).
 	</loop>
 </do>
 
-<!--display><pft>v5775+|<br>|</pft></display-->
+<!--display><pft>v5775+|<br />|</pft></display-->
 <!--display><pft>ALL</pft></display-->
 
 <!-- Limpiamos la lista (porque sólo hay una lista disponible!) -->
@@ -493,7 +493,7 @@ para mostrar).
 	<parm name="count">3</parm> <!-- Ponemos un tope -->
 	<loop>
 		<field action="import" tag="list">1002,5776</field>
-		<!--display><pft>v2,'--',f(val(v2)/val(v1002),1,3) ,v1'<br>'</pft></display-->
+		<!--display><pft>v2,'--',f(val(v2)/val(v1002),1,3) ,v1'<br />'</pft></display-->
 		<field action="add" tag="5776"><pft>
 			if val(v2)/val(v1002) >= 0.2 then v1, fi
 		</pft></field>
@@ -503,11 +503,11 @@ para mostrar).
 </do>
 
 <display><htmlpft>
-	[pft]if p(v5776) then /*v5776+|<br>|*/[/pft]
+	[pft]if p(v5776) then /*v5776+|<br />|*/[/pft]
 		
 		<!--script type="text/javascript">
 			if ( document.getElementById ) {
-				document.getElementById("concom1").innerHTML = "<img src=/img/right.gif alt=&gt;>";
+				document.getElementById("concom1").innerHTML = "<img src=/img/right.gif alt=&gt; />";
 				document.getElementById("concom2").innerHTML += "Vea también: ";
 				[pft]
 				(,

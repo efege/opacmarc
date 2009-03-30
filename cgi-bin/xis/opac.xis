@@ -166,8 +166,9 @@ Parámetros CGI
     
     '2110 status'/    /* status luego del envío de mensaje por mail */
     
-    '2117 output'/      /* tipo de salida; 'embed' para encajar el opac dentro de otra aplicación */
-    '2118 script_url'/  /* url para links y forms; usada para encajar el opac dentro de otra aplicación */
+    '2117 output'/       /* tipo de salida; 'embed' para encajar el opac dentro de otra aplicación */
+    '2118 script_url'/   /* url para links y forms; usada para encajar el opac dentro de otra aplicación */
+    '2119 path_htdocs'/  /* url para imágenes y otros archivos estáticos; usada para encajar el opac dentro de otra aplicación */
 </pft></cgitable>
 
 
@@ -250,13 +251,20 @@ Parámetros CGI
 <!-- Default: rpp (bib records por página) [para bib-*-search] -->
 <field action="replace" tag="2028"><pft>if a(v2028) then v6001^r fi</pft></field>
 
+<display><pft>
+	/* Limpiamos el heading buscado (lo necesitamos para el <title>) */
+	/* Ubicado aquí porque en el caso de embed no pasamos por page-begin */
+	,@CLEAN-HEADING.PFT,
+</pft></display>
+
 <!--proc>s</proc>
 <display><pft>ALL</pft></display-->
 
 <!-- Comienzo de la salida HTML -->
 <display><htmlpft><pft>if v2117 <> 'embed' then ,cat('PAGE-BEGIN.HTM'), fi</pft></htmlpft></display>
 <display><htmlpft><pft>if v2117 <> 'embed' then ,cat('DB-HEADER.HTM'), fi</pft></htmlpft></display>
-<display><div id="contentWrapper"> <!-- abre aquí y cierra en el footer --></display>
+
+<display><div class="opacmarc"></display>    <!-- abre aquí y cierra al final -->
 
 
 <!-- ----------------------------------------------------------------- -->
@@ -500,8 +508,8 @@ Parámetros CGI
 </pft></htmlpft></display>
 
 <display><pft>
+    '</div>',   /* cierra "opacmarc" */
     if v2117 <> 'embed' then
-        '</div>'/  /*  cierra "contentWrapper" */
         '</body></html>',
     fi,
 </pft></display>

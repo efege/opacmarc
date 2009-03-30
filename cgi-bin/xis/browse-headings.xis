@@ -180,9 +180,9 @@
 </pft></field>
 
 <!--display><pft>
-	'<pre>#'v1'#<br>',
-	'#'v3007'#<br>',
-	'#'mid(s(mpu,v3007.29,mpl),1,size(v3007)-1)'#<br>',
+	'<pre>#'v1'#<br />',
+	'#'v3007'#<br />',
+	'#'mid(s(mpu,v3007.29,mpl),1,size(v3007)-1)'#<br />',
 	'#',s('~',if ',. ':right(v3007.29,1) then mid(s(mpu,v3007.29),1,size(v3007)-1) else mpu,v3007.29 fi),'#',
 	'</pre>'
 </pft></display-->

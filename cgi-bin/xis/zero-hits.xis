@@ -10,7 +10,7 @@
 	  TO-DO: las sugerencias muy cortas del agrep no deberían considerarse.
 	  TO-DO: ver qué hacer con las búsquedas avanzadas
 -->
-<!--display><pft>'3001: ',v3001,'<br>'</pft></display-->
+<!--display><pft>'3001: ',v3001,'<br />'</pft></display-->
 <proc><pft>'d4001a4001|',replace(replace(v3001,' OR ',''),' ','|a4001|'),'|'</pft></proc> <!-- usamos v3001 ( = v2001  limpio) -->
 <!--display><pft>'<span style="color: red">',v4001+| ~ |,'</span>'</pft></display-->
 <flow action="jump"><pft>
@@ -22,20 +22,20 @@
 
 <flow action="jump"><pft>if nocc(v4001) = 2 and v4001[1] <> v4001[2] then 'AGREP_FOR_TWO' fi</pft></flow>
 
-<!--display><pft>'<br>AGREP para 1'</pft></display-->
+<!--display><pft>'<br />AGREP para 1'</pft></display-->
 <proc><pft>'d4101a4101|',v2001,'|'</pft></proc>
 <call name="agrep"><pft>v4101</pft></call>
 <flow action="jump">POST_AGREP</flow>
 
 <label>AGREP_FOR_TWO</label>
-<!--display><pft>'<br>AGREP para 2'</pft></display-->
+<!--display><pft>'<br />AGREP para 2'</pft></display-->
 <include>xis/agrep-multi.xis</include>
 
 <!-- ================================================== -->
 <label>POST_AGREP</label>
 <!-- ================================================== -->
 
-<!--display><pft>'<br>zero-hits.xis | Sugerencias finales: ',v5555+| ~ |</pft></display-->
+<!--display><pft>'<br />zero-hits.xis | Sugerencias finales: ',v5555+| ~ |</pft></display-->
 
 <flow action="jump"><pft>
 	if v6001^x <> '1' or nocc(v5555) > 1 or size(v5555) < 7 then 'DISPLAY_SUG', fi
@@ -245,11 +245,11 @@
 	<li>Intente con otro tipo de búsqueda.</li>
 	
 	[pft]if p(v2001) and not v2001 : '*' then[/pft]
-		<li>Si lo desea, puede buscar <b>[pft]v2001[/pft]</b> en la Web usando alguna de estas herramientas:<br>
-			<!--form action="http://www.google.com/search" method="GET" style="display: inline; margin-left: 2em">
-				<img src="[pft]v6003^h[/pft]img/google-Logo_25wht.gif" alt="Google" align="top" border="0">
-				<input type="text" name="q" value="[pft]v2001[/pft]">
-				<input type="submit" value="Buscar" class="button"> 
+		<li>Si lo desea, puede buscar <b>[pft]v2001[/pft]</b> en la Web usando alguna de estas herramientas:<br />
+			<!--form action="http://www.google.com/search" method="get" style="display: inline; margin-left: 2em">
+				<img src="[pft]v6003^h[/pft]img/google-Logo_25wht.gif" alt="Google" align="top" border="0" />
+				<input type="text" name="q" value="[pft]v2001[/pft]" />
+				<input type="submit" value="Buscar" class="button" /> 
 			</form-->
 			<!-- TO-DO: las búsquedas en Scopus y MathSciNet se pueden acotar a un campo específico, según la búsqueda original -->
 			[pft]

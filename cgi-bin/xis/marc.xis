@@ -217,6 +217,7 @@
 					),
 					'</td>'/
 				fi,
+			'</tr>',
 			'</table>'/
 		</pft></display>
 	</loop>

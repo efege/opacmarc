@@ -8,14 +8,14 @@
 		<!-- Controles para cambiar el estilo de visualización -->
 		<div style="float: right;">
 			<form action="[pft]v6001^u[/pft]" method="get">
-				<input type="hidden" name="IsisScript" value="[pft]v2000[/pft]">
-				<input type="hidden" name="task" value="BIB-RECORD">
-				<input type="hidden" name="db" value="[pft]v2104[/pft]">
-				<!--input type="hidden" name="query" value="v2001"-->
-				<input type="hidden" name="cid" value="[pft]v2099[/pft]">
-				<!--input type="hidden" name="keys" value="v2010"--> <!-- pasan via tmp -->
-				<input type="hidden" name="curr" value="[pft]v2017,"1"n2017[/pft]">
-				<input type="hidden" name="total" value="[pft]v2027[/pft]">
+				<input type="hidden" name="IsisScript" value="[pft]v2000[/pft]" />
+				<input type="hidden" name="task" value="BIB-RECORD" />
+				<input type="hidden" name="db" value="[pft]v2104[/pft]" />
+				<!--input type="hidden" name="query" value="v2001" /-->
+				<input type="hidden" name="cid" value="[pft]v2099[/pft]" />
+				<!--input type="hidden" name="keys" value="v2010" /--> <!-- pasan via tmp -->
+				<input type="hidden" name="curr" value="[pft]v2017,"1"n2017[/pft]" />
+				<input type="hidden" name="total" value="[pft]v2027[/pft]" />
 				
 				[pft]
 				/* Estilos ofrecidos (faltan: cita, xml, breve?). TO-DO: enviar esto a config */
@@ -28,13 +28,13 @@
 						(,
 							'<option value="',v6017,'"',
 							if v2008[1] = v6017 then
-								' selected',
+								' selected="selected"',
 							fi,
 							'>',v6017,'</option>'/
 						),
 						'</select>'/
 						'<noscript>
-							<input type="submit" value="Cambiar" class="button">
+							<input type="submit" value="Cambiar" class="button" />
 						</noscript>'/
 					
 					case 'button' :
@@ -46,7 +46,7 @@
 							else
 								' class="estilo" ',
 							fi,
-							' name="style" value="',v6017,'">'/
+							' name="style" value="',v6017,'" />'/
 						),
 					
 					case 'text' :
