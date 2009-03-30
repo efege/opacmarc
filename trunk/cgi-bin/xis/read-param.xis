@@ -169,6 +169,11 @@
 	fi,
 </pft></field>
 
+<!-- PATH_HTDOCS -->
+<field action="replace" tag="6003"><pft>
+	if p(v2119) then replace(v6003, s('^h',v6003^h), s('^h',v2119)) fi,
+</pft></field>
+
 
 <!-- Borramos el campo auxiliar -->
 <proc>d6000</proc>

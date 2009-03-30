@@ -112,11 +112,11 @@ fi,
 
 	if v2000 : 'catalis.xis' then
 		/* ATENCION: no debemos usar aquí el nombre del IsisScript; hace falta algún otro parámetro */
-		/*'<br>',*/
+		/*'<br />',*/
 		'<button id="btn',v001,'" type="button" class="miniEditButton" style="width: 55px; background: ', if p(v980) then '#FFA;' else '#E2DFD0;', fi,'"',
 				' title="Editar este registro">',v001,'</button>',
 		/* ATENCION: si usamos mfn en lugar de mfn(1), no funciona bien */
-		"<br>"v991,
+		"<br />"v991,
 	else
 		v1001,'.',
 	fi,
@@ -145,7 +145,7 @@ fi,
 	/* --- MAIN HEADING --- */
 	/* ATENCION: el v2003 importa? */
 	/*if (v6001^c <> '1' or v2003 <> 'NAME') and v2016 = 'author' and p(v9010) then
-		v9010"<br>",
+		v9010"<br />",
 	fi,*/
 
 	/* --- 130: Título uniforme --- */
@@ -155,7 +155,7 @@ fi,
 		if p(v130^l) then
 			x1, if right(v130^l,1) = '.' then mid(v130^l,1,size(v130^l)-1) else v130^l, fi,
 		fi,
-		']</span><br>',
+		']</span><br />',
 	fi,
 	
 	/* --- 240: Título uniforme --- */
@@ -168,7 +168,7 @@ fi,
 					'¦',
 				),
 				v1000*1+| |,
-		']</span><br>',
+		']</span><br />',
 	fi,
 
 	/* --- Enlace desde el título (v245) al registro individual --- */
@@ -250,9 +250,9 @@ fi,
 				replace(v245,'^c ','^c'),
 			'¦',
 		),
-		/* if not v6001^j = '1' then '<br>' fi, */ 
+		/* if not v6001^j = '1' then '<br />' fi, */ 
 		/* mpu, " / "v245^c.1, mpl, v245^c*1, */
-		" / "v245^c,   /* OPCION: '<br>' | ' / ' | ' ' */
+		" / "v245^c,   /* OPCION: '<br />' | ' / ' | ' ' */
 	fi,
 	
 	/* ----------------------------------
@@ -261,7 +261,7 @@ fi,
 	 */
 	if p(v250) then
 		'<span class="whEdition">'
-			" &mdash; "d250,    /* OPCION: x1 | '<br>' | " &mdash; "d250 */
+			" &mdash; "d250,    /* OPCION: x1 | '<br />' | " &mdash; "d250 */
 			replace(v250^a,' /',''),
 			/* ¿agregamos '&nbsp;' para no dejar el numerito huerfano? */
 			/* quitar puntuacion final, como en MFN 37557 (???) */
@@ -283,7 +283,7 @@ fi,
 	if /*v6001^m = '1' or*/ s(v2013,v2014) > '' and 1=0 then
 		/* Campo 260 completo, si la búsqueda fue por lugar o editorial */ 
 		proc('d1901a1901¦',replace(v260*3,'^','¦a1901¦'),'¦'),
-		"<br>"d245^c,
+		"<br />"d245^c,
 		v1901*1+| |,
 	else
 		/* Sólo fecha, para el resto de las búsquedas */
@@ -324,14 +324,14 @@ fi,
 	if /*v240.1 = '1' and*/ v240 : '"hl"' then 
 		proc('d1901a1901¦',replace(v240*3,'^','¦a1901¦'),'¦'),
 		/*' (Original: ',v1901*1+| |,')',*/
-		/*'<br><em>Tít. original: ',v240^a,'</em>',*/
-		/*'<br>',*/ 
+		/*'<br /><em>Tít. original: ',v240^a,'</em>',*/
+		/*'<br />',*/ 
 	fi,
 
 	if v500 : '"hl"' and not v240 : '"hl"' then
 		(,
 			if v500 : '"hl"' and ( v500^a : 'Trad' or v500^a : 'Transl' ) then
-				'<br><em>',v500^a,'</em>', break,
+				'<br /><em>',v500^a,'</em>', break,
 			fi,
 		),
 	fi,
@@ -339,7 +339,7 @@ fi,
 	if v600 : '"hl"' and not v240 : '"hl"' then
 		(,
 			if v600^t : '"hl"' then
-				'<br>Acerca de: <em>',v600^a,x1,v600^d,x1,v600^t,'</em>',
+				'<br />Acerca de: <em>',v600^a,x1,v600^d,x1,v600^t,'</em>',
 			fi,
 		),
 	fi,
@@ -486,7 +486,7 @@ if not v6001^s = '0' then     /* v6001^s: DISPLAY_LOCATION */
         		'<span style="font-weight: bold;font-size: 0.7em;font-family: Verdana, Arial, Helvetica, sans-serif; color: #006699;"
         			title="Solicitar en ',v6201,'">',
         			v6201,
-        		'</span><br>',
+        		'</span><br />',
             fi,
     			
 			if v2104 = 'bibima' and v859^p : 'A-' then  /* La base del INMABB tiene un tratamiento especial */
@@ -509,7 +509,7 @@ if not v6001^s = '0' then     /* v6001^s: DISPLAY_LOCATION */
 				'<div class="STresto">',
 					v859^k[1]|<!--br-->&nbsp;|        /* separamos con saltos de línea o con espacios? */
 					v859^h[1],
-					'<br><!--&nbsp;-->',replace(v859^i[1],' ','<!--br-->&nbsp;'),
+					'<br /><!--&nbsp;-->',replace(v859^i[1],' ','<!--br /-->&nbsp;'),
 					/*|<!--br-->&nbsp;|v859^v[1],*/
 				
 					if nocc(v859) > 1 then   /* tenemos más de un ejemplar */
@@ -526,7 +526,7 @@ if not v6001^s = '0' then     /* v6001^s: DISPLAY_LOCATION */
 							'&amp;curr=',v1001,
 							'&amp;total=',v1002,
 							'" title="Hay más de un ejemplar; verifique sus ubicaciones.">',
-						'<img src="',v6003^h,'img/sym_s_tree_plus.gif" style="border: none; /*vertical-align: top;*/"></a>'/ 
+						'<img src="',v6003^h,'img/sym_s_tree_plus.gif" style="border: none; /*vertical-align: top;*/" alt="" /></a>'/ 
 					fi
 				'</div>'/
 			fi,
@@ -547,7 +547,7 @@ if not v6001^s = '0' then     /* v6001^s: DISPLAY_LOCATION */
 					else
 						v859^h[1],
 						if v859^i[1] <> '' then
-							'&nbsp;',    /* OPCION: separamos con saltos de línea <br> o con espacios &nbsp; ? */
+							'&nbsp;',    /* OPCION: separamos con saltos de línea <br /> o con espacios &nbsp; ? */
 							replace(v859^i[1],' ','&nbsp;'),
 						fi,
 					fi,
@@ -558,7 +558,7 @@ if not v6001^s = '0' then     /* v6001^s: DISPLAY_LOCATION */
 						if iocc <= val(v9011) then
 							v859^h,
 							if v859^i <> '' then
-								'&nbsp;',  /* OPCION: separamos con saltos de línea <br> o con espacios &nbsp; ? */
+								'&nbsp;',  /* OPCION: separamos con saltos de línea <br /> o con espacios &nbsp; ? */
 								replace(v859^i,' ','&nbsp;'),
 							fi,
 						fi,
@@ -585,11 +585,11 @@ if not v6001^s = '0' then     /* v6001^s: DISPLAY_LOCATION */
 		else if p(v092) then   /* locally assigned Dewey call number (OCLC) */
 			'<b>',v092^c[1],x1,v092^l[1],'</b>',   /* subcampos $c y $l usados en la U N de Cuyo */
 			/* TO-DO: considerar más de un campo 092? */
-			if val(v866^a) > 1 then '<br><i>(',v866^a,')</i>', fi,
+			if val(v866^a) > 1 then '<br /><i>(',v866^a,')</i>', fi,
 			
 		else if p(v050) then   /* signatura topográfica de LC */
 			v050^a[1],x1,v050^b[1],            /* menos líneas */
-			/*'<br>',replace(v050^b[1],' ','<br>'),*/  /* más líneas */
+			/*'<br />',replace(v050^b[1],' ','<br />'),*/  /* más líneas */
 			/* TO-DO: considerar más de un campo 050; e.g. LCCN 2002658459 */
 			
 		else if p(v856) then  /* acceso mediante URI */

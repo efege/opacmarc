@@ -29,14 +29,14 @@
 	<proc>d5555</proc>
 	<call name="agrep"><pft>v4001[1]</pft></call>
 	<field action="replace" tag="1" split="occ"><pft>(v5555/)</pft></field>
-	<!--display><pft>'<br>agrep-multi.xis | Opciones para T1: ',v1+| ~ |</pft></display-->
+	<!--display><pft>'<br />agrep-multi.xis | Opciones para T1: ',v1+| ~ |</pft></display-->
 	
 	<!-- sugerencias de agrep para T2 -->
 	<proc>d5555</proc>
 	<call name="agrep"><pft>v4001[2]</pft></call>
-	<!--display><pft>'<br>agrep-multi.xis | v5555: ',v5555+| ~ |</pft></display-->
+	<!--display><pft>'<br />agrep-multi.xis | v5555: ',v5555+| ~ |</pft></display-->
 	<field action="replace" tag="2" split="occ"><pft>(v5555/)</pft></field>
-	<!--display><pft>'<br>agrep-multi.xis | Opciones para T2: ',v2+| ~ |</pft></display-->
+	<!--display><pft>'<br />agrep-multi.xis | Opciones para T2: ',v2+| ~ |</pft></display-->
 
 	
 	<!-- ATENCION: si alguno de los términos T1 o T2 tienen hits, quedan automáticamente incluidos 
@@ -65,7 +65,7 @@
 									( if iocc = val(v12[1]) then v2, break, fi )
 									if v2002 = 'TITLE' then '/(9204)' fi,
   								</pft></field>
-  								<!--display><pft>'<br>agrep-multi.xis | Base: ',v31, ', query: #'v30,'#'</pft></display-->
+  								<!--display><pft>'<br />agrep-multi.xis | Base: ',v31, ', query: #'v30,'#'</pft></display-->
   								<do task="search">
   									<parm name="db"><pft>v31</pft></parm>
   									<parm name="expression"><pft>v30</pft></parm>

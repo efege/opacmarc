@@ -7,7 +7,7 @@
 		[pft]if p(v985) then[/pft]
 			<div class="imageCell">
 				<p style="background: #DDD;">
-					<img src="[pft]v6003^h[/pft]local-db/[pft]v2104[/pft]/img/[pft]v001,'.',v985^a[/pft]" alt="Imagen de la tapa">
+					<img src="[pft]v6003^h[/pft]local-db/[pft]v2104[/pft]/img/[pft]v001,'.',v985^a[/pft]" alt="Imagen de la tapa" />
 				</p>
 			</div>
 		[pft]fi[/pft]
@@ -25,8 +25,8 @@
 
 			'<a ',
 				'href="',
-                    getenv('SCRIPT_NAME'),
-					'?IsisScript=',v2000,
+                    v6001^u,
+					'&amp;IsisScript=',v2000,
 					'&amp;task=BIB-RECORD',
 					'&amp;db=',v2104,
 					'&amp;cn=',v001,
@@ -109,8 +109,8 @@
 										'<div class="STresto">',
 											v859^k|<!--br-->&nbsp;|        /* separamos con saltos de línea o con espacios? */
 											v859^h,
-											'<!--br-->&nbsp;',replace(v859^i,' ','<!--br-->&nbsp;'),
-											|<!--br-->&nbsp;|v859^v,
+											'<!--br /-->&nbsp;',replace(v859^i,' ','<!--br-->&nbsp;'),
+											|<!--br /-->&nbsp;|v859^v,
 										'</div>'/
 										
 										/* Nro. de inventario */

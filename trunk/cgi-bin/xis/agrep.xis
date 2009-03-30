@@ -87,7 +87,7 @@
 	<!-- Leemos los resultados -->
 	<proc>d5555</proc>
 	<field action="replace" tag="5555" split="occ"><pft>,cat(v2098),</pft></field>
-	<!--display><pft>'<br>agrep.xis | agrep output, pass 1: ',v5555+| ~ |</pft></display-->
+	<!--display><pft>'<br />agrep.xis | agrep output, pass 1: ',v5555+| ~ |</pft></display-->
 	
 	<!-- Si hubo matching o la palabra es "corta", no seguimos probando -->
 	<flow action="jump"><pft>
@@ -98,7 +98,7 @@
 	<field action="replace" tag="5551"><pft>replace(v5551,'-1','-2')</pft></field>
 	<display><pft>system(v5550,x1,v5551,x1,v5552,x1,v5553,x1,v5554)</pft></display>
 	<field action="add" tag="5555" split="occ"><pft>cat(v2098)</pft></field>
-	<!--display><pft>'<br>agrep.xis | agrep output, pass 2: ',v5555+| ~ |</pft></display-->
+	<!--display><pft>'<br />agrep.xis | agrep output, pass 2: ',v5555+| ~ |</pft></display-->
 	
 	<!-- Si hubo matching o la palabra no es "más larga", no seguimos probando -->
 	<flow action="jump"><pft>
@@ -109,11 +109,11 @@
 	<field action="replace" tag="5551"><pft>,replace(v5551,'-2','-3'),</pft></field>
 	<display><pft>,system(v5550,x1,v5551,x1,v5552,x1,v5553,x1,v5554),</pft></display>
 	<field action="add" tag="5555" split="occ"><pft>,cat(v2098),</pft></field>
-	<!--display><pft>'<br>agrep.xis | agrep output, pass 3: ',v5555+| ~ |</pft></display-->
+	<!--display><pft>'<br />agrep.xis | agrep output, pass 3: ',v5555+| ~ |</pft></display-->
 	
 	<label>AGREP_END</label>
 	
-	<!--display><pft>'<br>agrep.xis | Returned value: ',v5555+| ~ |</pft></display-->
+	<!--display><pft>'<br />agrep.xis | Returned value: ',v5555+| ~ |</pft></display-->
 	<return action="replace" tag="5555" split="occ"><pft>(v5555/)</pft></return>
 
 </function>

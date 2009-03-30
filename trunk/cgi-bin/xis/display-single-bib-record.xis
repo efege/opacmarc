@@ -353,7 +353,7 @@
 			<label>Etiquetado</label>
 			<!-- ~~~~~~~~~~~~~~~~~~~~~~~~ -->
 			<display><htmlpft>
-				<div style="text-align: center;">
+				<div style="/*text-align: center;*/">
 					<div id="etiquetadoWrapper">
 						[pft],@ETIQUETADO.PFT,[/pft]
 					</div>

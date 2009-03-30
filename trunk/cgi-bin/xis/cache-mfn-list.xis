@@ -53,8 +53,8 @@
         if v6001^0 = '1' then
             '<div class="debug-info">',
                 'ARCHIVO TEMPORAL CON LOS DATOS DE LA BÚSQUEDA: ',v2098,
-                '<br>PATH_TEMP=',v6003^t,
-                '<br>cid=',v2099,
+                '<br />PATH_TEMP=',v6003^t,
+                '<br />cid=',v2099,
             '</div>'
         fi
     </pft></display>

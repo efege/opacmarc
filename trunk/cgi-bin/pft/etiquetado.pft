@@ -79,8 +79,8 @@ if s(v100,v110,v111,v130) > '' then
 	'</td>'/
 	'<td class="data">',
 	'<a href="',
-        getenv('SCRIPT_NAME'),
-		'?IsisScript=',v2000,
+        v6001^u,
+		'&amp;IsisScript=',v2000,
 		'&amp;db=',v2104,
 		'&amp;index=NAME',
 		'&amp;query=',v100*2,v110*2,v111*2,v130*2,
@@ -95,7 +95,7 @@ if s(v100,v110,v111,v130) > '' then
 	/* En general, ocultamos v240 (ver cuándo sería necesario) */
 	/*
 	if p(v240) and v240.1 = '1' then
-		'<br>'/,
+		'<br />'/,
 		proc('d1000a1000¦',
 			replace(v240*3,'^','¦a1000¦'),
 		'¦'),
@@ -137,8 +137,8 @@ if s(v700,v710,v711,v730) > '' then
 			break,
 		else
 			'<a href="',
-                getenv('SCRIPT_NAME'),
-				'?IsisScript=',v2000[1],
+                v6001^u[1],
+				'&amp;IsisScript=',v2000[1],
 				'&amp;db=',v2104[1],
 				'&amp;index=NAME',
 				'&amp;query=',replace(v5555,s(',^e',v5555^e),''),
@@ -161,7 +161,7 @@ if s(v700,v710,v711,v730) > '' then
 			else v5555,
 			fi,fi,
 			*/
-			'</a><br>'/
+			'</a><br />'/
 		fi,
 	),
 
@@ -261,8 +261,8 @@ if s(v440,v490) > '' then
 				
 				/* Construimos el link */
 				'<a href="',
-                    getenv('SCRIPT_NAME'),
-					'?IsisScript=',v2000[1],
+                    v6001^u[1],
+					'&amp;IsisScript=',v2000[1],
 					'&amp;db=',v2104[1],
 					'&amp;index=COL',
 					'&amp;query=^a',replace(v7400[1]^a,'+;',''),
@@ -274,7 +274,7 @@ if s(v440,v490) > '' then
 				if p(v440^x) then ' ISSN ',replace(v440^x,' ;','') fi,
 				'</a>',
 				if p(v440^v) then ' ; ',replace(v440^v,' ','&nbsp;') fi,
-				'<br>',
+				'<br />',
 			),
 			fi,
 			if p(v490) then
@@ -286,8 +286,8 @@ if s(v440,v490) > '' then
 					
 					/* Construimos el link */
 					'<!--a href="',
-                        getenv('SCRIPT_NAME'),
-						'?IsisScript=',v2000[1],
+                        v6001^u[1],
+						'&amp;IsisScript=',v2000[1],
 						'&amp;db=',v2104[1],
 						'&amp;index=COL',
 						'&amp;query=^a',replace(v7400[1]^a,'+;',''),
@@ -298,7 +298,7 @@ if s(v440,v490) > '' then
 					if p(v490^x) then ' ISSN ',replace(v490^x,' ;','') fi,
 					'<!--/a-->',
 					if p(v490^v) then ' ; ',replace(v490^v,' ','&nbsp;') fi,
-					'<br>',
+					'<br />',
 				),
 			fi,
 		'</td>'
@@ -377,7 +377,7 @@ if p(v534) then
 			replace(v534*3,'^','¦a1000¦'),
 		'¦',
 	),
-	'<li>',(v1000*1+| |),'<br>'/
+	'<li>',(v1000*1+| |),'<br />'/
 fi,
 
 /* --------- Nota general ---------- */
@@ -413,7 +413,7 @@ if p(v520) then
 				'Resumen',
 			'</td>'/
 			'<td class="data">'/
-				replace(v520^a,'--','&mdash;'),'<br>'/
+				replace(v520^a,'--','&mdash;'),'<br />'/
 			'</td>'
 		'</tr>'/
 	),
@@ -463,7 +463,7 @@ if p(v510) then
 		'</td>'/
 		'<td class="data">'/
 			(,
-				if iocc > 1 then '<br>' fi,
+				if iocc > 1 then '<br />' fi,
 				v510^a,x1,
 				if v510^a : 'MR' then,  /* link para MR */
 					'<a href="http://www.ams.org/mathscinet-getitem?mr=', replace(v510^c,' #',':'), '" title="Acceso al texto de la reseña en MathSciNet">'
@@ -495,7 +495,7 @@ fi,
 	
 	'<div style="border: solid 1px #AAA; background: #FFC; padding: 0 0.3em; margin-bottom: 0.3em;">',
 		v001/
-		"<br>lccn: "v010^a/
+		"<br />lccn: "v010^a/
 	'</div>'/,
 	
 	if s(v50,v82) > '' then
@@ -505,14 +505,14 @@ fi,
 		if p(v050) then
 			'lcc: ',
 			'<a href="',
-                getenv('SCRIPT_NAME'),
-				'?IsisScript=',v2000[1],
+                v6001^u[1],
+				'&amp;IsisScript=',v2000[1],
 				'&amp;query=-LCCLASS=',v050^a.2,
 				'&amp;db=CLASS" title="Buscar obras dentro de esta misma clase">',
 			v050^a.2,
 			'</a>',
 			v050^a*2,
-			'<br>'/
+			'<br />'/
 		fi/
 	
 		/* ATENCION: tanto v82 como v82^a son repetibles */
@@ -522,7 +522,7 @@ fi,
 	fi,
 	
 	'<div style="border: solid 1px #AAA; background: #FFC; padding: 0 0.3em;">'
-		( v995+|<br>| ),/
+		( v995+|<br />| ),/
 	'</div>'/,
 	
 	'</td>',
@@ -609,8 +609,8 @@ if s(v600,v610,v630,v650,v651,v653) > '' then
 			'<li>'
                 if v7601[1] > '1' then
     				'<a style="font-weight: normal;" href="',
-                        getenv('SCRIPT_NAME'),
-    					'?IsisScript=',v2000[1],
+                        v6001^u[1],
+    					'&amp;IsisScript=',v2000[1],
     					'&amp;db=',v2104[1],
     					'&amp;task=BIB-H-SEARCH',
     					'&amp;index=SUBJ',
@@ -692,8 +692,8 @@ if s(v100,v700) > '' then
                 if v7101[1] > '1' then
     				/* Construimos el link */
     				'<a style="font-weight: normal;" href="',
-                        getenv('SCRIPT_NAME'),
-    					'?IsisScript=',v2000[1],
+                        v6001^u[1],
+    					'&amp;IsisScript=',v2000[1],
     					'&amp;db=',v2104[1],
     					'&amp;task=BIB-H-SEARCH',
     					'&amp;index=NAME',
@@ -725,7 +725,7 @@ if s(v100,v700) > '' then
                 else
                     '</span>',
                 fi,
-				if iocc < nocc(v8100) then ' <br> ' fi,
+				if iocc < nocc(v8100) then ' <br /> ' fi,
 			),
 		'</td>'
 	'</tr>'/
@@ -754,8 +754,8 @@ if s(v110,v710) > '' then
 				
 				/* Construimos el link */
 				'<a style="font-weight: normal;" href="',
-                    getenv('SCRIPT_NAME'),
-					'?IsisScript=',v2000[1],
+                    v6001^u[1],
+					'&amp;IsisScript=',v2000[1],
 					'&amp;db=',v2104[1],
 					'&amp;task=BIB-H-SEARCH',
 					'&amp;index=NAME',
@@ -780,7 +780,7 @@ if s(v110,v710) > '' then
 						s('^4',v8110^4),''),
 						s('^9',v8110^9),''),
 				'</a>',
-				if iocc < nocc(v8110) then ' <br> ' fi,
+				if iocc < nocc(v8110) then ' <br /> ' fi,
 			),
 		'</td>'
 	'</tr>'/
@@ -809,8 +809,8 @@ if s(v111,v711) > '' then
 				
 				/* Construimos el link */
 				'<a style="font-weight: normal;" href="',
-                    getenv('SCRIPT_NAME'),
-					'?IsisScript=',v2000[1],
+                    v6001^u[1],
+					'&amp;IsisScript=',v2000[1],
 					'&amp;db=',v2104[1],
 					'&amp;task=BIB-H-SEARCH',
 					'&amp;index=NAME',
@@ -833,7 +833,7 @@ if s(v111,v711) > '' then
 					s('^4',v8111^4),''),
 					s('^9',v8111^9),''),
 				'</a>',
-				if iocc < nocc(v8111) then ' <br> ' fi,
+				if iocc < nocc(v8111) then ' <br /> ' fi,
 			),
 		'</td>'
 	'</tr>'/
@@ -849,8 +849,8 @@ if p(v9084) and s(mpu,v084^2,mpl) : 'MSC' then
 		'<td class="label">Códigos MSC</td>',
 		'<td class="data">',
 			'<!--a href="',
-                getenv('SCRIPT_NAME'),
-				'?IsisScript=',v2000,
+                v6001^u,
+				'&amp;IsisScript=',v2000,
 				'&amp;db=',v2104,
 				'&amp;task=CLASS-KW-SEARCH',
 				'&amp;query=',v084^a+| |,
@@ -863,8 +863,8 @@ if p(v9084) and s(mpu,v084^2,mpl) : 'MSC' then
 			(,
 				'<li>'
 				'<a href="',
-                    getenv('SCRIPT_NAME'),
-					'?IsisScript=',v2000[1],
+                    v6001^u[1],
+					'&amp;IsisScript=',v2000[1],
 					'&amp;db=',v2104[1],
 					'&amp;task=CLASS-KW-SEARCH',
 					'&amp;query=',v084^a,
@@ -874,7 +874,7 @@ if p(v9084) and s(mpu,v084^2,mpl) : 'MSC' then
 					v084^a,
 				'</a>',
 				x1,
-				/* ref(['MSC']l(['MSC']v084^a),v2),'<br>', [suspendido por error "cntread/read/cnt2", 24/sep/05] */
+				/* ref(['MSC']l(['MSC']v084^a),v2),'<br />', [suspendido por error "cntread/read/cnt2", 24/sep/05] */
 			),
 			'</ul>'
 		'</td>',
@@ -900,7 +900,7 @@ if p(v246) then
 		'<tr>'
 			'<td class="label">Títulos&nbsp;alt.</td>'
 			'<td class="data">',
-				( v5555+|<br>| ),
+				( v5555+|<br />| ),
 			'</td>'
 		'</tr>'/
 	fi,
@@ -924,7 +924,7 @@ if p(v856) then
 			'<td class="label">',if p(v856^3) then v856^3 else 'Acceso en línea' fi,'</td>'/
 			'<td class="data">',
 				'<a href="',v856^u,'">',if p(v856^y) then v856^y else v856^u fi,'</a>'/
-				"<br>"v856^z,
+				"<br />"v856^z,
 			'</td>'
 		'</tr>'/
 	),
@@ -1012,7 +1012,7 @@ if p(v773) then
 					else if v1000.1 = 'x' then
 						' ISSN ', v1000*1,    /* $x: ISSN */
 					else
-						'<br>',replace(v1000*1,' : ',': '),
+						'<br />',replace(v1000*1,' : ',': '),
 					fi,fi,fi,
 					
 					/*'</td>',
@@ -1057,7 +1057,7 @@ fi,
 		 */
 		 
 		if p(v859^h) then
-			/* if v773[1].1 = '0' then '<hr>' fi, */
+			/* if v773[1].1 = '0' then '<hr />' fi, */
 			'<thead>',
 				'<tr>',
 					'<th class="locationHeader" valign="top">UBICACION</th>',
@@ -1094,7 +1094,7 @@ fi,
 				'<tr>',
 					'<td style="padding: 0.3em 0.5em; /*border-bottom: 1px solid #E0E0E0;*/ font-weight: bold; /*padding: 4px;*/">',
 						v050^a,
-						'<br>',replace(v050^b,' ','<br>'),
+						'<br />',replace(v050^b,' ','<br />'),
 					'</td>'
 				'</tr>',
 			),
@@ -1165,15 +1165,15 @@ fi,
 							elsecase
 								if v8*17.1 = 'k' then  /* United Kingdom */
 									'<a href="http://www.amazon.co.uk/exec/obidos/ASIN/',s(v020^a[1]).10,'">Amazon.co.uk</a>'/
-									'<br>'/
+									'<br />'/
 								fi,
 								if v8*17.1 = 'c' then  /* Canada */
 									'<a href="http://www.amazon.ca/exec/obidos/ASIN/',s(v020^a[1]).10,'">Amazon.ca</a>'/
-									'<br>'/
+									'<br />'/
 								fi,
 								'<a href="http://www.amazon.com/exec/obidos/ASIN/',s(v020^a[1]).10,'">Amazon.com</a>'/
-								'<br>'/
-								'<a href="http://search.barnesandnoble.com/booksearch/isbninquiry.asp?ISBN=',s(v020^a[1]).10,'">Barnes & Noble</a>'/
+								'<br />'/
+								'<a href="http://search.barnesandnoble.com/booksearch/isbninquiry.asp?ISBN=',s(v020^a[1]).10,'">Barnes &amp; Noble</a>'/
 						endsel,
 					fi,
 				'</td>'

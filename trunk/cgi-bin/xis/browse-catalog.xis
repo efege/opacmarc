@@ -44,7 +44,7 @@
 	</loop>
 </do>
 
-<!--display><pft>'<br>Primer posting: ',v2009</pft></display-->
+<!--display><pft>'<br />Primer posting: ',v2009</pft></display-->
 
 <!-- retrocedemos una posición -->
 <field action="replace" tag="2009"><pft>
@@ -88,7 +88,7 @@
 			fi,
 		),
 		[/pft], por orden de ubicación del material
-		<br> -->
+		<br /> -->
 		<!--span style="font-style: italic;">
 		Por favor informe errores en el ordenamiento (luego de verificar que no se trata de errores en la carga
 		de datos)</span>
@@ -128,7 +128,7 @@
 			v110*2,
 			v111*2,
 		</pft></field>
-		<!--display><pft>'<hr>9001: 'v9001,' . 9004: 'v9004</pft></display-->
+		<!--display><pft>'<hr />9001: 'v9001,' . 9004: 'v9004</pft></display-->
 		<field action="replace" tag="9005"><pft>
 			if v9004 <> v9001 then
 				'NEW_MAIN_HEADING',

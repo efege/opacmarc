@@ -8,10 +8,11 @@
 <div id="busqAvanzada" class="searchFormCell">
 
     <form action="[pft]v6001^u[/pft]" method="get">
-    <input type="hidden" name="IsisScript" value="[pft]v2000[/pft]">
-    <input type="hidden" name="db" value="[pft]v2104[/pft]">
-    <input type="hidden" name="task" value="BIB-KW-SEARCH">
-    <input type="hidden" name="advanced" value="1">
+    <input type="hidden" name="IsisScript" value="[pft]v2000[/pft]" />
+    <input type="hidden" name="db" value="[pft]v2104[/pft]" />
+    <input type="hidden" name="task" value="BIB-KW-SEARCH" />
+    <input type="hidden" name="form" value="s" />
+    <input type="hidden" name="advanced" value="1" />
     
     <h4 class="searchFormHead">
         <strong>Búsqueda avanzada</strong>
@@ -34,18 +35,18 @@
         <tr>
             <td>
                las palabras
-                <input type="text" name="filter1" size="26" value="[pft]v2051[/pft]">
+                <input type="text" name="filter1" size="26" value="[pft]v2051[/pft]" />
                 en
                 <select name="filterType1">
-                    <option value="TITLE" [pft]if v2052='TITLE' then 'selected' fi[/pft]>título</option>
-                    <option value="NAME" [pft]if v2052='NAME' OR a(v2052) then 'selected' fi[/pft]>autor</option>
-                    <option value="SUBJ" [pft]if v2052='SUBJ' then 'selected' fi[/pft]>tema</option>
-                    <option value="PUB_NAME" [pft]if v2052='PUB_NAME' then 'selected' fi[/pft]>editorial</option>
-                    <option value="PUB_PLACE" [pft]if v2052='PUB_PLACE' then 'selected' fi[/pft]>lugar de publicación</option>
-                    <option value="NOTE" [pft]if v2052='NOTE' then 'selected' fi[/pft]>notas</option>
-                    <option value="SN" [pft]if v2052='SN' then 'selected' fi[/pft]>ISBN/ISSN</option>
-                    <option value="ACCESSION" [pft]if v2052='ACCESSION' then 'selected' fi[/pft]>inventario</option>
-                    <option value="ANY" [pft]if v2052='ANY' then 'selected' fi[/pft]>cualquier campo</option>
+                    <option value="TITLE" [pft]if v2052='TITLE' then 'selected="selected"' fi[/pft]>título</option>
+                    <option value="NAME" [pft]if v2052='NAME' OR a(v2052) then 'selected="selected"' fi[/pft]>autor</option>
+                    <option value="SUBJ" [pft]if v2052='SUBJ' then 'selected="selected"' fi[/pft]>tema</option>
+                    <option value="PUB_NAME" [pft]if v2052='PUB_NAME' then 'selected="selected"' fi[/pft]>editorial</option>
+                    <option value="PUB_PLACE" [pft]if v2052='PUB_PLACE' then 'selected="selected"' fi[/pft]>lugar de publicación</option>
+                    <option value="NOTE" [pft]if v2052='NOTE' then 'selected="selected"' fi[/pft]>notas</option>
+                    <option value="SN" [pft]if v2052='SN' then 'selected="selected"' fi[/pft]>ISBN/ISSN</option>
+                    <option value="ACCESSION" [pft]if v2052='ACCESSION' then 'selected="selected"' fi[/pft]>inventario</option>
+                    <option value="ANY" [pft]if v2052='ANY' then 'selected="selected"' fi[/pft]>cualquier campo</option>
                 </select>
             </td>
         </tr>
@@ -53,36 +54,36 @@
         <tr>
             <td id="filterOp_cell">
                 <select name="filterOp">
-                    <option value="AND" [pft]if v2053='AND' OR a(v2053) then ' selected' fi[/pft]>y además</option>
-                    <option value="OR" [pft]if v2053='OR' then ' selected' fi[/pft]>o bien</option>
-                    <!--option value="AND NOT" [pft]if v2005='OR' then ' selected' fi[/pft]>pero no</option-->
+                    <option value="AND" [pft]if v2053='AND' OR a(v2053) then ' selected="selected"' fi[/pft]>y además</option>
+                    <option value="OR" [pft]if v2053='OR' then ' selected="selected"' fi[/pft]>o bien</option>
+                    <!--option value="AND NOT" [pft]if v2005='OR' then ' selected="selected"' fi[/pft]>pero no</option-->
                 </select>
             </td>
         </tr>
         
         <!--tr>
             <td>
-                <input type="radio" name="oper" id="oper_and" value="AND" [pft]if v2005='AND' OR a(v2005) then ' checked' fi[/pft]><label for="oper_and">y además (AND)</label>
-                <br>
-                <input type="radio" name="oper" id="oper_or" value="OR" [pft]if v2005='OR' then ' selected' fi[/pft]><label for="oper_or">o bien (OR)</label>
+                <input type="radio" name="oper" id="oper_and" value="AND" [pft]if v2005='AND' OR a(v2005) then ' checked="checked"' fi[/pft] /><label for="oper_and">y además (AND)</label>
+                <br />
+                <input type="radio" name="oper" id="oper_or" value="OR" [pft]if v2005='OR' then ' selected="selected"' fi[/pft] /><label for="oper_or">o bien (OR)</label>
             </td>
         </tr-->
         
         <tr>
             <td>
                las palabras
-                <input type="text" name="filter2" size="26" value="[pft]v2054[/pft]">
+                <input type="text" name="filter2" size="26" value="[pft]v2054[/pft]" />
                 en
                 <select name="filterType2">
-                    <option value="TITLE" [pft]if v2055='TITLE' OR a(v2055) then 'selected' fi[/pft]>título</option>
-                    <option value="NAME" [pft]if v2055='NAME' then 'selected' fi[/pft]>autor</option>
-                    <option value="SUBJ" [pft]if v2055='SUBJ' then 'selected' fi[/pft]>tema</option>
-                    <option value="PUB_NAME" [pft]if v2055='PUB_NAME' then 'selected' fi[/pft]>editorial</option>
-                    <option value="PUB_PLACE" [pft]if v2055='PUB_PLACE' then 'selected' fi[/pft]>lugar de publicación</option>
-                    <option value="NOTE" [pft]if v2055='NOTE' then 'selected' fi[/pft]>notas</option>
-                    <option value="SN" [pft]if v2055='SN' then 'selected' fi[/pft]>ISBN/ISSN</option>
-                    <option value="ACCESSION" [pft]if v2055='ACCESSION' then 'selected' fi[/pft]>inventario</option>
-                    <option value="ANY" [pft]if v2055='ANY' then 'selected' fi[/pft]>cualquier campo</option>
+                    <option value="TITLE" [pft]if v2055='TITLE' OR a(v2055) then 'selected="selected"' fi[/pft]>título</option>
+                    <option value="NAME" [pft]if v2055='NAME' then 'selected="selected"' fi[/pft]>autor</option>
+                    <option value="SUBJ" [pft]if v2055='SUBJ' then 'selected="selected"' fi[/pft]>tema</option>
+                    <option value="PUB_NAME" [pft]if v2055='PUB_NAME' then 'selected="selected"' fi[/pft]>editorial</option>
+                    <option value="PUB_PLACE" [pft]if v2055='PUB_PLACE' then 'selected="selected"' fi[/pft]>lugar de publicación</option>
+                    <option value="NOTE" [pft]if v2055='NOTE' then 'selected="selected"' fi[/pft]>notas</option>
+                    <option value="SN" [pft]if v2055='SN' then 'selected="selected"' fi[/pft]>ISBN/ISSN</option>
+                    <option value="ACCESSION" [pft]if v2055='ACCESSION' then 'selected="selected"' fi[/pft]>inventario</option>
+                    <option value="ANY" [pft]if v2055='ANY' then 'selected="selected"' fi[/pft]>cualquier campo</option>
                 </select>
             </td>
         </tr>
@@ -97,18 +98,18 @@
         <tr>
             <td>
                las palabras
-                <input type="text" name="exclude" size="26" value="[pft]v2056[/pft]">
+                <input type="text" name="exclude" size="26" value="[pft]v2056[/pft]" />
                 en
                 <select name="excludeType">
-                    <option value="TITLE" [pft]if v2057='TITLE' then 'selected' fi[/pft]>título</option>
-                    <option value="NAME" [pft]if v2057='NAME' then 'selected' fi[/pft]>autor</option>
-                    <option value="SUBJ" [pft]if v2057='SUBJ' then 'selected' fi[/pft]>tema</option>
-                    <option value="PUB_NAME" [pft]if v2057='PUB_NAME' then 'selected' fi[/pft]>editorial</option>
-                    <option value="PUB_PLACE" [pft]if v2057='PUB_PLACE' then 'selected' fi[/pft]>lugar de publicación</option>
-                    <option value="NOTE" [pft]if v2057='NOTE' then 'selected' fi[/pft]>notas</option>
-                    <option value="SN" [pft]if v2057='SN' then 'selected' fi[/pft]>ISBN/ISSN</option>
-                    <option value="ACCESSION" [pft]if v2057='ACCESSION' then 'selected' fi[/pft]>inventario</option>
-                    <option value="ANY" [pft]if v2057='ANY' OR a(v2057) then 'selected' fi[/pft]>cualquier campo</option>
+                    <option value="TITLE" [pft]if v2057='TITLE' then 'selected="selected"' fi[/pft]>título</option>
+                    <option value="NAME" [pft]if v2057='NAME' then 'selected="selected"' fi[/pft]>autor</option>
+                    <option value="SUBJ" [pft]if v2057='SUBJ' then 'selected="selected"' fi[/pft]>tema</option>
+                    <option value="PUB_NAME" [pft]if v2057='PUB_NAME' then 'selected="selected"' fi[/pft]>editorial</option>
+                    <option value="PUB_PLACE" [pft]if v2057='PUB_PLACE' then 'selected="selected"' fi[/pft]>lugar de publicación</option>
+                    <option value="NOTE" [pft]if v2057='NOTE' then 'selected="selected"' fi[/pft]>notas</option>
+                    <option value="SN" [pft]if v2057='SN' then 'selected="selected"' fi[/pft]>ISBN/ISSN</option>
+                    <option value="ACCESSION" [pft]if v2057='ACCESSION' then 'selected="selected"' fi[/pft]>inventario</option>
+                    <option value="ANY" [pft]if v2057='ANY' OR a(v2057) then 'selected="selected"' fi[/pft]>cualquier campo</option>
                 </select>
             </td>
         </tr>
@@ -131,21 +132,21 @@
         <tr>
             <td class="label">Fecha:</td>
             <td>
-                desde <input size="4" name="fecha1" maxlength="4"> 
-                y hasta <input size="4" name="fecha2" maxlength="4">
+                desde <input size="4" name="fecha1" maxlength="4" /> 
+                y hasta <input size="4" name="fecha2" maxlength="4" />
                 &nbsp;<span style="color: #777;">(rango: [pft]cat('DATES.TXT')[/pft])</span> 
             </td>
         </tr>
         <tr>
             <td class="label">Lugar:</td>
             <td>
-                <input type="text" name="place" size="26">
+                <input type="text" name="place" size="26" />
             </td>
         </tr>
         <tr>
             <td class="label">&nbsp;&nbsp;Editorial:</td>
             <td>
-                <input type="text" name="pub" size="26">
+                <input type="text" name="pub" size="26" />
             </td>
         </tr>
     </table>
@@ -157,14 +158,14 @@
    <table cellspacing="0" cellpadding="2" border="0">
     <tr>
         <td class="label">
-            <input type="radio" name="date_search_type" value="all" checked="checked" id="date_search_type_all">
+            <input type="radio" name="date_search_type" value="all" checked="checked" id="date_search_type_all" />
             <label for="date_search_type_all">Sin límite de fechas</label>
             &nbsp;<span style="color: #666;">(rango: [pft]cat('DATES.TXT')[/pft])</span> 
         </td>
     </tr>
    <tr>
         <td class="label">
-            <input type="radio" name="date_search_type" value="single" id="date_search_type_single">
+            <input type="radio" name="date_search_type" value="single" id="date_search_type_single" />
             <label for="date_search_type_single">
                 Publicado
             </label>
@@ -173,18 +174,18 @@
                 <option value="before">antes de</option>
                 <option value="after">después de</option>
             </select>
-            <input size="4" name="pub_date" id="pub_date" maxlength="4"> 
+            <input size="4" name="pub_date" id="pub_date" maxlength="4" /> 
         </td>
     </tr>
     <tr>
         <td class="label">
-            <input type="radio" name="date_search_type" value="multi" id="date_search_type_multi">
+            <input type="radio" name="date_search_type" value="multi" id="date_search_type_multi" />
             <label for="date_search_type_multi">
                 Publicado entre
             </label>
-            <input size="4" name="pub_date_from" id="pub_date_from" maxlength="4"> 
+            <input size="4" name="pub_date_from" id="pub_date_from" maxlength="4" /> 
             &nbsp;y&nbsp;
-            <input size="4" name="pub_date_to" id="pub_date_to" maxlength="4">
+            <input size="4" name="pub_date_to" id="pub_date_to" maxlength="4" />
         </td>
     </tr>
     </table>
@@ -200,8 +201,8 @@
    <!--tr>
         <td class="label">Fecha de publicación:</td>
         <td>
-            entre <input size="4" name="fecha1" maxlength="4"> 
-            &nbsp;y&nbsp; <input size="4" name="fecha2" maxlength="4">
+            entre <input size="4" name="fecha1" maxlength="4" /> 
+            &nbsp;y&nbsp; <input size="4" name="fecha2" maxlength="4" />
             &nbsp;<span style="color: #666;">(rango: [pft]cat('DATES.TXT')[/pft])</span> 
         </td>
     </tr-->
@@ -229,20 +230,20 @@
             <select name="format">
                 <!-- TO-DO: poblar este listado con los valores presentes en la base -->
                 <option value="" selected="selected">-- todos los materiales --</option>
-                <!--option value=c>Printed Music</option>
-                <option value=d>Manuscript Music</option>
-                <option value=j>Musical Sound Recordings</option-->
+                <!--option value="c">Printed Music</option>
+                <option value="d">Manuscript Music</option>
+                <option value="j">Musical Sound Recordings</option-->
                 <option value="i">Grabaciones sonoras (no musicales)</option>
-                <!--option value=e>Mapas</option-->
-                <!--option value=f>Manuscript Cartographic Materials</option>
-                <option value=p>Archival and Manuscript Material</option>
-                <option value=t>Unpublished Item</option>
-                <option value=g>Video, Film, Slides</option>
-                <option value=k>Photographs, Prints, Graphics</option>
-                <option value=m>Databases, Software, Data files</option>
-                <option value=r>Artifacts, Models, Realia</option>
-                <option value=o>Kit</option-->
-                <option value=a>Material impreso</option>
+                <!--option value="e">Mapas</option-->
+                <!--option value="f">Manuscript Cartographic Materials</option>
+                <option value="p">Archival and Manuscript Material</option>
+                <option value="t">Unpublished Item</option>
+                <option value="g">Video, Film, Slides</option>
+                <option value="k">Photographs, Prints, Graphics</option>
+                <option value="m">Databases, Software, Data files</option>
+                <option value="r">Artifacts, Models, Realia</option>
+                <option value="o">Kit</option-->
+                <option value="a">Material impreso</option>
             </select> 
         </td>
     </tr>
@@ -322,9 +323,9 @@ Forma literaria:
     </table>
     
     <!--
-    <input type="radio" name="trans" value="YES" id="trans-yes"><label for="trans-yes">Sí</label>
-    &nbsp;<input type="radio" name="trans" value="NO" id="trans-no"><label for="trans-no">No</label>
-    &nbsp;<input type="radio" name="trans" value="" id="trans-any" checked><label for="trans-any">No es relevante</label>
+    <input type="radio" name="trans" value="YES" id="trans-yes" /><label for="trans-yes">Sí</label>
+    &nbsp;<input type="radio" name="trans" value="NO" id="trans-no" /><label for="trans-no">No</label>
+    &nbsp;<input type="radio" name="trans" value="" id="trans-any" checked="checked" /><label for="trans-any">No es relevante</label>
     -->
 
 </fieldset>
@@ -333,15 +334,15 @@ Forma literaria:
 <legend>Opciones para presentar los resultados</legend>
 <div id="wrap_result_options">
 Ordenar los registros por <select><option>fecha</option></select>
-<br>
-<br>
+<br />
+<br />
 Mostrar <select><option>20</option></select> registros por página
 </div>
 </fieldset-->
 
 <div style="text-align: center; padding: 0.5em; margin-bottom: 1em;">
-    <input type="reset" class="button" value="Limpiar datos" style="float: left; margin-left: 1em;"> <!-- Opcional? -->
-    <input type="submit" class="button" value="Buscar" style="width: 10em; height: 2.5em;">
+    <input type="reset" class="button" value="Limpiar datos" style="float: left; margin-left: 1em;" /> <!-- Opcional? -->
+    <input type="submit" class="button" value="Buscar" style="width: 10em; height: 2.5em;" />
 </div>
 
 </form>
@@ -352,10 +353,10 @@ Mostrar <select><option>20</option></select> registros por página
     <table cellspacing="0" cellpadding="2" width="100%" border="0">
         <tr>
             <td valign="top" width="9" style="padding-top: 0.3em;">
-                <img src="/img/right.gif" alt="">
+                <img src="/img/right.gif" alt="" />
             </td>
             <td valign="top">
-                <a class="newSearch" href="[pft]v6001^u[/pft]?IsisScript=[pft]v2000[/pft]&amp;db=[pft]v2104[/pft]&amp;showForm=simple">
+                <a class="newSearch" href="[pft]v6001^u[/pft]&amp;IsisScript=[pft]v2000[/pft]&amp;db=[pft]v2104[/pft]&amp;showForm=simple">
                     Búsqueda simple e índices
                 </a>
             </td>
@@ -368,20 +369,20 @@ Mostrar <select><option>20</option></select> registros por página
         
         <tr>
             <td valign="top" width="9" style="padding-top: 0.3em;">
-                <img src="/img/right.gif" alt="">
+                <img src="/img/right.gif" alt="" />
             </td>
             <td valign="top">
-                <a class="newSearch" href="[pft]v6001^u[1][/pft]?IsisScript=[pft]v2000[1][/pft]&amp;query=NI:1&amp;db=bibima&amp;searchType=SUBJ">
+                <a class="newSearch" href="[pft]v6001^u[1][/pft]&amp;IsisScript=[pft]v2000[1][/pft]&amp;query=NI:1&amp;db=bibima&amp;searchType=SUBJ">
                     Clasificación temática MSC&nbsp;2000
                 </a>
-                <br>
+                <br />
             </td>
         </tr>
         [pft]fi[/pft]
         
         <tr>
             <td valign="top" width="9" style="padding-top: 0.3em;">
-                <img src="/img/right.gif" alt="">
+                <img src="/img/right.gif" alt="" />
             </td>
         <td valign="top"><a hhref="">Ayuda</a></td></tr>
     </table>

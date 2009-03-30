@@ -1,17 +1,19 @@
+/* ================= COMPLETE.CSS ================== */
+
 	/* margin y padding: intentamos usar % (horizontal) y em (vertical) */
 	
-	div#recordWrapper {
+	div.opacmarc div#recordWrapper {
 		background: #FFF;/*#FEFEF0; /*#ECFBEC; /*#E0EEE0; /*#F0F0F0;*/
 		/*border-top: 1px solid #CCC;*/
 		/*clear: both;*/
 		margin-top: 0.2em;
 		padding: 0.6em 1% 0em;
 	}
-	div#recordWrapper * {
+	div.opacmarc div#recordWrapper * {
 		margin: 0;
 		padding: 0;
 	}
-	div#columnsWrapper {
+	div.opacmarc div#columnsWrapper {
 		background-image: url(../img/999999a.gif);
 		background-position: 61% 0;
 		background-repeat: repeat-y;
@@ -19,7 +21,7 @@
 		margin-bottom: 0.5em;
 		width: 100%;
 	}
-	div#doctype {
+	div.opacmarc div#doctype {
 		background: #CCC;
 		border-top: 1px solid #BBB;
 		border-bottom: 1px dotted #BBB;
@@ -33,13 +35,13 @@
 		text-align: center;
 		text-transform: uppercase;
 	}
-	div#mainColumn {
+	div.opacmarc div#mainColumn {
 		/*background: #fff;*/
 		float: left;
 		/*padding: 1em 0.5%;*/
 		width: 60%;
 	}
-	div#description {
+	div.opacmarc div#description {
 		/*background: #ECFBEC;*/
 		/*border: 1px solid #999;
 		-moz-border-radius: 10px;*/
@@ -47,41 +49,42 @@
 		padding: 1em 2%;
 		padding-top: 0;
 	}
-	/*div#mainDescription img {
+	/*div.opacmarc div#mainDescription img {
 		border: 1px solid #999;
 		margin: 0.2em 1em 0.7em 0;
 	}*/
-	h3#title {
+	div.opacmarc h3#title {
 		font-size: 115%;
 		font-weight: bold;
 		line-height: 1.3;
 		margin-bottom: 0.6em;
 	}
-	h4#responsabilidad {
+	div.opacmarc h4#responsabilidad {
 		font-size: 100%;
 		font-weight: bold;
 		margin-bottom: 0.8em;
 	}
-	p#edicion, p#numeracion {
+	div.opacmarc p#edicion,
+	div.opacmarc p#numeracion {
 		margin-bottom: 0.6em;
 	}
-	p#publication {
+	div.opacmarc p#publication {
 		margin-bottom: 0.6em;
 	}
-	p#descrFisica {
+	div.opacmarc p#descrFisica {
 		margin-bottom: 0.6em;
 	}
-	p#serie {
+	div.opacmarc p#serie {
 		margin-bottom: 0.6em;
 	}
-	p#isbn {
+	div.opacmarc p#isbn {
 		/*margin-bottom: 0.7em;*/
 	}
-	div#recordWrapper span.label {
+	div.opacmarc div#recordWrapper span.label {
 		color: #333;
 		font-weight: bold;
 	}
-	div#notes {
+	div.opacmarc div#notes {
 		/*background: #fff;*/
 		/*border: 2px solid #CCC;
 		-moz-border-radius: 8px;*/
@@ -89,26 +92,26 @@
 		margin-top: 0.5em;
 		/*padding: 0 3% 0.7em 3%;*/
 	}
-	div#notes p {
+	div.opacmarc div#notes p {
 		margin-top: 0.5em;
 	}
-	div#contents {
+	div.opacmarc div#contents {
 		/*background: #ECFBEC;*/
 		/*border: 1px solid #999;*/
 		/*-moz-border-radius: 10px;*/
 		margin-top: 1em;
 		padding-bottom: 0.1em; /* ?? */
 	}
-	div#contents ul {
+	div.opacmarc div#contents ul {
 		list-style: none;
 		/*padding-left: 0.5em;*/
 		margin: 1em 0.7em 1em 1em;
 	}
-	div#contents ul.extraContents { /* 2da occ y posteriores del campo 505*/
+	div.opacmarc div#contents ul.extraContents { /* 2da occ y posteriores del campo 505*/
 		border-top: 1px dotted #999;
 		padding-top: 0.5em;
 	}
-	div#contents li {
+	div.opacmarc div#contents li {
 		background-image: url(../img/0180_bullet.gif);
 		background-position: 0 0.25em;
 		background-repeat: no-repeat;
@@ -116,19 +119,19 @@
 		padding-left: 1em;
 		/*text-indent: -1.5em;*/
 	}
-	div#recordWrapper span.titulo505 {
+	div.opacmarc div#recordWrapper span.titulo505 {
 		font-weight: bold;
 	}
-	div#mainColumn table td {
+	div.opacmarc div#mainColumn table td {
 		vertical-align: top;
 	}
-	div#v773 {
+	div.opacmarc div#v773 {
 		margin-left: 0.7em;
-		margin-top: -1em;  /* por qué necesito esto?? */
+		margin-top: -1em;  /* por quÃ© necesito esto?? */
 	}
 	
 	/* ******************* SIDEBAR ******************* */
-	#sidebar {
+	div.opacmarc #sidebar {
 		/*background: #ECFBEC;*/
 		/*border: 1px solid #ccc;*/
 		float: right;
@@ -137,9 +140,9 @@
 	}
 	
 	/* ******************* LABELS ******************* */
-	#recordWrapper h3.label {
+	div.opacmarc #recordWrapper h3.label {
 	
-		/* Activar este bloque para ver un diseño de h3.label */
+		/* Activar este bloque para ver un diseÃ±o de h3.label */
 		background: #F0F0F0; /*#B0E0E6; /*  #ADD8E6#7ADAE1; /*#BBB; /*#00FFFF; /*#D2CFC0; /*#908470; /*#EBD3A3; /*#87cefa; /* lightskyblue */
 		/*background-image: url(http://www.yuiblog.com/i/bg.gif);*/
 		border-bottom: 1px solid #D0D0D0;
@@ -152,22 +155,22 @@
 		margin-bottom: 0.3em;
 		padding: 0.1em 0.4em 0.1em 0.6em;
 		
-		/* Activar este bloque para ver otro diseño de h3.label */
+		/* Activar este bloque para ver otro diseÃ±o de h3.label */
 		/*border-bottom: 1px dotted #666;
 		color: #333;
 		margin: 0 0.6em;
 		padding: 0.2em 0;*/
 	}
-	* html #recordWrapper h3.label {  /* para IE (no entiende 'dotted') */
+	* html div.opacmarc #recordWrapper h3.label {  /* para IE (no entiende 'dotted') */
 		/*border-bottom: 1px solid #CCC;*/
 	}
 	
 	/* ******************* LISTAS ******************* */
-	#sidebar ul {
+	div.opacmarc #sidebar ul {
 		list-style: none;
 		margin: 0.5em 1em 0.7em 0.5em;
 	}
-	#sidebar ul li {
+	div.opacmarc #sidebar ul li {
 		background-image: url(../img/0180_bullet.gif);
 		background-position: 0 0.25em;
 		background-repeat: no-repeat;
@@ -176,7 +179,13 @@
 	}
 
 	/* ******************* SECCIONES ******************* */
-	div#ubicacion, div#holdings, div#outerLinks, div#accessPoints, div#subjectAccessPoints, div#classCodes, div#imageCell {
+	div.opacmarc div#ubicacion,
+	div.opacmarc div#holdings,
+	div.opacmarc div#outerLinks,
+	div.opacmarc div#accessPoints,
+	div.opacmarc div#subjectAccessPoints,
+	div.opacmarc div#classCodes,
+	div.opacmarc div#imageCell {
 		/*background: #FFF;*/
 		/*border: 1px solid #999;*/
 		/*-moz-border-radius: 6px;*/
@@ -184,29 +193,29 @@
 		/*padding: 0.4em 4% 0.6em;*/
 		/*width: 92%;*/ /* 92 + 2*4 = 100 (IE6 necesita que especifique el ancho) */
 	}
-	/*div#ubicacion {
+	/*div.opacmarc div#ubicacion {
 		margin-top: 0;
 	}*/
 	
-	div#imageCell {
+	div.opacmarc div#imageCell {
 		float: right;
 		margin-bottom: 0;
 	}
 	
-	div#imageCell p {
+	div.opacmarc div#imageCell p {
 		background: #FFF; /*#FEFEF0; /*#ECFBEC; /*#E0EEE0; /*#F0F0F0; /*#ECFBEC; /*#C8B9A6;*/ /* Debe coincidir con el de recordWrapper */
 		padding: 0 0 6px 6px;
 		text-align: center;
 	}
-	div#imageCell img {
+	div.opacmarc div#imageCell img {
 		border: 1px solid #908470;
 		/*margin: 0 0 0.7em;*/
 	}
-	div#gbs_preview img {
+	div.opacmarc div#gbs_preview img {
 		border: none;
 	}
 	
-	div#recordID {
+	div.opacmarc div#recordID {
 		/*background: #FFF;*/
 		/*border-width: 1px;
 		-moz-border-radius: 4px;*/
@@ -220,27 +229,27 @@
 		text-align: center;
 	}
 	
-	div.clear {
+	div.opacmarc div.clear {
 		clear: both;
 		font-size: 0;
-		line-height: 1px; /* el valor '0' da error de validación */
+		line-height: 1px; /* el valor '0' da error de validaciÃ³n */
 		height: 0;
 	}
 	
 	
 	/* Experimento */
-	#googleSearch a {
+	div.opacmarc #googleSearch a {
 		/*text-indent: 9999px;*/
 		background: url(../img/google_booksearch.gif) no-repeat 0 0;
 	}
 	/* Fin exp. */
 	
 	
-	span.quotationSource {
+	div.opacmarc span.quotationSource {
 		font-style: italic;
 	}
 	
-	a.pdfLink {
+	div.opacmarc a.pdfLink {
 		background-image: url(../img/pdf_icon.gif);
 		background-repeat: no-repeat;
 		background-position: 100% 0.2em;
@@ -248,7 +257,7 @@
 		padding-right: 50px;
 	}
 	
-	.postings {
+	div.opacmarc .postings {
 		color: #444;
 		cursor: help;
 		font-size: 1em;

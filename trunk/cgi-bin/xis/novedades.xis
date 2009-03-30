@@ -16,7 +16,7 @@
 	<parm name="count">100</parm>   <!-- TO-DO: llevar este número a config -->
 	<loop>
 		<field action="import" tag="list">2000,2104,6001,6003</field>
-		<!--display><pft>'<br>001: ',v1,' ; mfn: ',f(l(['BIBLIO']'-NC='v1),1,0)</pft></display-->
+		<!--display><pft>'<br />001: ',v1,' ; mfn: ',f(l(['BIBLIO']'-NC='v1),1,0)</pft></display-->
 		<do task="mfnrange">
 			<parm name="db">BIBLIO</parm>
 			<parm name="from"><pft>f(l(['BIBLIO']'-NC='v1),1,0)</pft></parm>

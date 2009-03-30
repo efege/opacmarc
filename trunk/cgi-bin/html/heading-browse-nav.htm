@@ -16,20 +16,20 @@
 						<!--td-->
 						<!-- Botón "buscar marcados" -->
 						<!--input type="hidden" name="IsisScript" value="[pft]v2000[/pft]">
-						<input type="hidden" name="index" value="[pft]v2003[/pft]">
-						<input type="submit" value="Buscar marcados">
+						<input type="hidden" name="index" value="[pft]v2003[/pft]" />
+						<input type="submit" value="Buscar marcados" />
 						</form>
 						</td-->
 						
 						<!-- Botón "comienzo" -->
 						<!--td style="padding-right: 2em;">
 							<form action="[pft]v6001^u[/pft]" method="get">
-								<input type="hidden" name="IsisScript" value="[pft]v2000[/pft]">
-								<input type="hidden" name="db" value="[pft]v2104[/pft]">
-								<input type="hidden" name="browseMfn" value="1">
-								<input type="hidden" name="index" value="[pft]v2003[/pft]">
-								<input type="hidden" name="hpp" value="[pft]v2029[/pft]">
-								<input type="submit" class="button" value="Comienzo">
+								<input type="hidden" name="IsisScript" value="[pft]v2000[/pft]" />
+								<input type="hidden" name="db" value="[pft]v2104[/pft]" />
+								<input type="hidden" name="browseMfn" value="1" />
+								<input type="hidden" name="index" value="[pft]v2003[/pft]" />
+								<input type="hidden" name="hpp" value="[pft]v2029[/pft]" />
+								<input type="submit" class="button" value="Comienzo" />
 							</form>
 						</td-->
 						
@@ -53,13 +53,13 @@
 						<!-- Link "siguientes" -->
 						<td style="padding-left: 2em;">
 							<!--form action="[pft]v6001^u[/pft]" method="get">
-								<input type="hidden" name="IsisScript" value="[pft]v2000[/pft]">
-								<input type="hidden" name="db" value="[pft]v2104[/pft]">
-								<input type="hidden" name="browseMfn" value="[pft]f(val(v2009)+val(v2029),1,0)[/pft]">
-								<input type="hidden" name="index" value="[pft]v2003[/pft]">
-								<input type="hidden" name="hpp" value="[pft]v2029[/pft]">
+								<input type="hidden" name="IsisScript" value="[pft]v2000[/pft]" />
+								<input type="hidden" name="db" value="[pft]v2104[/pft]" />
+								<input type="hidden" name="browseMfn" value="[pft]f(val(v2009)+val(v2029),1,0)[/pft]" />
+								<input type="hidden" name="index" value="[pft]v2003[/pft]" />
+								<input type="hidden" name="hpp" value="[pft]v2029[/pft]" />
 								<input type="submit" class="button" value="[pft]/*select v2003 case 'NAME' : 'Nombres', case 'SUBJ' : 'Temas', endsel*/,
-									   ' Siguientes &gt;"', if val(v2009) + val(v2029) > val(replace(v6018^t,'.','')) then ' disabled' fi[/pft]>
+									   ' Siguientes &gt;"', if val(v2009) + val(v2029) > val(replace(v6018^t,'.','')) then ' disabled="disabled"' fi[/pft] />
 							</form-->
 							[pft]if val(v2009) + val(v2029) > val(replace(v6018^t,'.','')) then[/pft]
 								<span style="color: #AAA;">Siguientes &gt;</span>
@@ -78,24 +78,25 @@
 						<tr>
 							<!-- Botón "saltar a" -->
 							<td>
-								<input type="hidden" name="IsisScript" value="[pft]v2000[/pft]">
-								<input type="hidden" name="db" value="[pft]v2104[/pft]">
-								<input type="hidden" name="hpp" value="[pft]v2029[/pft]">
-								<input type="hidden" name="index" value="[pft]v2003[/pft]">
-								<input type="submit" class="button" value="Saltar a:">
-								<input type="text" size="10" name="browseTerm" class="jumpTo">
+								<input type="hidden" name="IsisScript" value="[pft]v2000[/pft]" />
+								<input type="hidden" name="db" value="[pft]v2104[/pft]" />
+								<input type="hidden" name="hpp" value="[pft]v2029[/pft]" />
+								<input type="hidden" name="index" value="[pft]v2003[/pft]" />
+    							<input type="hidden" name="form" value="b" />
+								<input type="submit" class="button" value="Saltar a:" />
+								<input type="text" size="10" name="browseTerm" class="jumpTo" />
 							</td>
 						</tr>
 						
 						<!--tr>
 							<td -align="center">
-								<input type="radio" name="index" value="NAME" id="iNAME" [pft]if v2003='NAME' then 'checked' fi[/pft]><label for="iNAME">Autores</label>
+								<input type="radio" name="index" value="NAME" id="iNAME" [pft]if v2003='NAME' then 'checked="checked"' fi[/pft] /><label for="iNAME">Autores</label>
 								[pft]if v2104 <> 'bibima' then
 									'&nbsp;',
-									'<input type="radio" name="index" value="SUBJ" id="iSUBJ" ',if v2003='SUBJ' then 'checked' fi,'><label for="iSUBJ">Temas</label>'/
+									'<input type="radio" name="index" value="SUBJ" id="iSUBJ" ',if v2003='SUBJ' then 'checked="checked"' fi,' /><label for="iSUBJ">Temas</label>'/
 								fi[/pft]
 								&nbsp;
-								<input type="radio" name="index" value="TITLE" id="iTITLE" [pft]if v2003='TITLE' then 'checked' fi[/pft]><label for="iTITLE">Títulos</label>
+								<input type="radio" name="index" value="TITLE" id="iTITLE" [pft]if v2003='TITLE' then 'checked="checked"' fi[/pft] /><label for="iTITLE">Títulos</label>
 							</td>
 						</tr-->
 					</table>

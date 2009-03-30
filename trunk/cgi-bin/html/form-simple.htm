@@ -1,4 +1,4 @@
-<hr>
+<hr />
 
 <div id="searchFormWrapper">
 
@@ -10,10 +10,11 @@
 				[pft]v6002^w[/pft]
 			</h4>
 			
-			<form id="simpleSearchForm" name="simpleSearchForm" action="[pft]v6001^u[/pft]" method="GET" onsubmit="checkQuery(this); return false;">
+			<form id="simpleSearchForm" name="simpleSearchForm" action="[pft]v6001^u[/pft]" method="get" onsubmit="checkQuery(this); return false;">
 			
-				<input type="hidden" name="IsisScript" value="[pft]v2000[/pft]">
-				<input type="hidden" name="db" value="[pft]v2104[/pft]">
+				<input type="hidden" name="IsisScript" value="[pft]v2000[/pft]" />
+				<input type="hidden" name="db" value="[pft]v2104[/pft]" />
+				<input type="hidden" name="form" value="s" />
 				
 				<div id="keywordFormControls">
 					<table cellspacing="0" cellpadding="4">
@@ -22,11 +23,11 @@
 								<!--En<br-->
 								<!-- TO-DO: separar los options (mozilla) -->
 								<select name="searchType" id="searchType" size="5">
-									<option value="NAME"  [pft]if v2002 = 'NAME' then 'selected' fi[/pft]>Autor</option>
-									<option value="TITLE" [pft]if v2002 = 'TITLE' or a(v2002) then 'selected' fi[/pft]>Título</option>
-									<option value="SUBJ"  [pft]if v2002 = 'SUBJ' then 'selected' fi[/pft]>Tema[pft]if v6001^k = '1' then ' (MSC)' fi[/pft]</option>
-									<option value="SN"    [pft]if v2002 = 'SN' then 'selected' fi[/pft]>Números (ISBN, etc)</option>
-									<option value="ANY"   [pft]if v2002 = 'ANY' then 'selected' fi[/pft]>Cualquier campo</option>
+									<option value="NAME"  [pft]if v2002 = 'NAME' then 'selected="selected"' fi[/pft]>Autor</option>
+									<option value="TITLE" [pft]if v2002 = 'TITLE' or a(v2002) then 'selected="selected"' fi[/pft]>Título</option>
+									<option value="SUBJ"  [pft]if v2002 = 'SUBJ' then 'selected="selected"' fi[/pft]>Tema[pft]if v6001^k = '1' then ' (MSC)' fi[/pft]</option>
+									<option value="SN"    [pft]if v2002 = 'SN' then 'selected="selected"' fi[/pft]>Números (ISBN, etc)</option>
+									<option value="ANY"   [pft]if v2002 = 'ANY' then 'selected="selected"' fi[/pft]>Cualquier campo</option>
 								</select>
 							</td>
 							<!--td style="white-space: nowrap; width: 1em; vertical-align: top;">
@@ -34,10 +35,10 @@
 							</td-->
 							<td style="vertical-align: top;">
 								<label for="kwQuery">contiene las <u>p</u>alabras:</label>
-								<br>
+								<br />
 								<!-- TO-DO: mejorar el criterio usado para poner un atributo id aquí (ver opac.js) -->
-								<input type="text" id="kwQuery" name="query" value="[pft]if v2101 : '-KW-' and a(v2109) then v2001 fi[/pft]" accesskey="P">
-								<input type="submit" class="button" value="Buscar">
+								<input type="text" id="kwQuery" name="query" value="[pft]if v2101 : '-KW-' and a(v2109) then v2001 fi[/pft]" accesskey="P" />
+								<input type="submit" class="button" value="Buscar" />
 							</td>
 						</tr>
 					</table>
@@ -63,11 +64,12 @@
 			</h4>
 			
 			<!-- Formulario acceso a índices -->
-			<form id="BrowseIndexForm" name="BrowseIndexForm" action="[pft]v6001^u[/pft]" method="GET">
+			<form id="BrowseIndexForm" name="BrowseIndexForm" action="[pft]v6001^u[/pft]" method="get">
 			
-				<input type="hidden" name="IsisScript" value="[pft]v2000[/pft]">
-				<input type="hidden" name="db" value="[pft]v2104[/pft]">
-				<input type="hidden" name="task" value="H-BROWSE">
+				<input type="hidden" name="IsisScript" value="[pft]v2000[/pft]" />
+				<input type="hidden" name="db" value="[pft]v2104[/pft]" />
+				<input type="hidden" name="task" value="H-BROWSE" />
+				<input type="hidden" name="form" value="b" />
 					
 				
 				<div id="browseFormControls">
@@ -75,12 +77,12 @@
 						<tr>
 							<td style="width: 1em; vertical-align: top;">
 								<select name="index" id="browseType" size="[pft]if v2104 <> 'bibima' then '3' else '2' fi[/pft]">
-									<option value="NAME" [pft]if v2003 = 'NAME' or (v2003 = 'SUBJ' and v6001^k = '1') or v2003 = 'COL' or a(v2003) then 'selected' fi[/pft]>Autor</option>
-									<option value="TITLE" [pft]if v2003 = 'TITLE' then 'selected' fi[/pft]>Título</option>
+									<option value="NAME" [pft]if v2003 = 'NAME' or (v2003 = 'SUBJ' and v6001^k = '1') or v2003 = 'COL' or a(v2003) then 'selected="selected"' fi[/pft]>Autor</option>
+									<option value="TITLE" [pft]if v2003 = 'TITLE' then 'selected="selected"' fi[/pft]>Título</option>
 									[pft]if v2104 <> 'bibima' then[/pft]
-										<option value="SUBJ" [pft]if v2003 = 'SUBJ' then 'selected' fi[/pft]>Tema[pft]if v6001^k = '1' then ' (MSC)' fi[/pft]</option>
+										<option value="SUBJ" [pft]if v2003 = 'SUBJ' then 'selected="selected"' fi[/pft]>Tema[pft]if v6001^k = '1' then ' (MSC)' fi[/pft]</option>
 									[pft]fi[/pft]
-									<!--option value="SN" [pft]if v2003 = 'SN' then 'selected' fi[/pft]>ISBN/ISSN</option-->
+									<!--option value="SN" [pft]if v2003 = 'SN' then 'selected="selected"' fi[/pft]>ISBN/ISSN</option-->
 								</select>
 							</td>
 							<!--td style="vertical-align: top; white-space: nowrap; width: 1em; padding-right: 0;">
@@ -88,9 +90,9 @@
 							</td-->
 							<td style="vertical-align: top;">
 								<label for="browseTerm">com<u>i</u>enza&nbsp;por:</label>
-								<br>
-								<input type="text" size="18" id="browseTerm" name="browseTerm" accesskey="I">
-								<input type="submit" class="button" value="Explorar">
+								<br/>
+								<input type="text" size="18" id="browseTerm" name="browseTerm" accesskey="I" />
+								<input type="submit" class="button" value="Explorar" />
 							</td>
 						</tr>
 					</table>
@@ -104,9 +106,9 @@
 						<td align="left">
 							<div style="line-height: 1em;">
 							<span class="smaller">Mostrar</span>&nbsp;<select name="hpp">
-							<option value="8"  [pft]if v2029='8' OR s(v2029,v6001^h)='8' then 'selected' fi[/pft]>8</option>
-							<option value="16" [pft]if v2029='16' OR s(v2029,v6001^h)='16' then 'selected' fi[/pft]>16</option>
-							<option value="32" [pft]if v2029='32' OR s(v2029,v6001^h)='32' then 'selected' fi[/pft]>32</option>
+							<option value="8"  [pft]if v2029='8' OR s(v2029,v6001^h)='8' then 'selected="selected"' fi[/pft]>8</option>
+							<option value="16" [pft]if v2029='16' OR s(v2029,v6001^h)='16' then 'selected="selected"' fi[/pft]>16</option>
+							<option value="32" [pft]if v2029='32' OR s(v2029,v6001^h)='32' then 'selected="selected"' fi[/pft]>32</option>
 							</select>
 							
 							<span class="smaller">términos por página</span>
@@ -133,7 +135,7 @@
 		<div style="clear: both;">
 			<!--a class="newSearch" href="[pft]v6001^u[/pft]&amp;IsisScript=[pft]v2000[/pft]&amp;db=[pft]v2104[/pft]&amp;showForm=advanced">
 				Más opciones de búsqueda</a>
-			<br>
+			<br />
 			<span>
 			(Por autor/título, fecha, idioma, editorial, etc.)
 			</span-->

@@ -17,17 +17,17 @@ if s(v50,v82)>'' then
 
 	/* ATENCION: tanto v50 como v50^a son repetibles */
 	if p(v050) then
-		v050^a[1], "<br>"v050^b[1], '<br>'/
+		v050^a[1], "<br />"v050^b[1], '<br />'/
 	fi/
 
 	/* ATENCION: tanto v82 como v82^a son repetibles */
-	"<br>"v082^a[1]/
+	"<br />"v082^a[1]/
 
 	'</div>'/,
 fi,
 
 '<!--div style="border-bottom: solid 1px #bbb; /*background: #f0f0f0;*/ padding: 0 0.3em;">'
-	v995+|<br>|,/
+	v995+|<br />|,/
 '</div-->'/,
 '</td>'/
 /* ===== End side-column ====== */

@@ -14,14 +14,56 @@
  * ==============================================================
  */
 
+/* Unsafe character %, first of all! */
 proc('d7000a7000|'
-		replace(replace(replace(replace(v7000[1],
-			'"','%22'),
-			'&','%26'),
-			'+','%2B'),
-			' ','+'),
+		replace(v7000[1],
+			'%','%25'),
 '|'),
 
+
+/* Reserved characters */
+proc('d7000a7000|'
+        replace(replace(replace(replace(replace(
+		replace(replace(replace(replace(replace(v7000[1],
+		    '$','%24'),
+			'&','%26'),
+			'+','%2B'),
+		    ',','%2C'),
+		    '/','%2F'),
+		    ':','%3A'),
+		    ';','%3B'),
+		    '=','%3D'),
+		    '?','%3F'),
+		    '@','%40'),
+'|'),
+
+/* Other unsafe characters */
+proc('d7000a7000|'
+        replace(replace(replace(
+        replace(replace(replace(replace(replace(
+		replace(replace(replace(replace(replace(v7000[1],
+		    ' ','%20'),
+			'"','%22'),
+			'<','%3C'),
+			'>','%3E'),
+			'#','%23'),
+			'{','%7B'),
+			'}','%7D'),
+			'|','%7C'),
+			'\','%5C'),
+			/*'^','%5E'),*/   /* FIXME -- revisar cómo se usa el string que resulta de aplicar urlencode.pft */ 
+			'~','%7E'),
+			'[','%5B'),
+			']','%5D'),
+			'`','%60'),
+'|'),
+
+
+
+/* All the following are non-ASCII characters */
+
+
+/* Letters C, N with diacritics */
 proc('d7000a7000|'
 		replace(replace(replace(replace(v7000[1],
 			'ç','%E7'),
@@ -30,6 +72,7 @@ proc('d7000a7000|'
 			'Ñ','%D1'),
 '|'),
 
+/* Letter A with diacritics */
 proc('d7000a7000|'
 		replace(replace(replace(
 		replace(replace(replace(
@@ -45,6 +88,7 @@ proc('d7000a7000|'
 			'å','%E5'),
 '|'),
 
+/* Letter E with diacritics */
 proc('d7000a7000|'
 		replace(replace(replace(replace(replace(replace(v7000[1],
 			'è','%E8'),
@@ -55,6 +99,7 @@ proc('d7000a7000|'
 			'È','%C8'),
 '|'),
 
+/* Letter I with diacritics */
 proc('d7000a7000|'
 		replace(replace(replace(replace(v7000[1],
 			'ì','%EC'),
@@ -63,6 +108,7 @@ proc('d7000a7000|'
 			'ï','%EF'),
 '|'),
 
+/* Letter O with diacritics */
 proc('d7000a7000|'
 		replace(replace(replace(replace(replace(replace(replace(replace(v7000[1],
 			'ò','%F2'),
@@ -75,6 +121,7 @@ proc('d7000a7000|'
 			'ø','%F8')
 '|'),
 
+/* Letter U with diacritics */
 proc('d7000a7000|'
 		replace(replace(replace(
 		replace(replace(replace(v7000[1],
@@ -86,6 +133,7 @@ proc('d7000a7000|'
 			'ü','%FC'),
 '|'),
 
+/* Other non-ASCII */
 proc('d7000a7000|'
 		replace(replace(replace(replace(v7000[1],
 			'´','%B4'),
@@ -93,6 +141,3 @@ proc('d7000a7000|'
 			'º','%BA'),
             '¯','%75')
 '|'),
-
-
-/* ======================================================= */

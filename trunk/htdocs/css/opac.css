@@ -2,46 +2,68 @@
  * reset browser defaults
  * --------------------------------
  */
-body, p, h1, h2, h3, h4, h5, h6, table, tr, td, div, form, ul, ol, dl, li, pre {
+/*body, p, h1, h2, h3, h4, h5, h6, table, tr, td, div, form, ul, ol, dl, li, pre {
+	border: 0;
+	margin: 0;
+	padding: 0;
+}*/
+
+/* NOTE (for embedding): if this rule should override styles of the host page,
+   this stylesheet must be loaded *after* the one from the host */
+div.opacmarc p,
+div.opacmarc h1,
+div.opacmarc h2,
+div.opacmarc h3,
+div.opacmarc h4,
+div.opacmarc h5,
+div.opacmarc h6,
+div.opacmarc table,
+div.opacmarc tr,
+div.opacmarc td,
+div.opacmarc div,
+div.opacmarc form,
+div.opacmarc ul,
+div.opacmarc ol,
+div.opacmarc dl,
+div.opacmarc li,
+div.opacmarc pre {
 	border: 0;
 	margin: 0;
 	padding: 0;
 }
 
-p {
+
+div.opacmarc p {
 	margin-bottom: 1em;
 }
 
-hr {
-	display: none; /* lineas de separaciÛn para navegadores sin CSS */
+div.opacmarc hr {
+	display: none; /* lineas de separaci√≥n para navegadores sin CSS */
 }
 
-body {
-	background-color: #EEE; /*#C9C7BA; /*#C8B9A6; /*D0D0D0; /*#F6F6F6;*/
+div.opacmarc {
+	/*background-color:*/ #EEE; /*#C9C7BA; /*#C8B9A6; /*D0D0D0; /*#F6F6F6;*/
 	font-family: arial, 'trebuchet ms', verdana, sans-serif; 
 	font-size: small; /* trebuchet: 96%; verdana: 94% */
 	line-height: 1.3em; 
-	margin: 2px auto;
+	/*margin: 2px auto;
 	max-width: 990px;
-	width: 99%;
+	width: 99%;*/
 }
 
-.debug-info {
+div.opacmarc .debug-info {
     background-color: #FED;
     border: 2px solid red;
     padding: 0.3em 0.7em;
 }
 
-div#contentWrapper {
-	/*margin-left: 81px;   /* seg˙n el ancho del logo */
-}
 
 /* --------------------------------
- * Formularios de b˙squeda
+ * Formularios de b√∫squeda
  * --------------------------------
  */
 
-div#searchFormWrapper {
+div.opacmarc div#searchFormWrapper {
 	/*background: #FFF;*/ /* #E6E6E6;*/
 	/*border-top: 1px solid #BBB;
 	border-bottom: 1px solid #BBB;*/
@@ -50,38 +72,43 @@ div#searchFormWrapper {
 	margin-top: 1.5em;
 }
 
-div#searchFormWrapper a:visited {
+div.opacmarc div#searchFormWrapper a:visited {
 	color: #00C;
 }
 
-div#searchFormWrapper a:active, div#searchFormWrapper a:focus {
+div.opacmarc div#searchFormWrapper a:active,
+div.opacmarc div#searchFormWrapper a:focus {
 	color: #FFF;
 }
 
-div#browseIndexes, div#search, div#busqAvanzada {
+div.opacmarc div#browseIndexes,
+div.opacmarc div#search,
+div.opacmarc div#busqAvanzada {
 	/*-moz-border-radius: 10px;*/
 	margin-bottom: 1.2em;
 }
 
-div#search {
+div.opacmarc div#search {
 	float: left;
 	width: 49%;
 }
 
-div#browseIndexes {
+div.opacmarc div#browseIndexes {
 	float: right;
 	width: 49%;
 }
 
-div#browseIndexes table, div#search table {
+div.opacmarc div#browseIndexes table,
+div.opacmarc div#search table {
 	margin: 0.4em;
 }
 
-div#browseIndexes td, div#search td {
+div.opacmarc div#browseIndexes td,
+div.opacmarc div#search td {
 	padding: 0.5em;
 } 
 
-.searchFormHead {
+div.opacmarc .searchFormHead {
 	/*background: #FED;*/ /*#999;*/    /* #009 */
 	border-bottom: 1px dotted #999;
 	color: #222; 
@@ -93,106 +120,109 @@ div#browseIndexes td, div#search td {
 	/*text-transform: uppercase;*/
 }
 
-.searchFormCell {
+div.opacmarc .searchFormCell {
 	background: #D3D3D3; /*#A0DCD8; /*#7ADAE1; /*#D6D6D6; /*#FED; /*#EAC995; /*#FFC; /*#ECECEC; /*#F6F6F6;*/
 	/*border: 1px solid #996;*/
 	/*-moz-border-radius: 8px;*/
 	margin-bottom: 1.2em;
 }
 
-#busqAvanzada {
+div.opacmarc #busqAvanzada {
 	margin-left: auto;
 	margin-right: auto;
 	width: 65%;
 }
 
-#busqAvanzada td {
+div.opacmarc #busqAvanzada td {
 	padding: 0.1em 0.2em;
 }
 
-#busqAvanzada td.label {
+div.opacmarc #busqAvanzada td.label {
 	text-align: right;
 }
 
-#busqAvanzada fieldset {
+div.opacmarc #busqAvanzada fieldset {
     margin-top: 1em;
 }
 
-#busqAvanzada #pub_date_fieldset td.label {
+div.opacmarc #busqAvanzada #pub_date_fieldset td.label {
     text-align: left;
 }
 
-#busqAvanzada #otras_caract td {
+div.opacmarc #busqAvanzada #otras_caract td {
     padding-bottom: 0.2em;
     padding-top: 0.2em;
 }
 
-#busqAvanzada #filterOp_cell {
+div.opacmarc #busqAvanzada #filterOp_cell {
     padding-bottom: 0.4em;
     padding-top: 0.4em;
 }
 
-#busqAvanzada .toggler {
+div.opacmarc #busqAvanzada .toggler {
     background-repeat: no-repeat;
     background-position: 4px 50%;
     cursor: pointer;
     padding-left: 20px;
 }
-#busqAvanzada  .hide {
+div.opacmarc #busqAvanzada  .hide {
     display: none;
 }
-#busqAvanzada .show {
+div.opacmarc #busqAvanzada .show {
     display: block;
 }
-#busqAvanzada .expand {
+div.opacmarc #busqAvanzada .expand {
     /*background-image: url(http://www.javascriptjunkie.com/stuff/expand.gif);*/
     background-image: url(http://igene.invitrogen.com/iGene/media/icon_expand_red_border.gif);
 }
-#busqAvanzada .collapse {
+div.opacmarc #busqAvanzada .collapse {
     /*background-image: url(http://www.javascriptjunkie.com/stuff/collapse.gif);*/
     background-image: url(http://igene.invitrogen.com/iGene/media/icon_contract_red_border.gif);
 }
 
 
-fieldset {
+div.opacmarc fieldset {
 	margin: 0.3em 1em;
 	padding: 0.7em 0.5em 0.4em 0.5em;
 }
 
-legend {
+div.opacmarc legend {
 	font-family: arial, verdana, sans-serif;
 	font-size: 90%;
 	font-weight: bold;
 }
 
-.searchFormCell input {
+div.opacmarc .searchFormCell input {
 	background: #FFF;
 }
 
-.searchFormCell select {
+div.opacmarc .searchFormCell select {
 	background: #FFF;
 }
 
-input#kwQuery, input#browseTerm {
+div.opacmarc input#kwQuery,
+div.opacmarc input#browseTerm {
 	border: 1px solid #999;
 	margin-top: 0.2em;
 	padding: 0.1em;
 }
 
-input#kwQuery {
+div.opacmarc input#kwQuery {
 	margin-bottom: 0.2em;
 	width: 90%;
 }
 
-input#browseTerm {
+div.opacmarc input#browseTerm {
 	width: 60%;
 }
 
-select#searchType, select#browseType {
+div.opacmarc select#searchType,
+div.opacmarc select#browseType {
 	font-family: verdana, sans-serif;
 }
 
-div#browseIndexes .minihelp, div#search .minihelp {
+div.opacmarc div#browseIndexes .minihelp,
+div.opacmarc div#search .minihelp {
 	/*border-left: 1px dotted #999;*/
 	color: #333;
 	font-size: small;
@@ -201,11 +231,11 @@ div#browseIndexes .minihelp, div#search .minihelp {
 	/*width: 50%;*/
 }
 
-#busqAvanzada h4 {
+div.opacmarc #busqAvanzada h4 {
 	font-size: 95%;
 }
 
-input.jumpTo {
+div.opacmarc input.jumpTo {
 	background: #FFC;
 }
 
@@ -213,14 +243,14 @@ input.jumpTo {
  * Botones
  * --------------------------------
  */
-input.button {
+div.opacmarc input.button {
 	background: #E2DFD0; /*#7ADAE1*/
 	font-family: verdana, arial, sans-serif;
 	font-size: 90%;
 	/*font-weight: bold;*/
 }
 
-input.estilo {
+div.opacmarc input.estilo {
 	background: #DDD;
 	font-family: verdana, arial, sans-serif;
 	font-size: 13px;
@@ -229,38 +259,39 @@ input.estilo {
 	/*height: 1.5em;*/
 }
 
-input.estiloActivo {
+div.opacmarc input.estiloActivo {
 	background: #FFC; /*#666;*/
 	color: black; /*#F9F9F9;*/
 	/*font-weight: 600;*/
 }
 
-a.estilo, span.estilo {
+div.opacmarc a.estilo,
+div.opacmarc span.estilo {
 	font-weight: bold;
 	margin-left: 0.7em;
 }
 
-span.estiloActivo {
+div.opacmarc span.estiloActivo {
 	/*background: #FFC;*/
 	font-weight: bold;
 }
 
-input.estiloActivo:hover {
+div.opacmarc input.estiloActivo:hover {
 	cursor: pointer;
 	/*cursor: hand;*/
 }
 
-.newSearch {
+div.opacmarc .newSearch {
 	font-weight: 600;
 }
 
 
 
 /* ---------------------------------------------
- * Resaltado de tÈrminos de b˙squeda
+ * Resaltado de t√©rminos de b√∫squeda
  * ---------------------------------------------
  */
-.hl {
+div.opacmarc .hl {
 	font-weight: bold;
 	/*color: #A52A2A;*/
 	/*background: #E9E9E9;*/
@@ -272,11 +303,12 @@ input.estiloActivo:hover {
 	/*text-decoration: underline;*/
 }
 
-a:active .hl, a:focus .hl {
+div.opacmarc a:active .hl,
+div.opacmarc a:focus .hl {
 	color: #DDD;
 }
 
-.hl-msc {
+div.opacmarc .hl-msc {
 	/*background: #FFC;*/
 	background: #888;
 	color: #F0F0F0;
@@ -289,34 +321,35 @@ a:active .hl, a:focus .hl {
  * --------------------------------
  */
 
-a {
+div.opacmarc a {
 	text-decoration: none;
 }
 
 
 /* LINK PSEUDO-CLASES: L-V-H-A */
+/* "!important" added for embedding into DokuWiki */
 
-a:link {
+div.opacmarc a:link {
 	border-bottom: 1px dotted #009;
-	color: #00C;
+	color: #00C !important;
 }
 
-a:visited,
-a.visitedLink {
+div.opacmarc a:visited,
+div.opacmarc a.visitedLink {
 	border-bottom: 1px dotted #800080;
-	color: #800080; /*#69F;*/ /*#39F*/ 
+	color: #800080 !important; /*#69F;*/ /*#39F*/
 }
 
-a:hover {
+div.opacmarc a:hover {
 	border-bottom: 1px solid #009; /* genera error en IE6 */
-	color: #00C;
+	color: #00C !important;
 }
 
-a:active,
-a:focus {
+div.opacmarc a:active,
+div.opacmarc a:focus {
 	background: #009;
 	border-bottom: 1px dotted #009;
-	color: #FFF;
+	color: #FFF !important;
 }
 
 /* ---------------------------------------------- */
@@ -327,7 +360,7 @@ a:focus {
  * --------------------------------
  */
 
-table#bibRecordList {
+div.opacmarc table#bibRecordList {
 	/*float: left; */   /* float en caso de usar una barra lateral */
 	line-height: 1.3em;
 	margin-top: 0.7em;
@@ -337,11 +370,11 @@ table#bibRecordList {
 	width: 100%;        /* reducir en caso de usar una barra lateral */
 }
 
-table#bibRecordList td {
+div.opacmarc table#bibRecordList td {
 	padding: 0.2em;
 }
 
-table#bibRecordList th {
+div.opacmarc table#bibRecordList th {
 	background: #CCC; /*#E0EEE0; /*#CCC; /*#ECFBEC; /*#908470;*/
 	/*background-image: url(../img/999999a.gif);*/
 	border: none; /* para cancelar el efecto de border="1" */
@@ -354,7 +387,7 @@ table#bibRecordList th {
 	padding: 0.1em;
 }
 
-table#headingRecordList {
+div.opacmarc table#headingRecordList {
 	/*border-top: 1px solid #AAA;*/
 	/*border-bottom: 1px solid #AAA;*/
 	line-height: 1.3em;
@@ -369,43 +402,43 @@ table#headingRecordList {
  * --------------------------------
  */
 
-td.headingFirstRow {
+div.opacmarc td.headingFirstRow {
 	border-top: 0px solid #CCC;
 }
 
-td.NAME {
+div.opacmarc td.NAME {
 	/*background: #5FE;*/ /* #00DCFF;*/
 }
 
-td.SUBJ {
+div.opacmarc td.SUBJ {
 	/*background: #FEB;*/ /* #00DCFF;*/
 }
 
-td.TITLE {
+div.opacmarc td.TITLE {
 	/*background: #22FEFF;*/ /* #00DCFF;*/
 }
 
-tr.headingRow td {
+div.opacmarc tr.headingRow td {
 	border-bottom: 0px solid #DDD;
 	padding-bottom: 0.3em;
 	padding-top: 0.3em;
 }
 
-tr.headingOdd {
+div.opacmarc tr.headingOdd {
 	/*background: #FFFFEE;*/ /*#ECFBEC; /*#E3F2E3; /*#E6E6E6;*/
 }
 
-tr.headingEven {
+div.opacmarc tr.headingEven {
 	/*background: #FFFFEE;*/ /*#ECFBEC; /*#EFEFEF;*/
 }
 
-td.headingCellIndent {
+div.opacmarc td.headingCellIndent {
 	padding-left: 2.3em;
 	padding-right: 0.7em;
 	text-indent: -1.3em;
 }
 
-span.headingQualifier {
+div.opacmarc span.headingQualifier {
 	font-weight: normal;
 }
 
@@ -415,7 +448,7 @@ span.headingQualifier {
  * --------------------------------
  */
 
-.tablaMARC {
+div.opacmarc .tablaMARC {
 	border-top: 1px dotted #CCC;
 	color: #000;
 	font-family: 'lucida console', 'courier new', monospace;
@@ -424,45 +457,45 @@ span.headingQualifier {
 	table-layout: fixed;
 }
 
-.tablaMARC td {
+div.opacmarc .tablaMARC td {
 	padding-left: 0.5em;
 	padding-right: 0.5em;
 }
 
-td.marctag {
+div.opacmarc td.marctag {
 	width: 2.5em;
 }
 
-td.marcindicators {
+div.opacmarc td.marcindicators {
     letter-spacing: 0.3em;
 	width: 1.8em;
 }
 
 /* ------------------------------------- */
 
-.smaller {
+div.opacmarc .smaller {
 	font-size: 85%;
 }
 
-.lighter {
+div.opacmarc .lighter {
 	color: #666;
 }
 
-div#resultWrapper {
+div.opacmarc div#resultWrapper {
 	background: #FFF; /*#E0EEE0; /*#ECFBEC; */
 	/*border-left: 0.6em solid #908470;*/
 	padding: 0.6em;
 	padding-top: 0.4em;
 }
 
-div#resultHeader {
+div.opacmarc div#resultHeader {
 	background: #888; /*#0088DD;*/ /*#908470; /*#A09080; /* taupe */
 	color: #FFF;
 	/*font-weight: bold;*/
 	padding: 0.2em 0.5em;
 }
 
-.headerSuggestion {
+div.opacmarc .headerSuggestion {
 	background: #DDD; /*#FFC;*/
 	/*margin-top: -0.4em;
 	margin-left: -0.6em;
@@ -472,22 +505,22 @@ div#resultHeader {
 	/*border-bottom: 1px solid #CCC;*/
 }
 
-div#correctedQuery {
+div.opacmarc div#correctedQuery {
 	background: #FFC;
 	font-style: italic;
 	padding: 0.2em 0.5em;
 }
 
-div#correctedQuery b {
+div.opacmarc div#correctedQuery b {
 	font-style: normal;
 }
 
-div#singleMatchNotice {
+div.opacmarc div#singleMatchNotice {
 	background: #D0D0D0; /*#FFC;*/
 	padding: 0.2em 0.5em;
 }
 
-div#resultSubheader {
+div.opacmarc div#resultSubheader {
 	/*background: #ECFBEC; /*#FED; /*#DDD;*/
 	border-bottom: 1px solid #AAA;
 	/*float: left;*/
@@ -495,40 +528,40 @@ div#resultSubheader {
 	padding-right: 0.1em;
 }
 
-div.NAME { /* b˙squeda por "autor" */
+div.opacmarc div.NAME { /* b√∫squeda por "autor" */
 	/*background: #009966;*/ /*#008000;*/
 }
 
-div.SUBJ { /* b˙squeda por tema o cÛdigo tem·tico */
+div.opacmarc div.SUBJ { /* b√∫squeda por tema o c√≥digo tem√°tico */
 	/*background: #B6B092;*/ /*#A5A081;*/ /*#C7C1A3;*/ /* tan (tostado) */
 }
 
-div.TITLE { /* b˙squeda por tÌtulo */
+div.opacmarc div.TITLE { /* b√∫squeda por t√≠tulo */
 	/*background: #069;*/ /*#03c;*/ /*#6666FF;*/ /*#009;*/
 }
 
-div.SN { /* b˙squeda por n˙mero normalizado */
+div.opacmarc div.SN { /* b√∫squeda por n√∫mero normalizado */
 	/*background: #9966CC;*/
 }
 
-div.ANY { /* b˙squeda por cualquier campo */
+div.opacmarc div.ANY { /* b√∫squeda por cualquier campo */
 	/*background: #888;*/
 }
 
-div.COL { /* b˙squeda por serie/colecciÛn */
+div.opacmarc div.COL { /* b√∫squeda por serie/colecci√≥n */
 	/*background: #FF9933;*/ /*#f66;*/ /*#C30;*/ /*#CC0033;*/
 }
 
-blockquote {
+div.opacmarc blockquote {
 	margin: 0 0 0 1.2em;
 }
 
-span.publication {
+div.opacmarc span.publication {
 	/*font-size: 90%;*/
 }
 
 
-td.initialLetter {
+div.opacmarc td.initialLetter {
 	background: #DDD;
 	border-bottom: 1px solid #999;
 	border-top: 1px solid #999;
@@ -556,26 +589,26 @@ td.initialLetter {
  * --------------------------------
  */
 
-#cita {
+div.opacmarc #cita {
 	margin: 0.7em 15%;
 }
 
-.citaCell {
+div.opacmarc .citaCell {
 	background: #FEFEF0;
 	border: solid 1px #EAEAEA;
 }
 
 
 /* --------------------------------
- * ExtracciÛn de claves
+ * Extracci√≥n de claves
  * --------------------------------
  */
-.extract {
+div.opacmarc .extract {
 	font-family: lucida console, monospace;
 	font-size: 85%;
 }
 
-.alIndice {
+div.opacmarc .alIndice {
 	background: #009;
 	color: white;
 	font-weight: bold;
@@ -583,17 +616,17 @@ td.initialLetter {
 }
 
 
-ul.navigation {
+div.opacmarc ul.navigation {
 	display: inline;
 	list-style: none;
 	margin: 0;
 	padding: 0;
 }
-ul.navigation li {
+div.opacmarc ul.navigation li {
 	display: inline;
 }
 
-#linkPrevResult {
+div.opacmarc #linkPrevResult {
 	background-image: url(../img/left.gif);
 	background-position: 0 50%;
 	background-repeat: no-repeat;
@@ -601,7 +634,7 @@ ul.navigation li {
 	padding-left: 14px;
 	/*text-decoration: none;*/
 }
-#linkPrevResultDisabled {
+div.opacmarc #linkPrevResultDisabled {
 	background-image: url(../img/left-gris.gif);
 	background-position: 0 50%;
 	background-repeat: no-repeat;
@@ -609,7 +642,7 @@ ul.navigation li {
 	color: #777;
 	padding-left: 14px;
 }
-#linkNextResult {
+div.opacmarc #linkNextResult {
 	background-image: url(../img/right.gif);
 	background-position: 100% 50%;
 	background-repeat: no-repeat;
@@ -617,7 +650,7 @@ ul.navigation li {
 	padding-right: 14px;
 	/*text-decoration: none;*/
 }
-#linkNextResultDisabled {
+div.opacmarc #linkNextResultDisabled {
 	background-image: url(../img/right-gris.gif);
 	background-position: 100% 50%;
 	background-repeat: no-repeat;
@@ -633,27 +666,27 @@ ul.navigation li {
  */
  
 
-div#about {
+div.opacmarc div#about {
 	background: #FFF;
 	margin-top: 0;
 	/*margin-left: 82px;*/
 	padding: 1.5em 3em;
 }
-div#about h2 {
+div.opacmarc div#about h2 {
 	font-size: 1.3em;
 }
-div#about h3 {
+div.opacmarc div#about h3 {
 	border-bottom: 1px dotted #BBB;
 	margin-bottom: 0.5em;
 	margin-top: 1.5em;
 	padding-bottom: 0.2em;
 }
 
-div#about p {
+div.opacmarc div#about p {
 	margin-bottom: 1em;
 }
 
-h3#feedback_reply {
+div.opacmarc h3#feedback_reply {
 	background: #FFC;
 	color: #000;
 	font-size: 1.1em;
@@ -668,7 +701,7 @@ h3#feedback_reply {
  * --------------------------------
  */
 
-div#page-footer {
+div.opacmarc div#page-footer {
 	background: #FFF;
 	/*border-width: 1px 0;
 	border-style: solid;
@@ -685,7 +718,7 @@ div#page-footer {
 	text-align: center;
 }
 
-div#opac_numbers {
+div.opacmarc div#opac_numbers {
 	/*border-top: 1px dashed #CCC;*/
 	border-bottom: 1px dotted #CCC;
 	/*font-size: 85%;*/
@@ -698,7 +731,7 @@ div#opac_numbers {
  * --------------------------------
  */
  
-div#sugerencias {
+div.opacmarc div#sugerencias {
 	/*background: #FFC;*/
 	/*border: 3px solid #FFC;*/
 	margin: 0 auto;
@@ -706,16 +739,16 @@ div#sugerencias {
 	/*width: 78%;*/
 }
 
-div#sugerencias h3 {
+div.opacmarc div#sugerencias h3 {
 	font-size: 1.1em;
 	margin-bottom: 1em;
 }
-ul#listaSugerencias {
+div.opacmarc ul#listaSugerencias {
 	list-style: none;
 	margin-left: 1%;
 }
 
-ul#listaSugerencias li {
+div.opacmarc ul#listaSugerencias li {
 	background-image: url(../img/right.gif);
 	background-position: 0px 0.0em;
 	background-repeat: no-repeat;
@@ -723,26 +756,26 @@ ul#listaSugerencias li {
 	padding-left: 20px;
 }
 
-ul#otherSearches {
+div.opacmarc ul#otherSearches {
 	list-style: none;
 	margin-left: 1%;
 }
-ul#otherSearches li {
+div.opacmarc ul#otherSearches li {
 	background: none;
 }
 
-ul#webSearches {
+div.opacmarc ul#webSearches {
 	margin-left: 1%;
 	margin-top: 0.5em;
 }
-ul#webSearches li {
+div.opacmarc ul#webSearches li {
 	background: none;
 	border-left: 1px solid #bbb;
 	display: inline;
 	line-height: 1.7;
 	padding: 0 0.6em 0 0.8em;
 }
-ul#webSearches li:first-child {
+div.opacmarc ul#webSearches li:first-child {
 	border-left: none;
 }
 
@@ -754,24 +787,25 @@ ul#webSearches li:first-child {
  * --------------------------------
  */
 
-div#extra {
+div.opacmarc div#extra {
 	border-top: 1px dotted #999;
 	padding-top: 1em;
 }
 
-div#extra h4 {
+div.opacmarc div#extra h4 {
 	font-size: 1em;
 }
 
-div#extra a:visited {
+div.opacmarc div#extra a:visited {
 	color: #00C;
 }
 
-div#extra a:active, div#extra a:focus {
+div.opacmarc div#extra a:active,
+div.opacmarc div#extra a:focus {
 	color: #FFF;
 }
 
-div#extra div {
+div.opacmarc div#extra div {
 	background: #FFF8DC; /*#FAFAD2; /*#FFC; /*#E0ECFF; /*#C3D9FF;*/
 	border: 1px solid #CCC;
 	padding: 0.3em 1% 0.5em;
@@ -779,22 +813,25 @@ div#extra div {
 	-moz-border-radius: 8px;
 }
 
-div#extra div#otros-recursos, div#extra div#de-nuevo {
+div.opacmarc div#extra div#otros-recursos,
+div.opacmarc div#extra div#de-nuevo {
 	float: left;
 	margin-top: 0.5em;
 	width: 97.8%;
 }
-div#extra div#de-nuevo, div#extra div#textos {
+div.opacmarc div#extra div#de-nuevo,
+div.opacmarc div#extra div#textos {
 	/*float: left;*/
 }
-div#extra div#de-nuevo a {
+div.opacmarc div#extra div#de-nuevo a {
 	font-weight: bold;
 }
-div#extra div#otros-recursos ul, div#extra div#de-nuevo ul {
+div.opacmarc div#extra div#otros-recursos ul,
+div.opacmarc div#extra div#de-nuevo ul {
 	line-height: 1.5;
 	margin-left: 1em;
 }
-div#extra ul li {
+div.opacmarc div#extra ul li {
 	/*background: url(http://www.stylegala.com/img/_bullets/0199_small%20old%20simple%20arrow.png) no-repeat 0 0.4em;*/
 	/*float: left;*/
 	list-style: none;
@@ -802,12 +839,12 @@ div#extra ul li {
 	padding: 0em 0.2em;
 	white-space: nowrap;
 }
-div#extra div#otros-recursos li {
+div.opacmarc div#extra div#otros-recursos li {
 	/*float: left;*/
 }
 
 /* ---------------------------------------------- */
-.warning {
+div.opacmarc .warning {
 	background: #FFF; /* #CC0033; */
 	border-top: 1px solid #C00;
 	border-bottom: 1px solid #C00;
@@ -823,69 +860,69 @@ div#extra div#otros-recursos li {
 
 /* ---------------------------------------------- */
 
-tr.deberiaEstarAqui {
+div.opacmarc tr.deberiaEstarAqui {
 	background: #EEE;
 	color: #000;
 }
 
-tr.deberiaEstarAqui td {
+div.opacmarc tr.deberiaEstarAqui td {
 	border-top: 1px solid #DDD;
 	border-bottom: 1px solid #DDD;
 	padding: 0.3em 1em;
 	text-align: left;
 }
 
-tr.deberiaEstarAqui td span {
+div.opacmarc tr.deberiaEstarAqui td span {
 	font-weight: bold;
 	font-style: italic;
 }
 
 
 /* --------------------------------
- * SIGNATURAS TOPOGR¡FICAS
+ * SIGNATURAS TOPOGR√ÅFICAS
  * --------------------------------
  */
 
-div.STparte {
+div.opacmarc div.STparte {
 	padding: 0.1em;
 	/*border-bottom: 1px solid #CCC;*/
 	font-style: italic;
 	font-weight: normal;
 }
 
-div.STresto {
+div.opacmarc div.STresto {
 	font-weight: bold;
 	/*padding-left: 0.5em;*/
 }
 
 
 /* ---------------------------------------------------- */
-.hide {
+div.opacmarc .hide {
 	display: none;
 }
 
 /* ---------------------------------------------------- */
-.opacAacrDiv {
+div.opacmarc .opacAacrDiv {
 	background: #FFF; /*#FEFEF0; /*#FFF8DC*/
 	border-top: 0px solid #CCC;
 	margin: 0.5em 0 0 0;
 	padding: 0.5em 1.5em 0.5em 1.5em;
 	width: auto;
 }
-.opacAacrDiv a {
+div.opacmarc .opacAacrDiv a {
 	text-decoration: none;
 }
-.opacAacrDiv a:hover {
+div.opacmarc .opacAacrDiv a:hover {
 	text-decoration: underline;
 }
 
-.aacrLowlight {
-	background: transparent !important; /* cancela una declaraciÛn de aacr.css */
+div.opacmarc .aacrLowlight {
+	background: transparent !important; /* cancela una declaraci√≥n de aacr.css */
 }
 
 /* ---------------------------------------------------- */
 
 /* esto queda para el final, pues al validador de CSS no le gusta -moz */
-.searchFormCell {
+div.opacmarc .searchFormCell {
 	-moz-border-radius: 8px;
 }
