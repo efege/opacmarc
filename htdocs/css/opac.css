@@ -2,14 +2,7 @@
  * reset browser defaults
  * --------------------------------
  */
-/*body, p, h1, h2, h3, h4, h5, h6, table, tr, td, div, form, ul, ol, dl, li, pre {
-	border: 0;
-	margin: 0;
-	padding: 0;
-}*/
 
-/* NOTE (for embedding): if this rule should override styles of the host page,
-   this stylesheet must be loaded *after* the one from the host */
 div.opacmarc p,
 div.opacmarc h1,
 div.opacmarc h2,
@@ -327,29 +320,25 @@ div.opacmarc a {
 
 
 /* LINK PSEUDO-CLASES: L-V-H-A */
-/* "!important" added for embedding into DokuWiki */
-
 div.opacmarc a:link {
 	border-bottom: 1px dotted #009;
-	color: #00C !important;
+	color: #00C;
 }
-
 div.opacmarc a:visited,
 div.opacmarc a.visitedLink {
 	border-bottom: 1px dotted #800080;
-	color: #800080 !important; /*#69F;*/ /*#39F*/
+	color: #800080; /*#69F;*/ /*#39F*/
 }
-
 div.opacmarc a:hover {
 	border-bottom: 1px solid #009; /* genera error en IE6 */
-	color: #00C !important;
+	color: #00C;
+	text-decoration: none;
 }
-
 div.opacmarc a:active,
 div.opacmarc a:focus {
 	background: #009;
 	border-bottom: 1px dotted #009;
-	color: #FFF !important;
+	color: #FFF;
 }
 
 /* ---------------------------------------------- */

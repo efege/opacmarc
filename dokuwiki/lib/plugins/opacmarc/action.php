@@ -40,6 +40,7 @@ class action_plugin_opacmarc extends DokuWiki_Action_Plugin {
         $opacBaseUrl = $this->getConf('opac_host') . ':' . $this->getConf('opac_port');
         
         // JavaScript
+        // FIXME -- agregar los restantes js, incluyendo local y código que se ejecuta onload
         $scripts = array('opac', 'marc2aacr', 'isbn-hyphen', 'getMaterialType', 'zebra-table');
     	foreach ($scripts as $script) {
         	$event->data['script'][] = array ('type' => 'text/javascript',
@@ -50,6 +51,8 @@ class action_plugin_opacmarc extends DokuWiki_Action_Plugin {
         }
         
         // CSS
+        // FIXME -- agregar todas las otras hojas de estilo, incluyendo print y locales.
+        // Y las hojas de estilo para IE?
         $stylesheets = array('opac', 'aacr', 'wh', 'complete', 'etiquetado', 'novedades');
     	foreach ($stylesheets as $stylesheet) {
         	$event->data['link'][] = array ('rel' => 'stylesheet',  

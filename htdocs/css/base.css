@@ -1,0 +1,27 @@
+/* --------------------------------
+ * reset browser defaults
+ * --------------------------------
+ */
+body, p, h1, h2, h3, h4, h5, h6, table, tr, td, div, form, ul, ol, dl, li, pre {
+	border: 0;
+	margin: 0;
+	padding: 0;
+}
+
+body {
+    background-color: #EEE; /*#C9C7BA; /*#C8B9A6; /*D0D0D0; /*#F6F6F6;*/
+    font-family: arial, 'trebuchet ms', verdana, sans-serif; 
+    font-size: small; /* trebuchet: 96%; verdana: 94% */
+    line-height: 1.3em; 
+    margin: 2px auto;
+    max-width: 990px;
+    width: 99%;
+}
+
+p {
+    margin-bottom: 1em;
+}
+
+hr {
+    display: none; /* lineas de separación para navegadores sin CSS */
+}
