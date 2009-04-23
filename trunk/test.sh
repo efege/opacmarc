@@ -5,8 +5,6 @@
 # working copy local. Para usarlo en otro contexto, habría que ajustar
 # los parámetros de configuración y tal vez algún otro detalle.
 #
-# TO-DO: enviar la config a un archivo aparte.
-#
 # TO-DO: considerar dos tipos de test:
 #            - new install (crea local-data)
 #            - upgrade (usa local-data existente)
@@ -18,39 +16,46 @@
 #            - test u
 
 
-# -----------------------------------
-# begin config
-# -----------------------------------
-
+# Leemos parámetros locales de un archivo externo (test-config.bat).
+# Esta es la lista de parámetros esperados; los valores mostrados son
+# sólo ejemplos:
+#
 # working copy
-SVN_DIR=$HOME/opacmarc/svn
-
+#SVN_DIR=$HOME/opacmarc/svn
+#
 # versión de utilitarios cisis + wxis
-CISIS_VERSION=5.2b-1030
-
+#CISIS_VERSION=5.2b-1030
+#
 # Directorio para el test. Es eliminado con cada nuevo test.
-TEST_DIR=$HOME/opacmarc/test-install
-
+#TEST_DIR=$HOME/opacmarc/test-install
+#
 # Directorio de los cisis
-CISIS_DIR=$HOME/opacmarc/binaries/linux/cisis-$CISIS_VERSION
-
+#CISIS_DIR=$HOME/opacmarc/binaries/linux/cisis-$CISIS_VERSION
+#
 # wxis
-WXIS=$HOME/opacmarc/binaries/linux/wxis-$CISIS_VERSION
-
+#WXIS=$HOME/opacmarc/binaries/linux/wxis-$CISIS_VERSION
+#
 # agrep
-AGREP=`which agrep`
-
+#AGREP=`which agrep`
+#
 # Archivo con la configuración de un virtual host para OpacMarc
 # El método para que este archivo sea leído por Apache depende del
 # sistema operativo y de la versión de Apache.  
-APACHE_VHOST=/etc/apache2/sites-available/opacmarc-test
-
+#APACHE_VHOST=/etc/apache2/sites-available/opacmarc-test
+#
 # usuario asociado al servidor apache
-APACHE_USER=www-data
+#APACHE_USER=www-data
 
-# -----------------------------------
-# end config
-# -----------------------------------
+CONFIG_FILE=test-config.sh
+
+if [ ! -f $CONFIG_FILE ]; then
+    echo 'Missing configuration file:' $CONFIG_FILE
+    echo 'Test aborted'
+    exit
+fi
+
+# Read configuration
+source $CONFIG_FILE
 
 APP_DIR=$TEST_DIR/app
 LOCAL_DATA_DIR=$TEST_DIR/local-data
