@@ -314,7 +314,9 @@ div.opacmarc .hl-msc {
  * --------------------------------
  */
 
-div.opacmarc a {
+div.opacmarc a,
+div.opacmarc a:link,
+div.opacmarc a:visited {
 	text-decoration: none;
 }
 
