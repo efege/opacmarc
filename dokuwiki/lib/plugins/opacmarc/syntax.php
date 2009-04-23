@@ -164,7 +164,7 @@ class syntax_plugin_opacmarc extends DokuWiki_Syntax_Plugin {
 
         if($mode == 'xhtml') {
 
-            // These parameters are needed only for the catalog's first page
+            // These parameters are needed only for the catalog's main (first) page
             if (!isset($_REQUEST['IsisScript'])) {
                 $opac_url .= '&IsisScript=' . urlencode($this->getConf('isisscript'));
             }
@@ -201,6 +201,10 @@ class syntax_plugin_opacmarc extends DokuWiki_Syntax_Plugin {
             // fetch opac content
             $opac_data = file_get_contents($opac_url);
             $opac_data = utf8_encode($opac_data);
+            
+            if (!isset($_REQUEST['IsisScript'])) {
+                $renderer->doc .= "Colocar aquí algún texto introductorio";
+            }
 
             $renderer->doc .= $opac_data;     // ptype = 'block'
             return true;
