@@ -23,22 +23,27 @@
 #         y que cada usuario se ocupe de instalarlo o compilarlo desde las fuentes. 
 #
 
+# FIXME - tgz files are created in the svn directory.
+
 
 CONFIG_FILE=build-config.sh
 
 if [ ! -f $CONFIG_FILE ]; then
-    echo 'Missing configuration file:' $CONFIG_FILE
-    echo 'Build process aborted'
+    echo "Missing configuration file: $CONFIG_FILE"
+    echo "Build process aborted"
     exit
 fi
-
 
 # Read configuration
 source $CONFIG_FILE
 
+BUILD_DATE=`date +%Y.%m.%d`
+BUILD_DIR=opacmarc-$BUILD_DATE
+
+
 build() {
 
-    echo 'Building for' $SYSTEM '...'
+    echo "Building for $SYSTEM..."
 
     case $SYSTEM in
         linux)
@@ -83,13 +88,15 @@ build() {
     sed "s/__VERSION__/$BUILD_DATE/" $BUILD_DIR/cgi-bin/html/page-end.htm > tmpfile
     mv tmpfile $BUILD_DIR/cgi-bin/html/page-end.htm
     
+    # remove unwanted files
+    # TO-DO: loop over a list of filenames
     case $SYSTEM in
         linux)
             rm $BUILD_DIR/test.bat
             ;;
         windows)
             rm $BUILD_DIR/test.sh
-            # TO-DO: remove any other .sh files
+            rm $BUILD_DIR/build.sh
             ;;
     esac
     
@@ -103,7 +110,7 @@ build() {
 
 upload() {
     # upload file to public server
-    echo 'Uploading...'
+    echo "Uploading $SYSTEM build..."
     scp $BUILD_DIR-$SYSTEM.tgz $SERVER_INFO
 }
 

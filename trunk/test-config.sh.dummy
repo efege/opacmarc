@@ -1,0 +1,32 @@
+# working copy
+SVN_DIR=$HOME/dev/opacmarc/svn
+
+# versión de utilitarios cisis + wxis
+CISIS_VERSION=5.2b-1030
+
+# Directorio para el test. Es eliminado con cada nuevo test.
+TEST_DIR=$HOME/dev/opacmarc/test-install
+
+# Directorio de binarios
+BINARIES=$HOME/dev/opacmarc/binaries
+
+# Directorio de los cisis
+CISIS_DIR=$BINARIES/linux/cisis-$CISIS_VERSION
+
+# wxis
+WXIS=$BINARIES/linux/wxis-$CISIS_VERSION
+
+# agrep
+AGREP=`which agrep`
+
+# Archivo con la configuración de un virtual host para OpacMarc
+# El método para que este archivo sea leído por Apache depende del
+# sistema operativo y de la versión de Apache.  
+APACHE_VHOST=/etc/apache2/sites-available/opacmarc-test
+
+# puerto usado por el virtual host
+APACHE_PORT=8081
+
+# usuario asociado al servidor apache
+APACHE_USER=www-data
+

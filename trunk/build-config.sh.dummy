@@ -1,0 +1,8 @@
+WORKING_COPY=$HOME/dev/opacmarc/svn
+BINARIES=$HOME/dev/opacmarc/binaries
+
+# versión de utilitarios cisis + wxis
+CISIS_VERSION=5.2b-1030
+
+# datos para el upload
+SERVER_INFO=[user]@[host]:[path]
