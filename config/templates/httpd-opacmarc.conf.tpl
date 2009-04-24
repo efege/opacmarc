@@ -2,9 +2,9 @@
 #
 # Modify port number and ServerName as needed.
 
-Listen 8081
-NameVirtualHost *:8081
-<VirtualHost *:8081>
+Listen __APACHE_PORT__
+NameVirtualHost *:__APACHE_PORT__
+<VirtualHost *:__APACHE_PORT__>
 
     ServerName 127.0.0.1
     

@@ -90,6 +90,7 @@ def build_config_files():
         ['__LOCAL_DATA_DIR__', LOCAL_DATA_DIR],
         ['__WXIS__', WXIS],
         ['__TEMP_DIR__', TEMP_DIR],
+        ['__APACHE_PORT__', '8081'],  # FIXME: usar un argumento pasado al script, con un default
     )
     
     # TO-DO: no necesitamos listar explícitamente los archivos

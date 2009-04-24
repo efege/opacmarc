@@ -1,11 +1,15 @@
-Opacmarc - Versión de desarrollo
+OpacMarc - Versión de desarrollo
 
 
 Para conocer los términos bajo los cuales se ofrece este software, lea LICENCIA.TXT.
 
 Para instalar el sistema, siga las instrucciones de ... 
 
-Para encontrar información general sobre Catalis/Opacmarc, visite http://inmabb.criba.edu.ar/catalis/ .
+Para encontrar información general sobre Catalis/Opacmarc, visite
+
+  http://inmabb.criba.edu.ar/catalis/
+  http://code.google.com/p/opacmarc/
+  http://code.google.com/p/catalis/
 
 Para plantear consultas, participar en discusiones, y estar al tanto de lo que
 suceda con Catalis/Opacmarc, visite http://groups.google.com.ar/group/catalis/ .
@@ -18,3 +22,5 @@ usando la versión más reciente.
 
 --
 Fernando J. Gómez
+INMABB - Conicet
+Bahía Blanca, Argentina
